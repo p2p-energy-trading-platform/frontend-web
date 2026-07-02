@@ -7,9 +7,7 @@ import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query
 // import TanstackQueryProvider, {
 //   getContext,
 // } from './integrations/tanstack-query/root-provider'
-import {
-  getContext,
-} from './integrations/tanstack-query/root-provider'
+import { getContext } from './integrations/tanstack-query/root-provider'
 
 export function getRouter() {
   const context = getContext()
