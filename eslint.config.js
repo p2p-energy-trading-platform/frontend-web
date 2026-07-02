@@ -27,4 +27,10 @@ export default [
       'prettier.config.js',
     ],
   },
+  {
+    files: ['src/**/*.test.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-non-null-assertion': 'off',
+    },
+  },
 ]
