@@ -8,9 +8,7 @@ function getOptionalClass(enabled: boolean) {
 
 describe('cn', () => {
   it('joins class names', () => {
-    expect(cn('flex', 'items-center', 'gap-2')).toBe(
-      'flex items-center gap-2',
-    )
+    expect(cn('flex', 'items-center', 'gap-2')).toBe('flex items-center gap-2')
   })
 
   it('removes falsy class names', () => {
