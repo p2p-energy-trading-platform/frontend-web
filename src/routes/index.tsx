@@ -1,86 +1,184 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import {
+  ArrowRight,
+  BatteryCharging,
+  ChartCandlestick,
+  ShieldCheck,
+  Zap,
+} from 'lucide-react'
 
-export const Route = createFileRoute('/')({ component: App })
+import { Badge } from '#/components/ui/badge'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '#/components/ui/card'
+
+export const Route = createFileRoute('/')({
+  component: App,
+})
+
+const features = [
+  {
+    title: 'Live Energy Market',
+    description:
+      'Track local buy and sell orders across neighbourhood energy pools.',
+    icon: ChartCandlestick,
+  },
+  {
+    title: 'Smart Meter Ready',
+    description:
+      'Designed around verified production, usage, and settlement events.',
+    icon: Zap,
+  },
+  {
+    title: 'Battery & Solar Aware',
+    description:
+      'Model energy availability across storage, solar generation, and grid state.',
+    icon: BatteryCharging,
+  },
+  {
+    title: 'Secure Settlements',
+    description:
+      'Prepare the interface for auditable, role-aware transaction workflows.',
+    icon: ShieldCheck,
+  },
+]
+
+const stats = [
+  ['142.85 MWh', 'Energy traded'],
+  ['2,418', 'Market orders'],
+  ['98.7%', 'Grid sync health'],
+]
 
 function App() {
   return (
-    <main className="page-wrap px-4 pb-8 pt-14">
-      <section className="island-shell rise-in relative overflow-hidden rounded-[2rem] px-6 py-10 sm:px-10 sm:py-14">
-        <div className="pointer-events-none absolute -left-20 -top-24 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(79,184,178,0.32),transparent_66%)]" />
-        <div className="pointer-events-none absolute -bottom-20 -right-20 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(47,106,74,0.18),transparent_66%)]" />
-        <p className="island-kicker mb-3">TanStack Start Base Template</p>
-        <h1 className="display-title mb-5 max-w-3xl text-4xl leading-[1.02] font-bold tracking-tight text-[var(--sea-ink)] sm:text-6xl">
-          Start simple, ship quickly.
-        </h1>
-        <p className="mb-8 max-w-2xl text-base text-[var(--sea-ink-soft)] sm:text-lg">
-          This base starter intentionally keeps things light: two routes, clean
-          structure, and the essentials you need to build from scratch.
-        </p>
-        <div className="flex flex-wrap gap-3">
-          <a
-            href="/about"
-            className="rounded-full border border-[rgba(50,143,151,0.3)] bg-[rgba(79,184,178,0.14)] px-5 py-2.5 text-sm font-semibold text-[var(--lagoon-deep)] no-underline transition hover:-translate-y-0.5 hover:bg-[rgba(79,184,178,0.24)]"
-          >
-            About This Starter
-          </a>
-          <a
-            href="https://tanstack.com/router"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-full border border-[rgba(23,58,64,0.2)] bg-white/50 px-5 py-2.5 text-sm font-semibold text-[var(--sea-ink)] no-underline transition hover:-translate-y-0.5 hover:border-[rgba(23,58,64,0.35)]"
-          >
-            Router Guide
-          </a>
+    <main className="min-h-screen bg-background text-foreground">
+      <section className="mx-auto flex max-w-7xl flex-col gap-10 px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
+        <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+          <section className="relative overflow-hidden rounded-3xl border border-border-subtle bg-bg-surface p-6 shadow-sm sm:p-8 lg:p-10">
+            <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-brand-primary-muted blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-28 -left-20 h-72 w-72 rounded-full bg-brand-info-muted blur-3xl" />
+
+            <div className="relative">
+              <Badge variant="secondary" className="mb-5">
+                GridX Demo Interface
+              </Badge>
+
+              <h1 className="max-w-4xl text-display-lg text-text-primary sm:text-display-xl lg:text-display-2xl">
+                Peer-to-peer energy trading for local power grids.
+              </h1>
+
+              <p className="mt-5 max-w-2xl text-base leading-8 text-text-secondary sm:text-lg">
+                This temporary demo page uses the GridX design tokens, Base UI
+                shadcn components, and the monochrome trading-dashboard visual
+                direction from the Figma design system.
+              </p>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link
+                  to="/about"
+                  className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+                >
+                  View demo details
+                  <ArrowRight className="size-4" />
+                </Link>
+
+                <a
+                  href="https://tanstack.com/start/latest/docs/framework/react/overview"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex h-10 items-center justify-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-sm transition hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+                >
+                  TanStack Start docs
+                </a>
+              </div>
+            </div>
+          </section>
+
+          <Card className="border-border-subtle bg-bg-surface">
+            <CardHeader>
+              <CardDescription>Market snapshot</CardDescription>
+              <CardTitle className="text-heading-2">
+                Local Grid — Block A
+              </CardTitle>
+            </CardHeader>
+
+            <CardContent className="space-y-4">
+              {stats.map(([value, label]) => (
+                <div
+                  key={label}
+                  className="flex items-center justify-between rounded-xl border border-border-subtle bg-bg-elevated px-4 py-3"
+                >
+                  <span className="text-sm text-text-secondary">{label}</span>
+                  <span className="text-heading-4 text-text-primary">
+                    {value}
+                  </span>
+                </div>
+              ))}
+
+              <div className="rounded-xl border border-border-subtle bg-bg-sunken p-4">
+                <div className="mb-3 flex items-center justify-between">
+                  <span className="text-label-md text-text-tertiary">
+                    GRID STATUS
+                  </span>
+                  <Badge className="bg-brand-primary text-primary-foreground">
+                    Synced
+                  </Badge>
+                </div>
+
+                <div className="h-2 overflow-hidden rounded-full bg-bg-overlay">
+                  <div className="h-full w-[78%] rounded-full bg-brand-primary" />
+                </div>
+
+                <p className="mt-3 text-caption text-text-secondary">
+                  78% utilization across registered producers and consumers.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
-      </section>
 
-      <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {[
-          [
-            'Type-Safe Routing',
-            'Routes and links stay in sync across every page.',
-          ],
-          [
-            'Server Functions',
-            'Call server code from your UI without creating API boilerplate.',
-          ],
-          [
-            'Streaming by Default',
-            'Ship progressively rendered responses for faster experiences.',
-          ],
-          [
-            'Tailwind Native',
-            'Design quickly with utility-first styling and reusable tokens.',
-          ],
-        ].map(([title, desc], index) => (
-          <article
-            key={title}
-            className="island-shell feature-card rise-in rounded-2xl p-5"
-            style={{ animationDelay: `${index * 90 + 80}ms` }}
-          >
-            <h2 className="mb-2 text-base font-semibold text-[var(--sea-ink)]">
-              {title}
-            </h2>
-            <p className="m-0 text-sm text-[var(--sea-ink-soft)]">{desc}</p>
-          </article>
-        ))}
-      </section>
+        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {features.map((feature) => {
+            const Icon = feature.icon
 
-      <section className="island-shell mt-8 rounded-2xl p-6">
-        <p className="island-kicker mb-2">Quick Start</p>
-        <ul className="m-0 list-disc space-y-2 pl-5 text-sm text-[var(--sea-ink-soft)]">
-          <li>
-            Edit <code>src/routes/index.tsx</code> to customize the home page.
-          </li>
-          <li>
-            Update <code>src/components/Header.tsx</code> and{' '}
-            <code>src/components/Footer.tsx</code> for brand links.
-          </li>
-          <li>
-            Add routes in <code>src/routes</code> and tweak visual tokens in{' '}
-            <code>src/styles.css</code>.
-          </li>
-        </ul>
+            return (
+              <Card
+                key={feature.title}
+                className="border-border-subtle bg-bg-surface transition hover:-translate-y-0.5 hover:border-border-default hover:bg-bg-elevated"
+              >
+                <CardHeader>
+                  <div className="mb-2 flex size-10 items-center justify-center rounded-xl border border-border-subtle bg-bg-elevated">
+                    <Icon className="size-5 text-text-primary" />
+                  </div>
+                  <CardTitle className="text-heading-4">
+                    {feature.title}
+                  </CardTitle>
+                  <CardDescription>{feature.description}</CardDescription>
+                </CardHeader>
+              </Card>
+            )
+          })}
+        </section>
+
+        <Card className="border-border-subtle bg-bg-surface">
+          <CardHeader>
+            <Badge variant="outline" className="w-fit">
+              Temporary page
+            </Badge>
+            <CardTitle className="text-heading-2">
+              Ready for actual product content
+            </CardTitle>
+            <CardDescription className="max-w-3xl">
+              This is only a polished placeholder. Later, replace this with the
+              real landing page, authentication flow, dashboard, order book,
+              user profile, and market pages.
+            </CardDescription>
+          </CardHeader>
+        </Card>
       </section>
     </main>
   )

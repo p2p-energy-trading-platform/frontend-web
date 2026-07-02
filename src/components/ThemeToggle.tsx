@@ -1,4 +1,7 @@
+import { Monitor, Moon, Sun } from 'lucide-react'
 import { useEffect, useState } from 'react'
+
+import { Button } from '#/components/ui/button'
 
 type ThemeMode = 'light' | 'dark' | 'auto'
 
@@ -49,6 +52,7 @@ export default function ThemeToggle() {
     const onChange = () => applyThemeMode('auto')
 
     media.addEventListener('change', onChange)
+
     return () => {
       media.removeEventListener('change', onChange)
     }
@@ -57,6 +61,7 @@ export default function ThemeToggle() {
   function toggleMode() {
     const nextMode: ThemeMode =
       mode === 'light' ? 'dark' : mode === 'dark' ? 'auto' : 'light'
+
     setMode(nextMode)
     applyThemeMode(nextMode)
     window.localStorage.setItem('theme', nextMode)
@@ -64,18 +69,25 @@ export default function ThemeToggle() {
 
   const label =
     mode === 'auto'
-      ? 'Theme mode: auto (system). Click to switch to light mode.'
+      ? 'Theme mode: auto. Click to switch to light mode.'
       : `Theme mode: ${mode}. Click to switch mode.`
 
+  const Icon = mode === 'auto' ? Monitor : mode === 'dark' ? Moon : Sun
+
   return (
-    <button
+    <Button
       type="button"
+      variant="outline"
+      size="sm"
       onClick={toggleMode}
       aria-label={label}
       title={label}
-      className="rounded-full border border-[var(--chip-line)] bg-[var(--chip-bg)] px-3 py-1.5 text-sm font-semibold text-[var(--sea-ink)] shadow-[0_8px_22px_rgba(30,90,72,0.08)] transition hover:-translate-y-0.5"
+      className="gap-2"
     >
-      {mode === 'auto' ? 'Auto' : mode === 'dark' ? 'Dark' : 'Light'}
-    </button>
+      <Icon className="size-4" />
+      <span className="hidden sm:inline">
+        {mode === 'auto' ? 'Auto' : mode === 'dark' ? 'Dark' : 'Light'}
+      </span>
+    </Button>
   )
 }
