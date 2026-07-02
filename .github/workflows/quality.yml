@@ -1,0 +1,43 @@
+name: Quality CI/CD pipeline
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  quality:
+    name: Lint, format, typecheck, test
+    runs-on: ubuntu-latest
+
+    env:
+      CI: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.5.0'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate TanStack routes
+        run: npm run generate-routes
+
+      - name: Check formatting
+        run: npm run check
+
+      - name: Lint
+        run: npm run lint -- --max-warnings=0
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Run tests
+        run: npm test
