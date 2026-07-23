@@ -1,0 +1,46 @@
+:root {
+
+    /* Primitive Colors */
+    --primitive-color-navy-50: #F0F4F9;
+    --primitive-color-navy-100: #EEF2F8;
+    --primitive-color-navy-300: #9BA7BD;
+    --primitive-color-navy-500: #6B7A99;
+    --primitive-color-navy-800: #1A2537;
+    --primitive-color-navy-900: #0D1B36;
+    --primitive-color-navy-950: #060B16;
+    --primitive-color-navy-900-dark: #0F1826;
+    --primitive-color-navy-50-dark-text: #F4F6FA;
+    --primitive-color-navy-300-dark-text: #8D97AC;
+    --primitive-color-navy-500-dark-text: #6B7686;
+    --primitive-color-teal-600: #0EA592;
+    --primitive-color-teal-500-dark: #14C7B0;
+    --primitive-color-red-50: #FEF2F2;
+    --primitive-color-red-200: #FECACA;
+    --primitive-color-red-600: #DC2626;
+    --primitive-color-red-800: #991B1B;
+    --primitive-color-red-400-dark: #F87171;
+    --primitive-color-red-500-dark: #F87171;
+    --primitive-color-red-900-bg-dark: #991B1B2D;
+    --primitive-color-green-50: #ECFDF5;
+    --primitive-color-green-200: #A7F3D0;
+    --primitive-color-green-800: #065F46;
+    --primitive-color-green-400-dark: #34D399;
+    --primitive-color-green-900-bg-dark: #065F462D;
+    --primitive-color-amber-50: #FFFBEB;
+    --primitive-color-amber-200: #FDE68A;
+    --primitive-color-amber-800: #92400E;
+    --primitive-color-amber-400-dark: #FBBF24;
+    --primitive-color-amber-900-bg-dark: #92400E2D;
+    --primitive-color-blue-50: #EFF6FF;
+    --primitive-color-blue-200: #BFDBFE;
+    --primitive-color-blue-800: #1E40AF;
+    --primitive-color-blue-400-dark: #60A5FA;
+    --primitive-color-blue-900-bg-dark: #1E40AF2D;
+    --primitive-color-white: #FFFFFF;
+    --primitive-color-alpha-navy-10: #0D1B3619;
+    --primitive-color-alpha-navy-12: #0D1B361E;
+    --primitive-color-alpha-navy-06: #0D1B360F;
+    --primitive-color-alpha-navy-08-dark: #F4F6FA14;
+    --primitive-color-alpha-navy-10-dark: #F4F6FA19;
+    --primitive-color-alpha-navy-14-dark: #F4F6FA23;
+}
