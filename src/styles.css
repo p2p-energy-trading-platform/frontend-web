@@ -1,10 +1,11 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 @import 'tw-animate-css';
+@import './styles/token.css'
 
 @custom-variant dark (&:is(.dark *));
 
-:root {
+/* :root {
   --radius: 0.625rem;
 
   --brand-primary: #10121a;
@@ -158,86 +159,111 @@
   --sidebar-accent-foreground: var(--text-primary);
   --sidebar-border: var(--border-subtle);
   --sidebar-ring: var(--border-brand);
-}
+} */
 
 @theme inline {
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  /* Fonts */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-sans);
 
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  /* Base */
+  --color-background: var(--background-page);
+  --color-foreground: var(--text-primary);
 
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
+  /* Surface */
+  --color-card: var(--background-surface);
+  --color-card-foreground: var(--text-primary);
 
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--background-popover);
+  --color-popover-foreground: var(--text-primary);
 
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
+  /* Actions (shadcn compatible) */
+  --color-primary: var(--action-primary);
+  --color-primary-foreground: var(--action-primary-foreground);
 
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--action-secondary);
+  --color-secondary-foreground: var(--action-secondary-foreground);
 
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--action-accent);
+  --color-accent-foreground: var(--action-accent-foreground);
 
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--action-danger);
+  --color-destructive-foreground: var(--action-danger-foreground);
 
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
+  /* Borders */
+  --color-border: var(--border-default);
+  --color-input: var(--border-input);
+  --color-ring: var(--focus-ring);
 
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
+  /* Sidebar */
+  --color-sidebar: var(--sidebar-background);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-border: var(--sidebar-border);
 
+  /* Text */
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-text-placeholder: var(--text-placeholder);
+  --color-text-disabled: var(--text-disabled);
+  --color-text-inverse: var(--text-inverse);
+
+  /* Backgrounds */
+  --color-background-page: var(--background-page);
+  --color-background-surface: var(--background-surface);
+  --color-background-surface-raised: var(--background-surface-raised);
+  --color-background-fill: var(--background-fill);
+  --color-background-well: var(--background-well);
+  --color-background-overlay: var(--background-overlay);
+
+  /* Feedback */
+  --color-feedback-success-background: var(--feedback-success-background);
+  --color-feedback-success-border: var(--feedback-success-border);
+  --color-feedback-success-text: var(--feedback-success-text);
+
+  --color-feedback-warning-background: var(--feedback-warning-background);
+  --color-feedback-warning-border: var(--feedback-warning-border);
+  --color-feedback-warning-text: var(--feedback-warning-text);
+
+  --color-feedback-error-background: var(--feedback-error-background);
+  --color-feedback-error-border: var(--feedback-error-border);
+  --color-feedback-error-text: var(--feedback-error-text);
+
+  --color-feedback-info-background: var(--feedback-info-background);
+  --color-feedback-info-border: var(--feedback-info-border);
+  --color-feedback-info-text: var(--feedback-info-text);
+
+  /* Trading */
+  --color-trade-buy-background: var(--trade-buy-background);
+  --color-trade-buy-text: var(--trade-buy-text);
+
+  --color-trade-sell-background: var(--trade-sell-background);
+  --color-trade-sell-text: var(--trade-sell-text);
+
+  --color-trade-zone-background: var(--trade-zone-background);
+  --color-trade-zone-text: var(--trade-zone-text);
+
+  --color-trade-amber-background: var(--trade-amber-background);
+  --color-trade-amber-text: var(--trade-amber-text);
+
+  /* Charts */
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
 
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+  /* Skeleton */
+  --color-skeleton-from: var(--skeleton-from);
+  --color-skeleton-via: var(--skeleton-via);
 
-  --color-brand-primary: var(--brand-primary);
-  --color-brand-accent: var(--brand-accent);
-  --color-brand-danger: var(--brand-danger);
-  --color-brand-warning: var(--brand-warning);
-  --color-brand-info: var(--brand-info);
-  --color-brand-purple: var(--brand-purple);
+  /* Wallet */
+  --color-wallet-balance-hero-background: var(--wallet-balance-hero-background);
 
-  --color-brand-primary-muted: var(--brand-primary-muted);
-  --color-brand-danger-muted: var(--brand-danger-muted);
-  --color-brand-warning-muted: var(--brand-warning-muted);
-  --color-brand-info-muted: var(--brand-info-muted);
-  --color-brand-purple-muted: var(--brand-purple-muted);
-
-  --color-bg-canvas: var(--bg-canvas);
-  --color-bg-surface: var(--bg-surface);
-  --color-bg-elevated: var(--bg-elevated);
-  --color-bg-overlay: var(--bg-overlay);
-  --color-bg-sunken: var(--bg-sunken);
-
-  --color-border-subtle: var(--border-subtle);
-  --color-border-default: var(--border-default);
-  --color-border-strong: var(--border-strong);
-  --color-border-brand: var(--border-brand);
-  --color-border-danger: var(--border-danger);
-
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-tertiary: var(--text-tertiary);
-  --color-text-disabled: var(--text-disabled);
-  --color-text-brand: var(--text-brand);
-  --color-text-on-brand: var(--text-on-brand);
-
+  /* Radius */
   --radius-xs: 2px;
   --radius-sm: 4px;
   --radius-md: 8px;
@@ -245,8 +271,6 @@
   --radius-xl: 16px;
   --radius-2xl: 24px;
   --radius-3xl: 32px;
-  --font-heading: var(--font-sans);
-  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 @layer base {
