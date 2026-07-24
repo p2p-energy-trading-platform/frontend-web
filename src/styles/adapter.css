@@ -1,0 +1,55 @@
+:root {
+   
+
+   --background: var(--background-page);
+   --foreground: var(--text-primary);
+
+
+   --card: var(--background-surface);
+   --card-foreground: var(--text-primary);
+
+   --popover: var(--background-popover);
+   --popover-foreground: var(--text-primary);
+
+ 
+
+   --primary: var(--action-primary);
+   --primary-foreground: var(--action-primary-foreground);
+
+   --secondary: var(--action-secondary);
+   --secondary-foreground: var(--action-secondary-foreground);
+
+   --accent: var(--action-accent);
+   --accent-foreground: var(--action-accent-foreground);
+
+   --destructive: var(--action-danger);
+   --destructive-foreground: var(--action-danger-foreground);
+
+   
+
+   --muted: var(--background-fill);
+   --muted-foreground: var(--text-secondary);
+
+   
+
+   --border: var(--border-default);
+   --input: var(--border-input);
+   --ring: var(--focus-ring);
+
+
+   --radius: 0.625rem;
+
+
+
+   --sidebar: var(--sidebar-background);
+   --sidebar-foreground: var(--sidebar-foreground);
+
+   --sidebar-primary: var(--sidebar-primary);
+   --sidebar-primary-foreground: var(--sidebar-primary-foreground);
+
+   --sidebar-accent: var(--sidebar-accent);
+   --sidebar-accent-foreground: var(--sidebar-foreground);
+
+   --sidebar-border: var(--sidebar-border);
+   --sidebar-ring: var(--focus-ring);
+}
