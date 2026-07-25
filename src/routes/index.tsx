@@ -124,7 +124,7 @@ function App() {
                   <span className="text-label-md text-text-tertiary">
                     GRID STATUS
                   </span>
-                  <Badge className="bg-brand-primary text-primary-foreground">
+                  <Badge className="bg-brand-primary text-primary">
                     Synced
                   </Badge>
                 </div>
