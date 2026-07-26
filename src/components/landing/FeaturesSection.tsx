@@ -105,82 +105,46 @@ export default function FeatureSection() {
 }
 */
 
-import { Card } from "../ui/card";
-import { Badge } from "../ui/badge";
+import { Card } from '../ui/card'
+import { Badge } from '../ui/badge'
 
+export default function FeatureSection() {
+  return (
+    <section className="border border-red-500 bg-background flex flex-col items-center justify-center">
+      <div className="py-6 flex flex-col gap-5 items-center text-center">
+        <Badge variant="link">who it's for</Badge>
 
-export default function FeatureSection(){
+        <h2 className="text-section-title text-foreground">
+          Benifits for every household
+        </h2>
 
-    return (
+        <p className="text-label-lg text-text-secondary">
+          Ehether you generate more than you use or simply want greener, <br />
+          cheaper electricity - GrideX is for you.
+        </p>
+      </div>
 
-        <section className="border border-red-500 bg-background flex flex-col items-center justify-center">
-                
-            <div className="py-6 flex flex-col gap-5 items-center text-center">
+      <div className="py-6 flex flex-row justify-center gap-6">
+        <Card className="w-64 p-6">
+          <div className="flex flex-col gap-3">
+            <Badge variant="secondary">For buyers</Badge>
 
-                <Badge variant="link">
-                    who it's for
-                </Badge>
+            <h3 className="text-label-lg text-foreground">
+              clean local your energy assets
+            </h3>
+          </div>
+        </Card>
 
-                <h2 className="text-section-title text-foreground">
-                    Benifits for every household
-                </h2>
+        <Card className="w-64 p-6">
+          <div className="flex flex-col gap-3">
+            <Badge variant="secondary">For prosumers</Badge>
 
-                <p className="text-label-lg text-text-secondary">
-                    Ehether you generate more than you use or simply want greener, <br/>
-                    cheaper electricity - GrideX is for you.
-                </p>
-
-            </div>
-
-
-            <div className="py-6 flex flex-row justify-center gap-6">
-        
-                    <Card className="w-64 p-6">
-
-                        <div className="flex flex-col gap-3">
-
-                            
-
-                                <Badge variant="secondary">
-                                    For buyers
-                                </Badge>
-
-                                                                
-                                <h3 className="text-label-lg text-foreground">
-                                    clean local your energy assets
-                                </h3>
-
-                        </div>
-
-                    </Card>
-
-
-                    <Card className="w-64 p-6">
-
-                        <div className="flex flex-col gap-3">
-
-                            
-
-                                <Badge variant="secondary">
-                                    For prosumers
-                                </Badge>
-
-                                                                
-                                <h3 className="text-label-lg text-foreground">
-                                    Monetise your energy assets
-                                </h3>
-
-                        </div>
-
-                    </Card>
-
-                </div>
-
-
-            
-
-        </section>
-
-    )
-
+            <h3 className="text-label-lg text-foreground">
+              Monetise your energy assets
+            </h3>
+          </div>
+        </Card>
+      </div>
+    </section>
+  )
 }
