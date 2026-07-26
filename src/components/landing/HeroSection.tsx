@@ -6,7 +6,7 @@ export default function HeroSection() {
 
     return(
 
-        <section className="bg-background flex flex-row justify-center gap-20">
+        <section className="border border-red-500 bg-background flex flex-row justify-center gap-20">
         
             <HeroContent />
 
