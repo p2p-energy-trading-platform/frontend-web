@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, Zap, Globe } from 'lucide-react'
 
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
@@ -30,7 +30,7 @@ function SignInPage() {
         {/* Logo */}
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
-            <span className="text-white font-bold text-lg">⚡</span>
+            <Zap className="w-6 h-6 text-white" strokeWidth={2.5} />
           </div>
           <span className="text-xl font-bold text-foreground">GridX</span>
           <span className="text-xs bg-cyan-600 text-white px-2 py-1 rounded">
@@ -144,9 +144,9 @@ function SignInPage() {
             <Button
               type="button"
               variant="outline"
-              className="w-full h-10 text-sm font-medium"
+              className="w-full h-10 text-sm font-medium flex items-center justify-center gap-2"
             >
-              <span className="mr-2">🇦🇪</span>
+              <Globe className="w-4 h-4" />
               UAE PASS
             </Button>
 
