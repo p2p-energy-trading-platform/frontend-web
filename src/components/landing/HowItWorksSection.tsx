@@ -1,15 +1,33 @@
 import { Card } from "@/components/ui/card";
+import { Badge } from "../ui/badge";
 
 
 export default function HowItWorksSection() {
 
     return (
 
-        <section className="border border-green-500 bg-background flex flex-row justify-center gap-20">
+        <section className="bg-background flex flex-col items-center justify-center">
                 
-            <div> 
+            
+                <div className="py-6 flex flex-col gap-5 items-center text-center">
 
-                <div className="flex flex-row justify-center gap-6">
+                    <Badge variant="secondary" className="">
+                        How it works
+                    </Badge>
+
+                    <h2 className="text-section-title text-foreground">
+                        Trading Energy in Three Steps
+                    </h2>
+
+                    <p className="text-label-lg text-text-secondary">
+                        No special equipment needed. If your home has a smart meter,<br />
+                        you're ready.
+                    </p>
+                </div>
+
+                
+
+                <div className="py-6 flex flex-row justify-center gap-6">
         
                     <Card className="w-64 p-6">
 
@@ -25,11 +43,11 @@ export default function HowItWorksSection() {
 
                                 <div className="flex flex-col gap-1">
 
-                                    <span className="text-sm text-accent font-semibold">
+                                    <span className="text-caption text-text-secondary">
                                         STEP 01
                                     </span>
 
-                                    <h3 className="text-lg font-semibold text-foreground">
+                                    <h3 className="text-label-lg text-foreground">
                                         Connect Your Meter
                                     </h3>
 
@@ -60,11 +78,11 @@ export default function HowItWorksSection() {
 
                                 <div className="flex flex-col gap-1">
 
-                                    <span className="text-sm text-accent font-semibold">
+                                    <span className="text-caption text-text-secondary">
                                         STEP 02
                                     </span>
 
-                                    <h3 className="text-lg font-semibold text-foreground">
+                                    <h3 className="text-label-lg text-foreground">
                                         Verify Your Account
                                     </h3>
 
@@ -96,11 +114,11 @@ export default function HowItWorksSection() {
 
                                 <div className="flex flex-col gap-1">
 
-                                    <span className="text-sm text-accent font-semibold">
+                                    <span className="text-caption text-text-secondary">
                                         STEP 03
                                     </span>
 
-                                    <h3 className="text-lg font-semibold text-foreground">
+                                    <h3 className="text-label-lg text-foreground">
                                         Trade Energy
                                     </h3>
 
@@ -118,8 +136,8 @@ export default function HowItWorksSection() {
                     </Card>
 
                 </div>
-
-            </div>            
+                
+                        
                        
         </section>
 
