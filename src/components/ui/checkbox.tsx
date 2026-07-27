@@ -2,8 +2,7 @@ import * as React from 'react'
 import { Check } from 'lucide-react'
 import { cn } from '#/lib/utils'
 
-export interface CheckboxProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+export interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
   ({ className, ...props }, ref) => {
@@ -40,7 +39,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
           className={cn(
             'h-4 w-4 rounded border-2 border-input bg-background transition-all ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
             isChecked && 'border-primary bg-primary',
-            props.disabled && 'cursor-not-allowed opacity-50'
+            props.disabled && 'cursor-not-allowed opacity-50',
           )}
         >
           {isChecked && (
@@ -49,7 +48,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
         </div>
       </div>
     )
-  }
+  },
 )
 Checkbox.displayName = 'Checkbox'
 
