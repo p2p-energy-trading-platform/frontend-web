@@ -1,282 +1,373 @@
 import * as React from 'react'
-import { z } from 'zod'
-import { Eye, EyeOff } from 'lucide-react'
+import { Link } from '@tanstack/react-router'
+import {
+  ArrowRight,
+  BatteryCharging,
+  Eye,
+  EyeOff,
+  Gauge,
+  Globe2,
+  House,
+  Leaf,
+  Sun,
+  Users,
+  Zap,
+} from 'lucide-react'
 
 import { Button } from '#/components/ui/button'
-import { Input } from '#/components/ui/input'
 import { Checkbox } from '#/components/ui/checkbox'
+import { Input } from '#/components/ui/input'
 
-const signInSchema = z.object({
-  email: z
-    .string()
-    .min(1, 'Email is required')
-    .email('Please enter a valid email address'),
-  password: z.string().min(1, 'Password is required'),
-  rememberMe: z.boolean().default(false),
-})
-
-type SignInFormData = z.infer<typeof signInSchema>
-
-type FormErrors = Partial<Record<keyof SignInFormData, string>>
-
-interface SignInFormProps {
-  onSuccess?: (data: SignInFormData) => void
-  isLoading?: boolean
+export default function SignInForm() {
+  // existing component code
 }
 
-export const SignInForm = ({
-  onSuccess,
-  isLoading = false,
-}: SignInFormProps) => {
+function SignInPage() {
   const [showPassword, setShowPassword] = React.useState(false)
-  const [formData, setFormData] = React.useState<SignInFormData>({
-    email: '',
-    password: '',
-    rememberMe: false,
-  })
-  const [errors, setErrors] = React.useState<FormErrors>({})
-  const [touched, setTouched] = React.useState<
-    Partial<Record<keyof SignInFormData, boolean>>
-  >({})
+  const [email, setEmail] = React.useState('')
+  const [password, setPassword] = React.useState('')
+  const [rememberMe, setRememberMe] = React.useState(false)
 
-  const validateField = (name: keyof SignInFormData, value: unknown) => {
-    try {
-      const fieldSchema = z.object({
-        [name]: signInSchema.shape[name],
-      })
-      fieldSchema.parse({ [name]: value })
-      return null
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        return error.issues[0]?.message || 'Invalid input'
-      }
-      return 'Invalid input'
-    }
+  function handleSignIn(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    alert(`Welcome back, ${email}!`)
   }
-
-  const handleFieldChange = (field: keyof SignInFormData, value: unknown) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value,
-    }))
-
-    if (touched[field]) {
-      const error = validateField(field, value)
-      setErrors(prev => ({
-        ...prev,
-        [field]: error,
-      }))
-    }
-  }
-
-  const handleFieldBlur = (field: keyof SignInFormData) => {
-    setTouched(prev => ({
-      ...prev,
-      [field]: true,
-    }))
-
-    const error = validateField(field, formData[field])
-    setErrors(prev => ({
-      ...prev,
-      [field]: error,
-    }))
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    try {
-      const validatedData = signInSchema.parse(formData)
-      setErrors({})
-      onSuccess?.(validatedData)
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        const newErrors: FormErrors = {}
-        error.issues.forEach((err: z.ZodIssue) => {
-          const path = err.path[0] as keyof SignInFormData
-          newErrors[path] = err.message
-        })
-        setErrors(newErrors)
-      }
-    }
-  }
-
-  const isFormValid = !errors.email && !errors.password && formData.email && formData.password
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
-      {/* Email Field */}
-      <div className="space-y-2">
-        <label htmlFor="email" className="text-sm font-medium block">
-          EMAIL ADDRESS
-        </label>
-        <Input
-          id="email"
-          type="email"
-          placeholder="you@example.com"
-          value={formData.email}
-          onChange={e => handleFieldChange('email', e.target.value)}
-          onBlur={() => handleFieldBlur('email')}
-          disabled={isLoading}
-          className="w-full"
-        />
-        {errors.email && touched.email && (
-          <p className="text-xs text-destructive">{errors.email}</p>
-        )}
+    <main className="fixed inset-0 z-[100] overflow-y-auto bg-[#0c1424] text-[#e2eaf4]">
+      <div className="grid min-h-screen lg:grid-cols-2">
+        <section className="flex justify-center bg-[#0c1424] px-6 py-12 sm:px-10 lg:px-16 lg:py-16">
+          <div className="w-full max-w-[420px]">
+            <header>
+              <h1 className="font-heading text-2xl font-bold leading-8">
+                Welcome back
+              </h1>
+              <p className="mt-1.5 text-sm text-[#7a90a8]">
+                Sign in to your GridX account
+              </p>
+            </header>
+
+            <form onSubmit={handleSignIn} className="mt-7">
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-xs font-semibold uppercase tracking-[0.025em] text-[#a8bdd4]"
+                >
+                  Email address
+                </label>
+                <Input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(event) => setEmail(event.target.value)}
+                  className="mt-1.5 h-12 rounded-2xl border-[#94b4dc23] bg-[#1c2e48] px-4 text-sm text-[#e2eaf4] shadow-none placeholder:text-[#4a5f78] focus-visible:border-[#0ea592] focus-visible:ring-[#0ea592]/20"
+                  required
+                />
+              </div>
+
+              <div className="mt-4">
+                <div className="flex items-center justify-between">
+                  <label
+                    htmlFor="password"
+                    className="text-xs font-semibold uppercase tracking-[0.025em] text-[#a8bdd4]"
+                  >
+                    Password
+                  </label>
+                  <button
+                    type="button"
+                    className="text-xs font-semibold text-[#0ea592] hover:underline"
+                  >
+                    Forgot password?
+                  </button>
+                </div>
+                <div className="relative mt-1.5">
+                  <Input
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="current-password"
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                    className="h-12 rounded-2xl border-[#94b4dc23] bg-[#1c2e48] px-4 pr-12 text-sm text-[#e2eaf4] shadow-none placeholder:text-[#4a5f78] focus-visible:border-[#0ea592] focus-visible:ring-[#0ea592]/20"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((current) => !current)}
+                    aria-label={
+                      showPassword ? 'Hide password' : 'Show password'
+                    }
+                    className="absolute right-0 top-0 flex size-12 items-center justify-center text-[#4a5f78] transition hover:text-[#a8bdd4]"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="size-4" />
+                    ) : (
+                      <Eye className="size-4" />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5 py-4">
+                <Checkbox
+                  id="rememberMe"
+                  checked={rememberMe}
+                  onChange={(event) =>
+                    setRememberMe(event.currentTarget.checked)
+                  }
+                  className="size-5 rounded-[10px] border-2 border-[#94b4dc23] bg-transparent data-[state=checked]:border-[#0ea592] data-[state=checked]:bg-[#0ea592]"
+                />
+                <label
+                  htmlFor="rememberMe"
+                  className="cursor-pointer text-sm text-[#a8bdd4]"
+                >
+                  Remember me for 30 days
+                </label>
+              </div>
+
+              <Button
+                type="submit"
+                disabled={!email || !password}
+                className="h-12 w-full rounded-xl bg-[#0ea592] text-base font-semibold text-white hover:bg-[#0c9483] disabled:bg-[#124b48] disabled:text-[#7a90a8]"
+              >
+                Sign in
+              </Button>
+
+              <div className="my-6 flex items-center gap-3 text-xs font-medium text-[#4a5f78]">
+                <span className="h-px flex-1 bg-[#94b4dc0f]" />
+                or continue with
+                <span className="h-px flex-1 bg-[#94b4dc0f]" />
+              </div>
+
+              <button
+                type="button"
+                className="flex h-12 w-full items-center gap-3 rounded-2xl border border-[#94b4dc19] bg-[#152035] px-4 text-sm font-semibold transition hover:border-[#94b4dc2d] hover:bg-[#1a2840]"
+              >
+                <span className="flex h-[18px] w-7 overflow-hidden rounded-sm">
+                  <span className="w-1/3 bg-[#ef3340]" />
+                  <span className="w-1/3 bg-white" />
+                  <span className="w-1/3 bg-[#009739]" />
+                </span>
+                <span className="flex-1 text-left">UAE PASS</span>
+                <span className="rounded-full bg-[#94b4dc19] px-2 py-0.5 font-mono text-[10px] font-medium text-[#c8d6e8]">
+                  UAE Digital ID
+                </span>
+                <ArrowRight className="size-3.5 text-[#7a90a8]" />
+              </button>
+
+              <div className="mt-2.5 grid grid-cols-2 gap-2.5">
+                <button
+                  type="button"
+                  className="flex h-12 items-center justify-center gap-2 rounded-2xl border border-[#94b4dc19] bg-[#152035] text-sm font-semibold transition hover:bg-[#1a2840]"
+                >
+                  <span className="text-base font-bold text-[#4285f4]">G</span>
+                  Google
+                </button>
+                <button
+                  type="button"
+                  className="flex h-12 items-center justify-center gap-2 rounded-2xl border border-[#94b4dc19] bg-[#152035] text-sm font-semibold transition hover:bg-[#1a2840]"
+                >
+                  <span className="grid size-4 grid-cols-2 gap-px">
+                    <span className="bg-[#f25022]" />
+                    <span className="bg-[#7fba00]" />
+                    <span className="bg-[#00a4ef]" />
+                    <span className="bg-[#ffb900]" />
+                  </span>
+                  Microsoft
+                </button>
+              </div>
+
+              <p className="mt-2.5 text-center text-[10px] text-[#4a5f78]">
+                These options may not yet be available in all regions.
+              </p>
+
+              <p className="mt-6 text-center text-sm text-[#7a90a8]">
+                Don&apos;t have an account?{' '}
+                <Link
+                  to="/sign-up"
+                  className="font-semibold text-[#0ea592] hover:underline"
+                >
+                  Create account
+                </Link>
+              </p>
+
+              <div className="mt-5 border-t border-[#94b4dc0f] pt-5 text-center">
+                <p className="text-[10px] uppercase tracking-[0.08em] text-[#4a5f78]">
+                  Demo shortcut
+                </p>
+                <Link
+                  to="/"
+                  className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-[#0ea592] hover:underline"
+                >
+                  Skip to portal <ArrowRight className="size-3" />
+                </Link>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <SignInVisualPanel />
       </div>
-
-      {/* Password Field */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <label htmlFor="password" className="text-sm font-medium">
-            PASSWORD
-          </label>
-          <a
-            href="#"
-            className="text-xs text-primary hover:underline font-medium"
-          >
-            Forgot password?
-          </a>
-        </div>
-        <div className="relative">
-          <Input
-            id="password"
-            type={showPassword ? 'text' : 'password'}
-            placeholder="Enter your password"
-            value={formData.password}
-            onChange={e => handleFieldChange('password', e.target.value)}
-            onBlur={() => handleFieldBlur('password')}
-            disabled={isLoading}
-            className="w-full pr-10"
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-            tabIndex={-1}
-          >
-            {showPassword ? (
-              <EyeOff className="h-4 w-4" />
-            ) : (
-              <Eye className="h-4 w-4" />
-            )}
-          </button>
-        </div>
-        {errors.password && touched.password && (
-          <p className="text-xs text-destructive">{errors.password}</p>
-        )}
-      </div>
-
-      {/* Remember Me Checkbox */}
-      <div className="flex items-center gap-3">
-        <Checkbox
-          id="rememberMe"
-          checked={formData.rememberMe}
-          onChange={e =>
-            handleFieldChange('rememberMe', e.currentTarget.checked)
-          }
-          disabled={isLoading}
-        />
-        <label
-          htmlFor="rememberMe"
-          className="text-sm text-muted-foreground cursor-pointer"
-        >
-          Remember me for 30 days
-        </label>
-      </div>
-
-      {/* Sign In Button */}
-      <Button
-        type="submit"
-        disabled={!isFormValid || isLoading}
-        className="w-full h-11 text-base font-medium"
-      >
-        {isLoading ? 'Signing in...' : 'Sign in'}
-      </Button>
-
-      {/* Divider */}
-      <div className="relative my-6">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-muted"></div>
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            or continue with
-          </span>
-        </div>
-      </div>
-
-      {/* Social Login Options */}
-      <div className="space-y-3">
-        {/* UAE PASS */}
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full h-10 text-sm font-medium"
-          disabled={isLoading}
-        >
-          <span className="mr-2">🇦🇪</span>
-          UAE PASS
-        </Button>
-
-        {/* Google & Microsoft Row */}
-        <div className="grid grid-cols-2 gap-3">
-          <Button
-            type="button"
-            variant="outline"
-            className="h-10 text-sm font-medium"
-            disabled={isLoading}
-          >
-            <svg
-              className="w-4 h-4 mr-2"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-            >
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-            </svg>
-            Google
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            className="h-10 text-sm font-medium"
-            disabled={isLoading}
-          >
-            <svg
-              className="w-4 h-4 mr-2"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-            >
-              <path d="M11.4 24H0V11.6h11.4V24zM24 24H12.6V11.6H24V24zM11.4 11.4H0V0h11.4v11.4zm12.6 0H12.6V0H24v11.4z" />
-            </svg>
-            Microsoft
-          </Button>
-        </div>
-      </div>
-
-      {/* Sign Up Link */}
-      <div className="text-center pt-2">
-        <p className="text-sm text-muted-foreground">
-          Don't have an account?{' '}
-          <a
-            href="/sign-up"
-            className="text-primary hover:underline font-medium"
-          >
-            Create account
-          </a>
-        </p>
-      </div>
-
-      {/* Skip to Portal Link */}
-      <div className="text-center pt-2">
-        <a
-          href="#"
-          className="text-xs text-primary hover:underline font-medium uppercase tracking-wide"
-        >
-          Skip to portal →
-        </a>
-      </div>
-    </form>
+    </main>
   )
 }
+
+function SignInVisualPanel() {
+  const networkNodes = [
+    {
+      label: 'Solar PV',
+      sublabel: 'JLT Zone 4',
+      icon: Sun,
+      className: 'left-[8%] top-[12%]',
+    },
+    {
+      label: 'Battery',
+      sublabel: 'DIFC',
+      icon: BatteryCharging,
+      className: 'left-1/2 top-[2%] -translate-x-1/2',
+    },
+    {
+      label: 'EV Export',
+      sublabel: 'Downtown',
+      icon: Zap,
+      className: 'right-[8%] top-[12%]',
+    },
+    {
+      label: 'Villa',
+      sublabel: 'Al Quoz',
+      icon: House,
+      className: 'left-[8%] bottom-[4%]',
+    },
+    {
+      label: 'Apartment',
+      sublabel: 'Business Bay',
+      icon: House,
+      className: 'left-1/2 bottom-[-2%] -translate-x-1/2',
+    },
+    {
+      label: 'Townhouse',
+      sublabel: 'JBR',
+      icon: House,
+      className: 'right-[8%] bottom-[4%]',
+    },
+  ]
+
+  return (
+    <aside className="relative hidden min-h-screen overflow-hidden bg-[#080f1e] px-10 py-10 lg:block">
+      <div className="absolute -top-28 right-0 size-[500px] rounded-full bg-[#0ea592]/10 blur-[90px]" />
+      <div className="absolute -bottom-24 -left-24 size-80 rounded-full bg-blue-500/[0.07] blur-[90px]" />
+      <div className="relative mx-auto flex h-full max-w-[590px] flex-col">
+        <div className="flex items-center gap-2.5">
+          <span className="flex size-9 items-center justify-center rounded-2xl bg-[#0ea592] text-white">
+            <Zap className="size-[18px] fill-current" />
+          </span>
+          <span className="font-heading text-xl font-bold text-white">
+            GridX
+          </span>
+          <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-1.5 py-0.5 text-[9px] text-emerald-300">
+            Beta
+          </span>
+        </div>
+
+        <div className="relative mx-auto mt-8 h-[300px] w-full max-w-[520px]">
+          <svg
+            className="absolute inset-0 size-full"
+            viewBox="0 0 520 300"
+            aria-hidden="true"
+          >
+            <g stroke="#0ea592" strokeDasharray="5 6" strokeOpacity=".38">
+              <line x1="260" y1="150" x2="80" y2="55" />
+              <line x1="260" y1="150" x2="260" y2="30" />
+              <line x1="260" y1="150" x2="440" y2="55" />
+              <line x1="260" y1="150" x2="80" y2="245" />
+              <line x1="260" y1="150" x2="260" y2="275" />
+              <line x1="260" y1="150" x2="440" y2="245" />
+            </g>
+          </svg>
+          <div className="absolute left-1/2 top-1/2 flex size-20 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full border border-[#0ea592] bg-[#092c33] text-[#0ea592] shadow-[0_0_50px_rgba(14,165,146,.18)]">
+            <Zap className="size-5 fill-current" />
+            <span className="mt-1 text-[8px] font-bold">GRIDX</span>
+          </div>
+          {networkNodes.map(({ label, sublabel, icon: Icon, className }) => (
+            <div
+              key={label}
+              className={`absolute flex size-16 flex-col items-center justify-center rounded-full border border-[#0ea592]/45 bg-[#152035] text-center ${className}`}
+            >
+              <Icon className="size-3.5 text-[#0ea592]" />
+              <span className="mt-1 text-[8px] font-semibold text-[#a8bdd4]">
+                {label}
+              </span>
+              <span className="text-[6px] text-[#4a5f78]">{sublabel}</span>
+            </div>
+          ))}
+          <p className="absolute bottom-0 left-0 flex items-center gap-1.5 text-[8px] text-[#4a5f78]">
+            <span className="size-1.5 rounded-full bg-[#0ea592]" />
+            Energy trading in progress · Live
+          </p>
+        </div>
+
+        <div className="mt-8">
+          <h2 className="font-heading text-2xl font-bold leading-[1.25] text-white">
+            Your energy,
+            <br />
+            your neighbourhood
+          </h2>
+          <p className="mt-3 max-w-[310px] text-sm leading-[1.65] text-[#c8d6e8]/55">
+            Trade surplus solar, battery, and EV energy directly with households
+            in your Dubai grid zone.
+          </p>
+        </div>
+
+        <div className="mt-7 space-y-3">
+          <Metric icon={Gauge} value="~4 min" label="Average settlement" />
+          <Metric icon={Users} value="3,412" label="Active prosumers" />
+          <Metric icon={Leaf} value="61,840" label="kWh traded / month" />
+        </div>
+
+        <div className="mt-auto border-t border-[#94b4dc14] pt-5">
+          <p className="text-xs tracking-[0.18em] text-[#ffb900]">★★★★★</p>
+          <p className="mt-2 text-sm italic text-[#c8d6e8]/60">
+            “Sold 18 kWh this month to neighbours — earned more than my
+            electricity bill.”
+          </p>
+          <div className="mt-3 flex items-center gap-2.5">
+            <span className="flex size-7 items-center justify-center rounded-full bg-[#0ea592]/20 text-xs font-bold text-[#0ea592]">
+              SA
+            </span>
+            <div>
+              <p className="text-xs font-semibold text-white">Sara A.</p>
+              <p className="text-[10px] text-[#c8d6e8]/35">
+                Solar prosumer · JLT Zone 4
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  )
+}
+
+function Metric({
+  icon: Icon,
+  value,
+  label,
+}: {
+  icon: typeof Globe2
+  value: string
+  label: string
+}) {
+  return (
+    <div className="flex items-center gap-3">
+      <span className="flex size-8 items-center justify-center rounded-xl border border-[#0ea592]/20 bg-[#0ea592]/15 text-[#0ea592]">
+        <Icon className="size-3.5" />
+      </span>
+      <div>
+        <p className="font-mono text-sm font-bold text-white">{value}</p>
+        <p className="text-xs text-[#c8d6e8]/45">{label}</p>
+      </div>
+    </div>
+  )
+}
+

@@ -1,5 +1,6 @@
-import { cn } from '#/lib/utils'
 import { Check } from 'lucide-react'
+
+import { cn } from '#/lib/utils'
 
 interface RegistrationStep {
   id: number
@@ -12,64 +13,52 @@ interface RegistrationStepperProps {
   currentStep: number
 }
 
-export const RegistrationStepper = ({
+export function RegistrationStepper({
   steps,
   currentStep,
-}: RegistrationStepperProps) => {
+}: RegistrationStepperProps) {
   return (
-    <div className="w-full">
-      <div className="flex items-center justify-between">
-        {steps.map((step, index) => (
-          <div key={step.id} className="flex flex-1 items-center">
-            {/* Step Circle */}
-            <div className="flex flex-col items-center flex-1">
-              <div
+    <div className="flex h-20 w-full items-start">
+      {steps.map((step, index) => {
+        const complete = currentStep > step.id
+        const active = currentStep === step.id
+
+        return (
+          <div key={step.id} className="flex flex-1 items-start">
+            <div className="flex min-w-0 flex-1 flex-col items-center gap-1.5 text-center">
+              <span
                 className={cn(
-                  'flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all',
-                  currentStep > step.id
-                    ? 'border-primary bg-primary text-white'
-                    : currentStep === step.id
-                      ? 'border-primary bg-transparent text-primary'
-                      : 'border-muted bg-muted text-muted-foreground'
+                  'flex size-[34px] items-center justify-center rounded-full border text-[13px] font-semibold',
+                  complete || active
+                    ? 'border-[#0ea592] text-[#0ea592]'
+                    : 'border-[#4a5f78] text-[#4a5f78]',
                 )}
               >
-                {currentStep > step.id ? (
-                  <Check className="h-5 w-5" />
-                ) : (
-                  <span className="font-semibold">{step.id}</span>
+                {complete ? <Check className="size-4" /> : step.id}
+              </span>
+              <span
+                className={cn(
+                  'text-[13px] font-semibold leading-[18px]',
+                  complete || active ? 'text-[#e2eaf4]' : 'text-[#4a5f78]',
                 )}
-              </div>
-              <div className="mt-2 text-center">
-                <p
-                  className={cn(
-                    'text-xs font-medium',
-                    currentStep === step.id
-                      ? 'text-primary'
-                      : 'text-muted-foreground'
-                  )}
-                >
-                  {step.label}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  {step.description}
-                </p>
-              </div>
+              >
+                {step.label}
+              </span>
+              <span
+                className={cn(
+                  'text-[10px] leading-[14px]',
+                  active ? 'text-[#7a90a8]' : 'text-[#4a5f78]',
+                )}
+              >
+                {step.description}
+              </span>
             </div>
-
-            {/* Connector Line */}
-            {index < steps.length - 1 && (
-              <div className="flex-1 mx-2">
-                <div
-                  className={cn(
-                    'h-1 rounded-full transition-all',
-                    currentStep > step.id ? 'bg-primary' : 'bg-muted'
-                  )}
-                />
-              </div>
-            )}
+            {index < steps.length - 1 ? (
+              <span className="mt-[17px] h-px w-[clamp(40px,16vw,225px)] shrink-0 bg-[#94b4dc1f]" />
+            ) : null}
           </div>
-        ))}
-      </div>
+        )
+      })}
     </div>
   )
 }
