@@ -48,7 +48,7 @@ export const SignInForm = ({
       return null
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return error.errors[0]?.message || 'Invalid input'
+        return error.issues[0]?.message || 'Invalid input'
       }
       return 'Invalid input'
     }
@@ -92,7 +92,7 @@ export const SignInForm = ({
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: FormErrors = {}
-        error.errors.forEach(err => {
+        error.issues.forEach((err: z.ZodIssue) => {
           const path = err.path[0] as keyof SignInFormData
           newErrors[path] = err.message
         })

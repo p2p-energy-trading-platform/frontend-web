@@ -85,6 +85,11 @@
   --color-text-brand: var(--text-brand);
   --color-text-on-brand: var(--text-on-brand);
 
+  --color-action-accent: var(--action-accent);
+  --color-background-well: var(--background-well);
+  --color-background-surface: var(--background-surface);
+  --color-feedback-error-text: var(--feedback-error-text);
+
   --radius-xs: 2px;
   --radius-sm: 4px;
   --radius-md: 8px;
