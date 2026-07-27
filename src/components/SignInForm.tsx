@@ -6,13 +6,13 @@ import {
   Eye,
   EyeOff,
   Gauge,
-  Globe2,
   House,
   Leaf,
   Sun,
   Users,
   Zap,
 } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 
 import { Button } from '#/components/ui/button'
 import { Checkbox } from '#/components/ui/checkbox'
@@ -183,7 +183,6 @@ export default function SignInForm() {
                     <span className="bg-[#00a4ef]" />
                     <span className="bg-[#ffb900]" />
                   </span>
-
                   Microsoft
                 </button>
               </div>
@@ -306,24 +305,20 @@ function SignInVisualPanel() {
             <span className="mt-1 text-[8px] font-bold">GRIDX</span>
           </div>
 
-          {networkNodes.map(
-            ({ label, sublabel, icon: Icon, className }) => (
-              <div
-                key={label}
-                className={`absolute flex size-16 flex-col items-center justify-center rounded-full border border-[#0ea592]/45 bg-[#152035] text-center ${className}`}
-              >
-                <Icon className="size-3.5 text-[#0ea592]" />
+          {networkNodes.map(({ label, sublabel, icon: Icon, className }) => (
+            <div
+              key={label}
+              className={`absolute flex size-16 flex-col items-center justify-center rounded-full border border-[#0ea592]/45 bg-[#152035] text-center ${className}`}
+            >
+              <Icon className="size-3.5 text-[#0ea592]" />
 
-                <span className="mt-1 text-[8px] font-semibold text-[#a8bdd4]">
-                  {label}
-                </span>
+              <span className="mt-1 text-[8px] font-semibold text-[#a8bdd4]">
+                {label}
+              </span>
 
-                <span className="text-[6px] text-[#4a5f78]">
-                  {sublabel}
-                </span>
-              </div>
-            ),
-          )}
+              <span className="text-[6px] text-[#4a5f78]">{sublabel}</span>
+            </div>
+          ))}
 
           <p className="absolute bottom-0 left-0 flex items-center gap-1.5 text-[8px] text-[#4a5f78]">
             <span className="size-1.5 rounded-full bg-[#0ea592]" />
@@ -382,7 +377,7 @@ function Metric({
   value,
   label,
 }: {
-  icon: typeof Globe2
+  icon: LucideIcon
   value: string
   label: string
 }) {

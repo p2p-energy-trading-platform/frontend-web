@@ -63,12 +63,8 @@ export function CreateAccountForm({
 }: CreateAccountFormProps) {
   const [showPassword, setShowPassword] = React.useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false)
-
-  const [formData, setFormData] =
-    React.useState<FormState>(initialFormData)
-
+  const [formData, setFormData] = React.useState<FormState>(initialFormData)
   const [errors, setErrors] = React.useState<FormErrors>({})
-
   const [touched, setTouched] = React.useState<
     Partial<Record<FieldName, boolean>>
   >({})
@@ -93,9 +89,9 @@ export function CreateAccountForm({
     }, {})
   }
 
-  function updateField<Field extends keyof FormState>(
-    field: Field,
-    value: FormState[Field],
+  function updateField<TField extends keyof FormState>(
+    field: TField,
+    value: FormState[TField],
   ) {
     const nextData: FormState = {
       ...formData,
@@ -143,11 +139,7 @@ export function CreateAccountForm({
     'h-12 rounded-2xl border-[#94b4dc23] bg-[#1c2e48] px-4 text-sm text-[#e2eaf4] shadow-none placeholder:text-[#4a5f78] focus-visible:border-[#0ea592] focus-visible:ring-2 focus-visible:ring-[#0ea592]/20'
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      noValidate
-      className="mt-[26px]"
-    >
+    <form onSubmit={handleSubmit} noValidate className="mt-[26px]">
       <div className="space-y-4">
         <FormField
           id="email"
@@ -161,9 +153,7 @@ export function CreateAccountForm({
             autoComplete="email"
             placeholder="you@example.com"
             value={formData.email}
-            onChange={(event) =>
-              updateField('email', event.target.value)
-            }
+            onChange={(event) => updateField('email', event.target.value)}
             onBlur={() => touchField('email')}
             disabled={isLoading}
             aria-invalid={Boolean(touched.email && errors.email)}
@@ -187,20 +177,14 @@ export function CreateAccountForm({
             value={formData.password}
             visible={showPassword}
             onVisibleChange={() =>
-              setShowPassword((current) => !current)
+              setShowPassword((currentValue) => !currentValue)
             }
-            onChange={(event) =>
-              updateField('password', event.target.value)
-            }
+            onChange={(event) => updateField('password', event.target.value)}
             onBlur={() => touchField('password')}
             disabled={isLoading}
-            aria-invalid={Boolean(
-              touched.password && errors.password,
-            )}
+            aria-invalid={Boolean(touched.password && errors.password)}
             aria-describedby={
-              touched.password && errors.password
-                ? 'password-error'
-                : undefined
+              touched.password && errors.password ? 'password-error' : undefined
             }
             className={fieldClassName}
           />
@@ -209,11 +193,7 @@ export function CreateAccountForm({
         <FormField
           id="confirmPassword"
           label="Confirm password"
-          error={
-            touched.confirmPassword
-              ? errors.confirmPassword
-              : undefined
-          }
+          error={touched.confirmPassword ? errors.confirmPassword : undefined}
         >
           <PasswordInput
             id="confirmPassword"
@@ -223,7 +203,7 @@ export function CreateAccountForm({
             value={formData.confirmPassword}
             visible={showConfirmPassword}
             onVisibleChange={() =>
-              setShowConfirmPassword((current) => !current)
+              setShowConfirmPassword((currentValue) => !currentValue)
             }
             onChange={(event) =>
               updateField('confirmPassword', event.target.value)
@@ -249,10 +229,7 @@ export function CreateAccountForm({
             id="termsAccepted"
             checked={formData.termsAccepted}
             onChange={(event) =>
-              updateField(
-                'termsAccepted',
-                event.currentTarget.checked,
-              )
+              updateField('termsAccepted', event.currentTarget.checked)
             }
             onBlur={() => touchField('termsAccepted')}
             disabled={isLoading}
@@ -346,11 +323,7 @@ function FormField({
       {children}
 
       {error ? (
-        <p
-          id={`${id}-error`}
-          role="alert"
-          className="text-xs text-[#fca5a5]"
-        >
+        <p id={`${id}-error`} role="alert" className="text-xs text-[#fca5a5]">
           {error}
         </p>
       ) : null}
@@ -358,8 +331,10 @@ function FormField({
   )
 }
 
-interface PasswordInputProps
-  extends Omit<React.ComponentProps<typeof Input>, 'type'> {
+interface PasswordInputProps extends Omit<
+  React.ComponentProps<typeof Input>,
+  'type'
+> {
   visible: boolean
   onVisibleChange: () => void
 }
@@ -385,11 +360,7 @@ function PasswordInput({
         aria-label={visible ? 'Hide password' : 'Show password'}
         className="absolute right-0 top-0 flex size-12 items-center justify-center text-[#4a5f78] transition hover:text-[#a8bdd4] disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {visible ? (
-          <EyeOff className="size-4" />
-        ) : (
-          <Eye className="size-4" />
-        )}
+        {visible ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
       </button>
     </div>
   )

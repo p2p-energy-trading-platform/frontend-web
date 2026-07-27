@@ -36,13 +36,9 @@ export function RegistrationStepper({
               <span
                 className={cn(
                   'flex size-[34px] shrink-0 items-center justify-center rounded-full border text-[13px] font-semibold transition-colors',
-                  isComplete &&
-                    'border-[#0ea592] bg-[#0ea592] text-white',
-                  isActive &&
-                    'border-[#0ea592] bg-[#0ea592]/10 text-[#0ea592]',
-                  !isComplete &&
-                    !isActive &&
-                    'border-[#4a5f78] text-[#4a5f78]',
+                  isComplete && 'border-[#0ea592] bg-[#0ea592] text-white',
+                  isActive && 'border-[#0ea592] bg-[#0ea592]/10 text-[#0ea592]',
+                  !isComplete && !isActive && 'border-[#4a5f78] text-[#4a5f78]',
                 )}
               >
                 {isComplete ? (
@@ -55,9 +51,7 @@ export function RegistrationStepper({
               <span
                 className={cn(
                   'truncate text-[13px] font-semibold leading-[18px]',
-                  isComplete || isActive
-                    ? 'text-[#e2eaf4]'
-                    : 'text-[#4a5f78]',
+                  isComplete || isActive ? 'text-[#e2eaf4]' : 'text-[#4a5f78]',
                 )}
               >
                 {step.label}

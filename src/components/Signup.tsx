@@ -13,10 +13,8 @@ import {
   Zap,
 } from 'lucide-react'
 
-import {
-  CreateAccountForm,
-  type CreateAccountFormData,
-} from '#/components/CreateAccountForm'
+import { CreateAccountForm } from '#/components/CreateAccountForm'
+import type { CreateAccountFormData } from '#/components/CreateAccountForm'
 import { RegistrationStepper } from '#/components/RegistrationStepper'
 
 const REGISTRATION_STEPS = [
