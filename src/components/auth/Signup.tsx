@@ -13,9 +13,9 @@ import {
   Zap,
 } from 'lucide-react'
 
-import { CreateAccountForm } from '#/components/CreateAccountForm'
-import type { CreateAccountFormData } from '#/components/CreateAccountForm'
-import { RegistrationStepper } from '#/components/RegistrationStepper'
+import { CreateAccountForm } from '#/components/auth/CreateAccountForm'
+import type { CreateAccountFormData } from '#/components/auth/CreateAccountForm'
+import { RegistrationStepper } from '#/components/auth/RegistrationStepper'
 
 const REGISTRATION_STEPS = [
   { id: 1, label: 'Account', description: 'Email & password' },
@@ -49,8 +49,8 @@ export default function Signup() {
   }
 
   return (
-    <main className="fixed inset-0 z-[100] overflow-y-auto bg-[#0c1424] text-[#e2eaf4]">
-      <section className="h-[120px] overflow-hidden bg-[#152035] px-5 py-4 sm:px-10 lg:px-[72px]">
+    <main className="fixed inset-0 z-[100] overflow-y-auto bg-background text-foreground">
+      <section className="h-[120px] overflow-hidden bg-card px-5 py-4 sm:px-10 lg:px-[72px]">
         <div className="mx-auto max-w-[1197px]">
           <RegistrationStepper
             steps={REGISTRATION_STEPS}
@@ -60,7 +60,7 @@ export default function Signup() {
       </section>
 
       <div className="grid min-h-[calc(100vh-120px)] lg:grid-cols-2">
-        <section className="flex justify-center bg-[#0c1424] px-5 py-10 sm:px-10 lg:px-16">
+        <section className="flex justify-center bg-background px-5 py-10 sm:px-10 lg:px-16">
           <div className="w-full max-w-[460px]">
             {currentStep === 1 ? (
               <>
@@ -68,11 +68,11 @@ export default function Signup() {
                   Create your account
                 </h1>
 
-                <p className="mt-1 flex gap-1 text-sm leading-5 text-[#7a90a8]">
+                <p className="mt-1 flex gap-1 text-sm leading-5 text-text-tertiary">
                   Already have an account?{' '}
                   <Link
                     to="/sign-in"
-                    className="font-semibold text-[#0ea592] hover:underline"
+                    className="font-semibold text-accent hover:underline"
                   >
                     Sign in
                   </Link>
@@ -92,14 +92,14 @@ export default function Signup() {
           </div>
         </section>
 
-        <aside className="relative hidden min-h-[808px] overflow-hidden bg-[#080f1e] px-8 py-10 lg:block">
-          <div className="absolute -top-32 right-0 size-[400px] rounded-full bg-[#0ea592]/10 blur-[80px]" />
-          <div className="absolute -bottom-16 -left-16 size-64 rounded-full bg-blue-500/[0.06] blur-[80px]" />
+        <aside className="relative hidden min-h-[808px] overflow-hidden bg-sidebar px-8 py-10 lg:block">
+          <div className="absolute -top-32 right-0 size-[400px] rounded-full bg-accent/10 blur-[80px]" />
+          <div className="absolute -bottom-16 -left-16 size-64 rounded-full bg-chart-4/[0.06] blur-[80px]" />
 
           <div className="relative mx-auto flex h-full max-w-[606px] flex-col">
             <GridXBrand />
 
-            <div className="mt-10 flex size-12 items-center justify-center rounded-2xl border border-[#0ea592]/25 bg-[#0ea592]/15 text-[#0ea592]">
+            <div className="mt-10 flex size-12 items-center justify-center rounded-2xl border border-accent/25 bg-accent/15 text-accent">
               {currentStep === 1 ? (
                 <UserRoundPlus className="size-[22px]" />
               ) : (
@@ -107,17 +107,17 @@ export default function Signup() {
               )}
             </div>
 
-            <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.1em] text-[#0ea592]">
+            <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.1em] text-accent">
               Step {currentStep} of 3
             </p>
 
-            <h2 className="mt-1 font-heading text-xl font-bold leading-[25px] text-white">
+            <h2 className="mt-1 font-heading text-xl font-bold leading-[25px] text-accent-foreground">
               {currentStep === 1
                 ? 'Start trading in minutes'
                 : 'Verify your email address'}
             </h2>
 
-            <p className="mt-2 text-sm leading-[22px] text-[#c8d6e8]/55">
+            <p className="mt-2 text-sm leading-[22px] text-sidebar-foreground/55">
               {currentStep === 1
                 ? 'Your GridX account gives you access to the full peer-to-peer energy marketplace.'
                 : 'Email verification protects your account and confirms where GridX should send important trading updates.'}
@@ -128,9 +128,9 @@ export default function Signup() {
                 {ACCOUNT_BENEFITS.map(({ icon: Icon, text }) => (
                   <li
                     key={text}
-                    className="flex items-center gap-3 text-sm text-[#c8d6e8]/65"
+                    className="flex items-center gap-3 text-sm text-sidebar-foreground/65"
                   >
-                    <span className="flex size-7 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.08] text-[#0ea592]">
+                    <span className="flex size-7 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.08] text-accent">
                       <Icon className="size-3.5" />
                     </span>
 
@@ -139,46 +139,46 @@ export default function Signup() {
                 ))}
               </ul>
             ) : (
-              <div className="mt-7 rounded-2xl border border-[#94b4dc19] bg-[#152035]/60 p-5">
+              <div className="mt-7 rounded-2xl border border-border bg-card/60 p-5">
                 <p className="text-sm font-semibold">What happens next?</p>
 
-                <ol className="mt-4 space-y-3 text-sm text-[#7a90a8]">
+                <ol className="mt-4 space-y-3 text-sm text-text-tertiary">
                   <li className="flex gap-3">
-                    <Check className="mt-0.5 size-4 shrink-0 text-[#0ea592]" />
+                    <Check className="mt-0.5 size-4 shrink-0 text-accent" />
                     Enter the one-time code sent to your email.
                   </li>
 
                   <li className="flex gap-3">
-                    <Check className="mt-0.5 size-4 shrink-0 text-[#0ea592]" />
+                    <Check className="mt-0.5 size-4 shrink-0 text-accent" />
                     Continue to KYC identity verification.
                   </li>
 
                   <li className="flex gap-3">
-                    <Check className="mt-0.5 size-4 shrink-0 text-[#0ea592]" />
+                    <Check className="mt-0.5 size-4 shrink-0 text-accent" />
                     Connect your smart meter to complete onboarding.
                   </li>
                 </ol>
               </div>
             )}
 
-            <div className="mt-auto border-t border-[#94b4dc14] pt-6">
-              <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#c8d6e8]/35">
+            <div className="mt-auto border-t border-sidebar-border pt-6">
+              <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-sidebar-foreground/35">
                 Privacy & security
               </p>
 
-              <ul className="mt-3 space-y-2 text-[11px] text-[#c8d6e8]/45">
+              <ul className="mt-3 space-y-2 text-[11px] text-sidebar-foreground/45">
                 <li className="flex items-center gap-2">
-                  <LockKeyhole className="size-3 text-[#0ea592]" />
+                  <LockKeyhole className="size-3 text-accent" />
                   Your data is encrypted end-to-end
                 </li>
 
                 <li className="flex items-center gap-2">
-                  <ShieldCheck className="size-3 text-[#0ea592]" />
+                  <ShieldCheck className="size-3 text-accent" />
                   Never sold to third parties
                 </li>
 
                 <li className="flex items-center gap-2">
-                  <Check className="size-3 text-[#0ea592]" />
+                  <Check className="size-3 text-accent" />
                   ISO 27001-aligned security practices
                 </li>
               </ul>
@@ -193,11 +193,13 @@ export default function Signup() {
 function GridXBrand() {
   return (
     <div className="flex items-center gap-2.5">
-      <span className="flex size-8 items-center justify-center rounded-xl bg-[#0ea592] text-white">
+      <span className="flex size-8 items-center justify-center rounded-xl bg-accent text-accent-foreground">
         <Zap className="size-[15px] fill-current" />
       </span>
 
-      <span className="font-heading text-lg font-bold text-white">GridX</span>
+      <span className="font-heading text-lg font-bold text-accent-foreground">
+        GridX
+      </span>
     </div>
   )
 }
@@ -221,11 +223,11 @@ function VerifyEmailStep({
 
   return (
     <div>
-      <div className="flex size-12 items-center justify-center rounded-2xl border border-[#0ea592]/30 bg-[#0ea592]/10 text-[#0ea592]">
+      <div className="flex size-12 items-center justify-center rounded-2xl border border-accent/30 bg-accent/10 text-accent">
         <MailCheck className="size-6" />
       </div>
 
-      <p className="mt-5 text-xs font-semibold uppercase tracking-[0.12em] text-[#0ea592]">
+      <p className="mt-5 text-xs font-semibold uppercase tracking-[0.12em] text-accent">
         Step 2 · Verify email
       </p>
 
@@ -233,9 +235,9 @@ function VerifyEmailStep({
         Check your inbox
       </h1>
 
-      <p className="mt-3 text-sm leading-6 text-[#7a90a8]">
+      <p className="mt-3 text-sm leading-6 text-text-tertiary">
         We sent a six-digit verification code to{' '}
-        <strong className="font-semibold text-[#e2eaf4]">
+        <strong className="font-semibold text-foreground">
           {email || 'your email address'}
         </strong>
         .
@@ -244,7 +246,7 @@ function VerifyEmailStep({
       <div className="mt-8 space-y-2">
         <label
           htmlFor="verificationCode"
-          className="block text-xs font-semibold uppercase tracking-[0.03em] text-[#a8bdd4]"
+          className="block text-xs font-semibold uppercase tracking-[0.03em] text-muted-foreground"
         >
           Verification code
         </label>
@@ -259,7 +261,7 @@ function VerifyEmailStep({
             setCode(event.target.value.replace(/\D/g, '').slice(0, 6))
           }
           placeholder="000000"
-          className="h-14 w-full rounded-2xl border border-[#94b4dc23] bg-[#1c2e48] px-4 text-center font-mono text-xl tracking-[0.45em] outline-none focus:border-[#0ea592] focus:ring-2 focus:ring-[#0ea592]/20"
+          className="h-14 w-full rounded-2xl border border-input bg-secondary px-4 text-center font-mono text-xl tracking-[0.45em] outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
         />
       </div>
 
@@ -267,7 +269,7 @@ function VerifyEmailStep({
         type="button"
         disabled={code.length !== 6}
         onClick={handleVerification}
-        className="mt-7 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#0ea592] text-base font-semibold text-white transition hover:bg-[#0c9483] disabled:cursor-not-allowed disabled:bg-[#124b48] disabled:text-[#7a90a8]"
+        className="mt-7 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-accent text-base font-semibold text-accent-foreground transition hover:bg-accent/90 disabled:cursor-not-allowed disabled:bg-accent/30 disabled:text-text-tertiary"
       >
         Verify email
         <ArrowRight className="size-4" />
@@ -277,14 +279,14 @@ function VerifyEmailStep({
         <button
           type="button"
           onClick={onBack}
-          className="font-medium text-[#7a90a8] hover:text-[#e2eaf4]"
+          className="font-medium text-text-tertiary hover:text-foreground"
         >
           Back
         </button>
 
         <button
           type="button"
-          className="font-semibold text-[#0ea592] hover:underline"
+          className="font-semibold text-accent hover:underline"
         >
           Resend code
         </button>

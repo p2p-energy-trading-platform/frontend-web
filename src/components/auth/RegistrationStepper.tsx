@@ -36,9 +36,12 @@ export function RegistrationStepper({
               <span
                 className={cn(
                   'flex size-[34px] shrink-0 items-center justify-center rounded-full border text-[13px] font-semibold transition-colors',
-                  isComplete && 'border-[#0ea592] bg-[#0ea592] text-white',
-                  isActive && 'border-[#0ea592] bg-[#0ea592]/10 text-[#0ea592]',
-                  !isComplete && !isActive && 'border-[#4a5f78] text-[#4a5f78]',
+                  isComplete &&
+                    'border-accent bg-accent text-accent-foreground',
+                  isActive && 'border-accent bg-accent/10 text-accent',
+                  !isComplete &&
+                    !isActive &&
+                    'border-border-strong text-text-disabled',
                 )}
               >
                 {isComplete ? (
@@ -51,7 +54,9 @@ export function RegistrationStepper({
               <span
                 className={cn(
                   'truncate text-[13px] font-semibold leading-[18px]',
-                  isComplete || isActive ? 'text-[#e2eaf4]' : 'text-[#4a5f78]',
+                  isComplete || isActive
+                    ? 'text-foreground'
+                    : 'text-text-disabled',
                 )}
               >
                 {step.label}
@@ -60,7 +65,7 @@ export function RegistrationStepper({
               <span
                 className={cn(
                   'hidden text-[10px] leading-[14px] sm:block',
-                  isActive ? 'text-[#7a90a8]' : 'text-[#4a5f78]',
+                  isActive ? 'text-text-tertiary' : 'text-text-disabled',
                 )}
               >
                 {step.description}
@@ -71,8 +76,8 @@ export function RegistrationStepper({
               <span
                 aria-hidden="true"
                 className={cn(
-                  'mt-[17px] h-px min-w-6 flex-1 bg-[#94b4dc1f] sm:min-w-10',
-                  isComplete && 'bg-[#0ea592]/50',
+                  'mt-[17px] h-px min-w-6 flex-1 bg-border-default sm:min-w-10',
+                  isComplete && 'bg-accent/50',
                 )}
               />
             ) : null}

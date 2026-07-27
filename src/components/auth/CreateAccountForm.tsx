@@ -136,7 +136,7 @@ export function CreateAccountForm({
   }
 
   const fieldClassName =
-    'h-12 rounded-2xl border-[#94b4dc23] bg-[#1c2e48] px-4 text-sm text-[#e2eaf4] shadow-none placeholder:text-[#4a5f78] focus-visible:border-[#0ea592] focus-visible:ring-2 focus-visible:ring-[#0ea592]/20'
+    'h-12 rounded-2xl border-input bg-secondary px-4 text-sm text-foreground shadow-none placeholder:text-text-disabled focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20'
 
   return (
     <form onSubmit={handleSubmit} noValidate className="mt-[26px]">
@@ -228,8 +228,8 @@ export function CreateAccountForm({
           <Checkbox
             id="termsAccepted"
             checked={formData.termsAccepted}
-            onChange={(event) =>
-              updateField('termsAccepted', event.currentTarget.checked)
+            onCheckedChange={(checked: boolean) =>
+              updateField('termsAccepted', checked)
             }
             onBlur={() => touchField('termsAccepted')}
             disabled={isLoading}
@@ -241,24 +241,24 @@ export function CreateAccountForm({
                 ? 'termsAccepted-error'
                 : undefined
             }
-            className="mt-0.5 size-5 rounded-lg border-2 border-[#94b4dc2e] bg-transparent data-[state=checked]:border-[#0ea592] data-[state=checked]:bg-[#0ea592]"
+            className="mt-0.5 size-5 rounded-lg border-2 border-strong bg-transparent data-checked:border-accent data-checked:bg-accent"
           />
 
           <label
             htmlFor="termsAccepted"
-            className="cursor-pointer text-sm leading-[22px] text-[#a8bdd4]"
+            className="cursor-pointer text-sm leading-[22px] text-muted-foreground"
           >
             I agree to the{' '}
             <a
               href="/terms"
-              className="font-semibold text-[#0ea592] hover:underline"
+              className="font-semibold text-accent hover:underline"
             >
               GridX Terms
             </a>{' '}
             and{' '}
             <a
               href="/privacy"
-              className="font-semibold text-[#0ea592] hover:underline"
+              className="font-semibold text-accent hover:underline"
             >
               Privacy Policy
             </a>
@@ -269,7 +269,7 @@ export function CreateAccountForm({
           <p
             id="termsAccepted-error"
             role="alert"
-            className="mt-1.5 text-xs text-[#fca5a5]"
+            className="mt-1.5 text-xs text-feedback-error-text"
           >
             {errors.termsAccepted}
           </p>
@@ -280,7 +280,7 @@ export function CreateAccountForm({
         <Button
           type="submit"
           disabled={!isFormValid || isLoading}
-          className="h-12 w-full rounded-xl bg-[#0ea592] text-base font-semibold text-white hover:bg-[#0c9483] disabled:cursor-not-allowed disabled:bg-[#124b48] disabled:text-[#7a90a8]"
+          className="h-12 w-full rounded-xl bg-accent text-base font-semibold text-accent-foreground hover:bg-accent/90 disabled:cursor-not-allowed disabled:bg-accent/30 disabled:text-text-tertiary"
         >
           {isLoading ? (
             <>
@@ -292,7 +292,7 @@ export function CreateAccountForm({
           )}
         </Button>
 
-        <p className="mt-3.5 text-center text-[11px] leading-4 text-[#4a5f78]">
+        <p className="mt-3.5 text-center text-[11px] leading-4 text-text-disabled">
           Complete all fields and accept the terms to continue.
         </p>
       </div>
@@ -315,7 +315,7 @@ function FormField({
     <div className="space-y-1.5">
       <label
         htmlFor={id}
-        className="block text-xs font-semibold uppercase tracking-[0.025em] text-[#a8bdd4]"
+        className="block text-xs font-semibold uppercase tracking-[0.025em] text-muted-foreground"
       >
         {label}
       </label>
@@ -323,7 +323,11 @@ function FormField({
       {children}
 
       {error ? (
-        <p id={`${id}-error`} role="alert" className="text-xs text-[#fca5a5]">
+        <p
+          id={`${id}-error`}
+          role="alert"
+          className="text-xs text-feedback-error-text"
+        >
           {error}
         </p>
       ) : null}
@@ -358,7 +362,7 @@ function PasswordInput({
         onClick={onVisibleChange}
         disabled={props.disabled}
         aria-label={visible ? 'Hide password' : 'Show password'}
-        className="absolute right-0 top-0 flex size-12 items-center justify-center text-[#4a5f78] transition hover:text-[#a8bdd4] disabled:cursor-not-allowed disabled:opacity-50"
+        className="absolute right-0 top-0 flex size-12 items-center justify-center text-text-disabled transition hover:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
       >
         {visible ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
       </button>
