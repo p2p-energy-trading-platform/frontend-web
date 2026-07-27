@@ -14,13 +14,16 @@ const createAccountSchema = z
       .trim()
       .min(1, 'Email address is required')
       .email('Enter a valid email address'),
+
     password: z
       .string()
       .min(8, 'Use at least 8 characters')
       .regex(/[A-Z]/, 'Add at least one uppercase letter')
       .regex(/[a-z]/, 'Add at least one lowercase letter')
       .regex(/[0-9]/, 'Add at least one number'),
+
     confirmPassword: z.string().min(1, 'Confirm your password'),
+
     termsAccepted: z.literal(true, {
       error: 'Accept the GridX Terms and Privacy Policy to continue',
     }),
@@ -31,6 +34,7 @@ const createAccountSchema = z
   })
 
 export type CreateAccountFormData = z.infer<typeof createAccountSchema>
+
 type FieldName = keyof CreateAccountFormData
 type FormErrors = Partial<Record<FieldName, string>>
 
@@ -39,7 +43,14 @@ interface CreateAccountFormProps {
   isLoading?: boolean
 }
 
-const initialFormData = {
+interface FormState {
+  email: string
+  password: string
+  confirmPassword: string
+  termsAccepted: boolean
+}
+
+const initialFormData: FormState = {
   email: '',
   password: '',
   confirmPassword: '',
@@ -52,41 +63,64 @@ export function CreateAccountForm({
 }: CreateAccountFormProps) {
   const [showPassword, setShowPassword] = React.useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false)
-  const [formData, setFormData] = React.useState(initialFormData)
+
+  const [formData, setFormData] =
+    React.useState<FormState>(initialFormData)
+
   const [errors, setErrors] = React.useState<FormErrors>({})
+
   const [touched, setTouched] = React.useState<
     Partial<Record<FieldName, boolean>>
   >({})
 
   const isFormValid = createAccountSchema.safeParse(formData).success
 
-  function validationErrors(data = formData) {
+  function getValidationErrors(data: FormState): FormErrors {
     const result = createAccountSchema.safeParse(data)
-    if (result.success) return {}
 
-    return result.error.issues.reduce<FormErrors>((all, issue) => {
+    if (result.success) {
+      return {}
+    }
+
+    return result.error.issues.reduce<FormErrors>((allErrors, issue) => {
       const field = issue.path[0] as FieldName | undefined
-      if (field && !all[field]) all[field] = issue.message
-      return all
+
+      if (field && !allErrors[field]) {
+        allErrors[field] = issue.message
+      }
+
+      return allErrors
     }, {})
   }
 
-  function updateField<Field extends keyof typeof formData>(
+  function updateField<Field extends keyof FormState>(
     field: Field,
-    value: (typeof formData)[Field],
+    value: FormState[Field],
   ) {
-    const nextData = { ...formData, [field]: value }
+    const nextData: FormState = {
+      ...formData,
+      [field]: value,
+    }
+
     setFormData(nextData)
-    if (touched[field]) setErrors(validationErrors(nextData))
+
+    if (touched[field]) {
+      setErrors(getValidationErrors(nextData))
+    }
   }
 
-  function touch(field: FieldName) {
-    setTouched((current) => ({ ...current, [field]: true }))
-    setErrors(validationErrors())
+  function touchField(field: FieldName) {
+    setTouched((current) => ({
+      ...current,
+      [field]: true,
+    }))
+
+    setErrors(getValidationErrors(formData))
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
+
     const result = createAccountSchema.safeParse(formData)
 
     if (!result.success) {
@@ -96,7 +130,8 @@ export function CreateAccountForm({
         confirmPassword: true,
         termsAccepted: true,
       })
-      setErrors(validationErrors())
+
+      setErrors(getValidationErrors(formData))
       return
     }
 
@@ -108,7 +143,11 @@ export function CreateAccountForm({
     'h-12 rounded-2xl border-[#94b4dc23] bg-[#1c2e48] px-4 text-sm text-[#e2eaf4] shadow-none placeholder:text-[#4a5f78] focus-visible:border-[#0ea592] focus-visible:ring-2 focus-visible:ring-[#0ea592]/20'
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="mt-[26px]">
+    <form
+      onSubmit={handleSubmit}
+      noValidate
+      className="mt-[26px]"
+    >
       <div className="space-y-4">
         <FormField
           id="email"
@@ -122,10 +161,15 @@ export function CreateAccountForm({
             autoComplete="email"
             placeholder="you@example.com"
             value={formData.email}
-            onChange={(event) => updateField('email', event.target.value)}
-            onBlur={() => touch('email')}
+            onChange={(event) =>
+              updateField('email', event.target.value)
+            }
+            onBlur={() => touchField('email')}
             disabled={isLoading}
             aria-invalid={Boolean(touched.email && errors.email)}
+            aria-describedby={
+              touched.email && errors.email ? 'email-error' : undefined
+            }
             className={fieldClassName}
           />
         </FormField>
@@ -142,11 +186,22 @@ export function CreateAccountForm({
             placeholder="Create a strong password"
             value={formData.password}
             visible={showPassword}
-            onVisibleChange={() => setShowPassword((current) => !current)}
-            onChange={(event) => updateField('password', event.target.value)}
-            onBlur={() => touch('password')}
+            onVisibleChange={() =>
+              setShowPassword((current) => !current)
+            }
+            onChange={(event) =>
+              updateField('password', event.target.value)
+            }
+            onBlur={() => touchField('password')}
             disabled={isLoading}
-            aria-invalid={Boolean(touched.password && errors.password)}
+            aria-invalid={Boolean(
+              touched.password && errors.password,
+            )}
+            aria-describedby={
+              touched.password && errors.password
+                ? 'password-error'
+                : undefined
+            }
             className={fieldClassName}
           />
         </FormField>
@@ -154,7 +209,11 @@ export function CreateAccountForm({
         <FormField
           id="confirmPassword"
           label="Confirm password"
-          error={touched.confirmPassword ? errors.confirmPassword : undefined}
+          error={
+            touched.confirmPassword
+              ? errors.confirmPassword
+              : undefined
+          }
         >
           <PasswordInput
             id="confirmPassword"
@@ -169,11 +228,16 @@ export function CreateAccountForm({
             onChange={(event) =>
               updateField('confirmPassword', event.target.value)
             }
-            onBlur={() => touch('confirmPassword')}
+            onBlur={() => touchField('confirmPassword')}
             disabled={isLoading}
             aria-invalid={Boolean(
               touched.confirmPassword && errors.confirmPassword,
             )}
+            aria-describedby={
+              touched.confirmPassword && errors.confirmPassword
+                ? 'confirmPassword-error'
+                : undefined
+            }
             className={fieldClassName}
           />
         </FormField>
@@ -185,12 +249,24 @@ export function CreateAccountForm({
             id="termsAccepted"
             checked={formData.termsAccepted}
             onChange={(event) =>
-              updateField('termsAccepted', event.currentTarget.checked)
+              updateField(
+                'termsAccepted',
+                event.currentTarget.checked,
+              )
             }
-            onBlur={() => touch('termsAccepted')}
+            onBlur={() => touchField('termsAccepted')}
             disabled={isLoading}
+            aria-invalid={Boolean(
+              touched.termsAccepted && errors.termsAccepted,
+            )}
+            aria-describedby={
+              touched.termsAccepted && errors.termsAccepted
+                ? 'termsAccepted-error'
+                : undefined
+            }
             className="mt-0.5 size-5 rounded-lg border-2 border-[#94b4dc2e] bg-transparent data-[state=checked]:border-[#0ea592] data-[state=checked]:bg-[#0ea592]"
           />
+
           <label
             htmlFor="termsAccepted"
             className="cursor-pointer text-sm leading-[22px] text-[#a8bdd4]"
@@ -211,8 +287,13 @@ export function CreateAccountForm({
             </a>
           </label>
         </div>
+
         {touched.termsAccepted && errors.termsAccepted ? (
-          <p role="alert" className="mt-1.5 text-xs text-[#fca5a5]">
+          <p
+            id="termsAccepted-error"
+            role="alert"
+            className="mt-1.5 text-xs text-[#fca5a5]"
+          >
             {errors.termsAccepted}
           </p>
         ) : null}
@@ -222,7 +303,7 @@ export function CreateAccountForm({
         <Button
           type="submit"
           disabled={!isFormValid || isLoading}
-          className="h-12 w-full rounded-xl bg-[#0ea592] text-base font-semibold text-white hover:bg-[#0c9483] disabled:bg-[#124b48] disabled:text-[#7a90a8]"
+          className="h-12 w-full rounded-xl bg-[#0ea592] text-base font-semibold text-white hover:bg-[#0c9483] disabled:cursor-not-allowed disabled:bg-[#124b48] disabled:text-[#7a90a8]"
         >
           {isLoading ? (
             <>
@@ -233,6 +314,7 @@ export function CreateAccountForm({
             'Create Account'
           )}
         </Button>
+
         <p className="mt-3.5 text-center text-[11px] leading-4 text-[#4a5f78]">
           Complete all fields and accept the terms to continue.
         </p>
@@ -260,9 +342,15 @@ function FormField({
       >
         {label}
       </label>
+
       {children}
+
       {error ? (
-        <p role="alert" className="text-xs text-[#fca5a5]">
+        <p
+          id={`${id}-error`}
+          role="alert"
+          className="text-xs text-[#fca5a5]"
+        >
           {error}
         </p>
       ) : null}
@@ -270,10 +358,8 @@ function FormField({
   )
 }
 
-interface PasswordInputProps extends Omit<
-  React.ComponentProps<typeof Input>,
-  'type'
-> {
+interface PasswordInputProps
+  extends Omit<React.ComponentProps<typeof Input>, 'type'> {
   visible: boolean
   onVisibleChange: () => void
 }
@@ -291,14 +377,19 @@ function PasswordInput({
         className={cn(className, 'pr-12')}
         {...props}
       />
+
       <button
         type="button"
         onClick={onVisibleChange}
         disabled={props.disabled}
         aria-label={visible ? 'Hide password' : 'Show password'}
-        className="absolute right-0 top-0 flex size-12 items-center justify-center text-[#4a5f78] transition hover:text-[#a8bdd4] disabled:opacity-50"
+        className="absolute right-0 top-0 flex size-12 items-center justify-center text-[#4a5f78] transition hover:text-[#a8bdd4] disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {visible ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+        {visible ? (
+          <EyeOff className="size-4" />
+        ) : (
+          <Eye className="size-4" />
+        )}
       </button>
     </div>
   )
