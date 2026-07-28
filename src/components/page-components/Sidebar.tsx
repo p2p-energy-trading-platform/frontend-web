@@ -94,9 +94,9 @@ export default function Sidebar({ user }: SidebarProps) {
           const active = pathname === item.to
 
           return (
-            <Link
+            <a
               key={item.to}
-              to={item.to}
+              href={item.to}
               className={cn(
                 'flex items-center gap-3 rounded-lg px-2.5 py-2 text-sm font-medium no-underline transition',
                 active
@@ -106,7 +106,7 @@ export default function Sidebar({ user }: SidebarProps) {
             >
               <Icon className="size-4.5 shrink-0" />
               {!collapsed && <span className="truncate">{item.label}</span>}
-            </Link>
+            </a>
           )
         })}
       </nav>
