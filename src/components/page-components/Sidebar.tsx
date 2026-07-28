@@ -57,7 +57,10 @@ export default function Sidebar({ user }: SidebarProps) {
             <span className="text-base font-semibold text-sidebar-foreground">
               GridX
             </span>
-            <Badge variant="outline" className="ml-auto border-sidebar-border text-sidebar-foreground/70">
+            <Badge
+              variant="outline"
+              className="ml-auto border-sidebar-border text-sidebar-foreground/70"
+            >
               Beta
             </Badge>
           </>
@@ -118,7 +121,10 @@ export default function Sidebar({ user }: SidebarProps) {
         className="m-2 flex items-center gap-2 rounded-lg px-2.5 py-2 text-sm font-medium text-sidebar-foreground/60 transition hover:bg-sidebar-accent hover:text-sidebar-foreground"
       >
         <ChevronsLeft
-          className={cn('size-4.5 transition-transform', collapsed && 'rotate-180')}
+          className={cn(
+            'size-4.5 transition-transform',
+            collapsed && 'rotate-180',
+          )}
         />
         {!collapsed && <span>Collapse</span>}
       </button>
