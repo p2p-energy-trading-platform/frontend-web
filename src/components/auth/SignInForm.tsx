@@ -7,9 +7,9 @@ import {
   EyeOff,
   Gauge,
   House,
-  Leaf,
+  RefreshCw,
+  ShieldCheck,
   Sun,
-  Users,
   Zap,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
@@ -205,12 +205,12 @@ export default function SignInForm() {
               </p>
 
               <p className="mt-6 text-center text-sm text-text-tertiary">
-                Don&apos;t have an account?{' '}
+                New to GridX?{' '}
                 <Link
                   to="/sign-up"
                   className="font-semibold text-accent hover:underline"
                 >
-                  Create account
+                  Create Account
                 </Link>
               </p>
 
@@ -297,6 +297,13 @@ function SignInVisualPanel() {
           </span>
         </div>
 
+        <div className="mt-8">
+          <span className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1.5 text-[10px] font-bold tracking-[0.12em] text-accent">
+            <span className="size-1.5 rounded-full bg-accent shadow-[0_0_8px_currentColor]" />
+            LIVE ENERGY MARKETPLACE
+          </span>
+        </div>
+
         <div className="relative mx-auto mt-8 h-[300px] w-full max-w-[520px]">
           <svg
             className="absolute inset-0 size-full text-accent"
@@ -343,21 +350,21 @@ function SignInVisualPanel() {
 
         <div className="mt-8">
           <h2 className="font-heading text-2xl font-bold leading-[1.25] text-white">
-            Your energy,
+            Power your future,
             <br />
-            your neighbourhood
+            one trade at a time
           </h2>
 
           <p className="mt-3 max-w-[310px] text-sm leading-[1.65] text-[#8492a6]">
-            Trade surplus solar, battery, and EV energy directly with households
-            in your Dubai grid zone.
+            Sign in to manage your clean-energy portfolio and trade directly
+            with your local energy community.
           </p>
         </div>
 
         <div className="mt-7 space-y-3">
-          <Metric icon={Gauge} value="~4 min" label="Average settlement" />
-          <Metric icon={Users} value="3,412" label="Active prosumers" />
-          <Metric icon={Leaf} value="61,840" label="kWh traded / month" />
+          <Benefit icon={Gauge} label="24/7 live energy marketplace" />
+          <Benefit icon={ShieldCheck} label="Bank-grade encrypted sessions" />
+          <Benefit icon={RefreshCw} label="Instant portfolio sync" />
         </div>
 
         <div className="mt-auto border-t border-sidebar-border pt-5">
@@ -387,27 +394,16 @@ function SignInVisualPanel() {
   )
 }
 
-function Metric({
-  icon: Icon,
-  value,
-  label,
-}: {
-  icon: LucideIcon
-  value: string
-  label: string
-}) {
+function Benefit({ icon: Icon, label }: { icon: LucideIcon; label: string }) {
   return (
     <div className="flex min-h-9 items-center gap-3">
       <span className="flex size-8 shrink-0 items-center justify-center rounded-xl border border-accent/20 bg-accent/15 text-accent">
         <Icon className="size-3.5" />
       </span>
 
-      <div className="flex min-w-0 flex-col justify-center">
-        <p className="font-mono text-sm font-bold leading-5 text-white">
-          {value}
-        </p>
-        <p className="text-xs leading-4 text-[#728096]">{label}</p>
-      </div>
+      <p className="min-w-0 text-sm font-medium leading-5 text-white">
+        {label}
+      </p>
     </div>
   )
 }
