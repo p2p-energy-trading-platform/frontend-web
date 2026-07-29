@@ -18,6 +18,7 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as SignInRouteImport } from './routes/sign-in'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -29,6 +30,11 @@ const SignUpRoute = SignUpRouteImport.update({
 const SignInRoute = SignInRouteImport.update({
   id: '/sign-in',
   path: '/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -45,14 +51,22 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+<<<<<<< HEAD
   '/dashboard': typeof DashboardRoute
+=======
+  '/profile': typeof ProfileRoute
+>>>>>>> 0192125 (feat(auth): add email verification and kyc flow)
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+<<<<<<< HEAD
   '/dashboard': typeof DashboardRoute
+=======
+  '/profile': typeof ProfileRoute
+>>>>>>> 0192125 (feat(auth): add email verification and kyc flow)
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
 }
@@ -60,6 +74,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+<<<<<<< HEAD
   '/dashboard': typeof DashboardRoute
 }
 export interface FileRouteTypes {
@@ -68,21 +83,28 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/about' | '/dashboard'
   id: '__root__' | '/' | '/about' | '/dashboard'
+=======
+  '/profile': typeof ProfileRoute
+>>>>>>> 0192125 (feat(auth): add email verification and kyc flow)
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/sign-in' | '/sign-up'
+  fullPaths: '/' | '/about' | '/profile' | '/sign-in' | '/sign-up'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/sign-in' | '/sign-up'
-  id: '__root__' | '/' | '/about' | '/sign-in' | '/sign-up'
+  to: '/' | '/about' | '/profile' | '/sign-in' | '/sign-up'
+  id: '__root__' | '/' | '/about' | '/profile' | '/sign-in' | '/sign-up'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+<<<<<<< HEAD
   DashboardRoute: typeof DashboardRoute
+=======
+  ProfileRoute: typeof ProfileRoute
+>>>>>>> 0192125 (feat(auth): add email verification and kyc flow)
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
 }
@@ -108,6 +130,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignInRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -128,7 +157,11 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+<<<<<<< HEAD
   DashboardRoute: DashboardRoute,
+=======
+  ProfileRoute: ProfileRoute,
+>>>>>>> 0192125 (feat(auth): add email verification and kyc flow)
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
 }

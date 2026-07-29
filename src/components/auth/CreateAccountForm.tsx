@@ -241,7 +241,7 @@ export function CreateAccountForm({
                 ? 'termsAccepted-error'
                 : undefined
             }
-            className="mt-0.5 size-5 rounded-lg border-2 border-strong bg-transparent data-checked:border-accent data-checked:bg-accent"
+            className="mt-0.5 size-5 rounded-full border-2 border-strong bg-transparent data-checked:border-accent data-checked:bg-accent"
           />
 
           <label

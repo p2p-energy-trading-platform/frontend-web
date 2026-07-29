@@ -14,6 +14,10 @@ import {
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
+import chevronRightIcon from '#/assets/auth/chevron-right.svg'
+import googleIcon from '#/assets/auth/google.svg'
+import microsoftIcon from '#/assets/auth/microsoft.svg'
+import uaePassIcon from '#/assets/auth/uae-pass.svg'
 import { Button } from '#/components/ui/button'
 import { Checkbox } from '#/components/ui/checkbox'
 import { Input } from '#/components/ui/input'
@@ -145,42 +149,53 @@ export default function SignInForm() {
 
               <button
                 type="button"
-                className="flex h-12 w-full items-center gap-3 rounded-2xl border border-border bg-card px-4 text-sm font-semibold transition hover:border-strong hover:bg-muted"
+                className="flex h-12 w-full items-center gap-3 rounded-2xl border border-border bg-card px-[17px] text-sm font-semibold text-foreground transition hover:border-strong hover:bg-muted"
               >
-                <span className="flex h-[18px] w-7 overflow-hidden rounded-sm">
-                  <span className="w-1/3 bg-destructive" />
-                  <span className="w-1/3 bg-white" />
-                  <span className="w-1/3 bg-accent" />
-                </span>
+                <img
+                  src={uaePassIcon}
+                  alt=""
+                  aria-hidden="true"
+                  className="h-[18px] w-7 shrink-0"
+                />
 
                 <span className="flex-1 text-left">UAE PASS</span>
 
-                <span className="rounded-full bg-muted px-2 py-0.5 font-mono text-[10px] font-medium text-sidebar-foreground">
+                <span className="shrink-0 rounded-full bg-[#e8eef6] px-1.5 py-0.5 font-mono text-[10px] font-medium leading-[15px] text-[#4a5f78] dark:bg-[rgba(148,180,220,0.1)] dark:text-[#c8d6e8]">
                   UAE Digital ID
                 </span>
 
-                <ArrowRight className="size-3.5 text-text-tertiary" />
+                <img
+                  src={chevronRightIcon}
+                  alt=""
+                  aria-hidden="true"
+                  className="size-3.5 shrink-0"
+                />
               </button>
 
               <div className="mt-2.5 grid grid-cols-2 gap-2.5">
                 <button
                   type="button"
-                  className="flex h-12 items-center justify-center gap-2 rounded-2xl border border-border bg-card text-sm font-semibold transition hover:bg-muted"
+                  className="flex h-12 items-center justify-center gap-2.5 rounded-2xl border border-border bg-card text-sm font-semibold text-foreground transition hover:bg-muted"
                 >
-                  <span className="text-base font-bold text-chart-4">G</span>
+                  <img
+                    src={googleIcon}
+                    alt=""
+                    aria-hidden="true"
+                    className="size-[18px] shrink-0"
+                  />
                   Google
                 </button>
 
                 <button
                   type="button"
-                  className="flex h-12 items-center justify-center gap-2 rounded-2xl border border-border bg-card text-sm font-semibold transition hover:bg-muted"
+                  className="flex h-12 items-center justify-center gap-2.5 rounded-2xl border border-border bg-card text-sm font-semibold text-foreground transition hover:bg-muted"
                 >
-                  <span className="grid size-4 grid-cols-2 gap-px">
-                    <span className="bg-chart-5" />
-                    <span className="bg-chart-1" />
-                    <span className="bg-chart-4" />
-                    <span className="bg-chart-3" />
-                  </span>
+                  <img
+                    src={microsoftIcon}
+                    alt=""
+                    aria-hidden="true"
+                    className="size-[17px] shrink-0"
+                  />
                   Microsoft
                 </button>
               </div>
@@ -273,7 +288,7 @@ function SignInVisualPanel() {
             <Zap className="size-[18px] fill-current" />
           </span>
 
-          <span className="font-heading text-xl font-bold text-accent-foreground">
+          <span className="font-heading text-xl font-bold text-white">
             GridX
           </span>
 
@@ -306,15 +321,17 @@ function SignInVisualPanel() {
           {networkNodes.map(({ label, sublabel, icon: Icon, className }) => (
             <div
               key={label}
-              className={`absolute flex size-16 flex-col items-center justify-center rounded-full border border-accent/45 bg-card text-center ${className}`}
+              className={`absolute flex size-16 flex-col items-center justify-center rounded-full border border-accent/45 bg-[#1a2840] text-center shadow-[0_0_0_1px_rgba(14,165,146,0.08)] ${className}`}
             >
               <Icon className="size-3.5 text-accent" />
 
-              <span className="mt-1 text-[8px] font-semibold text-muted-foreground">
+              <span className="mt-1 text-[8px] font-semibold leading-[10px] text-[#a8bdd4]">
                 {label}
               </span>
 
-              <span className="text-[6px] text-text-disabled">{sublabel}</span>
+              <span className="mt-0.5 text-[6px] leading-[8px] text-[#60748d]">
+                {sublabel}
+              </span>
             </div>
           ))}
 
@@ -325,13 +342,13 @@ function SignInVisualPanel() {
         </div>
 
         <div className="mt-8">
-          <h2 className="font-heading text-2xl font-bold leading-[1.25] text-accent-foreground">
+          <h2 className="font-heading text-2xl font-bold leading-[1.25] text-white">
             Your energy,
             <br />
             your neighbourhood
           </h2>
 
-          <p className="mt-3 max-w-[310px] text-sm leading-[1.65] text-sidebar-foreground/55">
+          <p className="mt-3 max-w-[310px] text-sm leading-[1.65] text-[#8492a6]">
             Trade surplus solar, battery, and EV energy directly with households
             in your Dubai grid zone.
           </p>
@@ -346,7 +363,7 @@ function SignInVisualPanel() {
         <div className="mt-auto border-t border-sidebar-border pt-5">
           <p className="text-xs tracking-[0.18em] text-chart-3">★★★★★</p>
 
-          <p className="mt-2 text-sm italic text-sidebar-foreground/60">
+          <p className="mt-2 text-sm italic leading-6 text-[#93a0b2]">
             “Sold 18 kWh this month to neighbours — earned more than my
             electricity bill.”
           </p>
@@ -357,11 +374,9 @@ function SignInVisualPanel() {
             </span>
 
             <div>
-              <p className="text-xs font-semibold text-accent-foreground">
-                Sara A.
-              </p>
+              <p className="text-xs font-semibold text-white">Sara A.</p>
 
-              <p className="text-[10px] text-sidebar-foreground/35">
+              <p className="text-[10px] leading-4 text-[#68768a]">
                 Solar prosumer · JLT Zone 4
               </p>
             </div>
@@ -382,16 +397,16 @@ function Metric({
   label: string
 }) {
   return (
-    <div className="flex items-center gap-3">
-      <span className="flex size-8 items-center justify-center rounded-xl border border-accent/20 bg-accent/15 text-accent">
+    <div className="flex min-h-9 items-center gap-3">
+      <span className="flex size-8 shrink-0 items-center justify-center rounded-xl border border-accent/20 bg-accent/15 text-accent">
         <Icon className="size-3.5" />
       </span>
 
-      <div>
-        <p className="font-mono text-sm font-bold text-accent-foreground">
+      <div className="flex min-w-0 flex-col justify-center">
+        <p className="font-mono text-sm font-bold leading-5 text-white">
           {value}
         </p>
-        <p className="text-xs text-sidebar-foreground/45">{label}</p>
+        <p className="text-xs leading-4 text-[#728096]">{label}</p>
       </div>
     </div>
   )
