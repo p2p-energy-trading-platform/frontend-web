@@ -39,7 +39,10 @@ export function DeviceCard({
         >
           <Icon className="size-4.5" />
         </span>
-        <Badge variant="outline" className="border-border-subtle text-text-tertiary">
+        <Badge
+          variant="outline"
+          className="border-border-subtle text-text-tertiary"
+        >
           {statusLabel}
         </Badge>
       </div>

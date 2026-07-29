@@ -28,7 +28,10 @@ export function MarketCard({
     <Card className="gap-3 border-border-subtle bg-bg-surface p-4">
       <div className="flex items-center justify-between">
         <h3 className="text-heading-4 text-text-primary">JLT market</h3>
-        <Badge variant="outline" className="border-border-subtle text-text-tertiary">
+        <Badge
+          variant="outline"
+          className="border-border-subtle text-text-tertiary"
+        >
           {listingCount} listings
         </Badge>
       </div>
