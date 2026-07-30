@@ -73,7 +73,7 @@ function Dashboard() {
               </button>
               <button
                 type="button"
-                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-brand-primary px-3.5 text-sm font-medium text-primary-foreground transition hover:bg-brand-primary/90"
+                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-accent px-3.5 text-sm font-medium text-accent-foreground transition hover:brightness-95"
               >
                 Buy energy
               </button>

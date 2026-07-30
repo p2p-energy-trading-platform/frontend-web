@@ -25,7 +25,7 @@ export function QuickActionsCard({ actions }: { actions: Array<QuickAction> }) {
               className={cn(
                 'flex items-center justify-center gap-1.5 rounded-lg px-3 py-2.5 text-sm font-medium transition',
                 action.primary
-                  ? 'bg-brand-primary text-primary-foreground hover:bg-brand-primary/90'
+                  ? 'bg-accent text-accent-foreground hover:brightness-95'
                   : 'bg-bg-elevated text-text-primary hover:bg-bg-overlay',
               )}
             >
