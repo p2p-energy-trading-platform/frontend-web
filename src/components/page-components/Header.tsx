@@ -3,6 +3,7 @@ import { Bell, ChevronDown, Home, HelpCircle } from 'lucide-react'
 
 import { Badge } from '#/components/ui/badge'
 import { Button } from '#/components/ui/button'
+import ThemeToggle from '#/components/ThemeToggle'
 import { cn } from '#/lib/utils'
 
 interface PageHeaderProps {
@@ -77,8 +78,10 @@ export default function PageHeader({
           Meter {meterOnline ? 'online' : 'offline'}
         </Badge>
 
-        {/* Right: help, notifications, user */}
+        {/* Right: theme, help, notifications, user */}
         <div className="ml-auto flex items-center gap-1.5">
+          <ThemeToggle />
+
           <Button
             type="button"
             variant="ghost"
