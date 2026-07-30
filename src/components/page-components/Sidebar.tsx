@@ -27,6 +27,11 @@ const navItems = [
   { label: 'Settings', to: '/settings', icon: Settings },
 ] as const
 
+const navGroups = [
+  navItems.slice(0, 5),
+  navItems.slice(5),
+]
+
 interface SidebarProps {
   user: {
     name: string
@@ -48,7 +53,7 @@ export default function Sidebar({ user }: SidebarProps) {
       )}
     >
       {/* Brand */}
-      <div className="flex items-center gap-2 px-4 py-4">
+      <div className="flex items-center gap-2 border-b border-sidebar-border px-4 py-4">
         <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
           <Zap className="size-4.5 fill-current" />
         </span>
@@ -68,50 +73,64 @@ export default function Sidebar({ user }: SidebarProps) {
       </div>
 
       {/* User summary */}
-      <button
-        type="button"
-        className="mx-2 mb-2 flex items-center gap-2 rounded-lg px-2 py-2 text-left transition hover:bg-sidebar-accent"
-      >
-        <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-accent-foreground">
-          {user.initials}
-        </span>
-        {!collapsed && (
-          <>
-            <span className="flex min-w-0 flex-col leading-tight">
-              <span className="truncate text-sm font-medium text-sidebar-foreground">
-                {user.name}
+      <div className="border-b border-sidebar-border py-2">
+        <button
+          type="button"
+          className="mx-2 flex w-[calc(100%-1rem)] items-center gap-2 rounded-lg px-2 py-2 text-left transition hover:bg-sidebar-accent"
+        >
+          <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-accent-foreground">
+            {user.initials}
+          </span>
+          {!collapsed && (
+            <>
+              <span className="flex min-w-0 flex-col leading-tight">
+                <span className="truncate text-sm font-medium text-sidebar-foreground">
+                  {user.name}
+                </span>
+                <span className="truncate text-xs text-sidebar-foreground/60">
+                  {user.property} · {user.zone}
+                </span>
               </span>
-              <span className="truncate text-xs text-sidebar-foreground/60">
-                {user.property} · {user.zone}
-              </span>
-            </span>
-            <ChevronDown className="ml-auto size-4 shrink-0 text-sidebar-foreground/50" />
-          </>
-        )}
-      </button>
+              <ChevronDown className="ml-auto size-4 shrink-0 text-sidebar-foreground/50" />
+            </>
+          )}
+        </button>
+      </div>
 
       {/* Nav */}
-      <nav className="flex flex-1 flex-col gap-0.5 px-2">
-        {navItems.map((item) => {
-          const Icon = item.icon
-          const active = pathname === item.to
+      <nav className="flex flex-1 flex-col px-2 py-2">
+        {navGroups.map((group, groupIndex) => (
+          <div
+            key={group[0]?.label}
+            className={cn(
+              'flex flex-col gap-0.5 py-1',
+              groupIndex > 0 && 'mt-2 border-t border-sidebar-divider pt-3',
+            )}
+          >
+            {group.map((item) => {
+              const Icon = item.icon
+              const active = pathname === item.to
 
-          return (
-            <a
-              key={item.to}
-              href={item.to}
-              className={cn(
-                'flex items-center gap-3 rounded-lg px-2.5 py-2 text-sm font-medium no-underline transition',
-                active
-                  ? 'bg-sidebar-primary text-sidebar-primary-foreground'
-                  : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground',
-              )}
-            >
-              <Icon className="size-4.5 shrink-0" />
-              {!collapsed && <span className="truncate">{item.label}</span>}
-            </a>
-          )
-        })}
+              return (
+                <a
+                  key={item.to}
+                  href={item.to}
+                  className={cn(
+                    'flex items-center gap-3 rounded-lg px-2.5 py-2 text-sm font-medium no-underline transition',
+                    active
+                      ? 'bg-sidebar-primary text-sidebar-primary-foreground'
+                      : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground',
+                  )}
+                >
+                  <Icon className="size-4.5 shrink-0" />
+                  {!collapsed && (
+                    <span className="truncate">{item.label}</span>
+                  )}
+                </a>
+              )
+            })}
+          </div>
+        ))}
       </nav>
 
       {/* Collapse toggle */}
