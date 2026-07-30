@@ -8,7 +8,7 @@ function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
     <CheckboxPrimitive.Root
       data-slot="checkbox"
       className={cn(
-        'peer size-4 shrink-0 rounded border border-input bg-background shadow-xs outline-none transition-shadow',
+        'peer inline-flex size-4 shrink-0 items-center justify-center rounded border border-input bg-background p-0 shadow-xs outline-none transition-shadow',
         'focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50',
         'disabled:cursor-not-allowed disabled:opacity-50',
         'data-[checked]:border-primary data-[checked]:bg-primary data-[checked]:text-primary-foreground',
@@ -18,9 +18,9 @@ function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
     >
       <CheckboxPrimitive.Indicator
         data-slot="checkbox-indicator"
-        className="flex items-center justify-center text-current"
+        className="flex size-full items-center justify-center text-current"
       >
-        <Check className="size-3.5" />
+        <Check className="size-3.5" strokeWidth={3} />
       </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
   )

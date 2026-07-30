@@ -31,6 +31,13 @@ export function RegistrationStepper({
             key={step.id}
             className="flex min-w-0 flex-1 items-start"
             aria-current={isActive ? 'step' : undefined}
+            aria-label={`${step.label}: ${
+              isComplete
+                ? 'completed'
+                : isActive
+                  ? 'current step'
+                  : 'not started'
+            }`}
           >
             <div className="flex min-w-0 flex-1 flex-col items-center gap-1.5 text-center">
               <span
