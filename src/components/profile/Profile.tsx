@@ -6,23 +6,30 @@ import {
   ChevronRight,
   IdCard,
   MailCheck,
+  RadioTower,
   ShieldCheck,
   UserRound,
 } from 'lucide-react'
 
 import type { KycStatus } from '#/components/auth/KycStep'
+import type { SmartMeterStatus } from '#/lib/smart-meter-status'
 import { Badge } from '#/components/ui/badge'
 import { getKycStatus } from '#/lib/kyc-status'
+import { getSmartMeterStatus } from '#/lib/smart-meter-status'
 import { cn } from '#/lib/utils'
 
 export default function Profile() {
   const [kycStatus, setKycStatus] = React.useState<KycStatus>('not-submitted')
+  const [meterStatus, setMeterStatus] =
+    React.useState<SmartMeterStatus>('skipped')
 
   React.useEffect(() => {
     setKycStatus(getKycStatus())
+    setMeterStatus(getSmartMeterStatus())
   }, [])
 
   const isPending = kycStatus === 'pending'
+  const isMeterPending = meterStatus === 'pending'
 
   return (
     <main className="min-h-screen bg-background px-5 py-12 text-foreground sm:px-8">
@@ -57,7 +64,7 @@ export default function Profile() {
             </div>
           </div>
 
-          <div className="grid divide-y divide-border sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+          <div className="grid divide-y divide-border sm:grid-cols-3 sm:divide-x sm:divide-y-0">
             <ProfileItem
               icon={MailCheck}
               label="Email verification"
@@ -70,6 +77,16 @@ export default function Profile() {
               value={isPending ? 'Pending' : 'Not submitted'}
               valueClassName={
                 isPending
+                  ? 'text-[var(--feedback-warning-text)]'
+                  : 'text-text-tertiary'
+              }
+            />
+            <ProfileItem
+              icon={RadioTower}
+              label="Smart meter"
+              value={isMeterPending ? 'Pending' : 'Not connected'}
+              valueClassName={
+                isMeterPending
                   ? 'text-[var(--feedback-warning-text)]'
                   : 'text-text-tertiary'
               }

@@ -25,12 +25,12 @@ import { SmartMeterStep } from '#/components/auth/SmartMeterStep'
 import type { SmartMeterStatus } from '#/components/auth/SmartMeterStep'
 import { VerifyEmailStep } from '#/components/auth/VerifyEmailStep'
 import { saveKycStatus } from '#/lib/kyc-status'
+import { saveSmartMeterStatus } from '#/lib/smart-meter-status'
 
 const REGISTRATION_STEPS = [
   { id: 1, label: 'Account', description: 'Email & password' },
   { id: 2, label: 'Verify email', description: 'One-time code' },
-  { id: 3, label: 'Identity', description: 'KYC verification' },
-  { id: 4, label: 'Smart Meter', description: 'Connect your device' },
+  { id: 3, label: 'Smart Meter', description: 'Optional connection' },
 ]
 
 const ACCOUNT_BENEFITS = [
@@ -57,10 +57,10 @@ export default function Signup() {
       : view === 'verify-email'
         ? 2
         : view === 'kyc'
-          ? 3
+          ? 2.5
           : view === 'smart-meter'
-            ? 4
-            : 5
+            ? 3
+            : 4
 
   async function handleCreateAccount(data: CreateAccountFormData) {
     setIsLoading(true)
@@ -88,7 +88,7 @@ export default function Signup() {
 
   async function handleSmartMeterComplete(status: SmartMeterStatus) {
     await new Promise((resolve) => window.setTimeout(resolve, 600))
-    window.localStorage.setItem('gridx:smart-meter-status', status)
+    saveSmartMeterStatus(status)
     setMeterStatus(status)
     setView('complete')
   }
@@ -177,7 +177,9 @@ export default function Signup() {
             </div>
 
             <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.1em] text-accent">
-              Step {Math.min(currentStep, 4)} of 4
+              {view === 'kyc'
+                ? 'Optional identity check'
+                : `Step ${Math.min(currentStep, 3)} of 3`}
             </p>
 
             <h2 className="mt-1 font-heading text-xl font-bold leading-[25px] text-white">
@@ -281,7 +283,7 @@ export default function Signup() {
                   <span className="flex size-7 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.08] text-accent">
                     <ShieldCheck className="size-3.5" />
                   </span>
-                  Meter access is read-only and encrypted
+                  Compatible with SMETS2 &amp; most SMETS1 meters
                 </li>
               </ul>
             ) : (
@@ -301,9 +303,9 @@ export default function Signup() {
                         : 'Not submitted'}
                       <br />
                       Smart meter:{' '}
-                      {meterStatus === 'connected'
-                        ? 'Connected'
-                        : 'Set up later'}
+                      {meterStatus === 'pending'
+                        ? 'Pending approval'
+                        : 'Skipped'}
                     </p>
                   </div>
                 </div>
@@ -401,7 +403,7 @@ function RegistrationComplete({
               Smart meter
             </p>
             <p className="mt-0.5 text-sm font-semibold">
-              {meterStatus === 'connected' ? 'Connected' : 'Set up later'}
+              {meterStatus === 'pending' ? 'Pending' : 'Skipped'}
             </p>
           </div>
         </div>
