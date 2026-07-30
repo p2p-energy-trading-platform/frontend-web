@@ -72,7 +72,7 @@ export default function Sidebar({ user }: SidebarProps) {
         type="button"
         className="mx-2 mb-2 flex items-center gap-2 rounded-lg px-2 py-2 text-left transition hover:bg-sidebar-accent"
       >
-        <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-brand-primary text-xs font-semibold text-primary-foreground">
+        <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-accent-foreground">
           {user.initials}
         </span>
         {!collapsed && (

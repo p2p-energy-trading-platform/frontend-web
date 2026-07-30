@@ -110,7 +110,7 @@ export default function PageHeader({
             onClick={onUserMenuClick}
             className="ml-1 flex items-center gap-2 rounded-lg py-1 pl-1 pr-2 transition hover:bg-bg-elevated"
           >
-            <span className="flex size-8 items-center justify-center rounded-full bg-brand-primary text-xs font-semibold text-primary-foreground">
+            <span className="flex size-8 items-center justify-center rounded-full bg-accent text-xs font-semibold text-accent-foreground">
               {user.initials}
             </span>
             <span className="hidden flex-col items-start leading-tight sm:flex">
