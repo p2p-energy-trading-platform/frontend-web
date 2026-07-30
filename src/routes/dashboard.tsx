@@ -91,27 +91,48 @@ function Dashboard() {
 
           {/* Stat tile row */}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-7">
-            <StatTile icon={Wallet} value="AED 284.50" label="Wallet balance" />
+            <StatTile
+              icon={Wallet}
+              iconClassName="bg-brand-primary-muted text-brand-primary"
+              value="AED 284.50"
+              label="Wallet balance"
+            />
             <StatTile
               icon={ArrowUpRight}
-              iconClassName="text-brand-primary"
+              iconClassName="bg-brand-primary-muted text-brand-primary"
               value="+AED 3.19"
               label="Trading P&L"
             />
             <StatTile
               icon={CircleGauge}
+              iconClassName="bg-brand-info-muted text-brand-info"
               value="AED 1.60"
               label="Saved vs tariff"
             />
-            <StatTile icon={Sun} value="18.4 kg" label="Avoided carbon" />
+            <StatTile
+              icon={Sun}
+              iconClassName="bg-brand-warning-muted text-brand-warning"
+              value="18.4 kg"
+              label="Avoided carbon"
+            />
             <StatTile
               icon={ArrowUpRight}
-              iconClassName="text-brand-primary"
+              iconClassName="bg-brand-primary-muted text-brand-primary"
               value="8.4 kWh"
               label="Sold today"
             />
-            <StatTile icon={ArrowDownLeft} value="0 kWh" label="Bought today" />
-            <StatTile icon={BatteryCharging} value="94%" label="Battery SoC" />
+            <StatTile
+              icon={ArrowDownLeft}
+              iconClassName="bg-brand-info-muted text-brand-info"
+              value="0 kWh"
+              label="Bought today"
+            />
+            <StatTile
+              icon={BatteryCharging}
+              iconClassName="bg-brand-primary-muted text-brand-primary"
+              value="94%"
+              label="Battery SoC"
+            />
           </div>
 
           {/* Chart + right rail */}
