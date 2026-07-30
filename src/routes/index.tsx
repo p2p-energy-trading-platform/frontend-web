@@ -1,8 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 import HeroSection from '@/components/landing/HeroSection'
 import HowItWorksSection from '#/components/landing/HowItWorksSection'
-import FeaturesSection from '#/components/landing/FeaturesSection'
+import BenifitsSection from '#/components/landing/BenefitsSection'
 import FAQSection from '@/components/landing/FAQSection'
+
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -15,7 +16,7 @@ function Home() {
 
       <HowItWorksSection />
 
-      <FeaturesSection />
+      <BenifitsSection />
 
       <FAQSection />
     </main>
