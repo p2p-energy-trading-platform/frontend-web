@@ -52,7 +52,7 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-accent">
-            Step 3 · Optional smart meter
+            Step 4 · Optional smart meter
           </p>
           <h1 className="mt-1 font-heading text-[26px] font-bold leading-[34px]">
             Connect your smart meter

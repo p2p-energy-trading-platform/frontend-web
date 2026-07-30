@@ -30,7 +30,8 @@ import { saveSmartMeterStatus } from '#/lib/smart-meter-status'
 const REGISTRATION_STEPS = [
   { id: 1, label: 'Account', description: 'Email & password' },
   { id: 2, label: 'Verify email', description: 'One-time code' },
-  { id: 3, label: 'Smart Meter', description: 'Optional connection' },
+  { id: 3, label: 'Identity', description: 'KYC verification' },
+  { id: 4, label: 'Smart Meter', description: 'Optional connection' },
 ]
 
 const ACCOUNT_BENEFITS = [
@@ -57,10 +58,10 @@ export default function Signup() {
       : view === 'verify-email'
         ? 2
         : view === 'kyc'
-          ? 2.5
+          ? 3
           : view === 'smart-meter'
-            ? 3
-            : 4
+            ? 4
+            : 5
 
   async function handleCreateAccount(data: CreateAccountFormData) {
     setIsLoading(true)
@@ -177,9 +178,7 @@ export default function Signup() {
             </div>
 
             <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.1em] text-accent">
-              {view === 'kyc'
-                ? 'Optional identity check'
-                : `Step ${Math.min(currentStep, 3)} of 3`}
+              Step {Math.min(currentStep, 4)} of 4
             </p>
 
             <h2 className="mt-1 font-heading text-xl font-bold leading-[25px] text-white">
