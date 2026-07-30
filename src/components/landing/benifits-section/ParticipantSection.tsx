@@ -6,7 +6,7 @@ import { ProsumerBenefits } from './ProsumerBenefits'
 export default function ParticipantSection() {
    return ( 
        
-        <div className="py-6 flex flex-row justify-center gap-6">
+        <div className="w-full py-6 flex flex-row justify-center gap-6">
 
             <ParticipantCard
                 label="For buyers"

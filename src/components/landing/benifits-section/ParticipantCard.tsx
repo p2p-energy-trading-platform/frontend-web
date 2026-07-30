@@ -16,10 +16,10 @@ export default function ParticipantCard({label, title, benefits}: ParticipantCar
 
     return(
 
-        <Card className="w-64 p-6">
+        <Card className="w-full max-w-lg p-6">
             <div className="flex flex-col gap-3">
 
-                <Badge variant="secondary">
+                <Badge variant="secondary" className="px-6">
                     {label}
                 </Badge>
 
@@ -27,15 +27,15 @@ export default function ParticipantCard({label, title, benefits}: ParticipantCar
                     {title}
                 </h3>
 
-                <ul className="flex flex-col gap-2">
+                <ul className="flex flex-col gap-5">
                     {benefits.map((benefit) => (
 
-                        <li key={benefit.text} className="text-sm text-text-secondary">
+                        <li key={benefit.text} className="flex items-center gap-2 text-sm text-text-secondary">
 
                             {benefit.icon}
 
-                            <span>
-                               {benefit.text}
+                            <span className="text-caption">
+                                {benefit.text}
                             </span>
 
                         </li>
