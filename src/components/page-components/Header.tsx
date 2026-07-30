@@ -49,7 +49,7 @@ export default function PageHeader({
           to={dashboardHref}
           className="inline-flex items-center gap-2 rounded-lg px-1.5 py-1 text-text-primary no-underline transition hover:bg-bg-elevated"
         >
-          <span className="flex size-7 items-center justify-center rounded-lg bg-bg-elevated text-text-secondary">
+          <span className="flex size-7 items-center justify-center rounded-lg bg-bg-elevated text-brand-primary">
             <Home className="size-4" />
           </span>
           <span className="text-sm font-semibold">{propertyName}</span>
@@ -99,7 +99,7 @@ export default function PageHeader({
           >
             <Bell className="size-4.5 text-text-secondary" />
             {notificationCount > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-destructive text-[10px] font-semibold leading-none text-destructive-foreground">
+              <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-brand-primary text-[10px] font-semibold leading-none text-text-on-brand">
                 {notificationCount > 9 ? '9+' : notificationCount}
               </span>
             )}
