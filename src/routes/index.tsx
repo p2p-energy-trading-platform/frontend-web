@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import HeroSection from '@/components/landing/HeroSection'
 import HowItWorksSection from '#/components/landing/HowItWorksSection'
-import BenifitsSection from '#/components/landing/BenefitsSection'
+import BenifitsSection from '#/components/landing/benifits-section/BenefitsSection'
 import FAQSection from '@/components/landing/FAQSection'
 
 
