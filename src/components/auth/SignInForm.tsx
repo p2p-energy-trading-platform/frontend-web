@@ -7,9 +7,9 @@ import {
   EyeOff,
   Gauge,
   House,
-  Leaf,
+  RefreshCw,
+  ShieldCheck,
   Sun,
-  Users,
   Zap,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
@@ -74,12 +74,13 @@ export default function SignInForm() {
                     Password
                   </label>
 
-                  <button
+                  <Button
                     type="button"
-                    className="text-xs font-semibold text-accent hover:underline"
+                    variant="link"
+                    className="h-auto p-0 text-xs font-semibold text-accent"
                   >
                     Forgot password?
-                  </button>
+                  </Button>
                 </div>
 
                 <div className="relative mt-1.5">
@@ -94,22 +95,24 @@ export default function SignInForm() {
                     required
                   />
 
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="icon"
                     onClick={() =>
                       setShowPassword((currentValue) => !currentValue)
                     }
                     aria-label={
                       showPassword ? 'Hide password' : 'Show password'
                     }
-                    className="absolute right-0 top-0 flex size-12 items-center justify-center text-text-disabled transition hover:text-muted-foreground"
+                    className="absolute right-0 top-0 size-12 text-text-disabled hover:bg-transparent hover:text-muted-foreground"
                   >
                     {showPassword ? (
                       <EyeOff className="size-4" />
                     ) : (
                       <Eye className="size-4" />
                     )}
-                  </button>
+                  </Button>
                 </div>
               </div>
 
@@ -143,46 +146,60 @@ export default function SignInForm() {
                 <span className="h-px flex-1 bg-muted/50" />
               </div>
 
-              <button
+              <Button
                 type="button"
-                className="flex h-12 w-full items-center gap-3 rounded-2xl border border-border bg-card px-4 text-sm font-semibold transition hover:border-strong hover:bg-muted"
+                variant="outline"
+                className="h-12 w-full justify-start gap-3 rounded-2xl bg-card px-[17px] text-sm font-semibold"
               >
-                <span className="flex h-[18px] w-7 overflow-hidden rounded-sm">
-                  <span className="w-1/3 bg-destructive" />
-                  <span className="w-1/3 bg-white" />
-                  <span className="w-1/3 bg-accent" />
-                </span>
+                <img
+                  src="/auth/uae-pass.svg"
+                  alt=""
+                  aria-hidden="true"
+                  className="h-[18px] w-7 shrink-0"
+                />
 
                 <span className="flex-1 text-left">UAE PASS</span>
 
-                <span className="rounded-full bg-muted px-2 py-0.5 font-mono text-[10px] font-medium text-sidebar-foreground">
+                <span className="shrink-0 rounded-full bg-[#e8eef6] px-1.5 py-0.5 font-mono text-[10px] font-medium leading-[15px] text-[#4a5f78] dark:bg-[rgba(148,180,220,0.1)] dark:text-[#c8d6e8]">
                   UAE Digital ID
                 </span>
 
-                <ArrowRight className="size-3.5 text-text-tertiary" />
-              </button>
+                <img
+                  src="/auth/chevron-right.svg"
+                  alt=""
+                  aria-hidden="true"
+                  className="size-3.5 shrink-0"
+                />
+              </Button>
 
               <div className="mt-2.5 grid grid-cols-2 gap-2.5">
-                <button
+                <Button
                   type="button"
-                  className="flex h-12 items-center justify-center gap-2 rounded-2xl border border-border bg-card text-sm font-semibold transition hover:bg-muted"
+                  variant="outline"
+                  className="h-12 gap-2.5 rounded-2xl bg-card text-sm font-semibold"
                 >
-                  <span className="text-base font-bold text-chart-4">G</span>
+                  <img
+                    src="/auth/google.svg"
+                    alt=""
+                    aria-hidden="true"
+                    className="size-[18px] shrink-0"
+                  />
                   Google
-                </button>
+                </Button>
 
-                <button
+                <Button
                   type="button"
-                  className="flex h-12 items-center justify-center gap-2 rounded-2xl border border-border bg-card text-sm font-semibold transition hover:bg-muted"
+                  variant="outline"
+                  className="h-12 gap-2.5 rounded-2xl bg-card text-sm font-semibold"
                 >
-                  <span className="grid size-4 grid-cols-2 gap-px">
-                    <span className="bg-chart-5" />
-                    <span className="bg-chart-1" />
-                    <span className="bg-chart-4" />
-                    <span className="bg-chart-3" />
-                  </span>
+                  <img
+                    src="/auth/microsoft.svg"
+                    alt=""
+                    aria-hidden="true"
+                    className="size-[17px] shrink-0"
+                  />
                   Microsoft
-                </button>
+                </Button>
               </div>
 
               <p className="mt-2.5 text-center text-[10px] text-text-disabled">
@@ -190,12 +207,12 @@ export default function SignInForm() {
               </p>
 
               <p className="mt-6 text-center text-sm text-text-tertiary">
-                Don&apos;t have an account?{' '}
+                New to GridX?{' '}
                 <Link
                   to="/sign-up"
                   className="font-semibold text-accent hover:underline"
                 >
-                  Create account
+                  Create Account
                 </Link>
               </p>
 
@@ -273,12 +290,19 @@ function SignInVisualPanel() {
             <Zap className="size-[18px] fill-current" />
           </span>
 
-          <span className="font-heading text-xl font-bold text-accent-foreground">
+          <span className="font-heading text-xl font-bold text-white">
             GridX
           </span>
 
           <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-1.5 py-0.5 text-[9px] text-emerald-300">
             Beta
+          </span>
+        </div>
+
+        <div className="mt-8">
+          <span className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1.5 text-[10px] font-bold tracking-[0.12em] text-accent">
+            <span className="size-1.5 rounded-full bg-accent shadow-[0_0_8px_currentColor]" />
+            LIVE ENERGY MARKETPLACE
           </span>
         </div>
 
@@ -306,15 +330,17 @@ function SignInVisualPanel() {
           {networkNodes.map(({ label, sublabel, icon: Icon, className }) => (
             <div
               key={label}
-              className={`absolute flex size-16 flex-col items-center justify-center rounded-full border border-accent/45 bg-card text-center ${className}`}
+              className={`absolute flex size-16 flex-col items-center justify-center rounded-full border border-accent/45 bg-[#1a2840] text-center shadow-[0_0_0_1px_rgba(14,165,146,0.08)] ${className}`}
             >
               <Icon className="size-3.5 text-accent" />
 
-              <span className="mt-1 text-[8px] font-semibold text-muted-foreground">
+              <span className="mt-1 text-[8px] font-semibold leading-[10px] text-[#a8bdd4]">
                 {label}
               </span>
 
-              <span className="text-[6px] text-text-disabled">{sublabel}</span>
+              <span className="mt-0.5 text-[6px] leading-[8px] text-[#60748d]">
+                {sublabel}
+              </span>
             </div>
           ))}
 
@@ -325,28 +351,28 @@ function SignInVisualPanel() {
         </div>
 
         <div className="mt-8">
-          <h2 className="font-heading text-2xl font-bold leading-[1.25] text-accent-foreground">
-            Your energy,
+          <h2 className="font-heading text-2xl font-bold leading-[1.25] text-white">
+            Power your future,
             <br />
-            your neighbourhood
+            one trade at a time
           </h2>
 
-          <p className="mt-3 max-w-[310px] text-sm leading-[1.65] text-sidebar-foreground/55">
-            Trade surplus solar, battery, and EV energy directly with households
-            in your Dubai grid zone.
+          <p className="mt-3 max-w-[310px] text-sm leading-[1.65] text-[#8492a6]">
+            Sign in to manage your clean-energy portfolio and trade directly
+            with your local energy community.
           </p>
         </div>
 
         <div className="mt-7 space-y-3">
-          <Metric icon={Gauge} value="~4 min" label="Average settlement" />
-          <Metric icon={Users} value="3,412" label="Active prosumers" />
-          <Metric icon={Leaf} value="61,840" label="kWh traded / month" />
+          <Benefit icon={Gauge} label="24/7 live energy marketplace" />
+          <Benefit icon={ShieldCheck} label="Bank-grade encrypted sessions" />
+          <Benefit icon={RefreshCw} label="Instant portfolio sync" />
         </div>
 
         <div className="mt-auto border-t border-sidebar-border pt-5">
           <p className="text-xs tracking-[0.18em] text-chart-3">★★★★★</p>
 
-          <p className="mt-2 text-sm italic text-sidebar-foreground/60">
+          <p className="mt-2 text-sm italic leading-6 text-[#93a0b2]">
             “Sold 18 kWh this month to neighbours — earned more than my
             electricity bill.”
           </p>
@@ -357,11 +383,9 @@ function SignInVisualPanel() {
             </span>
 
             <div>
-              <p className="text-xs font-semibold text-accent-foreground">
-                Sara A.
-              </p>
+              <p className="text-xs font-semibold text-white">Sara A.</p>
 
-              <p className="text-[10px] text-sidebar-foreground/35">
+              <p className="text-[10px] leading-4 text-[#68768a]">
                 Solar prosumer · JLT Zone 4
               </p>
             </div>
@@ -372,27 +396,16 @@ function SignInVisualPanel() {
   )
 }
 
-function Metric({
-  icon: Icon,
-  value,
-  label,
-}: {
-  icon: LucideIcon
-  value: string
-  label: string
-}) {
+function Benefit({ icon: Icon, label }: { icon: LucideIcon; label: string }) {
   return (
-    <div className="flex items-center gap-3">
-      <span className="flex size-8 items-center justify-center rounded-xl border border-accent/20 bg-accent/15 text-accent">
+    <div className="flex min-h-9 items-center gap-3">
+      <span className="flex size-8 shrink-0 items-center justify-center rounded-xl border border-accent/20 bg-accent/15 text-accent">
         <Icon className="size-3.5" />
       </span>
 
-      <div>
-        <p className="font-mono text-sm font-bold text-accent-foreground">
-          {value}
-        </p>
-        <p className="text-xs text-sidebar-foreground/45">{label}</p>
-      </div>
+      <p className="min-w-0 text-sm font-medium leading-5 text-white">
+        {label}
+      </p>
     </div>
   )
 }
