@@ -27,10 +27,7 @@ const navItems = [
   { label: 'Settings', to: '/settings', icon: Settings },
 ] as const
 
-const navGroups = [
-  navItems.slice(0, 5),
-  navItems.slice(5),
-]
+const navGroups = [navItems.slice(0, 5), navItems.slice(5)]
 
 interface SidebarProps {
   user: {
@@ -123,9 +120,7 @@ export default function Sidebar({ user }: SidebarProps) {
                   )}
                 >
                   <Icon className="size-4.5 shrink-0" />
-                  {!collapsed && (
-                    <span className="truncate">{item.label}</span>
-                  )}
+                  {!collapsed && <span className="truncate">{item.label}</span>}
                 </a>
               )
             })}
