@@ -190,7 +190,10 @@ export function KycStep({ email, onComplete }: KycStepProps) {
                   onChange={(event) =>
                     updateField('dateOfBirth', event.target.value)
                   }
-                  className={cn(inputClassName, 'date-input pr-12')}
+                  className={cn(
+                    inputClassName,
+                    'pr-12 [&::-webkit-calendar-picker-indicator]:hidden',
+                  )}
                 />
                 <button
                   type="button"

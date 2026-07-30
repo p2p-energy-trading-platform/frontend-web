@@ -14,10 +14,6 @@ import {
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
-import chevronRightIcon from '#/assets/auth/chevron-right.svg'
-import googleIcon from '#/assets/auth/google.svg'
-import microsoftIcon from '#/assets/auth/microsoft.svg'
-import uaePassIcon from '#/assets/auth/uae-pass.svg'
 import { Button } from '#/components/ui/button'
 import { Checkbox } from '#/components/ui/checkbox'
 import { Input } from '#/components/ui/input'
@@ -152,7 +148,7 @@ export default function SignInForm() {
                 className="flex h-12 w-full items-center gap-3 rounded-2xl border border-border bg-card px-[17px] text-sm font-semibold text-foreground transition hover:border-strong hover:bg-muted"
               >
                 <img
-                  src={uaePassIcon}
+                  src="/auth/uae-pass.svg"
                   alt=""
                   aria-hidden="true"
                   className="h-[18px] w-7 shrink-0"
@@ -165,7 +161,7 @@ export default function SignInForm() {
                 </span>
 
                 <img
-                  src={chevronRightIcon}
+                  src="/auth/chevron-right.svg"
                   alt=""
                   aria-hidden="true"
                   className="size-3.5 shrink-0"
@@ -178,7 +174,7 @@ export default function SignInForm() {
                   className="flex h-12 items-center justify-center gap-2.5 rounded-2xl border border-border bg-card text-sm font-semibold text-foreground transition hover:bg-muted"
                 >
                   <img
-                    src={googleIcon}
+                    src="/auth/google.svg"
                     alt=""
                     aria-hidden="true"
                     className="size-[18px] shrink-0"
@@ -191,7 +187,7 @@ export default function SignInForm() {
                   className="flex h-12 items-center justify-center gap-2.5 rounded-2xl border border-border bg-card text-sm font-semibold text-foreground transition hover:bg-muted"
                 >
                   <img
-                    src={microsoftIcon}
+                    src="/auth/microsoft.svg"
                     alt=""
                     aria-hidden="true"
                     className="size-[17px] shrink-0"

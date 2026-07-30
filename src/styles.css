@@ -160,10 +160,6 @@
 }
 
 @layer utilities {
-  .date-input::-webkit-calendar-picker-indicator {
-    display: none;
-  }
-
   .text-display-2xl {
     font-size: 60px;
     font-weight: 700;
