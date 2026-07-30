@@ -4,7 +4,7 @@ import ParticipantSection from './ParticipantSection'
 
 export default function BenifitsSection() {
     return (
-    <section className="border border-red-500 bg-background flex flex-col items-center justify-center">
+    <section className="bg-background flex flex-col items-center justify-center">
       
         <BenefitsHeader />
 
