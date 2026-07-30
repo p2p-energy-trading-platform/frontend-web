@@ -201,13 +201,14 @@ export function VerifyEmailStep({
 
       <p className="mt-5 text-center text-sm text-text-tertiary">
         Didn&apos;t receive the verification code?{' '}
-        <button
+        <Button
           type="button"
+          variant="link"
           onClick={handleResend}
-          className="font-semibold text-accent hover:underline"
+          className="h-auto p-0 font-semibold text-accent"
         >
           Resend
-        </button>
+        </Button>
       </p>
 
       {resendMessage ? (
@@ -219,14 +220,15 @@ export function VerifyEmailStep({
         </p>
       ) : null}
 
-      <button
+      <Button
         type="button"
+        variant="ghost"
         onClick={onBack}
-        className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-text-tertiary transition hover:text-foreground"
+        className="mt-6 h-auto p-0 text-sm font-medium text-text-tertiary hover:bg-transparent hover:text-foreground"
       >
         <ArrowLeft className="size-4" />
         Back to account details
-      </button>
+      </Button>
     </div>
   )
 }

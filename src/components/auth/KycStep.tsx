@@ -195,14 +195,16 @@ export function KycStep({ email, onComplete }: KycStepProps) {
                     'pr-12 [&::-webkit-calendar-picker-indicator]:hidden',
                   )}
                 />
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="icon"
                   onClick={() => dateInputRef.current?.showPicker()}
                   aria-label="Open date picker"
-                  className="absolute right-2 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-full text-text-disabled transition hover:bg-foreground/[0.06] hover:text-foreground"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full text-text-disabled hover:bg-foreground/[0.06] hover:text-foreground"
                 >
                   <CalendarDays className="size-4" />
-                </button>
+                </Button>
               </div>
             </FormField>
           </div>
@@ -228,18 +230,21 @@ export function KycStep({ email, onComplete }: KycStepProps) {
                   </span>
                 </span>
 
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="icon"
                   onClick={() => setDocument(null)}
                   aria-label="Remove selected document"
-                  className="flex size-8 items-center justify-center rounded-lg text-text-tertiary transition hover:bg-white/[0.06] hover:text-foreground"
+                  className="text-text-tertiary hover:bg-white/[0.06] hover:text-foreground"
                 >
                   <X className="size-4" />
-                </button>
+                </Button>
               </div>
             ) : (
-              <button
+              <Button
                 type="button"
+                variant="outline"
                 onClick={() => fileInputRef.current?.click()}
                 onDragEnter={(event) => {
                   event.preventDefault()
@@ -266,7 +271,7 @@ export function KycStep({ email, onComplete }: KycStepProps) {
                 <span className="mt-1 text-xs text-text-tertiary">
                   PNG, JPG, PDF up to 10 MB
                 </span>
-              </button>
+              </Button>
             )}
 
             <input

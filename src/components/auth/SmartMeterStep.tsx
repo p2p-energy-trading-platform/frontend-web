@@ -156,15 +156,16 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
           )}
         </Button>
 
-        <button
+        <Button
           type="button"
+          variant="ghost"
           disabled={isSubmitting}
           onClick={() => complete('skipped')}
-          className="mt-4 flex w-full items-center justify-center gap-1.5 text-sm font-medium text-text-tertiary transition hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
+          className="mt-4 h-auto w-full gap-1.5 p-0 text-sm font-medium text-text-tertiary hover:bg-transparent hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
         >
           <ShieldCheck className="size-4" />
           Set up later
-        </button>
+        </Button>
       </form>
     </div>
   )

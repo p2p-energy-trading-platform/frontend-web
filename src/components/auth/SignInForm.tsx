@@ -74,12 +74,13 @@ export default function SignInForm() {
                     Password
                   </label>
 
-                  <button
+                  <Button
                     type="button"
-                    className="text-xs font-semibold text-accent hover:underline"
+                    variant="link"
+                    className="h-auto p-0 text-xs font-semibold text-accent"
                   >
                     Forgot password?
-                  </button>
+                  </Button>
                 </div>
 
                 <div className="relative mt-1.5">
@@ -94,22 +95,24 @@ export default function SignInForm() {
                     required
                   />
 
-                  <button
+                  <Button
                     type="button"
+                    variant="ghost"
+                    size="icon"
                     onClick={() =>
                       setShowPassword((currentValue) => !currentValue)
                     }
                     aria-label={
                       showPassword ? 'Hide password' : 'Show password'
                     }
-                    className="absolute right-0 top-0 flex size-12 items-center justify-center text-text-disabled transition hover:text-muted-foreground"
+                    className="absolute right-0 top-0 size-12 text-text-disabled hover:bg-transparent hover:text-muted-foreground"
                   >
                     {showPassword ? (
                       <EyeOff className="size-4" />
                     ) : (
                       <Eye className="size-4" />
                     )}
-                  </button>
+                  </Button>
                 </div>
               </div>
 
@@ -143,9 +146,10 @@ export default function SignInForm() {
                 <span className="h-px flex-1 bg-muted/50" />
               </div>
 
-              <button
+              <Button
                 type="button"
-                className="flex h-12 w-full items-center gap-3 rounded-2xl border border-border bg-card px-[17px] text-sm font-semibold text-foreground transition hover:border-strong hover:bg-muted"
+                variant="outline"
+                className="h-12 w-full justify-start gap-3 rounded-2xl bg-card px-[17px] text-sm font-semibold"
               >
                 <img
                   src="/auth/uae-pass.svg"
@@ -166,12 +170,13 @@ export default function SignInForm() {
                   aria-hidden="true"
                   className="size-3.5 shrink-0"
                 />
-              </button>
+              </Button>
 
               <div className="mt-2.5 grid grid-cols-2 gap-2.5">
-                <button
+                <Button
                   type="button"
-                  className="flex h-12 items-center justify-center gap-2.5 rounded-2xl border border-border bg-card text-sm font-semibold text-foreground transition hover:bg-muted"
+                  variant="outline"
+                  className="h-12 gap-2.5 rounded-2xl bg-card text-sm font-semibold"
                 >
                   <img
                     src="/auth/google.svg"
@@ -180,11 +185,12 @@ export default function SignInForm() {
                     className="size-[18px] shrink-0"
                   />
                   Google
-                </button>
+                </Button>
 
-                <button
+                <Button
                   type="button"
-                  className="flex h-12 items-center justify-center gap-2.5 rounded-2xl border border-border bg-card text-sm font-semibold text-foreground transition hover:bg-muted"
+                  variant="outline"
+                  className="h-12 gap-2.5 rounded-2xl bg-card text-sm font-semibold"
                 >
                   <img
                     src="/auth/microsoft.svg"
@@ -193,7 +199,7 @@ export default function SignInForm() {
                     className="size-[17px] shrink-0"
                   />
                   Microsoft
-                </button>
+                </Button>
               </div>
 
               <p className="mt-2.5 text-center text-[10px] text-text-disabled">

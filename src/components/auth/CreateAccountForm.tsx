@@ -357,15 +357,17 @@ function PasswordInput({
         {...props}
       />
 
-      <button
+      <Button
         type="button"
+        variant="ghost"
+        size="icon"
         onClick={onVisibleChange}
         disabled={props.disabled}
         aria-label={visible ? 'Hide password' : 'Show password'}
-        className="absolute right-0 top-0 flex size-12 items-center justify-center text-text-disabled transition hover:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+        className="absolute right-0 top-0 size-12 text-text-disabled hover:bg-transparent hover:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
       >
         {visible ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-      </button>
+      </Button>
     </div>
   )
 }
