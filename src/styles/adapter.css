@@ -1,32 +1,4 @@
 :root {
-  /* Dashboard component aliases */
-  --brand-primary: var(--action-accent);
-  --brand-accent: var(--action-accent);
-  --brand-danger: var(--action-danger);
-  --brand-warning: var(--feedback-warning-icon);
-  --brand-info: var(--feedback-info-icon);
-  --brand-purple: #8b5cf6;
-  --brand-primary-muted: color-mix(
-    in srgb,
-    var(--action-accent) 12%,
-    transparent
-  );
-  --brand-danger-muted: var(--feedback-error-background);
-  --brand-warning-muted: var(--feedback-warning-background);
-  --brand-info-muted: var(--feedback-info-background);
-  --brand-purple-muted: #8b5cf61f;
-
-  --bg-canvas: var(--background-page);
-  --bg-surface: var(--background-surface);
-  --bg-elevated: var(--background-surface-raised);
-  --bg-overlay: var(--background-overlay);
-  --bg-sunken: var(--background-well);
-
-  --border-brand: var(--action-accent);
-  --border-danger: var(--action-danger);
-  --text-brand: var(--action-accent);
-  --text-on-brand: var(--action-accent-foreground);
-
   --background: var(--background-page);
   --foreground: var(--text-primary);
 
@@ -58,14 +30,6 @@
   --radius: 0.625rem;
 
   --sidebar: var(--sidebar-background);
-  --sidebar-foreground: var(--sidebar-content);
-
-  --sidebar-primary: var(--sidebar-active);
-  --sidebar-primary-foreground: var(--sidebar-active-content);
-
-  --sidebar-accent: var(--sidebar-hover);
-  --sidebar-accent-foreground: var(--sidebar-content);
-
-  --sidebar-border: var(--sidebar-divider);
+  --sidebar-accent-foreground: var(--sidebar-foreground);
   --sidebar-ring: var(--focus-ring);
 }

@@ -101,7 +101,7 @@ export default function Sidebar({ user }: SidebarProps) {
             key={group[0]?.label}
             className={cn(
               'flex flex-col gap-0.5 py-1',
-              groupIndex > 0 && 'mt-2 border-t border-sidebar-divider pt-3',
+              groupIndex > 0 && 'mt-2 border-t border-sidebar-border pt-3',
             )}
           >
             {group.map((item) => {

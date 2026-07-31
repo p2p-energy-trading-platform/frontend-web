@@ -17,13 +17,13 @@ export function CurrentSlotCard({
   progressPercent,
 }: CurrentSlotCardProps) {
   return (
-    <Card className="gap-3 border-border-subtle bg-bg-surface p-4">
+    <Card className="gap-3 border-border-subtle bg-card p-4">
       <div className="flex items-center justify-between">
         <h3 className="text-heading-4 text-text-primary">
           Current 30-min slot
         </h3>
-        <Badge className="gap-1 bg-brand-primary-muted text-brand-primary">
-          <span className="size-1.5 rounded-full bg-brand-primary" />
+        <Badge className="gap-1 bg-accent/12 text-accent">
+          <span className="size-1.5 rounded-full bg-accent" />
           Live
         </Badge>
       </div>
@@ -33,16 +33,14 @@ export function CurrentSlotCard({
       </p>
 
       <p>
-        <span className="text-lg font-semibold text-brand-primary">
-          {pricePerKwh}
-        </span>
+        <span className="text-lg font-semibold text-accent">{pricePerKwh}</span>
         <span className="text-sm text-text-tertiary"> / kWh zone price</span>
       </p>
 
       <div>
-        <div className="h-1.5 overflow-hidden rounded-full bg-bg-overlay">
+        <div className="h-1.5 overflow-hidden rounded-full bg-muted">
           <div
-            className="h-full rounded-full bg-brand-primary"
+            className="h-full rounded-full bg-accent"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
