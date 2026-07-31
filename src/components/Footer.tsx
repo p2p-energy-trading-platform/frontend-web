@@ -29,7 +29,7 @@ export default function Footer() {
             target="_blank"
             rel="noreferrer"
             aria-label="Go to TanStack GitHub"
-            className="inline-flex size-9 items-center justify-center rounded-md text-text-secondary transition hover:bg-bg-elevated hover:text-text-primary"
+            className="inline-flex size-9 items-center justify-center rounded-md text-text-secondary transition hover:bg-secondary hover:text-text-primary"
           >
             <Github className="size-4" />
           </a>

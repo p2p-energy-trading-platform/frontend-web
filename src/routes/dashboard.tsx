@@ -39,7 +39,7 @@ function Dashboard() {
   }
 
   return (
-    <div className="flex min-h-screen bg-bg-canvas">
+    <div className="flex min-h-screen bg-background">
       <Sidebar user={user} />
 
       <div className="flex min-w-0 flex-1 flex-col">
@@ -66,14 +66,14 @@ function Dashboard() {
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-bg-elevated px-3.5 text-sm font-medium text-text-primary transition hover:bg-bg-overlay"
+                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-secondary px-3.5 text-sm font-medium text-text-primary transition hover:bg-muted"
               >
                 <Plus className="size-4" />
                 Post listing
               </button>
               <button
                 type="button"
-                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-brand-primary px-3.5 text-sm font-medium text-primary-foreground transition hover:bg-brand-primary/90"
+                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-accent px-3.5 text-sm font-medium text-accent-foreground transition hover:brightness-95"
               >
                 Buy energy
               </button>
@@ -91,27 +91,48 @@ function Dashboard() {
 
           {/* Stat tile row */}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-7">
-            <StatTile icon={Wallet} value="AED 284.50" label="Wallet balance" />
+            <StatTile
+              icon={Wallet}
+              iconClassName="bg-accent/12 text-accent"
+              value="AED 284.50"
+              label="Wallet balance"
+            />
             <StatTile
               icon={ArrowUpRight}
-              iconClassName="text-brand-primary"
+              iconClassName="bg-accent/12 text-accent"
               value="+AED 3.19"
               label="Trading P&L"
             />
             <StatTile
               icon={CircleGauge}
+              iconClassName="bg-chart-4/12 text-chart-4"
               value="AED 1.60"
               label="Saved vs tariff"
             />
-            <StatTile icon={Sun} value="18.4 kg" label="Avoided carbon" />
+            <StatTile
+              icon={Sun}
+              iconClassName="bg-chart-3/12 text-chart-3"
+              value="18.4 kg"
+              label="Avoided carbon"
+            />
             <StatTile
               icon={ArrowUpRight}
-              iconClassName="text-brand-primary"
+              iconClassName="bg-accent/12 text-accent"
               value="8.4 kWh"
               label="Sold today"
             />
-            <StatTile icon={ArrowDownLeft} value="0 kWh" label="Bought today" />
-            <StatTile icon={BatteryCharging} value="94%" label="Battery SoC" />
+            <StatTile
+              icon={ArrowDownLeft}
+              iconClassName="bg-chart-4/12 text-chart-4"
+              value="0 kWh"
+              label="Bought today"
+            />
+            <StatTile
+              icon={BatteryCharging}
+              iconClassName="bg-accent/12 text-accent"
+              value="94%"
+              label="Battery SoC"
+            />
           </div>
 
           {/* Chart + right rail */}
@@ -147,7 +168,7 @@ function Dashboard() {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <DeviceCard
                 icon={Sun}
-                iconWrapClassName="bg-brand-warning-muted text-brand-warning"
+                iconWrapClassName="bg-chart-3/12 text-chart-3"
                 title="Solar PV"
                 subtitle="Rooftop · 6 kWp"
                 statusLabel="Generating"
@@ -157,7 +178,7 @@ function Dashboard() {
               />
               <DeviceCard
                 icon={BatteryCharging}
-                iconWrapClassName="bg-brand-primary-muted text-brand-primary"
+                iconWrapClassName="bg-accent/12 text-accent"
                 title="Home Battery"
                 subtitle="14 kWh · AC-coupled"
                 statusLabel="Charging"
@@ -168,7 +189,7 @@ function Dashboard() {
               />
               <DeviceCard
                 icon={Car}
-                iconWrapClassName="bg-brand-info-muted text-brand-info"
+                iconWrapClassName="bg-chart-4/12 text-chart-4"
                 title="EV"
                 subtitle="Plugged in · V2G ready"
                 statusLabel="Charging"
@@ -209,23 +230,23 @@ function Dashboard() {
               items={[
                 {
                   icon: ArrowUpRight,
-                  iconClassName: 'bg-brand-primary-muted text-brand-primary',
+                  iconClassName: 'bg-accent/12 text-accent',
                   title: 'Sold 8.4 kWh',
                   subtitle: 'to M. Al-Rashidi · JLT',
                   amount: '+AED 3.19',
-                  amountClassName: 'text-brand-primary',
+                  amountClassName: 'text-accent',
                   time: '14:32',
                 },
                 {
                   icon: Bell,
-                  iconClassName: 'bg-brand-info-muted text-brand-info',
+                  iconClassName: 'bg-chart-4/12 text-chart-4',
                   title: 'Price alert',
                   subtitle: 'Dubai South hit AED 0.38/kWh',
                   time: '13:50',
                 },
                 {
                   icon: ArrowDownLeft,
-                  iconClassName: 'bg-bg-elevated text-text-secondary',
+                  iconClassName: 'bg-secondary text-text-secondary',
                   title: 'Bought 5.2 kWh',
                   subtitle: 'from F. Al-Mansouri · JLT',
                   amount: '-AED 2.13',
@@ -234,7 +255,7 @@ function Dashboard() {
                 },
                 {
                   icon: Zap,
-                  iconClassName: 'bg-bg-elevated text-text-secondary',
+                  iconClassName: 'bg-secondary text-text-secondary',
                   title: 'Meter sync',
                   subtitle: 'SM-784-20241105 · 15-min read',
                   amount: '42.6 kWh',
@@ -242,11 +263,11 @@ function Dashboard() {
                 },
                 {
                   icon: Wallet,
-                  iconClassName: 'bg-brand-primary-muted text-brand-primary',
+                  iconClassName: 'bg-accent/12 text-accent',
                   title: 'Funds deposited',
                   subtitle: 'Bank transfer confirmed',
                   amount: '+AED 100',
-                  amountClassName: 'text-brand-primary',
+                  amountClassName: 'text-accent',
                   time: '09:18',
                 },
               ]}

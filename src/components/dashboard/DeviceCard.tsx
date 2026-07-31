@@ -29,7 +29,7 @@ export function DeviceCard({
   footnote,
 }: DeviceCardProps) {
   return (
-    <Card className="gap-3 border-border-subtle bg-bg-surface p-4">
+    <Card className="gap-3 border-border-subtle bg-card p-4">
       <div className="flex items-center justify-between">
         <span
           className={cn(
@@ -61,9 +61,9 @@ export function DeviceCard({
 
       {typeof progressPercent === 'number' && (
         <div>
-          <div className="h-1.5 overflow-hidden rounded-full bg-bg-overlay">
+          <div className="h-1.5 overflow-hidden rounded-full bg-muted">
             <div
-              className="h-full rounded-full bg-brand-primary"
+              className="h-full rounded-full bg-accent"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
