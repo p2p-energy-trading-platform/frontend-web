@@ -22,13 +22,13 @@ export function RecentActivityCard({
   onViewAll?: () => void
 }) {
   return (
-    <Card className="gap-1 border-border-subtle bg-bg-surface p-4">
+    <Card className="gap-1 border-border-subtle bg-card p-4">
       <div className="mb-2 flex items-center justify-between">
         <h3 className="text-heading-4 text-text-primary">Recent activity</h3>
         <button
           type="button"
           onClick={onViewAll}
-          className="flex items-center gap-0.5 text-sm font-medium text-brand-primary hover:underline"
+          className="flex items-center gap-0.5 text-sm font-medium text-accent hover:underline"
         >
           View all
           <ArrowUpRight className="size-3.5 rotate-45" />

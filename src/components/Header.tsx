@@ -14,7 +14,7 @@ export default function Header() {
       <nav className="mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
         <Link
           to="/"
-          className="inline-flex items-center gap-2 rounded-xl border border-border-subtle bg-bg-surface px-3 py-2 text-sm font-semibold text-text-primary no-underline shadow-sm transition hover:bg-bg-elevated"
+          className="inline-flex items-center gap-2 rounded-xl border border-border-subtle bg-card px-3 py-2 text-sm font-semibold text-text-primary no-underline shadow-sm transition hover:bg-secondary"
         >
           <span className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <Zap className="size-4" />
@@ -28,9 +28,9 @@ export default function Header() {
               key={item.to}
               to={item.to}
               activeProps={{
-                className: 'bg-bg-elevated text-text-primary',
+                className: 'bg-secondary text-text-primary',
               }}
-              className="inline-flex h-9 items-center justify-center rounded-md px-3 text-sm font-medium text-text-secondary transition hover:bg-bg-elevated hover:text-text-primary"
+              className="inline-flex h-9 items-center justify-center rounded-md px-3 text-sm font-medium text-text-secondary transition hover:bg-secondary hover:text-text-primary"
             >
               {item.label}
             </Link>
@@ -40,7 +40,7 @@ export default function Header() {
             href="https://tanstack.com/start/latest/docs/framework/react/overview"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex h-9 items-center justify-center rounded-md px-3 text-sm font-medium text-text-secondary transition hover:bg-bg-elevated hover:text-text-primary"
+            className="inline-flex h-9 items-center justify-center rounded-md px-3 text-sm font-medium text-text-secondary transition hover:bg-secondary hover:text-text-primary"
           >
             Docs
           </a>

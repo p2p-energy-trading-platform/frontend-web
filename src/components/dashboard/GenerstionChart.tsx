@@ -49,18 +49,18 @@ export function GenerationChart({
   ]
 
   return (
-    <Card className="gap-4 border-border-subtle bg-bg-surface p-5">
+    <Card className="gap-4 border-border-subtle bg-card p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-4">
           <h3 className="text-heading-4 text-text-primary">
             Generation vs. Consumption
           </h3>
-          <Legend swatchClass="bg-brand-primary" label="Generated" />
+          <Legend swatchClass="bg-accent" label="Generated" />
           <Legend swatchClass="bg-text-tertiary" label="Consumed" dashed />
-          <Legend swatchClass="bg-brand-info" label="Exported" />
+          <Legend swatchClass="bg-chart-4" label="Exported" />
         </div>
 
-        <div className="inline-flex rounded-lg border border-border-subtle bg-bg-elevated p-0.5 text-xs font-medium">
+        <div className="inline-flex rounded-lg border border-border-subtle bg-secondary p-0.5 text-xs font-medium">
           {(['Day', 'Week', 'Month'] as const).map((r) => (
             <button
               key={r}
@@ -69,7 +69,7 @@ export function GenerationChart({
               className={cn(
                 'rounded-md px-3 py-1 transition',
                 r === range
-                  ? 'bg-bg-surface text-text-primary shadow-sm'
+                  ? 'bg-card text-text-primary shadow-sm'
                   : 'text-text-tertiary hover:text-text-secondary',
               )}
             >
@@ -96,12 +96,12 @@ export function GenerationChart({
               <linearGradient id="genFill" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="0%"
-                  stopColor="var(--brand-primary, #0ea592)"
+                  stopColor="var(--action-accent, #0ea592)"
                   stopOpacity="0.35"
                 />
                 <stop
                   offset="100%"
-                  stopColor="var(--brand-primary, #0ea592)"
+                  stopColor="var(--action-accent, #0ea592)"
                   stopOpacity="0"
                 />
               </linearGradient>
@@ -124,7 +124,7 @@ export function GenerationChart({
             <path
               d={linePath}
               fill="none"
-              stroke="var(--brand-primary, #0ea592)"
+              stroke="var(--action-accent, #0ea592)"
               strokeWidth={2.5}
               strokeLinecap="round"
               strokeLinejoin="round"

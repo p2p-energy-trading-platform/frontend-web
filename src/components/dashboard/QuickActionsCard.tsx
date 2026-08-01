@@ -12,7 +12,7 @@ export interface QuickAction {
 
 export function QuickActionsCard({ actions }: { actions: Array<QuickAction> }) {
   return (
-    <Card className="gap-3 border-border-subtle bg-bg-surface p-4">
+    <Card className="gap-3 border-border-subtle bg-card p-4">
       <h3 className="text-heading-4 text-text-primary">Quick actions</h3>
       <div className="grid grid-cols-2 gap-2">
         {actions.map((action) => {
@@ -25,8 +25,8 @@ export function QuickActionsCard({ actions }: { actions: Array<QuickAction> }) {
               className={cn(
                 'flex items-center justify-center gap-1.5 rounded-lg px-3 py-2.5 text-sm font-medium transition',
                 action.primary
-                  ? 'bg-brand-primary text-primary-foreground hover:bg-brand-primary/90'
-                  : 'bg-bg-elevated text-text-primary hover:bg-bg-overlay',
+                  ? 'bg-accent text-accent-foreground hover:brightness-95'
+                  : 'bg-secondary text-text-primary hover:bg-muted',
               )}
             >
               <Icon className="size-4" />
