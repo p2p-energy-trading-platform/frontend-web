@@ -6,7 +6,6 @@ import AssetsSection from '@/components/landing/asssets-section/AssetsSection'
 import FAQSection from '@/components/landing/faq-section/FAQSection'
 import CTASection from '@/components/landing/cta-section/CTASection'
 
-
 export const Route = createFileRoute('/')({
   component: Home,
 })
