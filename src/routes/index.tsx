@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import HeroSection from '#/components/landing/hero-section/HeroSection'
 import HowItWorksSection from '@/components/landing/howitworks-section/HowItWorksSection'
 import BenifitsSection from '@/components/landing/benifits-section/BenefitsSection'
+import AssetsSection from '@/components/landing/asssets-section/AssetsSection'
 import FAQSection from '@/components/landing/faq-section/FAQSection'
 import CTASection from '@/components/landing/cta-section/CTASection'
 
@@ -18,6 +19,8 @@ function Home() {
       <HowItWorksSection />
 
       <BenifitsSection />
+
+      <AssetsSection />
 
       <FAQSection />
 
