@@ -1,5 +1,5 @@
 import { Card } from '@/components/ui/card'
-import { Badge } from '../ui/badge'
+import { Badge } from '@/components/ui/badge'
 
 export default function HowItWorksSection() {
   return (
