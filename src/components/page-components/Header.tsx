@@ -42,7 +42,7 @@ export default function PageHeader({
   onUserMenuClick,
 }: PageHeaderProps) {
   return (
-    <header className="sticky top-0 z-50 border-b border-border-subtle bg-bg-surface">
+    <header className="sticky top-0 z-50 border-b border-border-strong bg-bg-elevated/95 shadow-sm backdrop-blur-xl">
       <div className="flex h-14 items-center gap-3 px-4 sm:px-6">
         {/* Left: property + zone + meter status */}
         <Link
@@ -105,12 +105,12 @@ export default function PageHeader({
             )}
           </Button>
 
-          <button
-            type="button"
+          <Link
+            to="/profile"
             onClick={onUserMenuClick}
-            className="ml-1 flex items-center gap-2 rounded-lg py-1 pl-1 pr-2 transition hover:bg-bg-elevated"
+            className="ml-1 flex items-center gap-2 rounded-lg py-1 pl-1 pr-2 no-underline transition hover:bg-bg-elevated"
           >
-            <span className="flex size-8 items-center justify-center rounded-full bg-brand-primary text-xs font-semibold text-primary-foreground">
+            <span className="flex size-8 items-center justify-center rounded-full border border-[#5eead4]/30 bg-[#0ea592] text-xs font-semibold text-white shadow-sm ring-2 ring-[#0ea592]/10">
               {user.initials}
             </span>
             <span className="hidden flex-col items-start leading-tight sm:flex">
@@ -120,7 +120,7 @@ export default function PageHeader({
               <span className="text-xs text-text-tertiary">{user.role}</span>
             </span>
             <ChevronDown className="size-3.5 text-text-tertiary" />
-          </button>
+          </Link>
         </div>
       </div>
     </header>

@@ -9,5 +9,7 @@ export function saveKycStatus(status: KycStatus) {
 export function getKycStatus(): KycStatus {
   const status = window.localStorage.getItem(KYC_STATUS_STORAGE_KEY)
 
-  return status === 'pending' ? 'pending' : 'not-submitted'
+  return status === 'pending' || status === 'verified'
+    ? status
+    : 'not-submitted'
 }

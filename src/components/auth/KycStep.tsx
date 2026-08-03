@@ -16,7 +16,7 @@ import { cn } from '#/lib/utils'
 const MAX_FILE_SIZE = 10 * 1024 * 1024
 const ACCEPTED_FILE_TYPES = ['image/png', 'image/jpeg', 'application/pdf']
 
-export type KycStatus = 'not-submitted' | 'pending'
+export type KycStatus = 'not-submitted' | 'pending' | 'verified'
 
 interface KycStepProps {
   email: string

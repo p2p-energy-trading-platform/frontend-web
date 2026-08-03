@@ -1,4 +1,4 @@
-import { useRouterState } from '@tanstack/react-router'
+import { Link, useRouterState } from '@tanstack/react-router'
 import {
   Bell,
   ChevronDown,
@@ -24,7 +24,7 @@ const navItems = [
   { label: 'Wallet', to: '/wallet', icon: Wallet },
   { label: 'History', to: '/history', icon: History },
   { label: 'Notifications', to: '/notifications', icon: Bell },
-  { label: 'Settings', to: '/settings', icon: Settings },
+  { label: 'Settings', to: '/profile', icon: Settings },
 ] as const
 
 interface SidebarProps {
@@ -68,11 +68,11 @@ export default function Sidebar({ user }: SidebarProps) {
       </div>
 
       {/* User summary */}
-      <button
-        type="button"
+      <Link
+        to="/profile"
         className="mx-2 mb-2 flex items-center gap-2 rounded-lg px-2 py-2 text-left transition hover:bg-sidebar-accent"
       >
-        <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-brand-primary text-xs font-semibold text-primary-foreground">
+        <span className="flex size-8 shrink-0 items-center justify-center rounded-full border border-[#5eead4]/30 bg-[#0ea592] text-xs font-semibold text-white shadow-sm ring-2 ring-[#0ea592]/15">
           {user.initials}
         </span>
         {!collapsed && (
@@ -88,27 +88,34 @@ export default function Sidebar({ user }: SidebarProps) {
             <ChevronDown className="ml-auto size-4 shrink-0 text-sidebar-foreground/50" />
           </>
         )}
-      </button>
+      </Link>
 
       {/* Nav */}
       <nav className="flex flex-1 flex-col gap-0.5 px-2">
         {navItems.map((item) => {
           const Icon = item.icon
           const active = pathname === item.to
+          const className = cn(
+            'flex items-center gap-3 rounded-lg px-2.5 py-2 text-sm font-medium no-underline transition',
+            active
+              ? 'bg-sidebar-primary text-sidebar-primary-foreground'
+              : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground',
+          )
 
-          return (
-            <a
-              key={item.to}
-              href={item.to}
-              className={cn(
-                'flex items-center gap-3 rounded-lg px-2.5 py-2 text-sm font-medium no-underline transition',
-                active
-                  ? 'bg-sidebar-primary text-sidebar-primary-foreground'
-                  : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground',
-              )}
-            >
+          const content = (
+            <>
               <Icon className="size-4.5 shrink-0" />
               {!collapsed && <span className="truncate">{item.label}</span>}
+            </>
+          )
+
+          return item.to === '/profile' ? (
+            <Link key={item.to} to="/profile" className={className}>
+              {content}
+            </Link>
+          ) : (
+            <a key={item.to} href={item.to} className={className}>
+              {content}
             </a>
           )
         })}
