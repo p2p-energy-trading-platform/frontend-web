@@ -24,7 +24,7 @@ const navItems = [
   { label: 'Wallet', to: '/wallet', icon: Wallet },
   { label: 'History', to: '/history', icon: History },
   { label: 'Notifications', to: '/notifications', icon: Bell },
-  { label: 'Settings', to: '/settings', icon: Settings },
+  { label: 'Settings', to: '/profile', icon: Settings },
 ] as const
 
 const navGroups = [navItems.slice(0, 5), navItems.slice(5)]

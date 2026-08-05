@@ -54,7 +54,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   })
-  const isDashboardRoute = pathname.startsWith('/dashboard')
+  const usesAppShell = pathname === '/dashboard' || pathname === '/profile'
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -63,9 +63,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="font-sans antialiased wrap-anywhere selection:bg-[rgba(79,184,178,0.24)]">
-        {!isDashboardRoute && <Header />}
+        {!usesAppShell && <Header />}
         {children}
-        {!isDashboardRoute && <Footer />}
+        {!usesAppShell && <Footer />}
         <TanStackDevtools
           config={{
             position: 'bottom-right',

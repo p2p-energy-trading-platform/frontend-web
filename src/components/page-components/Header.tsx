@@ -108,12 +108,12 @@ export default function PageHeader({
             )}
           </Button>
 
-          <button
-            type="button"
+          <Link
+            to="/profile"
             onClick={onUserMenuClick}
-            className="ml-1 flex items-center gap-2 rounded-lg py-1 pl-1 pr-2 transition hover:bg-secondary"
+            className="ml-1 flex items-center gap-2 rounded-lg py-1 pl-1 pr-2 no-underline transition hover:bg-bg-elevated"
           >
-            <span className="flex size-8 items-center justify-center rounded-full bg-accent text-xs font-semibold text-accent-foreground">
+            <span className="flex size-8 items-center justify-center rounded-full border border-[#5eead4]/30 bg-[#0ea592] text-xs font-semibold text-white shadow-sm ring-2 ring-[#0ea592]/10">
               {user.initials}
             </span>
             <span className="hidden flex-col items-start leading-tight sm:flex">
@@ -123,7 +123,7 @@ export default function PageHeader({
               <span className="text-xs text-text-tertiary">{user.role}</span>
             </span>
             <ChevronDown className="size-3.5 text-text-tertiary" />
-          </button>
+          </Link>
         </div>
       </div>
     </header>
