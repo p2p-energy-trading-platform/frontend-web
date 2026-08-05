@@ -17,10 +17,10 @@ export function StatTile({
   label,
 }: StatTileProps) {
   return (
-    <Card className="gap-2 border-border-subtle bg-bg-surface p-4">
+    <Card className="gap-2 border-border-subtle bg-card p-4">
       <span
         className={cn(
-          'flex size-7 items-center justify-center rounded-md bg-bg-elevated text-text-secondary',
+          'flex size-7 items-center justify-center rounded-md bg-secondary text-text-secondary',
           iconClassName,
         )}
       >

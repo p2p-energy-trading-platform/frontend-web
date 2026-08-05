@@ -3,6 +3,7 @@ import { Bell, ChevronDown, Home, HelpCircle } from 'lucide-react'
 
 import { Badge } from '#/components/ui/badge'
 import { Button } from '#/components/ui/button'
+import ThemeToggle from '#/components/ThemeToggle'
 import { cn } from '#/lib/utils'
 
 interface PageHeaderProps {
@@ -42,14 +43,14 @@ export default function PageHeader({
   onUserMenuClick,
 }: PageHeaderProps) {
   return (
-    <header className="sticky top-0 z-50 border-b border-border-strong bg-bg-elevated/95 shadow-sm backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-border-subtle bg-card">
       <div className="flex h-14 items-center gap-3 px-4 sm:px-6">
         {/* Left: property + zone + meter status */}
         <Link
           to={dashboardHref}
-          className="inline-flex items-center gap-2 rounded-lg px-1.5 py-1 text-text-primary no-underline transition hover:bg-bg-elevated"
+          className="inline-flex items-center gap-2 rounded-lg px-1.5 py-1 text-text-primary no-underline transition hover:bg-secondary"
         >
-          <span className="flex size-7 items-center justify-center rounded-lg bg-bg-elevated text-text-secondary">
+          <span className="flex size-7 items-center justify-center rounded-lg bg-secondary text-accent">
             <Home className="size-4" />
           </span>
           <span className="text-sm font-semibold">{propertyName}</span>
@@ -58,7 +59,7 @@ export default function PageHeader({
         <button
           type="button"
           onClick={onZoneClick}
-          className="inline-flex items-center gap-1 rounded-full border border-border-subtle bg-bg-elevated px-2.5 py-1 text-xs font-medium text-text-secondary transition hover:bg-bg-overlay"
+          className="inline-flex items-center gap-1 rounded-full border border-border-subtle bg-secondary px-2.5 py-1 text-xs font-medium text-text-secondary transition hover:bg-muted"
         >
           {zoneLabel}
           <ChevronDown className="size-3.5" />
@@ -66,19 +67,21 @@ export default function PageHeader({
 
         <Badge
           variant="outline"
-          className="gap-1.5 border-border-subtle bg-bg-elevated px-2.5 py-1 text-text-secondary"
+          className="gap-1.5 border-border-subtle bg-secondary px-2.5 py-1 text-text-secondary"
         >
           <span
             className={cn(
               'size-1.5 rounded-full',
-              meterOnline ? 'bg-brand-primary' : 'bg-text-tertiary',
+              meterOnline ? 'bg-accent' : 'bg-text-tertiary',
             )}
           />
           Meter {meterOnline ? 'online' : 'offline'}
         </Badge>
 
-        {/* Right: help, notifications, user */}
+        {/* Right: theme, help, notifications, user */}
         <div className="ml-auto flex items-center gap-1.5">
+          <ThemeToggle />
+
           <Button
             type="button"
             variant="ghost"
@@ -99,7 +102,7 @@ export default function PageHeader({
           >
             <Bell className="size-4.5 text-text-secondary" />
             {notificationCount > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-destructive text-[10px] font-semibold leading-none text-destructive-foreground">
+              <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-accent text-[10px] font-semibold leading-none text-accent-foreground">
                 {notificationCount > 9 ? '9+' : notificationCount}
               </span>
             )}

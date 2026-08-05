@@ -13,14 +13,14 @@ export interface FlowTile {
 
 export function LiveEnergyFlowCard({ tiles }: { tiles: Array<FlowTile> }) {
   const toneClass: Record<FlowTile['tone'], string> = {
-    warning: 'bg-brand-warning-muted text-brand-warning',
-    default: 'bg-bg-elevated text-text-secondary',
-    primary: 'bg-brand-primary-muted text-brand-primary',
-    info: 'bg-brand-info-muted text-brand-info',
+    warning: 'bg-chart-3/12 text-chart-3',
+    default: 'bg-secondary text-text-secondary',
+    primary: 'bg-accent/12 text-accent',
+    info: 'bg-chart-4/12 text-chart-4',
   }
 
   return (
-    <Card className="gap-3 border-border-subtle bg-bg-surface p-4">
+    <Card className="gap-3 border-border-subtle bg-card p-4">
       <div className="flex items-center justify-between">
         <h3 className="text-heading-4 text-text-primary">Live energy flow</h3>
         <Badge

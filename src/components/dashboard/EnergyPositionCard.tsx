@@ -22,7 +22,7 @@ export function EnergyPositionCard({
   const surplus = netKwh >= 0
 
   return (
-    <Card className="flex-row flex-wrap items-center justify-between gap-6 border-border-subtle bg-bg-surface p-5">
+    <Card className="flex-row flex-wrap items-center justify-between gap-6 border-border-subtle bg-card p-5">
       <div>
         <p className="text-label-md font-medium tracking-wide text-text-tertiary">
           TODAY&apos;S ENERGY POSITION
@@ -31,13 +31,13 @@ export function EnergyPositionCard({
           <span
             className={cn(
               'font-mono text-4xl font-semibold',
-              surplus ? 'text-brand-primary' : 'text-destructive',
+              surplus ? 'text-accent' : 'text-destructive',
             )}
           >
             {surplus ? '+' : ''}
             {netKwh.toFixed(1)} kWh
           </span>
-          <Badge className="gap-1 bg-brand-primary-muted text-brand-primary">
+          <Badge className="gap-1 bg-accent/12 text-accent">
             <ArrowUpRight className="size-3" />
             {surplus ? 'Surplus' : 'Deficit'}
           </Badge>
@@ -46,7 +46,7 @@ export function EnergyPositionCard({
 
       <div className="flex items-center gap-8">
         <div className="text-center">
-          <Sun className="mx-auto mb-1 size-4 text-brand-warning" />
+          <Sun className="mx-auto mb-1 size-4 text-chart-3" />
           <p className="font-mono text-xl font-semibold text-text-primary">
             {generatedKwh}
           </p>
@@ -60,7 +60,7 @@ export function EnergyPositionCard({
           <p className="text-xs text-text-tertiary">Consumed</p>
         </div>
         <div className="flex flex-col gap-1 text-xs">
-          <span className="flex items-center gap-1 text-brand-primary">
+          <span className="flex items-center gap-1 text-accent">
             <ArrowUpRight className="size-3.5" />
             {exportedKwh} kWh Exported
           </span>

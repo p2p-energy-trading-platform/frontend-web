@@ -39,7 +39,7 @@ function About() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <section className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-12 sm:px-6 lg:px-8">
-        <Card className="border-border-subtle bg-bg-surface">
+        <Card className="border-border-subtle bg-card">
           <CardHeader>
             <Badge variant="secondary" className="w-fit">
               About this demo
@@ -72,12 +72,9 @@ function About() {
             const Icon = note.icon
 
             return (
-              <Card
-                key={note.title}
-                className="border-border-subtle bg-bg-surface"
-              >
+              <Card key={note.title} className="border-border-subtle bg-card">
                 <CardHeader>
-                  <div className="mb-2 flex size-10 items-center justify-center rounded-xl border border-border-subtle bg-bg-elevated">
+                  <div className="mb-2 flex size-10 items-center justify-center rounded-xl border border-border-subtle bg-secondary">
                     <Icon className="size-5 text-text-primary" />
                   </div>
                   <CardTitle className="text-heading-4">{note.title}</CardTitle>
