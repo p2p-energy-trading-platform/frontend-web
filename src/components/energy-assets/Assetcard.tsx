@@ -28,20 +28,20 @@ export interface AssetCardProps {
 }
 
 const statusDotClass: Record<AssetStatus, string> = {
-  Online: 'bg-brand-primary',
-  Idle: 'bg-text-disabled',
-  Offline: 'bg-text-disabled',
+  Online: 'bg-accent',
+  Idle: 'bg-text-tertiary',
+  Offline: 'bg-text-tertiary',
 }
 
 const healthBarClass: Record<AssetHealth, string> = {
-  Good: 'bg-brand-primary',
-  Degraded: 'bg-brand-warning',
+  Good: 'bg-accent',
+  Degraded: 'bg-chart-4',
   Poor: 'bg-destructive',
 }
 
 const controlModeClass: Record<AssetControlMode, string> = {
-  Controllable: 'text-brand-primary',
-  'Monitoring only': 'text-brand-warning',
+  Controllable: 'text-accent',
+  'Monitoring only': 'text-chart-4',
 }
 
 export function AssetCard({
@@ -63,7 +63,7 @@ export function AssetCard({
   onMenuClick,
 }: AssetCardProps) {
   return (
-    <div className="relative rounded-2xl border border-border-subtle bg-bg-surface p-[17px] shadow-sm">
+    <div className="relative rounded-2xl border border-border-subtle bg-card p-[17px] shadow-sm">
       <button
         type="button"
         onClick={onClick}
@@ -83,7 +83,7 @@ export function AssetCard({
           </span>
           <div>
             <p className="text-sm font-bold text-text-primary">{name}</p>
-            <p className="text-[10px] text-text-disabled">{brandModel}</p>
+            <p className="text-[10px] text-text-tertiary">{brandModel}</p>
           </div>
         </div>
 
@@ -98,7 +98,7 @@ export function AssetCard({
             type="button"
             onClick={onMenuClick}
             aria-label="More options"
-            className="flex size-6 items-center justify-center rounded-[10px] text-text-tertiary transition hover:bg-bg-elevated hover:text-text-primary"
+            className="flex size-6 items-center justify-center rounded-[10px] text-text-tertiary transition hover:bg-secondary hover:text-text-primary"
           >
             <MoreHorizontal className="size-3.5" />
           </button>
@@ -109,19 +109,19 @@ export function AssetCard({
         <span className={cn('font-mono text-xl font-extrabold', statValueClassName)}>
           {statValue}
         </span>
-        <span className="text-xs text-text-disabled">{statUnit}</span>
-        <span className="text-[10px] text-text-disabled">{statLabel}</span>
+        <span className="text-xs text-text-tertiary">{statUnit}</span>
+        <span className="text-[10px] text-text-tertiary">{statLabel}</span>
       </div>
 
       {typeof socPercent === 'number' && (
         <div className="relative mt-2">
           <div className="flex items-center justify-between text-[10px]">
-            <span className="text-text-disabled">State of charge</span>
+            <span className="text-text-tertiary">State of charge</span>
             <span className="font-mono text-text-primary">{socPercent}%</span>
           </div>
-          <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-bg-overlay">
+          <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-muted">
             <div
-              className="h-full rounded-full bg-brand-primary"
+              className="h-full rounded-full bg-accent"
               style={{ width: `${socPercent}%` }}
             />
           </div>
@@ -130,18 +130,18 @@ export function AssetCard({
 
       <div className="relative mt-3 flex items-center gap-2 border-t border-border-subtle pt-2.5">
         <div className="flex flex-1 items-center gap-2">
-          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-bg-overlay">
+          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
             <div
               className={cn('h-full rounded-full', healthBarClass[health])}
               style={{ width: `${healthPercent}%` }}
             />
           </div>
-          <span className="w-10 text-[10px] font-semibold text-text-disabled">
+          <span className="w-10 text-[10px] font-semibold text-text-tertiary">
             {health}
           </span>
         </div>
         <div className="flex flex-col items-end text-[9px] leading-tight">
-          <span className="font-mono text-text-disabled">{lastUpdated}</span>
+          <span className="font-mono text-text-tertiary">{lastUpdated}</span>
           <span className={cn('font-semibold', controlModeClass[controlMode])}>
             {controlMode}
           </span>
