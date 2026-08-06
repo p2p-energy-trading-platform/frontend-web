@@ -32,14 +32,14 @@ export function ForecastCard({
   const yLabels = ['4kW', '3kW', '2kW', '1kW', '0kW']
 
   return (
-    <Card className="gap-4 border-border-subtle bg-bg-surface p-5">
+    <Card className="gap-4 border-border-subtle bg-card p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h3 className="text-heading-4 text-text-primary">Forecast vs actual</h3>
           <p className="text-xs text-text-tertiary">Solar generation · kW · Today</p>
         </div>
         <div className="text-right">
-          <p className="font-mono text-2xl font-semibold text-brand-primary">
+          <p className="font-mono text-2xl font-semibold text-accent">
             {accuracyPercent}
           </p>
           <p className="text-xs text-text-tertiary">forecast accuracy</p>
@@ -52,7 +52,7 @@ export function ForecastCard({
           Forecast
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="size-1.5 rounded-full bg-brand-primary" />
+          <span className="size-1.5 rounded-full bg-accent" />
           Actual
         </span>
       </div>
@@ -98,7 +98,7 @@ export function ForecastCard({
                 cx={i * step}
                 cy={height - v * height}
                 r={4}
-                fill="var(--brand-primary, #0ea592)"
+                fill="var(--action-accent, #0ea592)"
               />
             ))}
           </svg>
