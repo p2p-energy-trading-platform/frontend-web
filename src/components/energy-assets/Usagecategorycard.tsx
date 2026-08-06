@@ -5,7 +5,7 @@ export interface UsageCategory {
   label: string
   valueKwh: number
   colorClass: string
-  /** stroke color used in the donut segment, e.g. 'var(--brand-primary)' */
+  /** stroke color used in the donut segment, e.g. 'var(--action-accent)' */
   strokeColor: string
 }
 
@@ -34,7 +34,7 @@ export function UsageCategoryCard({
   })
 
   return (
-    <Card className="gap-4 border-border-subtle bg-bg-surface p-5">
+    <Card className="gap-4 border-border-subtle bg-card p-5">
       <div className="flex items-center justify-between">
         <h3 className="text-heading-4 text-text-primary">Usage by category</h3>
         <Badge variant="outline" className="border-border-subtle text-text-tertiary">
@@ -79,7 +79,7 @@ export function UsageCategoryCard({
                   {c.valueKwh.toFixed(1)} kWh
                 </span>
               </div>
-              <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-bg-overlay">
+              <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-muted">
                 <div
                   className={`h-full rounded-full ${c.colorClass}`}
                   style={{ width: `${(c.valueKwh / maxValue) * 100}%` }}

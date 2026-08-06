@@ -19,11 +19,11 @@ export function InsightsPanel({
   newCount?: number
 }) {
   return (
-    <Card className="gap-0 divide-y divide-border-subtle border-border-subtle bg-bg-surface p-0">
+    <Card className="gap-0 divide-y divide-border-subtle border-border-subtle bg-card p-0">
       <div className="flex items-center justify-between px-5 py-4">
         <h3 className="text-heading-4 text-text-primary">Insights</h3>
         {typeof newCount === 'number' && newCount > 0 && (
-          <Badge className="bg-brand-primary-muted text-brand-primary">
+          <Badge className="bg-accent/12 text-accent">
             {newCount} new
           </Badge>
         )}

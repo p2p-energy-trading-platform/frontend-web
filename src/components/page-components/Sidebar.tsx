@@ -18,7 +18,7 @@ import { cn } from '#/lib/utils'
 
 const navItems = [
   { label: 'Dashboard', to: '/dashboard', icon: LayoutGrid },
-  { label: 'Energy', to: '/energy', icon: Zap },
+  { label: 'Energy', to: '/energyassets', icon: Zap },
   { label: 'Trade', to: '/trade', icon: TrendingUp },
   { label: 'Forecast', to: '/forecast', icon: Activity },
   { label: 'Wallet', to: '/wallet', icon: Wallet },

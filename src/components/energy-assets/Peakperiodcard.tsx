@@ -20,9 +20,9 @@ const DEFAULT_HOURS = 18 // 06:00 .. 23:00 step ~1
 const DEFAULT_MATRIX = DAYS.map(() => randomRow([12, 19], DEFAULT_HOURS))
 
 function intensityClass(v: number) {
-  if (v > 0.66) return 'bg-brand-primary'
-  if (v > 0.33) return 'bg-brand-primary/50'
-  return 'bg-brand-primary/15'
+  if (v > 0.66) return 'bg-accent'
+  if (v > 0.33) return 'bg-accent/50'
+  return 'bg-accent/15'
 }
 
 export function PeakPeriodsCard({
@@ -30,13 +30,13 @@ export function PeakPeriodsCard({
   hourLabels = ['06', '08', '10', '12', '14', '16', '18', '20', '22'],
 }: PeakPeriodsCardProps) {
   return (
-    <Card className="gap-4 border-border-subtle bg-bg-surface p-5">
+    <Card className="gap-4 border-border-subtle bg-card p-5">
       <div className="flex items-center justify-between">
         <h3 className="text-heading-4 text-text-primary">Peak usage periods</h3>
         <div className="flex items-center gap-3 text-xs text-text-tertiary">
-          <Legend colorClass="bg-brand-primary/15" label="Low" />
-          <Legend colorClass="bg-brand-primary/50" label="Mid" />
-          <Legend colorClass="bg-brand-primary" label="Peak" />
+          <Legend colorClass="bg-accent/15" label="Low" />
+          <Legend colorClass="bg-accent/50" label="Mid" />
+          <Legend colorClass="bg-accent" label="Peak" />
         </div>
       </div>
 
