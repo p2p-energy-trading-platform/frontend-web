@@ -54,7 +54,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   })
-  const usesAppShell = pathname === '/dashboard' || pathname === '/profile'
+  const usesAppShell =
+    pathname === '/dashboard' || pathname === '/profile' || pathname === '/energyassets'
 
   return (
     <html lang="en" suppressHydrationWarning>
