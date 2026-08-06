@@ -42,7 +42,9 @@ export function EnergyTimeSeriesChart({
     <Card className="gap-4 border-border-subtle bg-card p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h3 className="text-heading-4 text-text-primary">Energy time series</h3>
+          <h3 className="text-heading-4 text-text-primary">
+            Energy time series
+          </h3>
           <p className="text-xs text-text-tertiary">30-min resolution · GST</p>
         </div>
 

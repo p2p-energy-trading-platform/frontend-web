@@ -88,9 +88,7 @@ export function AssetCard({
         </div>
 
         <div className="relative z-10 flex items-center gap-1.5">
-          <span
-            className={cn('size-2 rounded-full', statusDotClass[status])}
-          />
+          <span className={cn('size-2 rounded-full', statusDotClass[status])} />
           <span className="text-[11px] font-semibold text-text-tertiary">
             {status}
           </span>
@@ -106,7 +104,9 @@ export function AssetCard({
       </div>
 
       <div className="relative mt-3 flex items-baseline gap-1.5">
-        <span className={cn('font-mono text-xl font-extrabold', statValueClassName)}>
+        <span
+          className={cn('font-mono text-xl font-extrabold', statValueClassName)}
+        >
           {statValue}
         </span>
         <span className="text-xs text-text-tertiary">{statUnit}</span>

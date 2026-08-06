@@ -1,4 +1,10 @@
-import { ChevronLeft, ChevronRight, Calendar, Download, MapPin } from 'lucide-react'
+import {
+  ChevronLeft,
+  ChevronRight,
+  Calendar,
+  Download,
+  MapPin,
+} from 'lucide-react'
 
 import { cn } from '#/lib/utils'
 

@@ -35,7 +35,10 @@ export function EnergyBalanceCard({
     <Card className="gap-5 border-border-subtle bg-card p-5">
       <div className="flex items-center justify-between">
         <h3 className="text-heading-4 text-text-primary">Energy balance</h3>
-          <Badge variant="outline" className="border-border-subtle text-text-tertiary">
+        <Badge
+          variant="outline"
+          className="border-border-subtle text-text-tertiary"
+        >
           Today
         </Badge>
       </div>
@@ -44,7 +47,10 @@ export function EnergyBalanceCard({
         {summary.map((s) => {
           const Icon = s.icon
           return (
-            <div key={s.label} className="flex flex-col items-center gap-1 text-center">
+            <div
+              key={s.label}
+              className="flex flex-col items-center gap-1 text-center"
+            >
               <Icon className="size-4 text-text-secondary" />
               <p className="font-mono text-lg font-semibold text-text-primary">
                 {s.value}

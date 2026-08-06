@@ -96,7 +96,7 @@ function EnergyPage() {
             </button>
           </div>
 
-             {tab === 'usage' ? <GenerationUsageView /> : <AssetsView />}
+          {tab === 'usage' ? <GenerationUsageView /> : <AssetsView />}
         </main>
       </div>
     </div>
@@ -124,32 +124,32 @@ function GenerationUsageView() {
             value: '28.4',
             unit: 'kWh',
             label: 'Solar generation',
-              trend: '+2.1 vs forecast',
-              trendClassName: 'text-accent',
+            trend: '+2.1 vs forecast',
+            trendClassName: 'text-accent',
           },
           {
             icon: Zap,
             value: '36.0',
             unit: 'kWh',
             label: 'Household consumption',
-              trend: '+2.8 vs avg',
-              trendClassName: 'text-chart-4',
+            trend: '+2.8 vs avg',
+            trendClassName: 'text-chart-4',
           },
           {
             icon: Percent,
             value: '81.7',
             unit: '%',
             label: 'Self-consumption',
-              trend: '+4 pts vs wk',
-              trendClassName: 'text-accent',
+            trend: '+4 pts vs wk',
+            trendClassName: 'text-accent',
           },
           {
             icon: ArrowDownLeft,
             value: '9.4',
             unit: 'kWh',
             label: 'Grid import',
-              trend: '-1.2 vs avg',
-              trendClassName: 'text-accent',
+            trend: '-1.2 vs avg',
+            trendClassName: 'text-accent',
           },
           {
             icon: ArrowUpRight,
@@ -157,7 +157,7 @@ function GenerationUsageView() {
             unit: 'kWh',
             label: 'Grid export',
             trend: 'AED 1.22 earned',
-              trendClassName: 'text-accent',
+            trendClassName: 'text-accent',
           },
           {
             icon: Gauge,
@@ -172,7 +172,7 @@ function GenerationUsageView() {
             unit: 'AED',
             label: 'Est. savings',
             trend: 'vs retail tariff',
-              trendClassName: 'text-accent',
+            trendClassName: 'text-accent',
           },
         ]}
       />
@@ -307,7 +307,7 @@ function AssetsView() {
   const [subTab, setSubTab] = useState<'devices' | 'automation'>('devices')
   const [category, setCategory] = useState<AssetCategory>('All assets')
   const [view, setView] = useState<'grid' | 'list'>('grid')
- 
+
   return (
     <div className="flex flex-col gap-4">
       {/* Devices / Automation sub-toggle */}
@@ -337,7 +337,7 @@ function AssetsView() {
           Automation
         </button>
       </div>
- 
+
       {subTab === 'devices' ? (
         <>
           <AssetFilterBar
@@ -347,7 +347,7 @@ function AssetsView() {
             view={view}
             onViewChange={setView}
           />
- 
+
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
             <AssetCard
               icon={Sun}

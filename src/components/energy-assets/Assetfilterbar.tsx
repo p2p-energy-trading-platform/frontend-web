@@ -3,12 +3,7 @@ import { LayoutGrid, List, Plus } from 'lucide-react'
 import { cn } from '#/lib/utils'
 
 export type AssetCategory =
-  | 'All assets'
-  | 'Solar'
-  | 'Battery'
-  | 'EV'
-  | 'Charger'
-  | 'Flex loads'
+  'All assets' | 'Solar' | 'Battery' | 'EV' | 'Charger' | 'Flex loads'
 
 const CATEGORIES: Array<AssetCategory> = [
   'All assets',
@@ -48,7 +43,7 @@ export function AssetFilterBar({
               'rounded-[10px] px-2.5 py-1.5 transition',
               c === category
                 ? 'bg-card text-text-primary shadow-sm'
-                  : 'text-text-tertiary hover:text-text-secondary',
+                : 'text-text-tertiary hover:text-text-secondary',
             )}
           >
             {c}

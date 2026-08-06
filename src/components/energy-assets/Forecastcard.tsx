@@ -28,15 +28,27 @@ export function ForecastCard({
     .map((v, i) => `${i === 0 ? 'M' : 'L'} ${i * step} ${height - v * height}`)
     .join(' ')
 
-  const xLabels = ['06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00']
+  const xLabels = [
+    '06:00',
+    '08:00',
+    '10:00',
+    '12:00',
+    '14:00',
+    '16:00',
+    '18:00',
+  ]
   const yLabels = ['4kW', '3kW', '2kW', '1kW', '0kW']
 
   return (
     <Card className="gap-4 border-border-subtle bg-card p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h3 className="text-heading-4 text-text-primary">Forecast vs actual</h3>
-          <p className="text-xs text-text-tertiary">Solar generation · kW · Today</p>
+          <h3 className="text-heading-4 text-text-primary">
+            Forecast vs actual
+          </h3>
+          <p className="text-xs text-text-tertiary">
+            Solar generation · kW · Today
+          </p>
         </div>
         <div className="text-right">
           <p className="font-mono text-2xl font-semibold text-accent">

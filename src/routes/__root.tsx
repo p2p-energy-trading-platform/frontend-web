@@ -55,7 +55,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     select: (state) => state.location.pathname,
   })
   const usesAppShell =
-    pathname === '/dashboard' || pathname === '/profile' || pathname === '/energyassets'
+    pathname === '/dashboard' ||
+    pathname === '/profile' ||
+    pathname === '/energyassets'
 
   return (
     <html lang="en" suppressHydrationWarning>

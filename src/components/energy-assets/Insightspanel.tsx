@@ -23,9 +23,7 @@ export function InsightsPanel({
       <div className="flex items-center justify-between px-5 py-4">
         <h3 className="text-heading-4 text-text-primary">Insights</h3>
         {typeof newCount === 'number' && newCount > 0 && (
-          <Badge className="bg-accent/12 text-accent">
-            {newCount} new
-          </Badge>
+          <Badge className="bg-accent/12 text-accent">{newCount} new</Badge>
         )}
       </div>
 
