@@ -29,7 +29,7 @@ export function EnergyDateBar({
     <div className="flex flex-wrap items-center justify-between gap-3 py-2">
       <div className="flex items-center gap-4">
         {/* Period toggle */}
-        <div className="inline-flex rounded-lg border border-border-subtle bg-bg-elevated p-0.5 text-sm font-medium">
+        <div className="inline-flex rounded-lg border border-border-subtle bg-secondary p-0.5 text-sm font-medium">
           {PERIODS.map((p) => (
             <button
               key={p}
@@ -38,7 +38,7 @@ export function EnergyDateBar({
               className={cn(
                 'rounded-md px-3 py-1 transition',
                 p === period
-                  ? 'bg-bg-surface text-text-primary shadow-sm'
+                  ? 'bg-card text-text-primary shadow-sm'
                   : 'text-text-tertiary hover:text-text-secondary',
               )}
             >
@@ -53,7 +53,7 @@ export function EnergyDateBar({
             type="button"
             onClick={onPrevDate}
             aria-label="Previous"
-            className="flex size-7 items-center justify-center rounded-md text-text-tertiary transition hover:bg-bg-elevated hover:text-text-primary"
+            className="flex size-7 items-center justify-center rounded-md text-text-tertiary transition hover:bg-secondary hover:text-text-primary"
           >
             <ChevronLeft className="size-3.5" />
           </button>
@@ -65,14 +65,14 @@ export function EnergyDateBar({
             type="button"
             onClick={onNextDate}
             aria-label="Next"
-            className="flex size-7 items-center justify-center rounded-md text-text-tertiary transition hover:bg-bg-elevated hover:text-text-primary"
+            className="flex size-7 items-center justify-center rounded-md text-text-tertiary transition hover:bg-secondary hover:text-text-primary"
           >
             <ChevronRight className="size-3.5" />
           </button>
         </div>
 
         {/* Zone */}
-        <span className="flex items-center gap-1.5 rounded-full border border-border-subtle bg-bg-elevated px-2.5 py-1 text-xs font-medium text-text-secondary">
+        <span className="flex items-center gap-1.5 rounded-full border border-border-subtle bg-secondary px-2.5 py-1 text-xs font-medium text-text-secondary">
           <MapPin className="size-3" />
           {zoneLabel}
         </span>
@@ -81,7 +81,7 @@ export function EnergyDateBar({
       <button
         type="button"
         onClick={onExportCsv}
-        className="inline-flex items-center gap-1.5 rounded-lg border border-border-subtle bg-bg-elevated px-3 py-1.5 text-sm font-medium text-text-primary transition hover:bg-bg-overlay"
+        className="inline-flex items-center gap-1.5 rounded-lg border border-border-subtle bg-secondary px-3 py-1.5 text-sm font-medium text-text-primary transition hover:bg-muted"
       >
         <Download className="size-3.5" />
         Export CSV
