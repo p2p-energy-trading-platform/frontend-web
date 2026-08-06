@@ -38,7 +38,7 @@ export function AssetFilterBar({
 }: AssetFilterBarProps) {
   return (
     <div className="flex flex-wrap items-center gap-2 pt-4">
-      <div className="inline-flex rounded-xl bg-bg-overlay p-0.5 text-xs font-semibold">
+      <div className="inline-flex rounded-xl bg-secondary p-0.5 text-xs font-semibold">
         {CATEGORIES.map((c) => (
           <button
             key={c}
@@ -47,8 +47,8 @@ export function AssetFilterBar({
             className={cn(
               'rounded-[10px] px-2.5 py-1.5 transition',
               c === category
-                ? 'bg-bg-surface text-text-primary shadow-sm'
-                : 'text-text-disabled hover:text-text-secondary',
+                ? 'bg-card text-text-primary shadow-sm'
+                  : 'text-text-tertiary hover:text-text-secondary',
             )}
           >
             {c}
@@ -58,17 +58,17 @@ export function AssetFilterBar({
 
       <select
         aria-label="Sort assets"
-        className="h-[30.5px] rounded-xl border border-border-subtle bg-bg-surface px-2.5 text-xs font-medium text-text-secondary"
+        className="h-[30.5px] rounded-xl border border-border-subtle bg-card px-2.5 text-xs font-medium text-text-secondary"
       >
         <option>Sort by name</option>
         <option>Sort by output</option>
         <option>Sort by status</option>
       </select>
 
-      <span className="text-xs text-text-disabled">{deviceCount} devices</span>
+      <span className="text-xs text-text-tertiary">{deviceCount} devices</span>
 
       <div className="ml-auto flex items-center gap-2">
-        <div className="flex items-center gap-0.5 rounded-xl bg-bg-overlay p-0.5">
+        <div className="flex items-center gap-0.5 rounded-xl bg-secondary p-0.5">
           <button
             type="button"
             onClick={() => onViewChange('grid')}
@@ -76,8 +76,8 @@ export function AssetFilterBar({
             className={cn(
               'flex size-7 items-center justify-center rounded-[10px] transition',
               view === 'grid'
-                ? 'bg-bg-surface text-text-primary shadow-sm'
-                : 'text-text-disabled hover:text-text-secondary',
+                ? 'bg-card text-text-primary shadow-sm'
+                : 'text-text-tertiary hover:text-text-secondary',
             )}
           >
             <LayoutGrid className="size-3.5" />
@@ -89,8 +89,8 @@ export function AssetFilterBar({
             className={cn(
               'flex size-7 items-center justify-center rounded-[10px] transition',
               view === 'list'
-                ? 'bg-bg-surface text-text-primary shadow-sm'
-                : 'text-text-disabled hover:text-text-secondary',
+                ? 'bg-card text-text-primary shadow-sm'
+                : 'text-text-tertiary hover:text-text-secondary',
             )}
           >
             <List className="size-3.5" />
@@ -100,7 +100,7 @@ export function AssetFilterBar({
         <button
           type="button"
           onClick={onAddAsset}
-          className="inline-flex h-[30.5px] items-center gap-1.5 rounded-xl bg-brand-primary px-3 text-xs font-semibold text-primary-foreground transition hover:bg-brand-primary/90"
+          className="inline-flex h-[30.5px] items-center gap-1.5 rounded-xl bg-accent px-3 text-xs font-semibold text-accent-foreground transition hover:brightness-95"
         >
           <Plus className="size-3.5" />
           Add asset
