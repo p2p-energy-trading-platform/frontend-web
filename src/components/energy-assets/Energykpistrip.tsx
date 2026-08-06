@@ -19,10 +19,10 @@ export function EnergyKpiStrip({ kpis }: { kpis: Array<EnergyKpi> }) {
       {kpis.map((kpi) => {
         const Icon = kpi.icon
         return (
-          <Card key={kpi.label} className="gap-2.5 border-border-subtle bg-bg-surface p-4">
+          <Card key={kpi.label} className="gap-2.5 border-border-subtle bg-card p-4">
             <span
               className={cn(
-                'flex size-7 items-center justify-center rounded-md bg-bg-elevated text-text-secondary',
+                'flex size-7 items-center justify-center rounded-md bg-secondary text-text-secondary',
                 kpi.iconClassName,
               )}
             >
