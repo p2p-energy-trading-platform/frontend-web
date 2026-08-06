@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import PageHeader from '#/components/page-components/Header'
 import Sidebar from '#/components/page-components/Sidebar'
+import { BalanceHero } from '#/components/wallet/BalanceHero'
 
 export const Route = createFileRoute('/wallet')({
   component: Wallet,
@@ -20,8 +21,11 @@ function Wallet() {
   return (
 
     <div className="flex min-h-screen bg-background">
+
         <Sidebar user={user} /> 
+
         <div className="flex min-w-0 flex-1 flex-col">
+
             <PageHeader
                       propertyName="Villa 47"
                       zoneLabel="JLT Zone 4"
@@ -29,9 +33,15 @@ function Wallet() {
                       notificationCount={3}
                       user={user}
             />
+
+            <main className="mx-auto flex w-full max-w-[1440px] flex-col gap-5 p-6">
+                <BalanceHero />
+            </main>
+
         </div>
+        
     </div>
 
   )
-  
+
 }
