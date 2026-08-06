@@ -32,10 +32,10 @@ export function EnergyBalanceCard({
   exportEarnings,
 }: EnergyBalanceCardProps) {
   return (
-    <Card className="gap-5 border-border-subtle bg-bg-surface p-5">
+    <Card className="gap-5 border-border-subtle bg-card p-5">
       <div className="flex items-center justify-between">
         <h3 className="text-heading-4 text-text-primary">Energy balance</h3>
-        <Badge variant="outline" className="border-border-subtle text-text-tertiary">
+          <Badge variant="outline" className="border-border-subtle text-text-tertiary">
           Today
         </Badge>
       </div>
@@ -79,15 +79,15 @@ export function EnergyBalanceCard({
                 </span>
               </div>
 
-              <div className="flex h-1.5 overflow-hidden rounded-full bg-bg-overlay">
+              <div className="flex h-1.5 overflow-hidden rounded-full bg-muted">
                 {source.segmentWidths.map((w, i) => (
                   <div
                     key={i}
                     className={cn(
                       'h-full',
-                      i === 0 && 'bg-brand-primary',
-                      i === 1 && 'bg-brand-info',
-                      i === 2 && 'bg-brand-warning',
+                      i === 0 && 'bg-accent',
+                      i === 1 && 'bg-chart-4',
+                      i === 2 && 'bg-chart-3',
                     )}
                     style={{ width: `${w}%` }}
                   />
@@ -115,7 +115,7 @@ export function EnergyBalanceCard({
 
       <div className="flex items-center justify-between border-t border-border-subtle pt-4">
         <span className="text-sm text-text-secondary">Grid export earned</span>
-        <span className="text-lg font-semibold text-brand-primary">
+        <span className="text-lg font-semibold text-accent">
           {exportEarnings}
         </span>
       </div>
