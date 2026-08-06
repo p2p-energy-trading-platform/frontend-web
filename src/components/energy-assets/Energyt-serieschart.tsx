@@ -39,7 +39,7 @@ export function EnergyTimeSeriesChart({
   const xLabels = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00']
 
   return (
-    <Card className="gap-4 border-border-subtle bg-bg-surface p-5">
+    <Card className="gap-4 border-border-subtle bg-card p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h3 className="text-heading-4 text-text-primary">Energy time series</h3>
@@ -47,10 +47,10 @@ export function EnergyTimeSeriesChart({
         </div>
 
         <div className="flex items-center gap-3 text-xs text-text-tertiary">
-          <Legend colorClass="bg-brand-primary" label="Generated" />
+          <Legend colorClass="bg-accent" label="Generated" />
           <Legend colorClass="bg-text-tertiary" label="Consumed" />
-          <Legend colorClass="bg-brand-info" label="Exported" />
-          <Legend colorClass="bg-brand-warning" label="Imported" />
+          <Legend colorClass="bg-chart-4" label="Exported" />
+          <Legend colorClass="bg-chart-3" label="Imported" />
         </div>
       </div>
 
@@ -110,7 +110,7 @@ export function EnergyTimeSeriesChart({
             <path
               d={genPath}
               fill="none"
-              stroke="var(--brand-primary, #0ea592)"
+              stroke="var(--action-accent, #0ea592)"
               strokeWidth={2.5}
               strokeLinecap="round"
               strokeLinejoin="round"
