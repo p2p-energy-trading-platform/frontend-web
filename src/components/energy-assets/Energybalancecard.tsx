@@ -21,7 +21,12 @@ export interface EnergySourceRow {
 }
 
 export interface EnergyBalanceCardProps {
-  summary: Array<{ icon: LucideIcon; value: string; label: string }>
+  summary: Array<{
+    icon: LucideIcon
+    iconClassName?: string
+    value: string
+    label: string
+  }>
   sources: Array<EnergySourceRow>
   exportEarnings: string
 }
@@ -49,13 +54,18 @@ export function EnergyBalanceCard({
           return (
             <div
               key={s.label}
-              className="flex flex-col items-center gap-1 text-center"
+              className={cn(
+                'flex flex-col items-start gap-1 rounded-lg p-3',
+                s.iconClassName ?? 'bg-secondary text-text-secondary',
+              )}
             >
-              <Icon className="size-4 text-text-secondary" />
-              <p className="font-mono text-lg font-semibold text-text-primary">
-                {s.value}
-              </p>
-              <p className="text-xs text-text-tertiary">{s.label}</p>
+              <Icon className="size-4.5 shrink-0" />
+              <div className="min-w-0 leading-tight">
+                <p className="truncate font-mono text-sm font-semibold">
+                  {s.value}
+                </p>
+                <p className="truncate text-xs opacity-80">{s.label}</p>
+              </div>
             </div>
           )
         })}
