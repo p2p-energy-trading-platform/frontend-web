@@ -48,7 +48,7 @@ export function EnergyTimeSeriesChart({
           <p className="text-xs text-text-tertiary">30-min resolution · GST</p>
         </div>
 
-        <div className="flex items-center gap-3 text-xs text-text-tertiary">
+        <div className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1 text-xs text-text-tertiary">
           <Legend colorClass="bg-accent" label="Generated" />
           <Legend colorClass="bg-text-tertiary" label="Consumed" />
           <Legend colorClass="bg-chart-4" label="Exported" />
