@@ -31,7 +31,7 @@ export function PeakPeriodsCard({
 }: PeakPeriodsCardProps) {
   return (
     <Card className="gap-4 border-border-subtle bg-card p-5">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <h3 className="text-heading-4 text-text-primary">Peak usage periods</h3>
         <div className="flex items-center gap-3 text-xs text-text-tertiary">
           <Legend colorClass="bg-accent/15" label="Low" />
