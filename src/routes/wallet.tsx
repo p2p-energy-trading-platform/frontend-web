@@ -4,6 +4,7 @@ import PageHeader from '#/components/page-components/Header'
 import Sidebar from '#/components/page-components/Sidebar'
 import { BalanceHero } from '#/components/wallet/BalanceHero'
 import { TransactionHistory } from '#/components/wallet/TransactionHistory'
+import { PaymentMethods } from '#/components/wallet/PaymentMethods.tsx'
 
 export const Route = createFileRoute('/wallet')({
   component: Wallet,
@@ -36,8 +37,16 @@ function Wallet() {
             />
 
             <main className="mx-auto flex w-full max-w-[1440px] flex-col gap-5 p-6">
+
                 <BalanceHero />
-                <TransactionHistory />
+                
+                <div className="flex flex-row w-full gap-7">
+
+                    <TransactionHistory />
+                    <PaymentMethods />
+
+                </div>
+
             </main>
 
         </div>
