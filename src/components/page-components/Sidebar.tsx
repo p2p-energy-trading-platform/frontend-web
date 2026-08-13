@@ -23,7 +23,7 @@ const navItems = [
   { label: 'Forecast', to: '/forecast', icon: Activity },
   { label: 'Wallet', to: '/wallet', icon: Wallet },
   { label: 'History', to: '/history', icon: History },
-  { label: 'Notifications', to: '/notifications', icon: Bell },
+  { label: 'Notifications', to: '/notification', icon: Bell },
   { label: 'Settings', to: '/profile', icon: Settings },
 ] as const
 
