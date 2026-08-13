@@ -15,7 +15,7 @@ export interface EnergyKpi {
 
 export function EnergyKpiStrip({ kpis }: { kpis: Array<EnergyKpi> }) {
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
       {kpis.map((kpi) => {
         const Icon = kpi.icon
         return (
@@ -29,7 +29,7 @@ export function EnergyKpiStrip({ kpis }: { kpis: Array<EnergyKpi> }) {
                 kpi.iconClassName,
               )}
             >
-              <Icon className="size-3.5" />
+              <Icon className="size-4" />
             </span>
             <p className="font-mono text-lg font-semibold text-text-primary">
               {kpi.value}

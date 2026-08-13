@@ -28,8 +28,115 @@ import { PeakPeriodsCard } from '#/components/energy-assets/Peakperiodcard'
 import { EnergyBalanceCard } from '#/components/energy-assets/Energybalancecard'
 import { InsightsPanel } from '#/components/energy-assets/Insightspanel'
 import { AssetFilterBar } from '#/components/energy-assets/Assetfilterbar'
-import type { AssetCategory } from '#/components/energy-assets/Assetfilterbar'
+import type {
+  AssetCategory,
+  AssetSort,
+} from '#/components/energy-assets/Assetfilterbar'
 import { AssetCard } from '#/components/energy-assets/Assetcard'
+import type { AssetCardProps } from '#/components/energy-assets/Assetcard'
+
+const ASSETS: Array<
+  AssetCardProps & { category: Exclude<AssetCategory, 'All assets'> }
+> = [
+  {
+    category: 'Solar' as const,
+    icon: Sun,
+    iconWrapClassName: 'bg-chart-3/12 text-chart-3',
+    name: 'Rooftop Solar Array',
+    brandModel: 'JA Solar · JAM72S20 370/MR',
+    status: 'Online' as const,
+    statValue: '+3.4',
+    statValueClassName: 'text-chart-3',
+    statUnit: 'kW',
+    statLabel: 'Generating',
+    health: 'Good' as const,
+    healthPercent: 82,
+    lastUpdated: 'Just now',
+    controlMode: 'Monitoring only' as const,
+  },
+  {
+    category: 'Battery' as const,
+    icon: BatteryCharging,
+    iconWrapClassName: 'bg-accent/12 text-accent',
+    name: 'Home Battery',
+    brandModel: 'Tesla · Powerwall 2',
+    status: 'Online' as const,
+    statValue: '+1.2',
+    statValueClassName: 'text-accent',
+    statUnit: 'kW',
+    statLabel: 'Charging',
+    socPercent: 67,
+    health: 'Good' as const,
+    healthPercent: 82,
+    lastUpdated: '1 min ago',
+    controlMode: 'Controllable' as const,
+  },
+  {
+    category: 'EV' as const,
+    icon: Car,
+    iconWrapClassName: 'bg-chart-4/12 text-chart-4',
+    name: 'Tesla Model Y',
+    brandModel: 'Tesla · Model Y Long',
+    status: 'Idle' as const,
+    statValue: '0',
+    statValueClassName: 'text-chart-4',
+    statUnit: 'kW',
+    statLabel: 'Active draw',
+    socPercent: 67,
+    health: 'Good' as const,
+    healthPercent: 72,
+    lastUpdated: '8 min ago',
+    controlMode: 'Controllable' as const,
+  },
+  {
+    category: 'Charger' as const,
+    icon: Zap,
+    iconWrapClassName: 'bg-accent/12 text-accent',
+    name: 'EV Charger',
+    brandModel: 'Wallbox · Pulsar Plus 22',
+    status: 'Idle' as const,
+    statValue: '0',
+    statValueClassName: 'text-accent',
+    statUnit: 'kW',
+    statLabel: 'Active draw',
+    health: 'Good' as const,
+    healthPercent: 78,
+    lastUpdated: '3 min ago',
+    controlMode: 'Controllable' as const,
+  },
+  {
+    category: 'Flex loads' as const,
+    icon: Droplets,
+    iconWrapClassName: 'bg-chart-4/12 text-chart-4',
+    name: 'Water Heater',
+    brandModel: 'Ariston · Lydos Hybrid 80L',
+    status: 'Online' as const,
+    statValue: '+0.8',
+    statValueClassName: 'text-chart-4',
+    statUnit: 'kW',
+    statLabel: 'Active draw',
+    health: 'Degraded' as const,
+    healthPercent: 65,
+    lastUpdated: '5 min ago',
+    controlMode: 'Controllable' as const,
+  },
+  {
+    category: 'Flex loads' as const,
+    icon: Thermometer,
+    iconWrapClassName: 'bg-secondary text-text-secondary',
+    name: 'HVAC — Main Zone',
+    brandModel: 'Daikin · SkyAir RZQS100',
+    status: 'Online' as const,
+    statValue: '+3.2',
+    statValueClassName: 'text-text-primary',
+    statUnit: 'kW',
+    statLabel: 'Active draw',
+    health: 'Good' as const,
+    healthPercent: 66,
+    lastUpdated: '2 min ago',
+    controlMode: 'Monitoring only' as const,
+  },
+]
 
 export const Route = createFileRoute('/energyassets')({
   component: EnergyPage,
@@ -69,9 +176,15 @@ function EnergyPage() {
           </div>
 
           {/* Generation & Usage / Assets tab toggle */}
-          <div className="inline-flex w-fit rounded-lg border border-border-subtle bg-secondary p-1 text-sm font-medium">
+          <div
+            role="tablist"
+            aria-label="Energy views"
+            className="inline-flex w-fit rounded-lg border border-border-subtle bg-secondary p-1 text-sm font-medium"
+          >
             <button
               type="button"
+              role="tab"
+              aria-selected={tab === 'usage'}
               onClick={() => setTab('usage')}
               className={cn(
                 'rounded-md px-4 py-1.5 transition',
@@ -84,6 +197,8 @@ function EnergyPage() {
             </button>
             <button
               type="button"
+              role="tab"
+              aria-selected={tab === 'assets'}
               onClick={() => setTab('assets')}
               className={cn(
                 'rounded-md px-4 py-1.5 transition',
@@ -121,6 +236,7 @@ function GenerationUsageView() {
         kpis={[
           {
             icon: Sun,
+            iconClassName: 'bg-chart-3/12 text-chart-3',
             value: '28.4',
             unit: 'kWh',
             label: 'Solar generation',
@@ -129,6 +245,7 @@ function GenerationUsageView() {
           },
           {
             icon: Zap,
+            iconClassName: 'bg-chart-4/12 text-chart-4',
             value: '36.0',
             unit: 'kWh',
             label: 'Household consumption',
@@ -137,6 +254,7 @@ function GenerationUsageView() {
           },
           {
             icon: Percent,
+            iconClassName: 'bg-accent/12 text-accent',
             value: '81.7',
             unit: '%',
             label: 'Self-consumption',
@@ -145,6 +263,7 @@ function GenerationUsageView() {
           },
           {
             icon: ArrowDownLeft,
+            iconClassName: 'bg-chart-4/12 text-chart-4',
             value: '9.4',
             unit: 'kWh',
             label: 'Grid import',
@@ -153,6 +272,7 @@ function GenerationUsageView() {
           },
           {
             icon: ArrowUpRight,
+            iconClassName: 'bg-accent/12 text-accent',
             value: '3.2',
             unit: 'kWh',
             label: 'Grid export',
@@ -161,6 +281,7 @@ function GenerationUsageView() {
           },
           {
             icon: Gauge,
+            iconClassName: 'bg-chart-3/12 text-chart-3',
             value: '3.4',
             unit: 'kW',
             label: 'Peak demand',
@@ -168,6 +289,7 @@ function GenerationUsageView() {
           },
           {
             icon: TrendingUp,
+            iconClassName: 'bg-accent/12 text-accent',
             value: '8.40',
             unit: 'AED',
             label: 'Est. savings',
@@ -227,9 +349,24 @@ function GenerationUsageView() {
         <div className="flex flex-col gap-5">
           <EnergyBalanceCard
             summary={[
-              { icon: Sun, value: '28.4 kWh', label: 'Generated' },
-              { icon: Zap, value: '36 kWh', label: 'Consumed' },
-              { icon: Percent, value: '81.7%', label: 'Self-use' },
+              {
+                icon: Sun,
+                iconClassName: 'bg-chart-3/12 text-chart-3',
+                value: '28.4 kWh',
+                label: 'Generated',
+              },
+              {
+                icon: Zap,
+                iconClassName: 'bg-chart-4/12 text-chart-4',
+                value: '36 kWh',
+                label: 'Consumed',
+              },
+              {
+                icon: Percent,
+                iconClassName: 'bg-accent/12 text-accent',
+                value: '81.7%',
+                label: 'Self-use',
+              },
             ]}
             sources={[
               {
@@ -307,13 +444,31 @@ function AssetsView() {
   const [subTab, setSubTab] = useState<'devices' | 'automation'>('devices')
   const [category, setCategory] = useState<AssetCategory>('All assets')
   const [view, setView] = useState<'grid' | 'list'>('grid')
+  const [sort, setSort] = useState<AssetSort>('name')
+  const visibleAssets = [...ASSETS]
+    .filter((asset) => category === 'All assets' || asset.category === category)
+    .sort((first, second) => {
+      if (sort === 'output') {
+        return (
+          Math.abs(Number(second.statValue)) - Math.abs(Number(first.statValue))
+        )
+      }
+      if (sort === 'status') return first.status.localeCompare(second.status)
+      return first.name.localeCompare(second.name)
+    })
 
   return (
     <div className="flex flex-col gap-4">
       {/* Devices / Automation sub-toggle */}
-      <div className="inline-flex w-fit rounded-2xl bg-secondary p-1 text-sm font-semibold">
+      <div
+        role="tablist"
+        aria-label="Asset views"
+        className="inline-flex w-fit rounded-2xl bg-secondary p-1 text-sm font-semibold"
+      >
         <button
           type="button"
+          role="tab"
+          aria-selected={subTab === 'devices'}
           onClick={() => setSubTab('devices')}
           className={cn(
             'rounded-xl px-4 py-2 transition',
@@ -326,6 +481,8 @@ function AssetsView() {
         </button>
         <button
           type="button"
+          role="tab"
+          aria-selected={subTab === 'automation'}
           onClick={() => setSubTab('automation')}
           className={cn(
             'rounded-xl px-4 py-2 transition',
@@ -343,110 +500,35 @@ function AssetsView() {
           <AssetFilterBar
             category={category}
             onCategoryChange={setCategory}
-            deviceCount={6}
+            deviceCount={visibleAssets.length}
             view={view}
             onViewChange={setView}
+            sort={sort}
+            onSortChange={setSort}
           />
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-            <AssetCard
-              icon={Sun}
-              iconWrapClassName="bg-chart-3/12 text-chart-3"
-              name="Rooftop Solar Array"
-              brandModel="JA Solar · JAM72S20 370/MR"
-              status="Online"
-              statValue="+3.4"
-              statValueClassName="text-chart-3"
-              statUnit="kW"
-              statLabel="Generating"
-              health="Good"
-              healthPercent={82}
-              lastUpdated="Just now"
-              controlMode="Monitoring only"
-            />
-            <AssetCard
-              icon={BatteryCharging}
-              iconWrapClassName="bg-accent/12 text-accent"
-              name="Home Battery"
-              brandModel="Tesla · Powerwall 2"
-              status="Online"
-              statValue="+1.2"
-              statValueClassName="text-accent"
-              statUnit="kW"
-              statLabel="Charging"
-              socPercent={67}
-              health="Good"
-              healthPercent={82}
-              lastUpdated="1 min ago"
-              controlMode="Controllable"
-            />
-            <AssetCard
-              icon={Car}
-              iconWrapClassName="bg-chart-4/12 text-chart-4"
-              name="Tesla Model Y"
-              brandModel="Tesla · Model Y Long"
-              status="Idle"
-              statValue="0"
-              statValueClassName="text-chart-4"
-              statUnit="kW"
-              statLabel="Active draw"
-              socPercent={67}
-              health="Good"
-              healthPercent={72}
-              lastUpdated="8 min ago"
-              controlMode="Controllable"
-            />
-            <AssetCard
-              icon={Zap}
-              iconWrapClassName="bg-accent/12 text-accent"
-              name="EV Charger"
-              brandModel="Wallbox · Pulsar Plus 22"
-              status="Idle"
-              statValue="0"
-              statValueClassName="text-accent"
-              statUnit="kW"
-              statLabel="Active draw"
-              health="Good"
-              healthPercent={78}
-              lastUpdated="3 min ago"
-              controlMode="Controllable"
-            />
-            <AssetCard
-              icon={Droplets}
-              iconWrapClassName="bg-chart-4/12 text-chart-4"
-              name="Water Heater"
-              brandModel="Ariston · Lydos Hybrid 80L"
-              status="Online"
-              statValue="+0.8"
-              statValueClassName="text-chart-4"
-              statUnit="kW"
-              statLabel="Active draw"
-              health="Degraded"
-              healthPercent={65}
-              lastUpdated="5 min ago"
-              controlMode="Controllable"
-            />
-            <AssetCard
-              icon={Thermometer}
-              iconWrapClassName="bg-secondary text-text-secondary"
-              name="HVAC — Main Zone"
-              brandModel="Daikin · SkyAir RZQS100"
-              status="Online"
-              statValue="+3.2"
-              statValueClassName="text-text-primary"
-              statUnit="kW"
-              statLabel="Active draw"
-              health="Good"
-              healthPercent={66}
-              lastUpdated="2 min ago"
-              controlMode="Monitoring only"
-            />
+          <div
+            className={cn(
+              'grid gap-3',
+              view === 'grid'
+                ? 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-3'
+                : 'grid-cols-1',
+            )}
+          >
+            {visibleAssets.map(({ category: _category, ...asset }) => (
+              <AssetCard key={asset.name} {...asset} />
+            ))}
           </div>
         </>
       ) : (
-        <div className="rounded-xl border border-dashed border-border-subtle p-10 text-center text-sm text-text-tertiary">
-          Automation sub-tab — send me that Figma frame and I'll build it the
-          same way.
+        <div className="rounded-xl border border-dashed border-border-subtle bg-card p-10 text-center">
+          <p className="text-sm font-medium text-text-primary">
+            No automations configured
+          </p>
+          <p className="mt-1 text-xs text-text-tertiary">
+            Create rules to coordinate your battery, EV charger, and flexible
+            loads.
+          </p>
         </div>
       )}
     </div>

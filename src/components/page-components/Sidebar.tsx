@@ -1,4 +1,4 @@
-import { useRouterState } from '@tanstack/react-router'
+import { Link, useRouterState } from '@tanstack/react-router'
 import {
   Bell,
   ChevronDown,
@@ -23,11 +23,23 @@ const navItems = [
   { label: 'Forecast', to: '/forecast', icon: Activity },
   { label: 'Wallet', to: '/wallet', icon: Wallet },
   { label: 'History', to: '/history', icon: History },
-  { label: 'Notifications', to: '/notifications', icon: Bell },
+  { label: 'Notifications', to: '/notification', icon: Bell },
   { label: 'Settings', to: '/profile', icon: Settings },
 ] as const
 
 const navGroups = [navItems.slice(0, 5), navItems.slice(5)]
+
+type ImplementedRoute =
+  '/dashboard' | '/energyassets' | '/notification' | '/profile'
+
+function isImplementedRoute(to: string): to is ImplementedRoute {
+  return (
+    to === '/dashboard' ||
+    to === '/energyassets' ||
+    to === '/notification' ||
+    to === '/profile'
+  )
+}
 
 interface SidebarProps {
   user: {
@@ -107,18 +119,26 @@ export default function Sidebar({ user }: SidebarProps) {
             {group.map((item) => {
               const Icon = item.icon
               const active = pathname === item.to
+              const className = cn(
+                'flex items-center gap-3 rounded-lg px-2.5 py-2 text-sm font-medium no-underline transition',
+                active
+                  ? 'bg-sidebar-primary text-sidebar-primary-foreground'
+                  : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground',
+              )
+
+              if (isImplementedRoute(item.to)) {
+                return (
+                  <Link key={item.to} to={item.to} className={className}>
+                    <Icon className="size-4.5 shrink-0" />
+                    {!collapsed && (
+                      <span className="truncate">{item.label}</span>
+                    )}
+                  </Link>
+                )
+              }
 
               return (
-                <a
-                  key={item.to}
-                  href={item.to}
-                  className={cn(
-                    'flex items-center gap-3 rounded-lg px-2.5 py-2 text-sm font-medium no-underline transition',
-                    active
-                      ? 'bg-sidebar-primary text-sidebar-primary-foreground'
-                      : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground',
-                  )}
-                >
+                <a key={item.to} href={item.to} className={className}>
                   <Icon className="size-4.5 shrink-0" />
                   {!collapsed && <span className="truncate">{item.label}</span>}
                 </a>
