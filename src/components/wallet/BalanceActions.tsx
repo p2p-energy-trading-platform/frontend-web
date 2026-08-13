@@ -7,7 +7,7 @@ export function BalanceActions() {
 
   return (
 
-    <div className="border border-red-500 flex flex-row gap-2">
+    <div className="flex flex-row gap-2">
 
         <Button size="lg" className="px-47 cursor-pointer">
            <ArrowDownLeft />

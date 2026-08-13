@@ -7,7 +7,7 @@ export function BalanceMetrics() {
 
   return (
 
-    <div className="border border-red-500 flex flex-row items-center justify-between gap-2">
+    <div className="flex flex-row items-center justify-between gap-2">
 
         <BalanceMetricCard
             icon={Clock}

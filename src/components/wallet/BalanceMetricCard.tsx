@@ -17,9 +17,9 @@ export function BalanceMetricCard({icon: Icon, title, amount, description}: Prop
 
   return (
 
-    <Card className="border border-blue-500 flex flex-col items-start justify-start gap-3 pl-2 pr-48">
+    <Card className="flex flex-col items-start justify-start gap-3 pl-2 pr-48">
 
-        <div className="border border-green-500 flex flex-row items-center justify-start gap-2">
+        <div className="flex flex-row items-center justify-start gap-2">
 
             <Icon className="size-5 text-text-secondary" />
 
@@ -29,13 +29,13 @@ export function BalanceMetricCard({icon: Icon, title, amount, description}: Prop
 
         </div>
 
-        <div className="border border-green-500">
+        <div className="">
 
             <h3 className="text-heading-4">{amount}</h3>
 
         </div>
 
-        <div className="border border-green-500">
+        <div className="">
 
             <p className="text-caption text-text-secondary">{description}</p>
 
