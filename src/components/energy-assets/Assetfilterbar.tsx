@@ -4,6 +4,7 @@ import { cn } from '#/lib/utils'
 
 export type AssetCategory =
   'All assets' | 'Solar' | 'Battery' | 'EV' | 'Charger' | 'Flex loads'
+export type AssetSort = 'name' | 'output' | 'status'
 
 const CATEGORIES: Array<AssetCategory> = [
   'All assets',
@@ -20,6 +21,8 @@ export interface AssetFilterBarProps {
   deviceCount: number
   view: 'grid' | 'list'
   onViewChange: (view: 'grid' | 'list') => void
+  sort: AssetSort
+  onSortChange: (sort: AssetSort) => void
   onAddAsset?: () => void
 }
 
@@ -29,11 +32,13 @@ export function AssetFilterBar({
   deviceCount,
   view,
   onViewChange,
+  sort,
+  onSortChange,
   onAddAsset,
 }: AssetFilterBarProps) {
   return (
     <div className="flex flex-wrap items-center gap-2 pt-4">
-      <div className="inline-flex rounded-xl bg-secondary p-0.5 text-xs font-semibold">
+      <div className="flex flex-wrap rounded-xl bg-secondary p-0.5 text-xs font-semibold">
         {CATEGORIES.map((c) => (
           <button
             key={c}
@@ -53,16 +58,18 @@ export function AssetFilterBar({
 
       <select
         aria-label="Sort assets"
+        value={sort}
+        onChange={(event) => onSortChange(event.target.value as AssetSort)}
         className="h-[30.5px] rounded-xl border border-border-subtle bg-card px-2.5 text-xs font-medium text-text-secondary"
       >
-        <option>Sort by name</option>
-        <option>Sort by output</option>
-        <option>Sort by status</option>
+        <option value="name">Sort by name</option>
+        <option value="output">Sort by output</option>
+        <option value="status">Sort by status</option>
       </select>
 
       <span className="text-xs text-text-tertiary">{deviceCount} devices</span>
 
-      <div className="ml-auto flex items-center gap-2">
+      <div className="flex items-center gap-2 sm:ml-auto">
         <div className="flex items-center gap-0.5 rounded-xl bg-secondary p-0.5">
           <button
             type="button"
