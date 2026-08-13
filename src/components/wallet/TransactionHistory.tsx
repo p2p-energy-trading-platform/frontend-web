@@ -4,10 +4,8 @@ import { Card } from '#/components/ui/card'
 import { Input } from '#/components/ui/input'
 import { Button } from '#/components/ui/button'
 
+const transactions = [
 
-export function TransactionHistory() {
-
-  const transactions = [
     {
       title: 'Energy purchase',
       date: '07 Aug 2026 · 10:30 AM',
@@ -19,13 +17,13 @@ export function TransactionHistory() {
       date: '06 Aug 2026 · 04:15 PM',
       amount: '+ AED 42.50',
       type: 'sell',
-    },
-  ]
+    }
 
+]
 
-  return (
+export function TransactionHistory() {
 
-    <div className="flex flex-row w-full gap-7">
+    return (
 
         <Card className="flex flex-col w-3/5 gap-6 border-border-subtle bg-card p-6">
 
@@ -53,10 +51,6 @@ export function TransactionHistory() {
                 
             </div>
             
-
-            
-
-
             {transactions.map((transaction) => (
 
                 <div
@@ -89,8 +83,8 @@ export function TransactionHistory() {
                     <p
                         className={
                             transaction.type === 'buy'
-                            ? 'text-[var(--trade-buy-text)]'
-                            : 'text-[var(--trade-sell-text)]'
+                            ? "text-text-primary"
+                            : "text-feedback-success-text"
                         }
                     >
                         {transaction.amount}
@@ -99,17 +93,10 @@ export function TransactionHistory() {
 
                 </div>
 
-                ))}
+            ))}
 
         </Card>
 
-        <Card className="flex flex-col gap-4 border-border-subtle bg-card p-5">
+    )
 
-            
-
-        </Card>
-
-    </div>
-
-  )
 }
