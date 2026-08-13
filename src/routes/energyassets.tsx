@@ -28,8 +28,10 @@ import { PeakPeriodsCard } from '#/components/energy-assets/Peakperiodcard'
 import { EnergyBalanceCard } from '#/components/energy-assets/Energybalancecard'
 import { InsightsPanel } from '#/components/energy-assets/Insightspanel'
 import { AssetFilterBar } from '#/components/energy-assets/Assetfilterbar'
-import type { AssetCategory } from '#/components/energy-assets/Assetfilterbar'
-import type { AssetSort } from '#/components/energy-assets/Assetfilterbar'
+import type {
+  AssetCategory,
+  AssetSort,
+} from '#/components/energy-assets/Assetfilterbar'
 import { AssetCard } from '#/components/energy-assets/Assetcard'
 import type { AssetCardProps } from '#/components/energy-assets/Assetcard'
 
