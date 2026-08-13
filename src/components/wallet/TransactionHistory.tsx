@@ -27,7 +27,7 @@ export function TransactionHistory() {
 
         <Card className="flex flex-col w-3/5 gap-6 border-border-subtle bg-card p-6">
 
-            <div className="border border-red-500 flex flex-row justify-between items-center">
+            <div className="flex flex-row justify-between items-center">
                 <h2 className="text-heading-4 text-text-secondary">
                     Transaction History
                 </h2>
@@ -38,7 +38,8 @@ export function TransactionHistory() {
                 </Button>
             </div>
 
-            <div className="border border-red-500 flex flex-row justify-between items-center gap-3">
+            <div className="flex flex-row justify-between items-center gap-3">
+                
                 <Input
                     placeholder="Search description or reference"
                 />
