@@ -13,6 +13,7 @@ import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as NotificationRouteImport } from './routes/notification'
+import { Route as HistoryRouteImport } from './routes/history'
 import { Route as EnergyassetsRouteImport } from './routes/energyassets'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AboutRouteImport } from './routes/about'
@@ -36,6 +37,11 @@ const ProfileRoute = ProfileRouteImport.update({
 const NotificationRoute = NotificationRouteImport.update({
   id: '/notification',
   path: '/notification',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoryRoute = HistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EnergyassetsRoute = EnergyassetsRouteImport.update({
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/dashboard': typeof DashboardRoute
   '/energyassets': typeof EnergyassetsRoute
+  '/history': typeof HistoryRoute
   '/notification': typeof NotificationRoute
   '/profile': typeof ProfileRoute
   '/sign-in': typeof SignInRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/dashboard': typeof DashboardRoute
   '/energyassets': typeof EnergyassetsRoute
+  '/history': typeof HistoryRoute
   '/notification': typeof NotificationRoute
   '/profile': typeof ProfileRoute
   '/sign-in': typeof SignInRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/dashboard': typeof DashboardRoute
   '/energyassets': typeof EnergyassetsRoute
+  '/history': typeof HistoryRoute
   '/notification': typeof NotificationRoute
   '/profile': typeof ProfileRoute
   '/sign-in': typeof SignInRoute
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/dashboard'
     | '/energyassets'
+    | '/history'
     | '/notification'
     | '/profile'
     | '/sign-in'
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/dashboard'
     | '/energyassets'
+    | '/history'
     | '/notification'
     | '/profile'
     | '/sign-in'
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/dashboard'
     | '/energyassets'
+    | '/history'
     | '/notification'
     | '/profile'
     | '/sign-in'
@@ -128,6 +140,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   DashboardRoute: typeof DashboardRoute
   EnergyassetsRoute: typeof EnergyassetsRoute
+  HistoryRoute: typeof HistoryRoute
   NotificationRoute: typeof NotificationRoute
   ProfileRoute: typeof ProfileRoute
   SignInRoute: typeof SignInRoute
@@ -162,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/notification'
       fullPath: '/notification'
       preLoaderRoute: typeof NotificationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/history': {
+      id: '/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof HistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/energyassets': {
@@ -200,6 +220,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   DashboardRoute: DashboardRoute,
   EnergyassetsRoute: EnergyassetsRoute,
+  HistoryRoute: HistoryRoute,
   NotificationRoute: NotificationRoute,
   ProfileRoute: ProfileRoute,
   SignInRoute: SignInRoute,
