@@ -9,16 +9,22 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TradehistoryRouteImport } from './routes/tradehistory'
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as OrderhistoryRouteImport } from './routes/orderhistory'
 import { Route as NotificationRouteImport } from './routes/notification'
-import { Route as HistoryRouteImport } from './routes/history'
 import { Route as EnergyassetsRouteImport } from './routes/energyassets'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TradehistoryRoute = TradehistoryRouteImport.update({
+  id: '/tradehistory',
+  path: '/tradehistory',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignUpRoute = SignUpRouteImport.update({
   id: '/sign-up',
   path: '/sign-up',
@@ -34,14 +40,14 @@ const ProfileRoute = ProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrderhistoryRoute = OrderhistoryRouteImport.update({
+  id: '/orderhistory',
+  path: '/orderhistory',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NotificationRoute = NotificationRouteImport.update({
   id: '/notification',
   path: '/notification',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HistoryRoute = HistoryRouteImport.update({
-  id: '/history',
-  path: '/history',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EnergyassetsRoute = EnergyassetsRouteImport.update({
@@ -70,22 +76,24 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/dashboard': typeof DashboardRoute
   '/energyassets': typeof EnergyassetsRoute
-  '/history': typeof HistoryRoute
   '/notification': typeof NotificationRoute
+  '/orderhistory': typeof OrderhistoryRoute
   '/profile': typeof ProfileRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
+  '/tradehistory': typeof TradehistoryRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/dashboard': typeof DashboardRoute
   '/energyassets': typeof EnergyassetsRoute
-  '/history': typeof HistoryRoute
   '/notification': typeof NotificationRoute
+  '/orderhistory': typeof OrderhistoryRoute
   '/profile': typeof ProfileRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
+  '/tradehistory': typeof TradehistoryRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -93,11 +101,12 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/dashboard': typeof DashboardRoute
   '/energyassets': typeof EnergyassetsRoute
-  '/history': typeof HistoryRoute
   '/notification': typeof NotificationRoute
+  '/orderhistory': typeof OrderhistoryRoute
   '/profile': typeof ProfileRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
+  '/tradehistory': typeof TradehistoryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -106,33 +115,36 @@ export interface FileRouteTypes {
     | '/about'
     | '/dashboard'
     | '/energyassets'
-    | '/history'
     | '/notification'
+    | '/orderhistory'
     | '/profile'
     | '/sign-in'
     | '/sign-up'
+    | '/tradehistory'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/dashboard'
     | '/energyassets'
-    | '/history'
     | '/notification'
+    | '/orderhistory'
     | '/profile'
     | '/sign-in'
     | '/sign-up'
+    | '/tradehistory'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/dashboard'
     | '/energyassets'
-    | '/history'
     | '/notification'
+    | '/orderhistory'
     | '/profile'
     | '/sign-in'
     | '/sign-up'
+    | '/tradehistory'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -140,15 +152,23 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   DashboardRoute: typeof DashboardRoute
   EnergyassetsRoute: typeof EnergyassetsRoute
-  HistoryRoute: typeof HistoryRoute
   NotificationRoute: typeof NotificationRoute
+  OrderhistoryRoute: typeof OrderhistoryRoute
   ProfileRoute: typeof ProfileRoute
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
+  TradehistoryRoute: typeof TradehistoryRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tradehistory': {
+      id: '/tradehistory'
+      path: '/tradehistory'
+      fullPath: '/tradehistory'
+      preLoaderRoute: typeof TradehistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sign-up': {
       id: '/sign-up'
       path: '/sign-up'
@@ -170,18 +190,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/orderhistory': {
+      id: '/orderhistory'
+      path: '/orderhistory'
+      fullPath: '/orderhistory'
+      preLoaderRoute: typeof OrderhistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/notification': {
       id: '/notification'
       path: '/notification'
       fullPath: '/notification'
       preLoaderRoute: typeof NotificationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/history': {
-      id: '/history'
-      path: '/history'
-      fullPath: '/history'
-      preLoaderRoute: typeof HistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/energyassets': {
@@ -220,11 +240,12 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   DashboardRoute: DashboardRoute,
   EnergyassetsRoute: EnergyassetsRoute,
-  HistoryRoute: HistoryRoute,
   NotificationRoute: NotificationRoute,
+  OrderhistoryRoute: OrderhistoryRoute,
   ProfileRoute: ProfileRoute,
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
+  TradehistoryRoute: TradehistoryRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
