@@ -75,15 +75,15 @@ export function AssetCard({
         <div className="flex items-center gap-2.5">
           <span
             className={cn(
-              'flex size-9 shrink-0 items-center justify-center rounded-2xl',
+              'flex size-9 shrink-0 items-center justify-center rounded-lg',
               iconWrapClassName,
             )}
           >
-            <Icon className="size-4" />
+            <Icon className="size-4.5" />
           </span>
           <div>
-            <p className="text-sm font-bold text-text-primary">{name}</p>
-            <p className="text-[10px] text-text-tertiary">{brandModel}</p>
+            <p className="text-sm font-semibold text-text-primary">{name}</p>
+            <p className="text-xs text-text-tertiary">{brandModel}</p>
           </div>
         </div>
 

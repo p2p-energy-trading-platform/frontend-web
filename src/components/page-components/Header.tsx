@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { Bell, ChevronDown, Home, HelpCircle } from 'lucide-react'
 
 import { Badge } from '#/components/ui/badge'
@@ -42,6 +42,17 @@ export default function PageHeader({
   onNotificationsClick,
   onUserMenuClick,
 }: PageHeaderProps) {
+  const navigate = useNavigate()
+
+  const handleNotificationsClick = () => {
+    if (onNotificationsClick) {
+      onNotificationsClick()
+      return
+    }
+
+    navigate({ to: '/notification' })
+  }
+
   return (
     <header className="sticky top-0 z-50 border-b border-border-subtle bg-card">
       <div className="flex h-14 items-center gap-3 px-4 sm:px-6">
@@ -97,7 +108,7 @@ export default function PageHeader({
             variant="ghost"
             size="icon"
             aria-label="Notifications"
-            onClick={onNotificationsClick}
+            onClick={handleNotificationsClick}
             className="relative"
           >
             <Bell className="size-4.5 text-text-secondary" />

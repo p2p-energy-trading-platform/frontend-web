@@ -58,7 +58,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     pathname === '/dashboard' ||
     pathname === '/profile' ||
     pathname === '/energyassets' ||
-    pathname === '/trade'
+    pathname === '/trade' ||
+    pathname === '/notification'
 
   return (
     <html lang="en" suppressHydrationWarning>
