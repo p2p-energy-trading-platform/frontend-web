@@ -1,5 +1,3 @@
-import { ArrowUpRight, ArrowDownLeft, Clock, Lock } from 'lucide-react'
-
 import { Card } from '#/components/ui/card'
 import { BalanceOverview } from './BalanceOverview'
 import { BalanceMetrics } from './BalanceMetrics'
