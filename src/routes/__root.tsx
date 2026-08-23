@@ -58,6 +58,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     pathname === '/dashboard' ||
     pathname === '/profile' ||
     pathname === '/energyassets' ||
+    pathname === '/trade' ||
     pathname === '/notification'
 
   return (
