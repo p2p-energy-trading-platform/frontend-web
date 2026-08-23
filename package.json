@@ -38,6 +38,7 @@
     "@tanstack/router-plugin": "^1.132.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "lightweight-charts": "^5.2.0",
     "lucide-react": "^0.577.0",
     "nitro": "npm:nitro-nightly@latest",
     "react": "^19.2.0",
@@ -77,5 +78,8 @@
       "esbuild",
       "lightningcss"
     ]
+  },
+  "allowScripts": {
+    "unrs-resolver@1.12.2": true
   }
 }

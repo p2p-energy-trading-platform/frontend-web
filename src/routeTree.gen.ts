@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TradehistoryRouteImport } from './routes/tradehistory'
+import { Route as TradeRouteImport } from './routes/trade'
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as ProfileRouteImport } from './routes/profile'
@@ -23,6 +24,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const TradehistoryRoute = TradehistoryRouteImport.update({
   id: '/tradehistory',
   path: '/tradehistory',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TradeRoute = TradeRouteImport.update({
+  id: '/trade',
+  path: '/trade',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignUpRoute = SignUpRouteImport.update({
@@ -81,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
+  '/trade': typeof TradeRoute
   '/tradehistory': typeof TradehistoryRoute
 }
 export interface FileRoutesByTo {
@@ -93,6 +100,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
+  '/trade': typeof TradeRoute
   '/tradehistory': typeof TradehistoryRoute
 }
 export interface FileRoutesById {
@@ -106,6 +114,7 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
+  '/trade': typeof TradeRoute
   '/tradehistory': typeof TradehistoryRoute
 }
 export interface FileRouteTypes {
@@ -120,6 +129,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/sign-in'
     | '/sign-up'
+    | '/trade'
     | '/tradehistory'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -132,6 +142,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/sign-in'
     | '/sign-up'
+    | '/trade'
     | '/tradehistory'
   id:
     | '__root__'
@@ -144,6 +155,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/sign-in'
     | '/sign-up'
+    | '/trade'
     | '/tradehistory'
   fileRoutesById: FileRoutesById
 }
@@ -157,6 +169,7 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
+  TradeRoute: typeof TradeRoute
   TradehistoryRoute: typeof TradehistoryRoute
 }
 
@@ -167,6 +180,13 @@ declare module '@tanstack/react-router' {
       path: '/tradehistory'
       fullPath: '/tradehistory'
       preLoaderRoute: typeof TradehistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trade': {
+      id: '/trade'
+      path: '/trade'
+      fullPath: '/trade'
+      preLoaderRoute: typeof TradeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sign-up': {
@@ -245,6 +265,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
+  TradeRoute: TradeRoute,
   TradehistoryRoute: TradehistoryRoute,
 }
 export const routeTree = rootRouteImport
