@@ -59,6 +59,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     pathname === '/profile' ||
     pathname === '/energyassets' ||
     pathname === '/trade' ||
+    pathname === '/wallet' ||
     pathname === '/notification'
 
   return (
