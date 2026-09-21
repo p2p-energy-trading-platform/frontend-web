@@ -2,11 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { Zap } from 'lucide-react'
 
 import ThemeToggle from './ThemeToggle'
-
-const navItems = [
-  { label: 'Home', to: '/' },
-  { label: 'About', to: '/about' },
-] as const
+import { buttonVariants } from './ui/button'
 
 export default function Header() {
   return (
@@ -22,32 +18,11 @@ export default function Header() {
           <span>GridX</span>
         </Link>
 
-        <div className="order-3 flex w-full items-center gap-1 sm:order-0 sm:w-auto">
-          {navItems.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              activeProps={{
-                className: 'bg-secondary text-text-primary',
-              }}
-              className="inline-flex h-9 items-center justify-center rounded-md px-3 text-sm font-medium text-text-secondary transition hover:bg-secondary hover:text-text-primary"
-            >
-              {item.label}
-            </Link>
-          ))}
-
-          <a
-            href="https://tanstack.com/start/latest/docs/framework/react/overview"
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex h-9 items-center justify-center rounded-md px-3 text-sm font-medium text-text-secondary transition hover:bg-secondary hover:text-text-primary"
-          >
-            Docs
-          </a>
-        </div>
-
         <div className="ml-auto flex items-center gap-2">
           <ThemeToggle />
+          <Link to="/sign-in" className={buttonVariants({ size: 'sm' })}>
+            Sign in
+          </Link>
         </div>
       </nav>
     </header>

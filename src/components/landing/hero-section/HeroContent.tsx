@@ -1,4 +1,5 @@
-import { Button } from '@/components/ui/button'
+import { Link } from '@tanstack/react-router'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Check, ArrowRight } from 'lucide-react'
 
@@ -22,10 +23,10 @@ export default function HeroContent() {
       </p>
 
       <div className="mt-7 ml-2 flex flex-wrap items-center justify-start gap-4">
-        <Button size="lg">
+        <Link to="/sign-in" className={buttonVariants({ size: 'lg' })}>
           Start Trading Energy
           <ArrowRight />
-        </Button>
+        </Link>
 
         <Button variant="outline" className="border-primary" size="lg">
           See How It Works

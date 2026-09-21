@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WalletRouteImport } from './routes/wallet'
 import { Route as TradehistoryRouteImport } from './routes/tradehistory'
 import { Route as TradeRouteImport } from './routes/trade'
 import { Route as SignUpRouteImport } from './routes/sign-up'
@@ -21,6 +22,11 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WalletRoute = WalletRouteImport.update({
+  id: '/wallet',
+  path: '/wallet',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TradehistoryRoute = TradehistoryRouteImport.update({
   id: '/tradehistory',
   path: '/tradehistory',
@@ -89,6 +95,7 @@ export interface FileRoutesByFullPath {
   '/sign-up': typeof SignUpRoute
   '/trade': typeof TradeRoute
   '/tradehistory': typeof TradehistoryRoute
+  '/wallet': typeof WalletRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -102,6 +109,7 @@ export interface FileRoutesByTo {
   '/sign-up': typeof SignUpRoute
   '/trade': typeof TradeRoute
   '/tradehistory': typeof TradehistoryRoute
+  '/wallet': typeof WalletRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -116,6 +124,7 @@ export interface FileRoutesById {
   '/sign-up': typeof SignUpRoute
   '/trade': typeof TradeRoute
   '/tradehistory': typeof TradehistoryRoute
+  '/wallet': typeof WalletRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -131,6 +140,7 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/trade'
     | '/tradehistory'
+    | '/wallet'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -144,6 +154,7 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/trade'
     | '/tradehistory'
+    | '/wallet'
   id:
     | '__root__'
     | '/'
@@ -157,6 +168,7 @@ export interface FileRouteTypes {
     | '/sign-up'
     | '/trade'
     | '/tradehistory'
+    | '/wallet'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -171,10 +183,18 @@ export interface RootRouteChildren {
   SignUpRoute: typeof SignUpRoute
   TradeRoute: typeof TradeRoute
   TradehistoryRoute: typeof TradehistoryRoute
+  WalletRoute: typeof WalletRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wallet': {
+      id: '/wallet'
+      path: '/wallet'
+      fullPath: '/wallet'
+      preLoaderRoute: typeof WalletRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tradehistory': {
       id: '/tradehistory'
       path: '/tradehistory'
@@ -267,6 +287,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignUpRoute: SignUpRoute,
   TradeRoute: TradeRoute,
   TradehistoryRoute: TradehistoryRoute,
+  WalletRoute: WalletRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
