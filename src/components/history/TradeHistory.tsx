@@ -222,7 +222,6 @@ const TRADE_STATUS: Record<
   },
 }
 
-
 function StatusPill({ label, cls }: { label: string; cls: string }) {
   return (
     <span

@@ -43,7 +43,6 @@ interface OrderRecord {
 
 // ─── Sample data ─────────────────────────────────────────────────────────────
 
-
 const ORDERS: OrderRecord[] = [
   {
     id: 'GX-2847',
@@ -216,7 +215,6 @@ function SidePill({ side }: { side: TradeSide }) {
     </span>
   )
 }
-
 
 // ─── Order detail drawer ──────────────────────────────────────────────────────
 
