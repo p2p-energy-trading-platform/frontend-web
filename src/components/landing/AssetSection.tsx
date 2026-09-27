@@ -1,6 +1,7 @@
 import { Card } from '@/components/ui/card'
+import { Badge } from '../ui/badge'
 
-export default function AssetsCard() {
+function AssetsCard() {
   return (
     <div className="py-6 flex flex-row justify-center gap-6">
       <Card className="w-64 p-6">
@@ -68,5 +69,33 @@ export default function AssetsCard() {
         </div>
       </Card>
     </div>
+  )
+}
+
+function AssetsHeader() {
+  return (
+    <div className="py-6 flex flex-col gap-5 items-center text-center">
+      <Badge variant="secondary" className="">
+        Supported assets
+      </Badge>
+
+      <h2 className="text-section-title text-foreground">
+        What you can trade on GridX
+      </h2>
+
+      <p className="text-label-lg text-text-secondary">
+        Three asset types, one unified marketplace.
+      </p>
+    </div>
+  )
+}
+
+export default function AssetsSection() {
+  return (
+    <section className="bg-background flex flex-col items-center justify-center">
+      <AssetsHeader />
+
+      <AssetsCard />
+    </section>
   )
 }

@@ -3,7 +3,7 @@ import { Button, buttonVariants } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Check, ArrowRight } from 'lucide-react'
 
-export default function HeroContent() {
+function HeroContent() {
   return (
     <div>
       <Badge variant="secondary" className="mt-10">
@@ -59,5 +59,27 @@ export default function HeroContent() {
         </div>
       </div>
     </div>
+  )
+}
+
+function HeroVisual() {
+  return (
+    <div className="">
+      <img
+        src="/images/gridx-energy-ecosystem.png"
+        alt="GridX energy ecosystem connecting solar, battery, EV and smart homes"
+      />
+    </div>
+  )
+}
+
+
+export default function HeroSection() {
+  return (
+    <section className="bg-background flex flex-row justify-center gap-20">
+      <HeroContent />
+
+      <HeroVisual />
+    </section>
   )
 }
