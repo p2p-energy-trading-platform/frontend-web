@@ -11,7 +11,7 @@ function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
         'peer inline-flex size-4 shrink-0 items-center justify-center rounded border border-input bg-background p-0 shadow-xs outline-none transition-shadow',
         'focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50',
         'disabled:cursor-not-allowed disabled:opacity-50',
-        'data-[checked]:border-primary data-[checked]:bg-primary data-[checked]:text-primary-foreground',
+        'data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground',
         className,
       )}
       {...props}

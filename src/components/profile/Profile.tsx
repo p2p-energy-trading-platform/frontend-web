@@ -283,7 +283,7 @@ export default function Profile() {
           dashboardHref="/dashboard"
         />
 
-        <main className="mx-auto w-full max-w-[1360px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+        <main className="mx-auto w-full max-w-340 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
           <div className="mb-7 max-w-3xl">
             <h1 className="font-heading text-2xl font-bold sm:text-3xl">
               Profile settings

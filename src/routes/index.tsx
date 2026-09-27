@@ -1,10 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
-import HeroSection from '#/components/landing/hero-section/HeroSection'
-import HowItWorksSection from '@/components/landing/howitworks-section/HowItWorksSection'
-import BenifitsSection from '@/components/landing/benifits-section/BenefitsSection'
-import AssetsSection from '@/components/landing/asssets-section/AssetsSection'
-import FAQSection from '@/components/landing/faq-section/FAQSection'
-import CTASection from '@/components/landing/cta-section/CTASection'
+import HowItWorksSection from '#/components/landing/HowItWorksSection'
+import HeroSection from '#/components/landing/HeroSection'
+import BenifitsSection from '#/components/landing/BenefitsHeader'
+import AssetsSection from '#/components/landing/AssetSection'
+import FAQSection from '#/components/landing/FAQSection'
+import CTASection from '#/components/landing/CTASection'
+
 
 export const Route = createFileRoute('/')({
   component: Home,

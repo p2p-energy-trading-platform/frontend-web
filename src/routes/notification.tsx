@@ -49,7 +49,7 @@ function NotificationsPage() {
           user={user}
         />
 
-        <main className="mx-auto flex w-full max-w-[900px] flex-col gap-4 p-6">
+        <main className="mx-auto flex w-full max-w-225 flex-col gap-4 p-6">
           <div className="flex items-center gap-2">
             <h1 className="text-heading-2 text-text-primary">Notifications</h1>
             <span className="flex min-w-5 items-center justify-center rounded-full bg-accent px-1.5 py-0.5 text-xs font-semibold text-accent-foreground">

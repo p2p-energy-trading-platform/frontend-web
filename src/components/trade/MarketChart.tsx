@@ -129,7 +129,7 @@ export function MarketChart({ timeframe }: { timeframe: Timeframe }) {
   }, [timeframe])
 
   return (
-    <div className="relative min-h-[390px] w-full" ref={containerRef}>
+    <div className="relative min-h-97.5 w-full" ref={containerRef}>
       {tooltip && (
         <div
           className="pointer-events-none absolute z-10 rounded-lg border border-border-default bg-card/95 px-3 py-2 text-xs leading-5 text-text-secondary shadow-lg backdrop-blur"

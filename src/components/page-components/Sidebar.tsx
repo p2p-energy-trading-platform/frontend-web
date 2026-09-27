@@ -58,7 +58,7 @@ export default function Sidebar({ user }: SidebarProps) {
     <aside
       className={cn(
         'sticky top-0 flex h-screen shrink-0 flex-col border-r border-sidebar-border bg-sidebar transition-all',
-        collapsed ? 'w-[76px]' : 'w-[220px]',
+        collapsed ? 'w-19' : 'w-55',
       )}
     >
       {/* Brand */}
