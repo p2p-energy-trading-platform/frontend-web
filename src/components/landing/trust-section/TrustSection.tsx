@@ -1,116 +1,130 @@
+import { useState } from 'react'
 import { Card } from '../../ui/card'
 import { Badge } from '../../ui/badge'
-import { Check } from 'lucide-react'
+import { BarChart3, Check, CheckCircle2, LockKeyhole, ShieldCheck } from 'lucide-react'
+
+
+const trustItems = [
+  {
+    title: 'Smart-meter verified',
+    description:
+      'Every trade is settled against certified smart-meter readings. No estimates, no self-reported figures.',
+    icon: ShieldCheck,
+  },
+  {
+    title: 'Transparent grid fees',
+    description:
+      'Network transmission and platform settlement fees are itemised on every transaction receipt.',
+    icon: BarChart3,
+  },
+  {
+    title: 'Escrow-secured payments',
+    description:
+      'AED funds are held in escrow until metered delivery is confirmed. Buyers are protected if delivery falls short.',
+    icon: LockKeyhole,
+  },
+  {
+    title: 'Identity verified users',
+    description:
+      'All participants complete document identity verification and meter-ownership checks before their first trade.',
+    icon: CheckCircle2,
+  },
+]
 
 
 export default function TrustSection() {
-  return (
-    <section className="border border-red-500 bg-background flex flex-row items-center justify-start gap-6 px-6">
 
-        <div className="border border-blue-500 py-6 flex flex-col gap-5 items-center text-center">
+  const [activeCard, setActiveCard] = useState<string | null>(null)
+
+
+  return (
+    <section className="bg-background flex flex-row items-center justify-start gap-6 px-9">
+
+        <div className="py-6 flex flex-col gap-5 items-start text-center">
             <Badge variant="secondary" className="">Trust & safety</Badge>
 
-            <h2 className="text-display-lg text-foreground">
+            <h2 className="text-display-lg text-foreground text-left">
                 Built on verified data, not promises
             </h2>
 
-            <p className="text-label-md text-text-secondary tracking-tight">
+            <p className="text-label-md text-text-secondary tracking-tight text-left">
                 GridX is designed around metered proof. Every kilowatt-hour is accounted for, every payment is protected, and every participant is verified.
             </p>
 
-            <div className="border border-green-500 flex flex-col items-start justify-center gap-3">
+            <div className="w-full flex flex-col items-start justify-center gap-3">
 
                 <div className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-emerald-500" />
+                    <Check className="h-4 w-4 text-action-accent" />
 
-                    <span className="text-xs text-muted-foreground/70">
+                    <span className="text-xs text-text-secondary">
                         ISO 27001-aligned data security
                     </span>
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-emerald-500" />
+                    <Check className="h-4 w-4 text-action-accent" />
 
-                    <span className="text-xs text-muted-foreground/70">
+                    <span className="text-xs text-text-secondary">
                         AES-256 encryption at rest and in transit
                     </span>
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-emerald-500" />
+                    <Check className="h-4 w-4 text-action-accent" />
 
-                    <span className="text-xs text-muted-foreground/70">
+                    <span className="text-xs text-text-secondary">
                         Audit trail on every trade
                     </span>
                 </div>
             </div>
         </div>
 
-        <div className="border border-pink-500 py-6 flex flex-col gap-5 items-center text-center">
+        <div className="grid grid-cols-2 gap-4 py-6">
           
-          <Card className="w-94 bg-background-surface border-border-default p-5">
-            <div className="flex flex-col gap-3 my-2">
-              <strong className="text-3xl font-semibold text-foreground">
-                3, 412
-              </strong>
+          {trustItems.map(({ title, description, icon: Icon }) => {
 
-              <span className="text-label-lg text-text-secondary">
-                Active  prosumers
-              </span>
+              const isActive = activeCard === title
 
-              <span className="text-caption">
-                across 16 zones
-              </span>
-            </div>
-          </Card>
+              return (
 
-          <Card className="w-94 bg-background-surface border-border-default p-5">
-            <div className="flex flex-col gap-3 my-2">
-              <strong className="text-3xl font-semibold text-foreground">
-                3, 412
-              </strong>
+                <Card 
+                  key={title} 
+                  className={`flex min-h-52 cursor-pointer flex-col items-start p-5 text-left transition-all ${
+                      isActive
+                        ? 'border-action-accent bg-background-surface'
+                        : 'border-border-default bg-background-surface hover:border-border-strong hover:bg-muted'
+                    }`}
+                    onClick={() => setActiveCard(isActive ? null : title)}
+                    aria-pressed={isActive}
+                >
 
-              <span className="text-label-lg text-text-secondary">
-                Active  prosumers
-              </span>
+                  <div
+                    className={`flex size-9 items-center justify-center rounded-lg ${
+                      isActive
+                        ? 'bg-accent text-accent-foreground'
+                        : 'bg-muted text-action-accent'
+                    }`}
+                  >
+                    <Icon
+                      aria-hidden="true"
+                      size={20}
+                      strokeWidth={1.8}
+                    />
+                  </div>
 
-              <span className="text-caption">
-                across 16 zones
-              </span>
-            </div>
-          </Card>
+                  <h3 className="mt-5 text-heading-4 text-text-primary">
+                    {title}
+                  </h3>
 
-          <Card className="w-94 bg-background-surface border-border-default p-5">
-            <div className="flex flex-col gap-3 my-2">
-              <strong className="text-3xl font-semibold text-foreground">
-                3, 412
-              </strong>
+                  <p className="mt-2 text-label-lg text-text-secondary">
+                    {description}
+                  </p>
 
-              <span className="text-label-lg text-text-secondary">
-                Active  prosumers
-              </span>
+                </Card>
 
-              <span className="text-caption">
-                across 16 zones
-              </span>
-            </div>
-          </Card>
-
-          <Card className="w-94 bg-background-surface border-border-default p-5">
-            <div className="flex flex-col gap-3 my-2">
-              <strong className="text-3xl font-semibold text-foreground">
-                3, 412
-              </strong>
-
-              <span className="text-label-lg text-text-secondary">
-                Active  prosumers
-              </span>
-
-              <span className="text-caption">
-                across 16 zones
-              </span>
-            </div>
-          </Card>  
+              )
+              
+          })}
 
         </div>
 
