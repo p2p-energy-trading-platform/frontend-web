@@ -19,21 +19,21 @@ import PageHeader from '#/components/page-components/Header'
 import Sidebar from '#/components/page-components/Sidebar'
 import { cn } from '#/lib/utils'
 
-import { EnergyDateBar } from '#/components/energy-assets/EnergyStatbar'
-import { EnergyKpiStrip } from '#/components/energy-assets/Energykpistrip'
-import { EnergyTimeSeriesChart } from '#/components/energy-assets/Energyt-serieschart'
-import { ForecastCard } from '#/components/energy-assets/Forecastcard'
-import { UsageCategoryCard } from '#/components/energy-assets/Usagecategorycard'
-import { PeakPeriodsCard } from '#/components/energy-assets/Peakperiodcard'
-import { EnergyBalanceCard } from '#/components/energy-assets/Energybalancecard'
-import { InsightsPanel } from '#/components/energy-assets/Insightspanel'
-import { AssetFilterBar } from '#/components/energy-assets/Assetfilterbar'
+import { EnergyDateBar } from '#/components/energy-assets/EnergyStatBar'
+import { EnergyKpiStrip } from '#/components/energy-assets/EnergyKPIStrip'
+import { EnergyTimeSeriesChart } from '#/components/energy-assets/EnergySeriesChart'
+import { ForecastCard } from '#/components/energy-assets/ForecastCard'
+import { UsageCategoryCard } from '#/components/energy-assets/UsageCategoryCard'
+import { PeakPeriodsCard } from '#/components/energy-assets/PeakPeriodCard'
+import { EnergyBalanceCard } from '#/components/energy-assets/EnergyBalanceCard'
+import { InsightsPanel } from '#/components/energy-assets/InsightsPanel'
+import { AssetFilterBar } from '#/components/energy-assets/AssetFilterBar'
 import type {
   AssetCategory,
   AssetSort,
-} from '#/components/energy-assets/Assetfilterbar'
-import { AssetCard } from '#/components/energy-assets/Assetcard'
-import type { AssetCardProps } from '#/components/energy-assets/Assetcard'
+} from '#/components/energy-assets/AssetFilterBar'
+import { AssetCard } from '#/components/energy-assets/AssetCard'
+import type { AssetCardProps } from '#/components/energy-assets/AssetCard'
 
 const ASSETS: Array<
   AssetCardProps & { category: Exclude<AssetCategory, 'All assets'> }
