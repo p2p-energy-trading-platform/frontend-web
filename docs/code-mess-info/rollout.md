@@ -8,6 +8,7 @@ Findings and file citations live in [README.md](./README.md). This document is t
 
 - **Phase 0 is in effect.** New UI uses tokens from [`src/styles/token.css`](../../src/styles/token.css) and primitives from [`src/components/ui`](../../src/components/ui). Do not add hex utilities, raw palette classes (`emerald-*`, `amber-*`, `red-*`), `gx-*` classes, arbitrary `text-[Npx]`, fake `setTimeout` / `localStorage` / `alert` success flows, or hand-rolled dialogs, tables, selects, and tab strips.
 - **Phase 1 is complete.** Alias colors in [`src/styles.css`](../../src/styles.css) point at real tokens. Feedback and trade tokens are available as utilities. History, wallet, auth, avatars, and charts no longer use `gx-*` or hardcoded hex.
+- **Phase 2 is complete.** Authenticated pages share [`src/routes/_authenticated.tsx`](../../src/routes/_authenticated.tsx). Marketing header and footer wrap only `/` and `/about`. Sign-in and sign-up are full-screen. Sidebar links use router `Link`s. `/energyassets`, `/notification`, `/orderhistory`, and `/tradehistory` redirect to the new paths.
 
 ## Rules for every phase
 
