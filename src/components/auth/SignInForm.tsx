@@ -30,7 +30,7 @@ export default function SignInForm() {
   }
 
   return (
-    <main className="fixed inset-0 z-100 overflow-y-auto bg-background text-foreground">
+    <main className="min-h-screen overflow-y-auto bg-background text-foreground">
       <div className="grid min-h-screen lg:grid-cols-2">
         <section className="flex justify-center bg-background px-6 py-12 sm:px-10 lg:px-16 lg:py-16">
           <div className="w-full max-w-105">

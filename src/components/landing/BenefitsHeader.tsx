@@ -1,6 +1,19 @@
-import { Badge } from "../ui/badge";
-import { TrendingDown, Leaf, Zap, Wallet, Globe, Bell, ArrowUpRight, Gauge, BatteryCharging, TrendingUp, CircleCheck, Star } from 'lucide-react'
-import { Card } from "../ui/card";
+import { Badge } from '../ui/badge'
+import {
+  TrendingDown,
+  Leaf,
+  Zap,
+  Wallet,
+  Globe,
+  Bell,
+  ArrowUpRight,
+  Gauge,
+  BatteryCharging,
+  TrendingUp,
+  CircleCheck,
+  Star,
+} from 'lucide-react'
+import { Card } from '../ui/card'
 
 function BenefitsHeader() {
   return (
@@ -8,7 +21,7 @@ function BenefitsHeader() {
       <Badge variant="link">who it's for</Badge>
 
       <h2 className="text-section-title text-foreground">
-        Benifits for every household
+        Benefits for every household
       </h2>
 
       <p className="text-label-lg text-text-secondary">
@@ -82,11 +95,7 @@ interface ParticipantCardProps {
   }[]
 }
 
-function ParticipantCard({
-  label,
-  title,
-  benefits,
-}: ParticipantCardProps) {
+function ParticipantCard({ label, title, benefits }: ParticipantCardProps) {
   return (
     <Card className="w-full max-w-lg p-6">
       <div className="flex flex-col gap-3">
@@ -113,7 +122,6 @@ function ParticipantCard({
   )
 }
 
-
 function ParticipantSection() {
   return (
     <div className="w-full py-6 flex flex-row justify-center gap-6">
@@ -132,7 +140,7 @@ function ParticipantSection() {
   )
 }
 
-export default function BenifitsSection() {
+export default function BenefitsSection() {
   return (
     <section className="bg-background flex flex-col items-center justify-center">
       <BenefitsHeader />

@@ -9,7 +9,6 @@ import {
   TrendingUp,
   Wallet,
   Zap,
-  Activity,
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -18,28 +17,15 @@ import { cn } from '#/lib/utils'
 
 const navItems = [
   { label: 'Dashboard', to: '/dashboard', icon: LayoutGrid },
-  { label: 'Energy', to: '/energyassets', icon: Zap },
+  { label: 'Energy', to: '/energy-assets', icon: Zap },
   { label: 'Trade', to: '/trade', icon: TrendingUp },
-  { label: 'Forecast', to: '/forecast', icon: Activity },
   { label: 'Wallet', to: '/wallet', icon: Wallet },
-  { label: 'History', to: '/history', icon: History },
-  { label: 'Notifications', to: '/notification', icon: Bell },
+  { label: 'History', to: '/history/orders', icon: History },
+  { label: 'Notifications', to: '/notifications', icon: Bell },
   { label: 'Settings', to: '/profile', icon: Settings },
 ] as const
 
-const navGroups = [navItems.slice(0, 5), navItems.slice(5)]
-
-type ImplementedRoute =
-  '/dashboard' | '/energyassets' | '/notification' | '/profile'
-
-function isImplementedRoute(to: string): to is ImplementedRoute {
-  return (
-    to === '/dashboard' ||
-    to === '/energyassets' ||
-    to === '/notification' ||
-    to === '/profile'
-  )
-}
+const navGroups = [navItems.slice(0, 4), navItems.slice(4)]
 
 interface SidebarProps {
   user: {
@@ -118,7 +104,10 @@ export default function Sidebar({ user }: SidebarProps) {
           >
             {group.map((item) => {
               const Icon = item.icon
-              const active = pathname === item.to
+              const active =
+                item.to === '/history/orders'
+                  ? pathname.startsWith('/history')
+                  : pathname === item.to
               const className = cn(
                 'flex items-center gap-3 rounded-lg px-2.5 py-2 text-sm font-medium no-underline transition',
                 active
@@ -126,22 +115,11 @@ export default function Sidebar({ user }: SidebarProps) {
                   : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground',
               )
 
-              if (isImplementedRoute(item.to)) {
-                return (
-                  <Link key={item.to} to={item.to} className={className}>
-                    <Icon className="size-4.5 shrink-0" />
-                    {!collapsed && (
-                      <span className="truncate">{item.label}</span>
-                    )}
-                  </Link>
-                )
-              }
-
               return (
-                <a key={item.to} href={item.to} className={className}>
+                <Link key={item.to} to={item.to} className={className}>
                   <Icon className="size-4.5 shrink-0" />
                   {!collapsed && <span className="truncate">{item.label}</span>}
-                </a>
+                </Link>
               )
             })}
           </div>

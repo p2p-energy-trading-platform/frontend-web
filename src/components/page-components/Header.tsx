@@ -50,7 +50,7 @@ export default function PageHeader({
       return
     }
 
-    navigate({ to: '/notification' })
+    navigate({ to: '/notifications' })
   }
 
   return (

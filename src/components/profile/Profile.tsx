@@ -18,8 +18,6 @@ import {
   Zap,
 } from 'lucide-react'
 
-import PageHeader from '#/components/page-components/Header'
-import Sidebar from '#/components/page-components/Sidebar'
 import { Badge } from '#/components/ui/badge'
 import { Button } from '#/components/ui/button'
 import {
@@ -268,451 +266,423 @@ export default function Profile() {
   }
 
   return (
-    <div className="flex min-h-screen bg-bg-canvas text-text-primary">
-      <div className="hidden lg:block">
-        <Sidebar user={profileUser} />
+    <main className="mx-auto w-full max-w-340 bg-bg-canvas px-4 py-6 text-text-primary sm:px-6 lg:px-8 lg:py-8">
+      <div className="mb-7 max-w-3xl">
+        <h1 className="font-heading text-2xl font-bold sm:text-3xl">
+          Profile settings
+        </h1>
+        <p className="mt-1 text-sm text-text-tertiary">
+          Manage your account, security, trading preferences and connected
+          services.
+        </p>
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <PageHeader
-          propertyName={user.property}
-          zoneLabel={user.zone}
-          meterOnline={false}
-          notificationCount={3}
-          user={profileUser}
-          dashboardHref="/dashboard"
-        />
+      <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
+        <div className="min-w-0 space-y-6">
+          <Card>
+            <CardHeader className="border-b border-border">
+              <CardTitle>Personal information</CardTitle>
+              <CardDescription>
+                Keep your contact and regional details up to date.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="mb-6 flex items-center gap-4 rounded-xl border border-border bg-bg-elevated p-4">
+                <div className="relative flex size-16 shrink-0 items-center justify-center rounded-full border-[3px] border-accent/30 bg-accent text-base font-bold text-accent-foreground shadow-md ring-4 ring-accent/10">
+                  {profileUser.initials}
+                  <span
+                    className="absolute bottom-0.5 right-0.5 size-3.5 rounded-full border-[3px] border-bg-elevated bg-feedback-success-icon shadow-sm"
+                    aria-label="Online"
+                  />
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate font-heading text-base font-semibold">
+                    {profile.fullName}
+                  </p>
+                  <p className="text-sm text-text-tertiary">
+                    Prosumer · Individual Account
+                  </p>
+                  <p className="mt-1 text-xs font-medium text-feedback-success-text">
+                    Online
+                  </p>
+                </div>
+              </div>
 
-        <main className="mx-auto w-full max-w-340 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-          <div className="mb-7 max-w-3xl">
-            <h1 className="font-heading text-2xl font-bold sm:text-3xl">
-              Profile settings
-            </h1>
-            <p className="mt-1 text-sm text-text-tertiary">
-              Manage your account, security, trading preferences and connected
-              services.
+              <form onSubmit={saveProfile} className="space-y-5">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field label="Full Name" htmlFor="fullName">
+                    <Input
+                      id="fullName"
+                      name="fullName"
+                      value={profile.fullName}
+                      onChange={(event) =>
+                        updateProfile('fullName', event.target.value)
+                      }
+                      autoComplete="name"
+                      required
+                    />
+                  </Field>
+                  <Field label="Email Address" htmlFor="email">
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={profile.email}
+                      onChange={(event) =>
+                        updateProfile('email', event.target.value)
+                      }
+                      autoComplete="email"
+                      required
+                    />
+                  </Field>
+                  <Field label="Phone Number" htmlFor="phone">
+                    <div className="grid grid-cols-[124px_minmax(0,1fr)] gap-2">
+                      <Select
+                        value={profile.countryCode}
+                        onValueChange={(value) =>
+                          updateProfile('countryCode', value ?? '')
+                        }
+                        name="countryCode"
+                      >
+                        <SelectTrigger
+                          aria-label="Country code"
+                          className="h-9 w-full"
+                        >
+                          <SelectValue>{profile.countryCode}</SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="+971">UAE (+971)</SelectItem>
+                          <SelectItem value="+60">Malaysia (+60)</SelectItem>
+                          <SelectItem value="+94">Sri Lanka (+94)</SelectItem>
+                          <SelectItem value="+65">Singapore (+65)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Input
+                        id="phone"
+                        name="phone"
+                        type="tel"
+                        value={profile.phone}
+                        onChange={(event) =>
+                          updateProfile('phone', event.target.value)
+                        }
+                        autoComplete="tel-national"
+                        required
+                      />
+                    </div>
+                  </Field>
+                  <Field label="Country / Region" htmlFor="country">
+                    <Select
+                      value={profile.country}
+                      onValueChange={(value) =>
+                        updateProfile('country', value ?? '')
+                      }
+                      name="country"
+                    >
+                      <SelectTrigger id="country" className="h-9 w-full">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="United Arab Emirates">
+                          United Arab Emirates
+                        </SelectItem>
+                        <SelectItem value="Malaysia">Malaysia</SelectItem>
+                        <SelectItem value="Sri Lanka">Sri Lanka</SelectItem>
+                        <SelectItem value="Singapore">Singapore</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                </div>
+                <FormActions
+                  feedback={profileFeedback}
+                  buttonLabel="Save Changes"
+                />
+              </form>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="border-b border-border">
+              <CardTitle className="flex items-center gap-2">
+                <LockKeyhole className="size-4 text-brand-primary" />
+                Security
+              </CardTitle>
+              <CardDescription>
+                Use a unique password you do not use elsewhere.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={updatePassword} className="space-y-5">
+                <div className="grid gap-4 sm:grid-cols-3">
+                  {[
+                    ['Current Password', 'currentPassword'],
+                    ['New Password', 'newPassword'],
+                    ['Confirm Password', 'confirmPassword'],
+                  ].map(([label, name]) => (
+                    <Field key={name} label={label} htmlFor={name}>
+                      <div className="relative">
+                        <Input
+                          id={name}
+                          name={name}
+                          type={showPasswords ? 'text' : 'password'}
+                          required
+                          minLength={8}
+                          className="pr-10"
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="absolute right-0.5 top-0.5"
+                          aria-label={
+                            showPasswords ? 'Hide passwords' : 'Show passwords'
+                          }
+                          onClick={() => setShowPasswords((shown) => !shown)}
+                        >
+                          {showPasswords ? <EyeOff /> : <Eye />}
+                        </Button>
+                      </div>
+                    </Field>
+                  ))}
+                </div>
+                <p className="text-xs text-text-tertiary">
+                  Demo current password: GridX123!
+                </p>
+                <FormActions
+                  feedback={passwordFeedback}
+                  buttonLabel="Update password"
+                />
+              </form>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="border-b border-border">
+              <CardTitle className="flex items-center gap-2">
+                <Activity className="size-4 text-brand-primary" />
+                Trading preferences
+              </CardTitle>
+              <CardDescription>
+                Defaults are applied when you open the Trading Terminal.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={saveTradingPreferences} className="space-y-5">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field label="Default Order Type" htmlFor="orderType">
+                    <Select
+                      value={tradingPreferences.orderType}
+                      onValueChange={(value) =>
+                        updateTradingPreference('orderType', value ?? '')
+                      }
+                      name="orderType"
+                    >
+                      <SelectTrigger id="orderType" className="h-9 w-full">
+                        <SelectValue>
+                          {tradingPreferences.orderType === 'market'
+                            ? 'Market order'
+                            : 'Limit order'}
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="limit">Limit order</SelectItem>
+                        <SelectItem value="market">Market order</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                  <Field label="Default Price Mode" htmlFor="priceMode">
+                    <Select
+                      value={tradingPreferences.priceMode}
+                      onValueChange={(value) =>
+                        updateTradingPreference('priceMode', value ?? '')
+                      }
+                      name="priceMode"
+                    >
+                      <SelectTrigger id="priceMode" className="h-9 w-full">
+                        <SelectValue>
+                          {tradingPreferences.priceMode === 'manual'
+                            ? 'Manual price'
+                            : tradingPreferences.priceMode === 'market'
+                              ? 'Market price'
+                              : 'Recommended price'}
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="recommended">
+                          Recommended price
+                        </SelectItem>
+                        <SelectItem value="manual">Manual price</SelectItem>
+                        <SelectItem value="market">Market price</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                  <Field label="Monthly Energy Limit" htmlFor="energyLimit">
+                    <div className="relative">
+                      <Input
+                        id="energyLimit"
+                        name="energyLimit"
+                        type="number"
+                        min="0"
+                        value={tradingPreferences.energyLimit}
+                        onChange={(event) =>
+                          updateTradingPreference(
+                            'energyLimit',
+                            event.target.value,
+                          )
+                        }
+                        required
+                        className="pr-14"
+                      />
+                      <span className="pointer-events-none absolute right-3 top-2.5 text-xs text-text-tertiary">
+                        kWh
+                      </span>
+                    </div>
+                  </Field>
+                  <Field label="Max Trade Value" htmlFor="tradeValue">
+                    <div className="relative">
+                      <span className="pointer-events-none absolute left-3 top-2.5 text-xs text-text-tertiary">
+                        RM
+                      </span>
+                      <Input
+                        id="tradeValue"
+                        name="tradeValue"
+                        type="number"
+                        min="0"
+                        value={tradingPreferences.tradeValue}
+                        onChange={(event) =>
+                          updateTradingPreference(
+                            'tradeValue',
+                            event.target.value,
+                          )
+                        }
+                        required
+                        className="pl-10"
+                      />
+                    </div>
+                  </Field>
+                </div>
+                <div className="divide-y divide-border rounded-xl border border-border">
+                  <PreferenceToggle
+                    id="recommendPrice"
+                    icon={Gauge}
+                    title="Auto-recommend sell price"
+                    description="Suggest a price using live order book depth."
+                    checked={tradingPreferences.recommendPrice}
+                    onCheckedChange={(checked) =>
+                      updateTradingPreference('recommendPrice', checked)
+                    }
+                  />
+                  <PreferenceToggle
+                    id="dispatchAutomation"
+                    icon={Zap}
+                    title="Allow dispatch automation"
+                    description="Let GridX optimise battery and EV usage within your limits."
+                    checked={tradingPreferences.dispatchAutomation}
+                    onCheckedChange={(checked) =>
+                      updateTradingPreference('dispatchAutomation', checked)
+                    }
+                  />
+                </div>
+                <FormActions
+                  feedback={preferencesFeedback}
+                  buttonLabel="Save preferences"
+                />
+              </form>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="border-b border-border">
+              <CardTitle className="flex items-center gap-2">
+                <Link2 className="size-4 text-brand-primary" />
+                Integrations
+              </CardTitle>
+              <CardDescription>
+                Control external services that can access your GridX account.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <div className="divide-y divide-border rounded-xl border border-border">
+                <IntegrationRow
+                  icon={RadioTower}
+                  name="Utility Smart Meter API"
+                  description="Connection request not approved yet"
+                  status="Pending approval"
+                  action="Retry request"
+                  tone="warning"
+                />
+                <IntegrationRow
+                  icon={Mail}
+                  name="Email delivery"
+                  description="Account and trading notifications enabled"
+                  status="Connected"
+                  action="Manage"
+                  tone="success"
+                />
+                <IntegrationRow
+                  icon={CircleDollarSign}
+                  name="Payment rail"
+                  description="Connect a payment provider for settlements"
+                  status="Not connected"
+                  action="Connect"
+                  tone="neutral"
+                />
+              </div>
+              <FormActions
+                feedback={integrationFeedback}
+                buttonLabel="Save settings"
+                onClick={() =>
+                  setIntegrationFeedback({
+                    tone: 'success',
+                    message: 'Integration settings saved.',
+                  })
+                }
+              />
+            </CardContent>
+          </Card>
+        </div>
+
+        <aside className="space-y-6 xl:sticky xl:top-20">
+          <Card>
+            <CardHeader className="border-b border-border">
+              <CardTitle>Account status</CardTitle>
+              <CardDescription>
+                Your current access and pending actions.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="divide-y divide-border">
+              <StatusRow
+                icon={UserRound}
+                label="Trading Mode"
+                value={user.role}
+                description={
+                  user.role === 'Prosumer'
+                    ? 'Can buy and sell verified energy'
+                    : 'Can buy verified energy'
+                }
+                tone="success"
+              />
+              <StatusRow
+                icon={BadgeCheck}
+                label="KYC status"
+                {...kycStatusDetails}
+              />
+              <StatusRow
+                icon={Building2}
+                label="Smart meter"
+                {...meterStatusDetails}
+              />
+            </CardContent>
+          </Card>
+          <div className="flex items-start gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary-muted p-4 text-sm">
+            <ShieldCheck className="mt-0.5 size-4 shrink-0 text-brand-primary" />
+            <p className="leading-5 text-text-secondary">
+              Your account information is encrypted and only shared with
+              services you approve.
             </p>
           </div>
-
-          <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
-            <div className="min-w-0 space-y-6">
-              <Card>
-                <CardHeader className="border-b border-border">
-                  <CardTitle>Personal information</CardTitle>
-                  <CardDescription>
-                    Keep your contact and regional details up to date.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="mb-6 flex items-center gap-4 rounded-xl border border-border bg-bg-elevated p-4">
-                    <div className="relative flex size-16 shrink-0 items-center justify-center rounded-full border-[3px] border-accent/30 bg-accent text-base font-bold text-accent-foreground shadow-md ring-4 ring-accent/10">
-                      {profileUser.initials}
-                      <span
-                        className="absolute bottom-0.5 right-0.5 size-3.5 rounded-full border-[3px] border-bg-elevated bg-feedback-success-icon shadow-sm"
-                        aria-label="Online"
-                      />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="truncate font-heading text-base font-semibold">
-                        {profile.fullName}
-                      </p>
-                      <p className="text-sm text-text-tertiary">
-                        Prosumer · Individual Account
-                      </p>
-                      <p className="mt-1 text-xs font-medium text-feedback-success-text">
-                        Online
-                      </p>
-                    </div>
-                  </div>
-
-                  <form onSubmit={saveProfile} className="space-y-5">
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <Field label="Full Name" htmlFor="fullName">
-                        <Input
-                          id="fullName"
-                          name="fullName"
-                          value={profile.fullName}
-                          onChange={(event) =>
-                            updateProfile('fullName', event.target.value)
-                          }
-                          autoComplete="name"
-                          required
-                        />
-                      </Field>
-                      <Field label="Email Address" htmlFor="email">
-                        <Input
-                          id="email"
-                          name="email"
-                          type="email"
-                          value={profile.email}
-                          onChange={(event) =>
-                            updateProfile('email', event.target.value)
-                          }
-                          autoComplete="email"
-                          required
-                        />
-                      </Field>
-                      <Field label="Phone Number" htmlFor="phone">
-                        <div className="grid grid-cols-[124px_minmax(0,1fr)] gap-2">
-                          <Select
-                            value={profile.countryCode}
-                            onValueChange={(value) =>
-                              updateProfile('countryCode', value ?? '')
-                            }
-                            name="countryCode"
-                          >
-                            <SelectTrigger
-                              aria-label="Country code"
-                              className="h-9 w-full"
-                            >
-                              <SelectValue>{profile.countryCode}</SelectValue>
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="+971">UAE (+971)</SelectItem>
-                              <SelectItem value="+60">
-                                Malaysia (+60)
-                              </SelectItem>
-                              <SelectItem value="+94">
-                                Sri Lanka (+94)
-                              </SelectItem>
-                              <SelectItem value="+65">
-                                Singapore (+65)
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <Input
-                            id="phone"
-                            name="phone"
-                            type="tel"
-                            value={profile.phone}
-                            onChange={(event) =>
-                              updateProfile('phone', event.target.value)
-                            }
-                            autoComplete="tel-national"
-                            required
-                          />
-                        </div>
-                      </Field>
-                      <Field label="Country / Region" htmlFor="country">
-                        <Select
-                          value={profile.country}
-                          onValueChange={(value) =>
-                            updateProfile('country', value ?? '')
-                          }
-                          name="country"
-                        >
-                          <SelectTrigger id="country" className="h-9 w-full">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="United Arab Emirates">
-                              United Arab Emirates
-                            </SelectItem>
-                            <SelectItem value="Malaysia">Malaysia</SelectItem>
-                            <SelectItem value="Sri Lanka">Sri Lanka</SelectItem>
-                            <SelectItem value="Singapore">Singapore</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </Field>
-                    </div>
-                    <FormActions
-                      feedback={profileFeedback}
-                      buttonLabel="Save Changes"
-                    />
-                  </form>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="border-b border-border">
-                  <CardTitle className="flex items-center gap-2">
-                    <LockKeyhole className="size-4 text-brand-primary" />
-                    Security
-                  </CardTitle>
-                  <CardDescription>
-                    Use a unique password you do not use elsewhere.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={updatePassword} className="space-y-5">
-                    <div className="grid gap-4 sm:grid-cols-3">
-                      {[
-                        ['Current Password', 'currentPassword'],
-                        ['New Password', 'newPassword'],
-                        ['Confirm Password', 'confirmPassword'],
-                      ].map(([label, name]) => (
-                        <Field key={name} label={label} htmlFor={name}>
-                          <div className="relative">
-                            <Input
-                              id={name}
-                              name={name}
-                              type={showPasswords ? 'text' : 'password'}
-                              required
-                              minLength={8}
-                              className="pr-10"
-                            />
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="icon"
-                              className="absolute right-0.5 top-0.5"
-                              aria-label={
-                                showPasswords
-                                  ? 'Hide passwords'
-                                  : 'Show passwords'
-                              }
-                              onClick={() =>
-                                setShowPasswords((shown) => !shown)
-                              }
-                            >
-                              {showPasswords ? <EyeOff /> : <Eye />}
-                            </Button>
-                          </div>
-                        </Field>
-                      ))}
-                    </div>
-                    <p className="text-xs text-text-tertiary">
-                      Demo current password: GridX123!
-                    </p>
-                    <FormActions
-                      feedback={passwordFeedback}
-                      buttonLabel="Update password"
-                    />
-                  </form>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="border-b border-border">
-                  <CardTitle className="flex items-center gap-2">
-                    <Activity className="size-4 text-brand-primary" />
-                    Trading preferences
-                  </CardTitle>
-                  <CardDescription>
-                    Defaults are applied when you open the Trading Terminal.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={saveTradingPreferences} className="space-y-5">
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <Field label="Default Order Type" htmlFor="orderType">
-                        <Select
-                          value={tradingPreferences.orderType}
-                          onValueChange={(value) =>
-                            updateTradingPreference('orderType', value ?? '')
-                          }
-                          name="orderType"
-                        >
-                          <SelectTrigger id="orderType" className="h-9 w-full">
-                            <SelectValue>
-                              {tradingPreferences.orderType === 'market'
-                                ? 'Market order'
-                                : 'Limit order'}
-                            </SelectValue>
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="limit">Limit order</SelectItem>
-                            <SelectItem value="market">Market order</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </Field>
-                      <Field label="Default Price Mode" htmlFor="priceMode">
-                        <Select
-                          value={tradingPreferences.priceMode}
-                          onValueChange={(value) =>
-                            updateTradingPreference('priceMode', value ?? '')
-                          }
-                          name="priceMode"
-                        >
-                          <SelectTrigger id="priceMode" className="h-9 w-full">
-                            <SelectValue>
-                              {tradingPreferences.priceMode === 'manual'
-                                ? 'Manual price'
-                                : tradingPreferences.priceMode === 'market'
-                                  ? 'Market price'
-                                  : 'Recommended price'}
-                            </SelectValue>
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="recommended">
-                              Recommended price
-                            </SelectItem>
-                            <SelectItem value="manual">Manual price</SelectItem>
-                            <SelectItem value="market">Market price</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </Field>
-                      <Field label="Monthly Energy Limit" htmlFor="energyLimit">
-                        <div className="relative">
-                          <Input
-                            id="energyLimit"
-                            name="energyLimit"
-                            type="number"
-                            min="0"
-                            value={tradingPreferences.energyLimit}
-                            onChange={(event) =>
-                              updateTradingPreference(
-                                'energyLimit',
-                                event.target.value,
-                              )
-                            }
-                            required
-                            className="pr-14"
-                          />
-                          <span className="pointer-events-none absolute right-3 top-2.5 text-xs text-text-tertiary">
-                            kWh
-                          </span>
-                        </div>
-                      </Field>
-                      <Field label="Max Trade Value" htmlFor="tradeValue">
-                        <div className="relative">
-                          <span className="pointer-events-none absolute left-3 top-2.5 text-xs text-text-tertiary">
-                            RM
-                          </span>
-                          <Input
-                            id="tradeValue"
-                            name="tradeValue"
-                            type="number"
-                            min="0"
-                            value={tradingPreferences.tradeValue}
-                            onChange={(event) =>
-                              updateTradingPreference(
-                                'tradeValue',
-                                event.target.value,
-                              )
-                            }
-                            required
-                            className="pl-10"
-                          />
-                        </div>
-                      </Field>
-                    </div>
-                    <div className="divide-y divide-border rounded-xl border border-border">
-                      <PreferenceToggle
-                        id="recommendPrice"
-                        icon={Gauge}
-                        title="Auto-recommend sell price"
-                        description="Suggest a price using live order book depth."
-                        checked={tradingPreferences.recommendPrice}
-                        onCheckedChange={(checked) =>
-                          updateTradingPreference('recommendPrice', checked)
-                        }
-                      />
-                      <PreferenceToggle
-                        id="dispatchAutomation"
-                        icon={Zap}
-                        title="Allow dispatch automation"
-                        description="Let GridX optimise battery and EV usage within your limits."
-                        checked={tradingPreferences.dispatchAutomation}
-                        onCheckedChange={(checked) =>
-                          updateTradingPreference('dispatchAutomation', checked)
-                        }
-                      />
-                    </div>
-                    <FormActions
-                      feedback={preferencesFeedback}
-                      buttonLabel="Save preferences"
-                    />
-                  </form>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="border-b border-border">
-                  <CardTitle className="flex items-center gap-2">
-                    <Link2 className="size-4 text-brand-primary" />
-                    Integrations
-                  </CardTitle>
-                  <CardDescription>
-                    Control external services that can access your GridX
-                    account.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-5">
-                  <div className="divide-y divide-border rounded-xl border border-border">
-                    <IntegrationRow
-                      icon={RadioTower}
-                      name="Utility Smart Meter API"
-                      description="Connection request not approved yet"
-                      status="Pending approval"
-                      action="Retry request"
-                      tone="warning"
-                    />
-                    <IntegrationRow
-                      icon={Mail}
-                      name="Email delivery"
-                      description="Account and trading notifications enabled"
-                      status="Connected"
-                      action="Manage"
-                      tone="success"
-                    />
-                    <IntegrationRow
-                      icon={CircleDollarSign}
-                      name="Payment rail"
-                      description="Connect a payment provider for settlements"
-                      status="Not connected"
-                      action="Connect"
-                      tone="neutral"
-                    />
-                  </div>
-                  <FormActions
-                    feedback={integrationFeedback}
-                    buttonLabel="Save settings"
-                    onClick={() =>
-                      setIntegrationFeedback({
-                        tone: 'success',
-                        message: 'Integration settings saved.',
-                      })
-                    }
-                  />
-                </CardContent>
-              </Card>
-            </div>
-
-            <aside className="space-y-6 xl:sticky xl:top-20">
-              <Card>
-                <CardHeader className="border-b border-border">
-                  <CardTitle>Account status</CardTitle>
-                  <CardDescription>
-                    Your current access and pending actions.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="divide-y divide-border">
-                  <StatusRow
-                    icon={UserRound}
-                    label="Trading Mode"
-                    value={user.role}
-                    description={
-                      user.role === 'Prosumer'
-                        ? 'Can buy and sell verified energy'
-                        : 'Can buy verified energy'
-                    }
-                    tone="success"
-                  />
-                  <StatusRow
-                    icon={BadgeCheck}
-                    label="KYC status"
-                    {...kycStatusDetails}
-                  />
-                  <StatusRow
-                    icon={Building2}
-                    label="Smart meter"
-                    {...meterStatusDetails}
-                  />
-                </CardContent>
-              </Card>
-              <div className="flex items-start gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary-muted p-4 text-sm">
-                <ShieldCheck className="mt-0.5 size-4 shrink-0 text-brand-primary" />
-                <p className="leading-5 text-text-secondary">
-                  Your account information is encrypted and only shared with
-                  services you approve.
-                </p>
-              </div>
-            </aside>
-          </div>
-        </main>
+        </aside>
       </div>
-    </div>
+    </main>
   )
 }
 

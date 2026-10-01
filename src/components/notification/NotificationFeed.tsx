@@ -1,6 +1,6 @@
 import { Card } from '#/components/ui/card'
-import { NotificationItem } from './Notificationitem'
-import type { NotificationItemData } from './Notificationitem'
+import { NotificationItem } from './NotificationItem'
+import type { NotificationItemData } from './NotificationItem'
 
 export interface NotificationGroup {
   dateLabel: string

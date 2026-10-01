@@ -95,7 +95,7 @@ export default function Signup() {
   }
 
   return (
-    <main className="fixed inset-0 z-[100] overflow-y-auto bg-background text-foreground">
+    <main className="min-h-screen overflow-y-auto bg-background text-foreground">
       <section className="h-[120px] overflow-hidden bg-card px-5 py-4 sm:px-10 lg:px-[72px]">
         <div className="mx-auto max-w-[1197px]">
           <RegistrationStepper
