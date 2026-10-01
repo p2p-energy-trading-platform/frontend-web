@@ -9,32 +9,30 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as WalletRouteImport } from './routes/wallet'
 import { Route as TradehistoryRouteImport } from './routes/tradehistory'
-import { Route as TradeRouteImport } from './routes/trade'
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as SignInRouteImport } from './routes/sign-in'
-import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as OrderhistoryRouteImport } from './routes/orderhistory'
 import { Route as NotificationRouteImport } from './routes/notification'
 import { Route as EnergyassetsRouteImport } from './routes/energyassets'
-import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as AboutRouteImport } from './routes/about'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as MarketingRouteImport } from './routes/_marketing'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as MarketingIndexRouteImport } from './routes/_marketing/index'
+import { Route as MarketingAboutRouteImport } from './routes/_marketing/about'
+import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
+import { Route as AuthenticatedTradeRouteImport } from './routes/_authenticated/trade'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
+import { Route as AuthenticatedEnergyAssetsRouteImport } from './routes/_authenticated/energy-assets'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedHistoryRouteRouteImport } from './routes/_authenticated/history/route'
+import { Route as AuthenticatedHistoryIndexRouteImport } from './routes/_authenticated/history/index'
+import { Route as AuthenticatedHistoryTradesRouteImport } from './routes/_authenticated/history/trades'
+import { Route as AuthenticatedHistoryOrdersRouteImport } from './routes/_authenticated/history/orders'
 
-const WalletRoute = WalletRouteImport.update({
-  id: '/wallet',
-  path: '/wallet',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const TradehistoryRoute = TradehistoryRouteImport.update({
   id: '/tradehistory',
   path: '/tradehistory',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TradeRoute = TradeRouteImport.update({
-  id: '/trade',
-  path: '/trade',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignUpRoute = SignUpRouteImport.update({
@@ -45,11 +43,6 @@ const SignUpRoute = SignUpRouteImport.update({
 const SignInRoute = SignInRouteImport.update({
   id: '/sign-in',
   path: '/sign-in',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProfileRoute = ProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrderhistoryRoute = OrderhistoryRouteImport.update({
@@ -67,146 +60,225 @@ const EnergyassetsRoute = EnergyassetsRouteImport.update({
   path: '/energyassets',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const MarketingRoute = MarketingRouteImport.update({
+  id: '/_marketing',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const MarketingIndexRoute = MarketingIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => MarketingRoute,
 } as any)
+const MarketingAboutRoute = MarketingAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => MarketingRoute,
+} as any)
+const AuthenticatedWalletRoute = AuthenticatedWalletRouteImport.update({
+  id: '/wallet',
+  path: '/wallet',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedTradeRoute = AuthenticatedTradeRouteImport.update({
+  id: '/trade',
+  path: '/trade',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedNotificationsRoute =
+  AuthenticatedNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedEnergyAssetsRoute =
+  AuthenticatedEnergyAssetsRouteImport.update({
+    id: '/energy-assets',
+    path: '/energy-assets',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedHistoryRouteRoute =
+  AuthenticatedHistoryRouteRouteImport.update({
+    id: '/history',
+    path: '/history',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedHistoryIndexRoute =
+  AuthenticatedHistoryIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedHistoryRouteRoute,
+  } as any)
+const AuthenticatedHistoryTradesRoute =
+  AuthenticatedHistoryTradesRouteImport.update({
+    id: '/trades',
+    path: '/trades',
+    getParentRoute: () => AuthenticatedHistoryRouteRoute,
+  } as any)
+const AuthenticatedHistoryOrdersRoute =
+  AuthenticatedHistoryOrdersRouteImport.update({
+    id: '/orders',
+    path: '/orders',
+    getParentRoute: () => AuthenticatedHistoryRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/dashboard': typeof DashboardRoute
+  '/': typeof MarketingIndexRoute
   '/energyassets': typeof EnergyassetsRoute
   '/notification': typeof NotificationRoute
   '/orderhistory': typeof OrderhistoryRoute
-  '/profile': typeof ProfileRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
-  '/trade': typeof TradeRoute
   '/tradehistory': typeof TradehistoryRoute
-  '/wallet': typeof WalletRoute
+  '/history': typeof AuthenticatedHistoryRouteRouteWithChildren
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/energy-assets': typeof AuthenticatedEnergyAssetsRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/trade': typeof AuthenticatedTradeRoute
+  '/wallet': typeof AuthenticatedWalletRoute
+  '/about': typeof MarketingAboutRoute
+  '/history/orders': typeof AuthenticatedHistoryOrdersRoute
+  '/history/trades': typeof AuthenticatedHistoryTradesRoute
+  '/history/': typeof AuthenticatedHistoryIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/dashboard': typeof DashboardRoute
+  '/': typeof MarketingIndexRoute
   '/energyassets': typeof EnergyassetsRoute
   '/notification': typeof NotificationRoute
   '/orderhistory': typeof OrderhistoryRoute
-  '/profile': typeof ProfileRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
-  '/trade': typeof TradeRoute
   '/tradehistory': typeof TradehistoryRoute
-  '/wallet': typeof WalletRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/energy-assets': typeof AuthenticatedEnergyAssetsRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
+  '/profile': typeof AuthenticatedProfileRoute
+  '/trade': typeof AuthenticatedTradeRoute
+  '/wallet': typeof AuthenticatedWalletRoute
+  '/about': typeof MarketingAboutRoute
+  '/history/orders': typeof AuthenticatedHistoryOrdersRoute
+  '/history/trades': typeof AuthenticatedHistoryTradesRoute
+  '/history': typeof AuthenticatedHistoryIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/dashboard': typeof DashboardRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/_marketing': typeof MarketingRouteWithChildren
   '/energyassets': typeof EnergyassetsRoute
   '/notification': typeof NotificationRoute
   '/orderhistory': typeof OrderhistoryRoute
-  '/profile': typeof ProfileRoute
   '/sign-in': typeof SignInRoute
   '/sign-up': typeof SignUpRoute
-  '/trade': typeof TradeRoute
   '/tradehistory': typeof TradehistoryRoute
-  '/wallet': typeof WalletRoute
+  '/_authenticated/history': typeof AuthenticatedHistoryRouteRouteWithChildren
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/energy-assets': typeof AuthenticatedEnergyAssetsRoute
+  '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
+  '/_authenticated/trade': typeof AuthenticatedTradeRoute
+  '/_authenticated/wallet': typeof AuthenticatedWalletRoute
+  '/_marketing/about': typeof MarketingAboutRoute
+  '/_marketing/': typeof MarketingIndexRoute
+  '/_authenticated/history/orders': typeof AuthenticatedHistoryOrdersRoute
+  '/_authenticated/history/trades': typeof AuthenticatedHistoryTradesRoute
+  '/_authenticated/history/': typeof AuthenticatedHistoryIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/about'
-    | '/dashboard'
     | '/energyassets'
     | '/notification'
     | '/orderhistory'
-    | '/profile'
     | '/sign-in'
     | '/sign-up'
-    | '/trade'
     | '/tradehistory'
+    | '/history'
+    | '/dashboard'
+    | '/energy-assets'
+    | '/notifications'
+    | '/profile'
+    | '/trade'
     | '/wallet'
+    | '/about'
+    | '/history/orders'
+    | '/history/trades'
+    | '/history/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/about'
-    | '/dashboard'
     | '/energyassets'
     | '/notification'
     | '/orderhistory'
-    | '/profile'
     | '/sign-in'
     | '/sign-up'
-    | '/trade'
     | '/tradehistory'
+    | '/dashboard'
+    | '/energy-assets'
+    | '/notifications'
+    | '/profile'
+    | '/trade'
     | '/wallet'
+    | '/about'
+    | '/history/orders'
+    | '/history/trades'
+    | '/history'
   id:
     | '__root__'
-    | '/'
-    | '/about'
-    | '/dashboard'
+    | '/_authenticated'
+    | '/_marketing'
     | '/energyassets'
     | '/notification'
     | '/orderhistory'
-    | '/profile'
     | '/sign-in'
     | '/sign-up'
-    | '/trade'
     | '/tradehistory'
-    | '/wallet'
+    | '/_authenticated/history'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/energy-assets'
+    | '/_authenticated/notifications'
+    | '/_authenticated/profile'
+    | '/_authenticated/trade'
+    | '/_authenticated/wallet'
+    | '/_marketing/about'
+    | '/_marketing/'
+    | '/_authenticated/history/orders'
+    | '/_authenticated/history/trades'
+    | '/_authenticated/history/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
-  DashboardRoute: typeof DashboardRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  MarketingRoute: typeof MarketingRouteWithChildren
   EnergyassetsRoute: typeof EnergyassetsRoute
   NotificationRoute: typeof NotificationRoute
   OrderhistoryRoute: typeof OrderhistoryRoute
-  ProfileRoute: typeof ProfileRoute
   SignInRoute: typeof SignInRoute
   SignUpRoute: typeof SignUpRoute
-  TradeRoute: typeof TradeRoute
   TradehistoryRoute: typeof TradehistoryRoute
-  WalletRoute: typeof WalletRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/wallet': {
-      id: '/wallet'
-      path: '/wallet'
-      fullPath: '/wallet'
-      preLoaderRoute: typeof WalletRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/tradehistory': {
       id: '/tradehistory'
       path: '/tradehistory'
       fullPath: '/tradehistory'
       preLoaderRoute: typeof TradehistoryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/trade': {
-      id: '/trade'
-      path: '/trade'
-      fullPath: '/trade'
-      preLoaderRoute: typeof TradeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sign-up': {
@@ -221,13 +293,6 @@ declare module '@tanstack/react-router' {
       path: '/sign-in'
       fullPath: '/sign-in'
       preLoaderRoute: typeof SignInRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/orderhistory': {
@@ -251,43 +316,172 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnergyassetsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
+    '/_marketing': {
+      id: '/_marketing'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof MarketingRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_marketing/': {
+      id: '/_marketing/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof MarketingIndexRouteImport
+      parentRoute: typeof MarketingRoute
+    }
+    '/_marketing/about': {
+      id: '/_marketing/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof MarketingAboutRouteImport
+      parentRoute: typeof MarketingRoute
+    }
+    '/_authenticated/wallet': {
+      id: '/_authenticated/wallet'
+      path: '/wallet'
+      fullPath: '/wallet'
+      preLoaderRoute: typeof AuthenticatedWalletRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/trade': {
+      id: '/_authenticated/trade'
+      path: '/trade'
+      fullPath: '/trade'
+      preLoaderRoute: typeof AuthenticatedTradeRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/notifications': {
+      id: '/_authenticated/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/energy-assets': {
+      id: '/_authenticated/energy-assets'
+      path: '/energy-assets'
+      fullPath: '/energy-assets'
+      preLoaderRoute: typeof AuthenticatedEnergyAssetsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/history': {
+      id: '/_authenticated/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof AuthenticatedHistoryRouteRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/history/': {
+      id: '/_authenticated/history/'
+      path: '/'
+      fullPath: '/history/'
+      preLoaderRoute: typeof AuthenticatedHistoryIndexRouteImport
+      parentRoute: typeof AuthenticatedHistoryRouteRoute
+    }
+    '/_authenticated/history/trades': {
+      id: '/_authenticated/history/trades'
+      path: '/trades'
+      fullPath: '/history/trades'
+      preLoaderRoute: typeof AuthenticatedHistoryTradesRouteImport
+      parentRoute: typeof AuthenticatedHistoryRouteRoute
+    }
+    '/_authenticated/history/orders': {
+      id: '/_authenticated/history/orders'
+      path: '/orders'
+      fullPath: '/history/orders'
+      preLoaderRoute: typeof AuthenticatedHistoryOrdersRouteImport
+      parentRoute: typeof AuthenticatedHistoryRouteRoute
     }
   }
 }
 
+interface AuthenticatedHistoryRouteRouteChildren {
+  AuthenticatedHistoryOrdersRoute: typeof AuthenticatedHistoryOrdersRoute
+  AuthenticatedHistoryTradesRoute: typeof AuthenticatedHistoryTradesRoute
+  AuthenticatedHistoryIndexRoute: typeof AuthenticatedHistoryIndexRoute
+}
+
+const AuthenticatedHistoryRouteRouteChildren: AuthenticatedHistoryRouteRouteChildren =
+  {
+    AuthenticatedHistoryOrdersRoute: AuthenticatedHistoryOrdersRoute,
+    AuthenticatedHistoryTradesRoute: AuthenticatedHistoryTradesRoute,
+    AuthenticatedHistoryIndexRoute: AuthenticatedHistoryIndexRoute,
+  }
+
+const AuthenticatedHistoryRouteRouteWithChildren =
+  AuthenticatedHistoryRouteRoute._addFileChildren(
+    AuthenticatedHistoryRouteRouteChildren,
+  )
+
+interface AuthenticatedRouteChildren {
+  AuthenticatedHistoryRouteRoute: typeof AuthenticatedHistoryRouteRouteWithChildren
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedEnergyAssetsRoute: typeof AuthenticatedEnergyAssetsRoute
+  AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
+  AuthenticatedTradeRoute: typeof AuthenticatedTradeRoute
+  AuthenticatedWalletRoute: typeof AuthenticatedWalletRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedHistoryRouteRoute: AuthenticatedHistoryRouteRouteWithChildren,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedEnergyAssetsRoute: AuthenticatedEnergyAssetsRoute,
+  AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
+  AuthenticatedTradeRoute: AuthenticatedTradeRoute,
+  AuthenticatedWalletRoute: AuthenticatedWalletRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
+interface MarketingRouteChildren {
+  MarketingAboutRoute: typeof MarketingAboutRoute
+  MarketingIndexRoute: typeof MarketingIndexRoute
+}
+
+const MarketingRouteChildren: MarketingRouteChildren = {
+  MarketingAboutRoute: MarketingAboutRoute,
+  MarketingIndexRoute: MarketingIndexRoute,
+}
+
+const MarketingRouteWithChildren = MarketingRoute._addFileChildren(
+  MarketingRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
-  DashboardRoute: DashboardRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  MarketingRoute: MarketingRouteWithChildren,
   EnergyassetsRoute: EnergyassetsRoute,
   NotificationRoute: NotificationRoute,
   OrderhistoryRoute: OrderhistoryRoute,
-  ProfileRoute: ProfileRoute,
   SignInRoute: SignInRoute,
   SignUpRoute: SignUpRoute,
-  TradeRoute: TradeRoute,
   TradehistoryRoute: TradehistoryRoute,
-  WalletRoute: WalletRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

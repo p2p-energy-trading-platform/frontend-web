@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from '#/components/ui/card'
 
-export const Route = createFileRoute('/about')({
+export const Route = createFileRoute('/_marketing/about')({
   component: About,
 })
 

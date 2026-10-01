@@ -2,12 +2,9 @@ import {
   HeadContent,
   Scripts,
   createRootRouteWithContext,
-  useRouterState,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
-import Footer from '../components/Footer'
-import Header from '../components/Header'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
@@ -51,17 +48,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  const pathname = useRouterState({
-    select: (state) => state.location.pathname,
-  })
-  const usesAppShell =
-    pathname === '/dashboard' ||
-    pathname === '/profile' ||
-    pathname === '/energyassets' ||
-    pathname === '/trade' ||
-    pathname === '/wallet' ||
-    pathname === '/notification'
-
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -69,9 +55,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="font-sans antialiased wrap-anywhere selection:bg-accent/25">
-        {!usesAppShell && <Header />}
         {children}
-        {!usesAppShell && <Footer />}
         <TanStackDevtools
           config={{
             position: 'bottom-right',
