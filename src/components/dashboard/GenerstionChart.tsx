@@ -1,6 +1,8 @@
 import { Card } from '#/components/ui/card'
 import { cn } from '#/lib/utils'
 
+// Replace with proper charts
+
 export interface GenerationChartProps {
   /** 0-1 normalized points across the day, left to right */
   points?: Array<number>

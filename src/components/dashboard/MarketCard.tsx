@@ -1,5 +1,6 @@
 import { Badge } from '#/components/ui/badge'
 import { Card } from '#/components/ui/card'
+import { Button } from '../ui/button'
 
 export interface MarketTrader {
   name: string
@@ -83,13 +84,13 @@ export function MarketCard({
         ))}
       </div>
 
-      <button
+      <Button
         type="button"
         onClick={onBrowseAll}
-        className="w-full rounded-lg bg-accent py-2.5 text-sm font-medium text-accent-foreground transition hover:bg-accent/90"
+        // className="w-full rounded-lg bg-accent py-2.5 text-sm font-medium text-accent-foreground transition hover:bg-accent/90"
       >
         Browse all listings
-      </button>
+      </Button>
     </Card>
   )
 }

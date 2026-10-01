@@ -2,6 +2,7 @@ import type { LucideIcon } from 'lucide-react'
 
 import { Card } from '#/components/ui/card'
 import { cn } from '#/lib/utils'
+import { Button } from '../ui/button'
 
 export interface QuickAction {
   label: string
@@ -18,20 +19,21 @@ export function QuickActionsCard({ actions }: { actions: Array<QuickAction> }) {
         {actions.map((action) => {
           const Icon = action.icon
           return (
-            <button
+            <Button
               key={action.label}
-              type="button"
+              // type="button"
               onClick={action.onClick}
-              className={cn(
-                'flex items-center justify-center gap-1.5 rounded-lg px-3 py-2.5 text-sm font-medium transition',
-                action.primary
-                  ? 'bg-accent text-accent-foreground hover:brightness-95'
-                  : 'bg-secondary text-text-primary hover:bg-muted',
-              )}
+              // className={cn(
+              //   'flex items-center justify-center gap-1.5 rounded-lg px-3 py-2.5 text-sm font-medium transition',
+              //   action.primary
+              //     ? 'bg-accent text-accent-foreground hover:brightness-95'
+              //     : 'bg-secondary text-text-primary hover:bg-muted',
+              // )}
+              variant={action.primary ? 'default' : 'secondary'}
             >
               <Icon className="size-4" />
               {action.label}
-            </button>
+            </Button>
           )
         })}
       </div>

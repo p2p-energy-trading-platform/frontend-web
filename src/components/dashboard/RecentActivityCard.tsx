@@ -3,6 +3,7 @@ import type { LucideIcon } from 'lucide-react'
 
 import { Card } from '#/components/ui/card'
 import { cn } from '#/lib/utils'
+import { Button } from '../ui/button'
 
 export interface ActivityItem {
   icon: LucideIcon
@@ -25,14 +26,15 @@ export function RecentActivityCard({
     <Card className="gap-1 border-border-subtle bg-card p-4">
       <div className="mb-2 flex items-center justify-between">
         <h3 className="text-heading-4 text-text-primary">Recent activity</h3>
-        <button
-          type="button"
+        <Button
+          // type="button"
           onClick={onViewAll}
-          className="flex items-center gap-0.5 text-sm font-medium text-accent hover:underline"
+          variant={"link"}
+          // className="flex items-center gap-0.5 text-sm font-medium text-accent hover:underline"
         >
           View all
           <ArrowUpRight className="size-3.5 rotate-45" />
-        </button>
+        </Button>
       </div>
 
       <div className="divide-y divide-border-subtle">

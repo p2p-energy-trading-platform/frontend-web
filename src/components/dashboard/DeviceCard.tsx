@@ -13,7 +13,6 @@ export interface DeviceCardProps {
   value: string
   valueLabel: string
   progressPercent?: number
-  footnote: string
 }
 
 /** Used for Solar PV / Home Battery / EV cards — same component, different props. */
@@ -26,7 +25,6 @@ export function DeviceCard({
   value,
   valueLabel,
   progressPercent,
-  footnote,
 }: DeviceCardProps) {
   return (
     <Card className="gap-3 border-border-subtle bg-card p-4">
@@ -72,11 +70,6 @@ export function DeviceCard({
           </div>
         </div>
       )}
-
-      <p className="flex items-center gap-1 text-xs text-text-tertiary">
-        <span className="text-[10px]">≡</span>
-        {footnote}
-      </p>
     </Card>
   )
 }

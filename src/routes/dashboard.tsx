@@ -24,6 +24,7 @@ import { CurrentSlotCard } from '#/components/dashboard/CurentSlotCard'
 import { LiveEnergyFlowCard } from '#/components/dashboard/LiveEnergyFlowCard'
 import { RecentActivityCard } from '#/components/dashboard/RecentActivityCard'
 import { MarketCard } from '#/components/dashboard/MarketCard'
+import { Button } from '#/components/ui/button'
 
 export const Route = createFileRoute('/dashboard')({
   component: Dashboard,
@@ -51,7 +52,7 @@ function Dashboard() {
           user={user}
         />
 
-        <main className="mx-auto flex w-full max-w-[1440px] flex-col gap-5 p-6">
+        <main className="mx-auto flex w-full max-w-360 flex-col gap-5 p-6">
           {/* Greeting row */}
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
@@ -64,19 +65,13 @@ function Dashboard() {
             </div>
 
             <div className="flex items-center gap-2">
-              <button
-                type="button"
-                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-secondary px-3.5 text-sm font-medium text-text-primary transition hover:bg-muted"
-              >
-                <Plus className="size-4" />
+              <Button>
+                <Plus />
                 Post listing
-              </button>
-              <button
-                type="button"
-                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-accent px-3.5 text-sm font-medium text-accent-foreground transition hover:brightness-95"
-              >
+              </Button>
+              <Button>
                 Buy energy
-              </button>
+              </Button>
             </div>
           </div>
 
@@ -174,7 +169,6 @@ function Dashboard() {
                 statusLabel="Generating"
                 value="3.8"
                 valueLabel="kW"
-                footnote="Auto-export"
               />
               <DeviceCard
                 icon={BatteryCharging}
@@ -185,7 +179,6 @@ function Dashboard() {
                 value="1.2"
                 valueLabel="kW"
                 progressPercent={94}
-                footnote="Peak-shift"
               />
               <DeviceCard
                 icon={Car}
@@ -196,7 +189,6 @@ function Dashboard() {
                 value="11"
                 valueLabel="kW"
                 progressPercent={67}
-                footnote="Smart charge"
               />
             </div>
 
