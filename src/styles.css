@@ -53,42 +53,61 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  --color-brand-primary: var(--brand-primary);
-  --color-brand-accent: var(--brand-accent);
-  --color-brand-danger: var(--brand-danger);
-  --color-brand-warning: var(--brand-warning);
-  --color-brand-info: var(--brand-info);
-  --color-brand-purple: var(--brand-purple);
+  --color-brand-primary: var(--action-primary);
+  --color-brand-accent: var(--action-accent);
+  --color-brand-danger: var(--action-danger);
+  --color-brand-warning: var(--feedback-warning-icon);
+  --color-brand-info: var(--feedback-info-icon);
+  --color-brand-purple: var(--chart-5);
 
-  --color-brand-primary-muted: var(--brand-primary-muted);
-  --color-brand-danger-muted: var(--brand-danger-muted);
-  --color-brand-warning-muted: var(--brand-warning-muted);
-  --color-brand-info-muted: var(--brand-info-muted);
-  --color-brand-purple-muted: var(--brand-purple-muted);
+  --color-brand-primary-muted: var(--background-well);
+  --color-brand-danger-muted: var(--feedback-error-background);
+  --color-brand-warning-muted: var(--feedback-warning-background);
+  --color-brand-info-muted: var(--feedback-info-background);
+  --color-brand-purple-muted: var(--background-fill);
 
-  --color-bg-canvas: var(--bg-canvas);
-  --color-bg-surface: var(--bg-surface);
-  --color-bg-elevated: var(--bg-elevated);
-  --color-bg-overlay: var(--bg-overlay);
-  --color-bg-sunken: var(--bg-sunken);
+  --color-bg-canvas: var(--background-page);
+  --color-bg-surface: var(--background-surface);
+  --color-bg-elevated: var(--background-surface-raised);
+  --color-bg-overlay: var(--background-overlay);
+  --color-bg-sunken: var(--background-well);
 
   --color-border-subtle: var(--border-subtle);
   --color-border-default: var(--border-default);
   --color-border-strong: var(--border-strong);
-  --color-border-brand: var(--border-brand);
-  --color-border-danger: var(--border-danger);
+  --color-border-brand: var(--action-accent);
+  --color-border-danger: var(--action-danger);
 
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-tertiary: var(--text-tertiary);
   --color-text-disabled: var(--text-disabled);
-  --color-text-brand: var(--text-brand);
-  --color-text-on-brand: var(--text-on-brand);
+  --color-text-brand: var(--action-accent);
+  --color-text-on-brand: var(--action-accent-foreground);
 
   --color-action-accent: var(--action-accent);
   --color-background-well: var(--background-well);
   --color-background-surface: var(--background-surface);
+  --color-feedback-success-background: var(--feedback-success-background);
+  --color-feedback-success-border: var(--feedback-success-border);
+  --color-feedback-success-text: var(--feedback-success-text);
+  --color-feedback-success-icon: var(--feedback-success-icon);
+  --color-feedback-warning-background: var(--feedback-warning-background);
+  --color-feedback-warning-border: var(--feedback-warning-border);
+  --color-feedback-warning-text: var(--feedback-warning-text);
+  --color-feedback-warning-icon: var(--feedback-warning-icon);
+  --color-feedback-error-background: var(--feedback-error-background);
+  --color-feedback-error-border: var(--feedback-error-border);
   --color-feedback-error-text: var(--feedback-error-text);
+  --color-feedback-error-icon: var(--feedback-error-icon);
+  --color-feedback-info-background: var(--feedback-info-background);
+  --color-feedback-info-border: var(--feedback-info-border);
+  --color-feedback-info-text: var(--feedback-info-text);
+  --color-feedback-info-icon: var(--feedback-info-icon);
+  --color-trade-buy-background: var(--trade-buy-background);
+  --color-trade-buy-text: var(--trade-buy-text);
+  --color-trade-sell-background: var(--trade-sell-background);
+  --color-trade-sell-text: var(--trade-sell-text);
 
   --radius-xs: 2px;
   --radius-sm: 4px;
@@ -135,7 +154,7 @@
   code {
     font-size: 0.9em;
     border: 1px solid var(--border-subtle);
-    background: var(--bg-elevated);
+    background: var(--background-surface-raised);
     border-radius: 6px;
     padding: 2px 6px;
   }
@@ -154,7 +173,7 @@
   .prose pre {
     border: 1px solid var(--border-default);
     border-radius: 12px;
-    background: var(--bg-sunken);
+    background: var(--background-well);
     color: var(--text-primary);
   }
 }
