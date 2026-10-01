@@ -30,10 +30,10 @@ export default function SignInForm() {
   }
 
   return (
-    <main className="fixed inset-0 z-[100] overflow-y-auto bg-background text-foreground">
+    <main className="fixed inset-0 z-100 overflow-y-auto bg-background text-foreground">
       <div className="grid min-h-screen lg:grid-cols-2">
         <section className="flex justify-center bg-background px-6 py-12 sm:px-10 lg:px-16 lg:py-16">
-          <div className="w-full max-w-[420px]">
+          <div className="w-full max-w-105">
             <header>
               <h1 className="font-heading text-2xl font-bold leading-8">
                 Welcome back
@@ -48,7 +48,7 @@ export default function SignInForm() {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-xs font-semibold uppercase tracking-[0.025em] text-muted-foreground"
+                  className="block text-xs font-semibold uppercase tracking-wide text-muted-foreground"
                 >
                   Email address
                 </label>
@@ -69,7 +69,7 @@ export default function SignInForm() {
                 <div className="flex items-center justify-between">
                   <label
                     htmlFor="password"
-                    className="text-xs font-semibold uppercase tracking-[0.025em] text-muted-foreground"
+                    className="text-xs font-semibold uppercase tracking-wide text-muted-foreground"
                   >
                     Password
                   </label>
@@ -149,18 +149,18 @@ export default function SignInForm() {
               <Button
                 type="button"
                 variant="outline"
-                className="h-12 w-full justify-start gap-3 rounded-2xl bg-card px-[17px] text-sm font-semibold"
+                className="h-12 w-full justify-start gap-3 rounded-2xl bg-card px-4.25 text-sm font-semibold"
               >
                 <img
                   src="/auth/uae-pass.svg"
                   alt=""
                   aria-hidden="true"
-                  className="h-[18px] w-7 shrink-0"
+                  className="h-4.5 w-7 shrink-0"
                 />
 
                 <span className="flex-1 text-left">UAE PASS</span>
 
-                <span className="shrink-0 rounded-full bg-[#e8eef6] px-1.5 py-0.5 font-mono text-[10px] font-medium leading-[15px] text-[#4a5f78] dark:bg-[rgba(148,180,220,0.1)] dark:text-[#c8d6e8]">
+                <span className="shrink-0 rounded-full bg-[#e8eef6] px-1.5 py-0.5 font-mono text-[10px] font-medium leading-3.75 text-[#4a5f78] dark:bg-[rgba(148,180,220,0.1)] dark:text-[#c8d6e8]">
                   UAE Digital ID
                 </span>
 
@@ -182,7 +182,7 @@ export default function SignInForm() {
                     src="/auth/google.svg"
                     alt=""
                     aria-hidden="true"
-                    className="size-[18px] shrink-0"
+                    className="size-4.5 shrink-0"
                   />
                   Google
                 </Button>
@@ -196,7 +196,7 @@ export default function SignInForm() {
                     src="/auth/microsoft.svg"
                     alt=""
                     aria-hidden="true"
-                    className="size-[17px] shrink-0"
+                    className="size-4.25 shrink-0"
                   />
                   Microsoft
                 </Button>
@@ -281,13 +281,13 @@ function SignInVisualPanel() {
 
   return (
     <aside className="relative hidden min-h-screen overflow-hidden bg-sidebar px-10 py-10 lg:block">
-      <div className="absolute -top-28 right-0 size-[500px] rounded-full bg-accent/10 blur-[90px]" />
+      <div className="absolute -top-28 right-0 size-125 rounded-full bg-accent/10 blur-[90px]" />
       <div className="absolute -bottom-24 -left-24 size-80 rounded-full bg-chart-4/[0.07] blur-[90px]" />
 
-      <div className="relative mx-auto flex h-full max-w-[590px] flex-col">
+      <div className="relative mx-auto flex h-full max-w-147.5 flex-col">
         <div className="flex items-center gap-2.5">
           <span className="flex size-9 items-center justify-center rounded-2xl bg-accent text-accent-foreground">
-            <Zap className="size-[18px] fill-current" />
+            <Zap className="size-4.5 fill-current" />
           </span>
 
           <span className="font-heading text-xl font-bold text-white">
@@ -306,7 +306,7 @@ function SignInVisualPanel() {
           </span>
         </div>
 
-        <div className="relative mx-auto mt-8 h-[300px] w-full max-w-[520px]">
+        <div className="relative mx-auto mt-8 h-75 w-full max-w-130">
           <svg
             className="absolute inset-0 size-full text-accent"
             viewBox="0 0 520 300"
@@ -334,11 +334,11 @@ function SignInVisualPanel() {
             >
               <Icon className="size-3.5 text-accent" />
 
-              <span className="mt-1 text-[8px] font-semibold leading-[10px] text-[#a8bdd4]">
+              <span className="mt-1 text-[8px] font-semibold leading-2.5 text-[#a8bdd4]">
                 {label}
               </span>
 
-              <span className="mt-0.5 text-[6px] leading-[8px] text-[#60748d]">
+              <span className="mt-0.5 text-[6px] leading-2 text-[#60748d]">
                 {sublabel}
               </span>
             </div>
@@ -351,13 +351,13 @@ function SignInVisualPanel() {
         </div>
 
         <div className="mt-8">
-          <h2 className="font-heading text-2xl font-bold leading-[1.25] text-white">
+          <h2 className="font-heading text-2xl font-bold leading-tight text-white">
             Power your future,
             <br />
             one trade at a time
           </h2>
 
-          <p className="mt-3 max-w-[310px] text-sm leading-[1.65] text-[#8492a6]">
+          <p className="mt-3 max-w-77.5 text-sm leading-[1.65] text-[#8492a6]">
             Sign in to manage your clean-energy portfolio and trade directly
             with your local energy community.
           </p>

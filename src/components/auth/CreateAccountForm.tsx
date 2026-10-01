@@ -139,7 +139,7 @@ export function CreateAccountForm({
     'h-12 rounded-2xl border-input bg-secondary px-4 text-sm text-foreground shadow-none placeholder:text-text-disabled focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20'
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="mt-[26px]">
+    <form onSubmit={handleSubmit} noValidate className="mt-6.5">
       <div className="space-y-4">
         <FormField
           id="email"
@@ -223,7 +223,7 @@ export function CreateAccountForm({
         </FormField>
       </div>
 
-      <div className="pt-[18px]">
+      <div className="pt-4.5">
         <div className="flex items-start gap-2.5">
           <Checkbox
             id="termsAccepted"
@@ -246,7 +246,7 @@ export function CreateAccountForm({
 
           <label
             htmlFor="termsAccepted"
-            className="cursor-pointer text-sm leading-[22px] text-muted-foreground"
+            className="cursor-pointer text-sm leading-5.5 text-muted-foreground"
           >
             I agree to the{' '}
             <a
@@ -276,7 +276,7 @@ export function CreateAccountForm({
         ) : null}
       </div>
 
-      <div className="pt-[18px]">
+      <div className="pt-4.5">
         <Button
           type="submit"
           disabled={!isFormValid || isLoading}
@@ -315,7 +315,7 @@ function FormField({
     <div className="space-y-1.5">
       <label
         htmlFor={id}
-        className="block text-xs font-semibold uppercase tracking-[0.025em] text-muted-foreground"
+        className="block text-xs font-semibold uppercase tracking-wide text-muted-foreground"
       >
         {label}
       </label>
