@@ -35,7 +35,7 @@ function HeroContent() {
 
       <div className="mt-6 flex flex-wrap items-center justify-center gap-6">
         <div className="mt-6 flex items-center gap-2">
-          <Check className="h-4 w-4 text-emerald-500" />
+          <Check className="h-4 w-4 text-feedback-success-icon" />
 
           <span className="text-xs text-muted-foreground/70">
             No lock-in contracts
@@ -43,7 +43,7 @@ function HeroContent() {
         </div>
 
         <div className="mt-6 flex items-center gap-2">
-          <Check className="h-4 w-4 text-emerald-500" />
+          <Check className="h-4 w-4 text-feedback-success-icon" />
 
           <span className="text-xs text-muted-foreground/70">
             AED wallet, instant settlement
@@ -51,7 +51,7 @@ function HeroContent() {
         </div>
 
         <div className="mt-6 flex items-center gap-2">
-          <Check className="h-4 w-4 text-emerald-500" />
+          <Check className="h-4 w-4 text-feedback-success-icon" />
 
           <span className="text-xs text-muted-foreground/70">
             Smart-meter verified
@@ -72,7 +72,6 @@ function HeroVisual() {
     </div>
   )
 }
-
 
 export default function HeroSection() {
   return (

@@ -207,18 +207,18 @@ const TRADE_STATUS: Record<
 > = {
   settled: {
     label: 'Settled',
-    cls: 'bg-gx-ok-bg text-gx-ok-ico border-gx-ok-brd',
-    dot: 'bg-gx-ok-ico',
+    cls: 'bg-feedback-success-background text-feedback-success-icon border-feedback-success-border',
+    dot: 'bg-feedback-success-icon',
   },
   pending: {
     label: 'Pending',
-    cls: 'bg-gx-warn-bg text-gx-warn-ico border-gx-warn-brd',
-    dot: 'bg-amber-400',
+    cls: 'bg-feedback-warning-background text-feedback-warning-icon border-feedback-warning-border',
+    dot: 'bg-feedback-warning-icon',
   },
   failed: {
     label: 'Failed',
-    cls: 'bg-gx-err-bg text-gx-err-ico border-gx-err-brd',
-    dot: 'bg-gx-err-ico',
+    cls: 'bg-feedback-error-background text-feedback-error-icon border-feedback-error-border',
+    dot: 'bg-feedback-error-icon',
   },
 }
 
@@ -233,12 +233,12 @@ function StatusPill({ label, cls }: { label: string; cls: string }) {
 }
 function SidePill({ side }: { side: TradeSide }) {
   return side === 'sell' ? (
-    <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-gx-sell-bg text-gx-sell-txt">
+    <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-trade-sell-background text-trade-sell-text">
       <ArrowUpRight size={9} />
       Sell
     </span>
   ) : (
-    <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-gx-buy-bg text-gx-buy-txt">
+    <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-trade-buy-background text-trade-buy-text">
       <ArrowDownLeft size={9} />
       Buy
     </span>
@@ -261,10 +261,10 @@ function TradeDrawer({
       onClick={onClose}
     >
       <div
-        className="bg-card rounded-2xl border border-gx-edge shadow-[var(--gx-shadow-modal)] w-full max-w-md"
+        className="bg-card rounded-2xl border border-border shadow-lg w-full max-w-md"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gx-line">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <div className="flex items-center gap-2">
             <span className="text-sm font-bold text-foreground font-mono">
               {trade.id}
@@ -273,7 +273,7 @@ function TradeDrawer({
           </div>
           <button
             onClick={onClose}
-            className="text-gx-fg4 hover:text-foreground transition-colors"
+            className="text-text-tertiary hover:text-foreground transition-colors"
           >
             <X size={17} />
           </button>
@@ -281,11 +281,11 @@ function TradeDrawer({
         <div className="p-5 space-y-4">
           <div className="flex items-center gap-2">
             <SidePill side={trade.side} />
-            <span className="text-sm text-gx-fg3">
+            <span className="text-sm text-text-secondary">
               {trade.slot} · {trade.executedAt}
             </span>
           </div>
-          <div className="bg-secondary rounded-xl border border-gx-edge divide-y divide-gx-line text-sm">
+          <div className="bg-secondary rounded-xl border border-border divide-y divide-border text-sm">
             {[
               ['Energy', `${trade.kWh} kWh`],
               ['Base price', `AED ${trade.basePrice.toFixed(3)}/kWh`],
@@ -295,7 +295,7 @@ function TradeDrawer({
               ['Counterparty', trade.zone],
             ].map(([k, v]) => (
               <div key={k} className="flex justify-between px-4 py-2.5">
-                <span className="text-gx-fg3">{k}</span>
+                <span className="text-text-secondary">{k}</span>
                 <span
                   className={`font-semibold font-mono text-foreground ${k === 'Total' ? 'text-accent' : ''}`}
                 >
@@ -304,7 +304,7 @@ function TradeDrawer({
               </div>
             ))}
           </div>
-          <p className="text-[11px] text-gx-fg4 flex items-start gap-1.5">
+          <p className="text-[11px] text-text-tertiary flex items-start gap-1.5">
             <AlertCircle size={11} className="shrink-0 mt-0.5" />
             Counterparty identity is anonymised per GridX trading rules. Grid
             fee (AED 0.090/kWh) covers metering, settlement, and grid
@@ -400,7 +400,7 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
         <div className="relative flex-1 min-w-[160px]">
           <Search
             size={13}
-            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gx-fg4 pointer-events-none"
+            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-text-tertiary pointer-events-none"
           />
           <input
             value={query}
@@ -409,8 +409,7 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
               setPage(1)
             }}
             placeholder="Search ID, zone, slot…"
-            style={{ color: 'var(--gx-fg1)', background: 'var(--gx-inp-bg)' }}
-            className="w-full pl-8 pr-3 py-2 text-sm border border-gx-inp-brd rounded-lg outline-none focus:border-accent focus:ring-2 focus:ring-accent/15 transition-all"
+            className="w-full bg-background pl-8 pr-3 py-2 text-sm text-text-primary border border-input rounded-lg outline-none focus:border-accent focus:ring-2 focus:ring-accent/15 transition-all"
           />
         </div>
         {[
@@ -444,8 +443,7 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
             <select
               value={f.val}
               onChange={(e) => f.set(e.target.value)}
-              style={{ color: 'var(--gx-fg1)', background: 'var(--gx-inp-bg)' }}
-              className="appearance-none pl-3 pr-8 py-2 text-sm border border-gx-inp-brd rounded-lg outline-none focus:border-accent focus:ring-2 focus:ring-accent/15 cursor-pointer"
+              className="appearance-none bg-background pl-3 pr-8 py-2 text-sm text-text-primary border border-input rounded-lg outline-none focus:border-accent focus:ring-2 focus:ring-accent/15 cursor-pointer"
             >
               {f.opts.map((o) => (
                 <option key={o.v} value={o.v}>
@@ -455,13 +453,13 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
             </select>
             <ChevronDown
               size={12}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gx-fg4 pointer-events-none"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-text-tertiary pointer-events-none"
             />
           </div>
         ))}
         <button
           onClick={() => toast.success('CSV export started.')}
-          className="flex items-center gap-1.5 px-3 py-2 text-sm border border-gx-edge rounded-lg text-gx-fg3 hover:text-foreground hover:bg-secondary transition-all font-medium"
+          className="flex items-center gap-1.5 px-3 py-2 text-sm border border-border rounded-lg text-text-secondary hover:text-foreground hover:bg-secondary transition-all font-medium"
         >
           <Download size={13} />
           Export
@@ -477,11 +475,11 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
       ) : (
         <>
           {/* Desktop table */}
-          <div className="hidden md:block bg-card rounded-2xl border border-gx-edge overflow-hidden shadow-[var(--gx-shadow-card)]">
+          <div className="hidden md:block bg-card rounded-2xl border border-border overflow-hidden shadow-sm">
             <div className="overflow-x-auto">
               <table className="w-full text-xs">
                 <thead>
-                  <tr className="border-b border-gx-line bg-secondary/60">
+                  <tr className="border-b border-border bg-secondary/60">
                     {[
                       'Time',
                       'ID',
@@ -498,20 +496,20 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
                     ].map((h) => (
                       <th
                         key={h}
-                        className="px-3 py-2.5 text-left font-semibold text-gx-fg4 uppercase tracking-wide whitespace-nowrap"
+                        className="px-3 py-2.5 text-left font-semibold text-text-tertiary uppercase tracking-wide whitespace-nowrap"
                       >
                         {h}
                       </th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gx-line">
+                <tbody className="divide-y divide-border">
                   {paged.map((t) => (
                     <tr
                       key={t.id}
                       className="hover:bg-secondary/40 transition-colors"
                     >
-                      <td className="px-3 py-3 text-gx-fg3 whitespace-nowrap">
+                      <td className="px-3 py-3 text-text-secondary whitespace-nowrap">
                         {t.executedAt}
                       </td>
                       <td className="px-3 py-3 font-mono font-semibold text-foreground">
@@ -520,7 +518,7 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
                       <td className="px-3 py-3">
                         <SidePill side={t.side} />
                       </td>
-                      <td className="px-3 py-3 font-mono text-gx-fg2 whitespace-nowrap">
+                      <td className="px-3 py-3 font-mono text-text-primary whitespace-nowrap">
                         {t.slot}
                       </td>
                       <td className="px-3 py-3 font-mono text-foreground">
@@ -529,7 +527,7 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
                       <td className="px-3 py-3 font-mono text-foreground">
                         {t.basePrice.toFixed(3)}
                       </td>
-                      <td className="px-3 py-3 font-mono text-gx-fg3">
+                      <td className="px-3 py-3 font-mono text-text-secondary">
                         {t.gridFee.toFixed(3)}
                       </td>
                       <td className="px-3 py-3 font-mono text-foreground">
@@ -538,7 +536,7 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
                       <td className="px-3 py-3 font-mono font-semibold text-foreground">
                         {t.totalAed.toFixed(3)}
                       </td>
-                      <td className="px-3 py-3 text-gx-fg3 max-w-[120px] truncate">
+                      <td className="px-3 py-3 text-text-secondary max-w-[120px] truncate">
                         {t.zone}
                       </td>
                       <td className="px-3 py-3">
@@ -547,7 +545,7 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
                       <td className="px-3 py-3">
                         <button
                           onClick={() => setSelected(t)}
-                          className="p-1.5 rounded-lg text-gx-fg4 hover:text-foreground hover:bg-secondary transition-all"
+                          className="p-1.5 rounded-lg text-text-tertiary hover:text-foreground hover:bg-secondary transition-all"
                         >
                           <Eye size={13} />
                         </button>
@@ -565,7 +563,7 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
               <button
                 key={t.id}
                 onClick={() => setSelected(t)}
-                className="w-full bg-card rounded-xl border border-gx-edge p-4 text-left shadow-[var(--gx-shadow-card)] hover:bg-secondary/40 transition-colors"
+                className="w-full bg-card rounded-xl border border-border p-4 text-left shadow-sm hover:bg-secondary/40 transition-colors"
               >
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-2">
@@ -577,7 +575,7 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
                   <StatusPill {...TRADE_STATUS[t.status]} />
                 </div>
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-gx-fg3">
+                  <span className="text-text-secondary">
                     {t.slot} · {t.executedAt}
                   </span>
                   <span className="font-mono font-bold text-foreground">
@@ -585,10 +583,10 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-xs mt-1">
-                  <span className="text-gx-fg4">
+                  <span className="text-text-tertiary">
                     {t.kWh} kWh · AED {t.effectivePrice.toFixed(3)}/kWh
                   </span>
-                  <span className="text-gx-fg4 truncate max-w-[120px]">
+                  <span className="text-text-tertiary truncate max-w-[120px]">
                     {t.zone}
                   </span>
                 </div>
@@ -598,7 +596,7 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
 
           {/* Pagination */}
           <div className="flex items-center justify-between pt-1">
-            <p className="text-xs text-gx-fg4">
+            <p className="text-xs text-text-tertiary">
               {filtered.length} trade{filtered.length !== 1 ? 's' : ''} · page{' '}
               {page} of {totalPages}
             </p>
@@ -606,14 +604,14 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="p-1.5 rounded-lg border border-gx-edge text-gx-fg4 hover:text-foreground hover:bg-secondary transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                className="p-1.5 rounded-lg border border-border text-text-tertiary hover:text-foreground hover:bg-secondary transition-all disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 <ChevronLeft size={14} />
               </button>
               <button
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page === totalPages}
-                className="p-1.5 rounded-lg border border-gx-edge text-gx-fg4 hover:text-foreground hover:bg-secondary transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                className="p-1.5 rounded-lg border border-border text-text-tertiary hover:text-foreground hover:bg-secondary transition-all disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 <ChevronRight size={14} />
               </button>
@@ -632,17 +630,7 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
   /* TODO: Need to check */
 }
 function Skeleton({ className = '' }: { className?: string }) {
-  return (
-    <div
-      className={`rounded-lg ${className}`}
-      style={{
-        background:
-          'linear-gradient(90deg, var(--gx-sk-from) 0%, var(--gx-sk-via) 50%, var(--gx-sk-from) 100%)',
-        backgroundSize: '200% 100%',
-        animation: 'gx-shimmer 1.6s ease-in-out infinite',
-      }}
-    />
-  )
+  return <div className={`rounded-lg bg-muted ${className}`} />
 }
 
 // ─── EmptyState ───────────────────────────────────────────────────────────────
@@ -660,13 +648,13 @@ function EmptyState({
 }) {
   return (
     <div className="flex flex-col items-center justify-center py-12 px-8 text-center">
-      <div className="w-14 h-14 rounded-2xl bg-gx-well flex items-center justify-center mb-4">
-        <Icon size={22} className="text-gx-fg4" />
+      <div className="w-14 h-14 rounded-2xl bg-muted flex items-center justify-center mb-4">
+        <Icon size={22} className="text-text-tertiary" />
       </div>
       <h3 className="text-base font-semibold text-foreground mb-1.5">
         {title}
       </h3>
-      <p className="text-sm text-gx-fg3 max-w-xs mb-5">{description}</p>
+      <p className="text-sm text-text-secondary max-w-xs mb-5">{description}</p>
       {action}
     </div>
   )

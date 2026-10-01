@@ -124,7 +124,7 @@ export default function PageHeader({
             onClick={onUserMenuClick}
             className="ml-1 flex items-center gap-2 rounded-lg py-1 pl-1 pr-2 no-underline transition hover:bg-bg-elevated"
           >
-            <span className="flex size-8 items-center justify-center rounded-full border border-[#5eead4]/30 bg-[#0ea592] text-xs font-semibold text-white shadow-sm ring-2 ring-[#0ea592]/10">
+            <span className="flex size-8 items-center justify-center rounded-full border border-accent/30 bg-accent text-xs font-semibold text-accent-foreground shadow-sm ring-2 ring-accent/10">
               {user.initials}
             </span>
             <span className="hidden flex-col items-start leading-tight sm:flex">

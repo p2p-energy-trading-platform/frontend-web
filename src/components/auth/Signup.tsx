@@ -193,7 +193,7 @@ export default function Signup() {
                       : 'Your account is ready'}
             </h2>
 
-            <p className="mt-2 text-sm leading-[22px] text-[#8492a6]">
+            <p className="mt-2 text-sm leading-[22px] text-sidebar-foreground/70">
               {view === 'account'
                 ? 'Your GridX account gives you access to the full peer-to-peer energy marketplace.'
                 : view === 'verify-email'
@@ -210,7 +210,7 @@ export default function Signup() {
                 {ACCOUNT_BENEFITS.map(({ icon: Icon, text }) => (
                   <li
                     key={text}
-                    className="flex items-center gap-3 text-sm text-[#93a0b2]"
+                    className="flex items-center gap-3 text-sm text-sidebar-foreground/80"
                   >
                     <span className="flex size-7 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.08] text-accent">
                       <Icon className="size-3.5" />
@@ -221,12 +221,12 @@ export default function Signup() {
                 ))}
               </ul>
             ) : view === 'verify-email' ? (
-              <div className="mt-7 rounded-2xl border border-white/10 bg-[#15253e] p-5 shadow-sm">
+              <div className="mt-7 rounded-2xl border border-white/10 bg-white/10 p-5 shadow-sm">
                 <p className="text-sm font-semibold text-white">
                   What happens next?
                 </p>
 
-                <ol className="mt-4 space-y-3 text-sm text-[#b1bccb]">
+                <ol className="mt-4 space-y-3 text-sm text-sidebar-foreground">
                   <li className="flex gap-3">
                     <Check className="mt-0.5 size-4 shrink-0 text-accent" />
                     Enter the one-time code sent to your email.
@@ -245,19 +245,19 @@ export default function Signup() {
               </div>
             ) : view === 'kyc' ? (
               <ul className="mt-7 space-y-3.5">
-                <li className="flex items-center gap-3 text-sm text-[#93a0b2]">
+                <li className="flex items-center gap-3 text-sm text-sidebar-foreground/80">
                   <span className="flex size-7 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.08] text-accent">
                     <Gauge className="size-3.5" />
                   </span>
                   Unlock higher peer-to-peer trading limits
                 </li>
-                <li className="flex items-center gap-3 text-sm text-[#93a0b2]">
+                <li className="flex items-center gap-3 text-sm text-sidebar-foreground/80">
                   <span className="flex size-7 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.08] text-accent">
                     <WalletCards className="size-3.5" />
                   </span>
                   Enable secure wallet payouts
                 </li>
-                <li className="flex items-center gap-3 text-sm text-[#93a0b2]">
+                <li className="flex items-center gap-3 text-sm text-sidebar-foreground/80">
                   <span className="flex size-7 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.08] text-accent">
                     <ShieldCheck className="size-3.5" />
                   </span>
@@ -266,19 +266,19 @@ export default function Signup() {
               </ul>
             ) : view === 'smart-meter' ? (
               <ul className="mt-7 space-y-3.5">
-                <li className="flex items-center gap-3 text-sm text-[#93a0b2]">
+                <li className="flex items-center gap-3 text-sm text-sidebar-foreground/80">
                   <span className="flex size-7 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.08] text-accent">
                     <RadioTower className="size-3.5" />
                   </span>
                   Receive live consumption and generation readings
                 </li>
-                <li className="flex items-center gap-3 text-sm text-[#93a0b2]">
+                <li className="flex items-center gap-3 text-sm text-sidebar-foreground/80">
                   <span className="flex size-7 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.08] text-accent">
                     <BarChart3 className="size-3.5" />
                   </span>
                   Use real-time data for smarter trading decisions
                 </li>
-                <li className="flex items-center gap-3 text-sm text-[#93a0b2]">
+                <li className="flex items-center gap-3 text-sm text-sidebar-foreground/80">
                   <span className="flex size-7 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.08] text-accent">
                     <ShieldCheck className="size-3.5" />
                   </span>
@@ -295,7 +295,7 @@ export default function Signup() {
                     <p className="text-sm font-semibold text-white">
                       Email verified
                     </p>
-                    <p className="mt-1 text-xs leading-5 text-[#8492a6]">
+                    <p className="mt-1 text-xs leading-5 text-sidebar-foreground/70">
                       KYC status:{' '}
                       {kycStatus === 'pending'
                         ? 'Pending review'
@@ -312,11 +312,11 @@ export default function Signup() {
             )}
 
             <div className="mt-auto border-t border-sidebar-border pt-6">
-              <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#5f6c7f]">
+              <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-sidebar-foreground/50">
                 Privacy & security
               </p>
 
-              <ul className="mt-3 space-y-2 text-[11px] text-[#68768a]">
+              <ul className="mt-3 space-y-2 text-[11px] text-sidebar-foreground/55">
                 <li className="flex items-center gap-2">
                   <LockKeyhole className="size-3 text-accent" />
                   Your data is encrypted end-to-end

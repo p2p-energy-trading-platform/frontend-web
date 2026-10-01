@@ -52,7 +52,7 @@ export function UsageCategoryCard({
             cy={56}
             r={radius}
             fill="none"
-            stroke="var(--border-subtle, #2a3142)"
+            stroke="var(--border-subtle)"
             strokeWidth={14}
           />
           {segments.map((s) => (

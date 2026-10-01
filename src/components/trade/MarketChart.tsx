@@ -57,40 +57,50 @@ export function MarketChart({ timeframe }: { timeframe: Timeframe }) {
     if (!container) return
 
     const styles = getComputedStyle(document.documentElement)
+    const token = (name: string) => styles.getPropertyValue(name).trim()
+    const withAlpha = (hex: string, alpha: number) => {
+      const value = hex.replace('#', '')
+      const r = Number.parseInt(value.slice(0, 2), 16)
+      const g = Number.parseInt(value.slice(2, 4), 16)
+      const b = Number.parseInt(value.slice(4, 6), 16)
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`
+    }
+    const text = token('--text-tertiary')
+    const accent = token('--action-accent')
+    const danger = token('--action-danger')
     const chart = createChart(container, {
       width: container.clientWidth,
       height: 390,
       layout: {
         background: { type: ColorType.Solid, color: 'transparent' },
-        textColor:
-          styles.getPropertyValue('--text-tertiary').trim() || '#6b7a99',
+        textColor: text,
         fontFamily: 'Inter, sans-serif',
       },
       grid: {
-        vertLines: { color: 'rgba(107,122,153,.10)' },
-        horzLines: { color: 'rgba(107,122,153,.10)' },
+        vertLines: { color: withAlpha(text, 0.1) },
+        horzLines: { color: withAlpha(text, 0.1) },
       },
       crosshair: { mode: CrosshairMode.Normal },
-      rightPriceScale: { borderColor: 'rgba(107,122,153,.18)' },
+      rightPriceScale: { borderColor: withAlpha(text, 0.18) },
       timeScale: {
-        borderColor: 'rgba(107,122,153,.18)',
+        borderColor: withAlpha(text, 0.18),
         timeVisible: true,
         secondsVisible: false,
       },
     })
     const series = chart.addSeries(CandlestickSeries, {
-      upColor: '#0ea592',
-      downColor: '#ef4444',
+      upColor: accent,
+      downColor: danger,
       borderVisible: false,
-      wickUpColor: '#0ea592',
-      wickDownColor: '#ef4444',
+      wickUpColor: accent,
+      wickDownColor: danger,
       priceFormat: { type: 'price', precision: 3, minMove: 0.001 },
     })
     series.setData(makeCandles(timeframe))
     ;[0.47, 0.452].forEach((price) =>
       series.createPriceLine({
         price,
-        color: price === 0.47 ? '#0ea592' : 'rgba(107,122,153,.6)',
+        color: price === 0.47 ? accent : withAlpha(text, 0.6),
         lineWidth: 1,
         lineStyle: LineStyle.Dashed,
         axisLabelVisible: true,

@@ -98,12 +98,12 @@ export function GenerationChart({
               <linearGradient id="genFill" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="0%"
-                  stopColor="var(--action-accent, #0ea592)"
+                  stopColor="var(--action-accent)"
                   stopOpacity="0.35"
                 />
                 <stop
                   offset="100%"
-                  stopColor="var(--action-accent, #0ea592)"
+                  stopColor="var(--action-accent)"
                   stopOpacity="0"
                 />
               </linearGradient>
@@ -126,7 +126,7 @@ export function GenerationChart({
             <path
               d={linePath}
               fill="none"
-              stroke="var(--action-accent, #0ea592)"
+              stroke="var(--action-accent)"
               strokeWidth={2.5}
               strokeLinecap="round"
               strokeLinejoin="round"

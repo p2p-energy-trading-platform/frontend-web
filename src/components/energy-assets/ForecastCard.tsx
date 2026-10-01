@@ -98,7 +98,7 @@ export function ForecastCard({
             <path
               d={forecastPath}
               fill="none"
-              stroke="var(--text-tertiary, #8a94a6)"
+              stroke="var(--text-tertiary)"
               strokeWidth={1.5}
               strokeDasharray="5 4"
               strokeLinecap="round"
@@ -110,7 +110,7 @@ export function ForecastCard({
                 cx={i * step}
                 cy={height - v * height}
                 r={4}
-                fill="var(--action-accent, #0ea592)"
+                fill="var(--action-accent)"
               />
             ))}
           </svg>

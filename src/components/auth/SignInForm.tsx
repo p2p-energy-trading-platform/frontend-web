@@ -160,7 +160,7 @@ export default function SignInForm() {
 
                 <span className="flex-1 text-left">UAE PASS</span>
 
-                <span className="shrink-0 rounded-full bg-[#e8eef6] px-1.5 py-0.5 font-mono text-[10px] font-medium leading-3.75 text-[#4a5f78] dark:bg-[rgba(148,180,220,0.1)] dark:text-[#c8d6e8]">
+                <span className="shrink-0 rounded-full bg-background-well px-1.5 py-0.5 font-mono text-[10px] font-medium leading-3.75 text-text-tertiary dark:bg-white/10 dark:text-text-secondary">
                   UAE Digital ID
                 </span>
 
@@ -294,7 +294,7 @@ function SignInVisualPanel() {
             GridX
           </span>
 
-          <span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-1.5 py-0.5 text-[9px] text-emerald-300">
+          <span className="rounded-full border border-accent/30 bg-accent/10 px-1.5 py-0.5 text-[9px] text-accent">
             Beta
           </span>
         </div>
@@ -322,7 +322,7 @@ function SignInVisualPanel() {
             </g>
           </svg>
 
-          <div className="absolute left-1/2 top-1/2 flex size-20 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full border border-accent bg-accent/10 text-accent shadow-[0_0_50px_rgba(14,165,146,.18)]">
+          <div className="absolute left-1/2 top-1/2 flex size-20 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full border border-accent bg-accent/10 text-accent shadow-lg shadow-accent/20">
             <Zap className="size-5 fill-current" />
             <span className="mt-1 text-[8px] font-bold">GRIDX</span>
           </div>
@@ -330,15 +330,15 @@ function SignInVisualPanel() {
           {networkNodes.map(({ label, sublabel, icon: Icon, className }) => (
             <div
               key={label}
-              className={`absolute flex size-16 flex-col items-center justify-center rounded-full border border-accent/45 bg-[#1a2840] text-center shadow-[0_0_0_1px_rgba(14,165,146,0.08)] ${className}`}
+              className={`absolute flex size-16 flex-col items-center justify-center rounded-full border border-accent/45 bg-white/10 text-center ring-1 ring-accent/10 ${className}`}
             >
               <Icon className="size-3.5 text-accent" />
 
-              <span className="mt-1 text-[8px] font-semibold leading-2.5 text-[#a8bdd4]">
+              <span className="mt-1 text-[8px] font-semibold leading-2.5 text-sidebar-foreground">
                 {label}
               </span>
 
-              <span className="mt-0.5 text-[6px] leading-2 text-[#60748d]">
+              <span className="mt-0.5 text-[6px] leading-2 text-sidebar-foreground/60">
                 {sublabel}
               </span>
             </div>
@@ -357,7 +357,7 @@ function SignInVisualPanel() {
             one trade at a time
           </h2>
 
-          <p className="mt-3 max-w-77.5 text-sm leading-[1.65] text-[#8492a6]">
+          <p className="mt-3 max-w-77.5 text-sm leading-[1.65] text-sidebar-foreground/70">
             Sign in to manage your clean-energy portfolio and trade directly
             with your local energy community.
           </p>
@@ -372,7 +372,7 @@ function SignInVisualPanel() {
         <div className="mt-auto border-t border-sidebar-border pt-5">
           <p className="text-xs tracking-[0.18em] text-chart-3">★★★★★</p>
 
-          <p className="mt-2 text-sm italic leading-6 text-[#93a0b2]">
+          <p className="mt-2 text-sm italic leading-6 text-sidebar-foreground/80">
             “Sold 18 kWh this month to neighbours — earned more than my
             electricity bill.”
           </p>
@@ -385,7 +385,7 @@ function SignInVisualPanel() {
             <div>
               <p className="text-xs font-semibold text-white">Sara A.</p>
 
-              <p className="text-[10px] leading-4 text-[#68768a]">
+              <p className="text-[10px] leading-4 text-sidebar-foreground/55">
                 Solar prosumer · JLT Zone 4
               </p>
             </div>

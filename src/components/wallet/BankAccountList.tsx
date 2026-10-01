@@ -48,7 +48,7 @@ export function BankAccountList({ accounts }: BankAccountListProps) {
               )}
             </div>
 
-            <p className="text-xs text-gx-fg4 font-mono mt-0.5">
+            <p className="text-xs text-text-tertiary font-mono mt-0.5">
               {account.maskedIban}
             </p>
 
@@ -59,7 +59,7 @@ export function BankAccountList({ accounts }: BankAccountListProps) {
             )}
 
             {!account.verified && (
-              <p className="text-caption text-amber-500 font-medium">
+              <p className="text-caption text-feedback-warning-text font-medium">
                 Micro-deposit verification pending
               </p>
             )}

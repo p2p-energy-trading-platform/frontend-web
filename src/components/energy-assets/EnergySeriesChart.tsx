@@ -92,18 +92,14 @@ export function EnergyTimeSeriesChart({
               strokeWidth={1}
               strokeDasharray="3 3"
             />
-            <text
-              x={nowX + 4}
-              y={12}
-              className="fill-text-tertiary text-xs"
-            >
+            <text x={nowX + 4} y={12} className="fill-text-tertiary text-xs">
               Now
             </text>
 
             <path
               d={conPath}
               fill="none"
-              stroke="var(--text-tertiary, #8a94a6)"
+              stroke="var(--text-tertiary)"
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -112,7 +108,7 @@ export function EnergyTimeSeriesChart({
             <path
               d={genPath}
               fill="none"
-              stroke="var(--action-accent, #0ea592)"
+              stroke="var(--action-accent)"
               strokeWidth={2.5}
               strokeLinecap="round"
               strokeLinejoin="round"

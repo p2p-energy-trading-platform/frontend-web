@@ -305,10 +305,10 @@ export default function Profile() {
                 </CardHeader>
                 <CardContent>
                   <div className="mb-6 flex items-center gap-4 rounded-xl border border-border bg-bg-elevated p-4">
-                    <div className="relative flex size-16 shrink-0 items-center justify-center rounded-full border-[3px] border-[#5eead4]/30 bg-[#0ea592] text-base font-bold text-white shadow-md ring-4 ring-[#0ea592]/10">
+                    <div className="relative flex size-16 shrink-0 items-center justify-center rounded-full border-[3px] border-accent/30 bg-accent text-base font-bold text-accent-foreground shadow-md ring-4 ring-accent/10">
                       {profileUser.initials}
                       <span
-                        className="absolute bottom-0.5 right-0.5 size-3.5 rounded-full border-[3px] border-bg-elevated bg-emerald-400 shadow-sm"
+                        className="absolute bottom-0.5 right-0.5 size-3.5 rounded-full border-[3px] border-bg-elevated bg-feedback-success-icon shadow-sm"
                         aria-label="Online"
                       />
                     </div>
@@ -319,7 +319,7 @@ export default function Profile() {
                       <p className="text-sm text-text-tertiary">
                         Prosumer · Individual Account
                       </p>
-                      <p className="mt-1 text-xs font-medium text-emerald-500">
+                      <p className="mt-1 text-xs font-medium text-feedback-success-text">
                         Online
                       </p>
                     </div>
