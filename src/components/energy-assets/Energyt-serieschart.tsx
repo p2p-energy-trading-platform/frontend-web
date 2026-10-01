@@ -95,7 +95,7 @@ export function EnergyTimeSeriesChart({
             <text
               x={nowX + 4}
               y={12}
-              className="fill-text-tertiary text-[10px]"
+              className="fill-text-tertiary text-xs"
             >
               Now
             </text>

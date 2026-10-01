@@ -40,7 +40,7 @@ export function EnergyKpiStrip({ kpis }: { kpis: Array<EnergyKpi> }) {
             <p className="text-xs text-text-tertiary">{kpi.label}</p>
             <p
               className={cn(
-                'text-[11px] font-medium',
+                'text-xs font-medium',
                 kpi.trendClassName ?? 'text-text-tertiary',
               )}
             >

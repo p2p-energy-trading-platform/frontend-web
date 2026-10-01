@@ -42,7 +42,7 @@ export function PeakPeriodsCard({
 
       <div>
         <div
-          className="mb-1 grid gap-1 pl-8 text-[11px] text-text-tertiary"
+          className="mb-1 grid gap-1 pl-8 text-sm text-text-tertiary"
           style={{ gridTemplateColumns: `repeat(${hourLabels.length}, 1fr)` }}
         >
           {hourLabels.map((h) => (

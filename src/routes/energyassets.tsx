@@ -166,7 +166,7 @@ function EnergyPage() {
           user={user}
         />
 
-        <main className="mx-auto flex w-full max-w-[1440px] flex-col gap-5 p-6">
+        <main className="mx-auto flex w-full max-w-360 flex-col gap-5 p-6">
           {/* Page title */}
           <div>
             <h1 className="text-heading-2 text-text-primary">Energy</h1>
