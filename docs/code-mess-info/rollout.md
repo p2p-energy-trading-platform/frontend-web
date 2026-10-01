@@ -4,6 +4,11 @@ Follow these phases in order. Each phase is a reviewable slice. Do not start a l
 
 Findings and file citations live in [README.md](./README.md). This document is the sequence for fixing them.
 
+## Status
+
+- **Phase 0 is in effect.** New UI uses tokens from [`src/styles/token.css`](../../src/styles/token.css) and primitives from [`src/components/ui`](../../src/components/ui). Do not add hex utilities, raw palette classes (`emerald-*`, `amber-*`, `red-*`), `gx-*` classes, arbitrary `text-[Npx]`, fake `setTimeout` / `localStorage` / `alert` success flows, or hand-rolled dialogs, tables, selects, and tab strips.
+- **Phase 1 is complete.** Alias colors in [`src/styles.css`](../../src/styles.css) point at real tokens. Feedback and trade tokens are available as utilities. History, wallet, auth, avatars, and charts no longer use `gx-*` or hardcoded hex.
+
 ## Rules for every phase
 
 - One phase, one pull request (or a short stack of PRs that stay inside that phase).
