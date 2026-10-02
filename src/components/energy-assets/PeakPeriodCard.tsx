@@ -1,4 +1,5 @@
 import { Card } from '#/components/ui/card'
+import { usePeakPeriods } from '#/hooks/useEnergyAssets'
 import { cn } from '#/lib/utils'
 
 export interface PeakPeriodsCardProps {
@@ -7,28 +8,17 @@ export interface PeakPeriodsCardProps {
   hourLabels?: Array<string>
 }
 
-const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-
-function randomRow(peakHours: Array<number>, hours: number) {
-  return Array.from({ length: hours }, (_, h) => {
-    const nearPeak = peakHours.some((p) => Math.abs(p - h) <= 1)
-    return nearPeak ? 0.7 + Math.random() * 0.3 : Math.random() * 0.4
-  })
-}
-
-const DEFAULT_HOURS = 18 // 06:00 .. 23:00 step ~1
-const DEFAULT_MATRIX = DAYS.map(() => randomRow([12, 19], DEFAULT_HOURS))
-
 function intensityClass(v: number) {
   if (v > 0.66) return 'bg-accent'
   if (v > 0.33) return 'bg-accent/50'
   return 'bg-accent/15'
 }
 
-export function PeakPeriodsCard({
-  matrix = DEFAULT_MATRIX,
-  hourLabels = ['06', '08', '10', '12', '14', '16', '18', '20', '22'],
-}: PeakPeriodsCardProps) {
+export function PeakPeriodsCard({ matrix, hourLabels }: PeakPeriodsCardProps) {
+  const peak = usePeakPeriods()
+  const cells = matrix ?? peak.matrix
+  const hours = hourLabels ?? peak.hourLabels
+  const days = peak.days
   return (
     <Card className="gap-4 border-border-subtle bg-card p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -43,9 +33,9 @@ export function PeakPeriodsCard({
       <div>
         <div
           className="mb-1 grid gap-1 pl-8 text-sm text-text-tertiary"
-          style={{ gridTemplateColumns: `repeat(${hourLabels.length}, 1fr)` }}
+          style={{ gridTemplateColumns: `repeat(${hours.length}, 1fr)` }}
         >
-          {hourLabels.map((h) => (
+          {hours.map((h) => (
             <span key={h} className="text-center">
               {h}
             </span>
@@ -53,13 +43,13 @@ export function PeakPeriodsCard({
         </div>
 
         <div className="space-y-1">
-          {DAYS.map((day, dayIdx) => (
+          {days.map((day, dayIdx) => (
             <div key={day} className="flex items-center gap-2">
-              <span className="w-6 shrink-0 text-[11px] text-text-tertiary">
+              <span className="w-6 shrink-0 text-caption text-text-tertiary">
                 {day}
               </span>
               <div className="grid flex-1 grid-flow-col gap-1">
-                {matrix[dayIdx].map((v, hourIdx) => (
+                {cells[dayIdx].map((v, hourIdx) => (
                   <div
                     key={hourIdx}
                     className={cn('h-4 rounded-sm', intensityClass(v))}

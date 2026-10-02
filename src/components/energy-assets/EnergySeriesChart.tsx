@@ -1,4 +1,5 @@
 import { Card } from '#/components/ui/card'
+import { useEnergySeries } from '#/hooks/useEnergyAssets'
 import { cn } from '#/lib/utils'
 
 export interface EnergyTimeSeriesChartProps {
@@ -8,15 +9,6 @@ export interface EnergyTimeSeriesChartProps {
   nowIndex?: number
 }
 
-const DEFAULT_GENERATED = [
-  0, 0, 0, 0.02, 0.08, 0.25, 0.5, 0.75, 0.92, 1, 0.96, 0.85, 0.65, 0.4, 0.18,
-  0.05, 0, 0, 0, 0, 0, 0, 0, 0,
-]
-const DEFAULT_CONSUMED = [
-  0.2, 0.18, 0.15, 0.15, 0.2, 0.3, 0.4, 0.45, 0.42, 0.4, 0.42, 0.5, 0.55, 0.5,
-  0.45, 0.5, 0.6, 0.75, 0.9, 0.85, 0.6, 0.4, 0.3, 0.22,
-]
-
 function toPath(values: Array<number>, width: number, height: number) {
   const step = width / (values.length - 1)
   return values
@@ -25,18 +17,22 @@ function toPath(values: Array<number>, width: number, height: number) {
 }
 
 export function EnergyTimeSeriesChart({
-  generated = DEFAULT_GENERATED,
-  consumed = DEFAULT_CONSUMED,
-  nowIndex = 12,
+  generated,
+  consumed,
+  nowIndex,
 }: EnergyTimeSeriesChartProps) {
+  const series = useEnergySeries()
+  const generatedPoints = generated ?? series.generated
+  const consumedPoints = consumed ?? series.consumed
+  const currentIndex = nowIndex ?? series.nowIndex
   const width = 900
   const height = 220
-  const genPath = toPath(generated, width, height)
-  const conPath = toPath(consumed, width, height)
-  const nowX = (nowIndex / (generated.length - 1)) * width
+  const genPath = toPath(generatedPoints, width, height)
+  const conPath = toPath(consumedPoints, width, height)
+  const nowX = (currentIndex / (generatedPoints.length - 1)) * width
 
-  const yLabels = ['2 kW', '1.5 kW', '1 kW', '0.5 kW', '0 kW']
-  const xLabels = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00']
+  const yLabels = series.yLabels
+  const xLabels = series.xLabels
 
   return (
     <Card className="gap-4 border-border-subtle bg-card p-5">

@@ -1,43 +1,33 @@
 import { Card } from '#/components/ui/card'
+import { useForecastSeries } from '#/hooks/useEnergyAssets'
 
 export interface ForecastCardProps {
   /** 0-1 normalized forecast curve */
   forecast?: Array<number>
   /** 0-1 normalized actual points (dots) */
   actual?: Array<number>
-  accuracyPercent: string
+  accuracyPercent?: string
 }
 
-const DEFAULT_FORECAST = [
-  0.05, 0.15, 0.35, 0.55, 0.72, 0.85, 0.92, 0.88, 0.75, 0.55, 0.35, 0.15, 0.05,
-]
-const DEFAULT_ACTUAL = [
-  0.04, 0.13, 0.32, 0.5, 0.7, 0.82, 0.9, 0.85, 0.72, 0.5, 0.3, 0.12, 0.04,
-]
-
 export function ForecastCard({
-  forecast = DEFAULT_FORECAST,
-  actual = DEFAULT_ACTUAL,
+  forecast,
+  actual,
   accuracyPercent,
 }: ForecastCardProps) {
+  const series = useForecastSeries()
+  const forecastPoints = forecast ?? series.forecast
+  const actualPoints = actual ?? series.actual
+  const accuracy = accuracyPercent ?? series.accuracyPercent
   const width = 900
   const height = 160
-  const step = width / (forecast.length - 1)
+  const step = width / (forecastPoints.length - 1)
 
-  const forecastPath = forecast
+  const forecastPath = forecastPoints
     .map((v, i) => `${i === 0 ? 'M' : 'L'} ${i * step} ${height - v * height}`)
     .join(' ')
 
-  const xLabels = [
-    '06:00',
-    '08:00',
-    '10:00',
-    '12:00',
-    '14:00',
-    '16:00',
-    '18:00',
-  ]
-  const yLabels = ['4kW', '3kW', '2kW', '1kW', '0kW']
+  const xLabels = series.xLabels
+  const yLabels = series.yLabels
 
   return (
     <Card className="gap-4 border-border-subtle bg-card p-5">
@@ -52,7 +42,7 @@ export function ForecastCard({
         </div>
         <div className="text-right">
           <p className="font-mono text-2xl font-semibold text-accent">
-            {accuracyPercent}
+            {accuracy}
           </p>
           <p className="text-xs text-text-tertiary">forecast accuracy</p>
         </div>
@@ -104,7 +94,7 @@ export function ForecastCard({
               strokeLinecap="round"
             />
 
-            {actual.map((v, i) => (
+            {actualPoints.map((v, i) => (
               <circle
                 key={i}
                 cx={i * step}

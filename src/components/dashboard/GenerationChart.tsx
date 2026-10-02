@@ -1,4 +1,5 @@
 import { Card } from '#/components/ui/card'
+import { useGenerationSeries } from '#/hooks/useDashboard'
 import { cn } from '#/lib/utils'
 
 // Replace with proper charts
@@ -10,23 +11,23 @@ export interface GenerationChartProps {
   onRangeChange?: (range: 'Day' | 'Week' | 'Month') => void
 }
 
-const DEFAULT_POINTS = [
-  0, 0, 0, 0.02, 0.05, 0.15, 0.35, 0.6, 0.82, 0.94, 1, 0.97, 0.88, 0.7, 0.45,
-  0.22, 0.08, 0.02, 0, 0, 0, 0, 0, 0,
-]
-
 export function GenerationChart({
-  points = DEFAULT_POINTS,
+  points,
   range = 'Day',
   onRangeChange,
 }: GenerationChartProps) {
+  const series = useGenerationSeries()
+  const chartPoints = points ?? series.points
   const width = 900
   const height = 260
   const paddingBottom = 24
   const chartHeight = height - paddingBottom
 
-  const step = width / (points.length - 1)
-  const coords = points.map((p, i) => [i * step, chartHeight - p * chartHeight])
+  const step = width / (chartPoints.length - 1)
+  const coords = chartPoints.map((p, i) => [
+    i * step,
+    chartHeight - p * chartHeight,
+  ])
 
   const linePath = coords
     .map(([x, y], i) => `${i === 0 ? 'M' : 'L'} ${x} ${y}`)
@@ -34,21 +35,8 @@ export function GenerationChart({
 
   const areaPath = `${linePath} L ${width} ${chartHeight} L 0 ${chartHeight} Z`
 
-  const yLabels = ['8 kW', '6 kW', '4 kW', '2 kW', '0 kW']
-  const xLabels = [
-    '00:00',
-    '02:00',
-    '04:00',
-    '06:00',
-    '08:00',
-    '10:00',
-    '12:00',
-    '14:00',
-    '16:00',
-    '18:00',
-    '20:00',
-    '22:00',
-  ]
+  const yLabels = series.yLabels
+  const xLabels = series.xLabels
 
   return (
     <Card className="gap-4 border-border-subtle bg-card p-5">
