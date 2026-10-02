@@ -9,6 +9,8 @@ Findings and file citations live in [README.md](./README.md). This document is t
 - **Phase 0 is in effect.** New UI uses tokens from [`src/styles/token.css`](../../src/styles/token.css) and primitives from [`src/components/ui`](../../src/components/ui). Do not add hex utilities, raw palette classes (`emerald-*`, `amber-*`, `red-*`), `gx-*` classes, arbitrary `text-[Npx]`, fake `setTimeout` / `localStorage` / `alert` success flows, or hand-rolled dialogs, tables, selects, and tab strips.
 - **Phase 1 is complete.** Alias colors in [`src/styles.css`](../../src/styles.css) point at real tokens. Feedback and trade tokens are available as utilities. History, wallet, auth, avatars, and charts no longer use `gx-*` or hardcoded hex.
 - **Phase 2 is complete.** Authenticated pages share [`src/routes/_authenticated.tsx`](../../src/routes/_authenticated.tsx). Marketing header and footer wrap only `/` and `/about`. Sign-in and sign-up are full-screen. Sidebar links use router `Link`s. `/energyassets`, `/notification`, `/orderhistory`, and `/tradehistory` redirect to the new paths.
+- **Phase 3 is complete.** The authenticated layout sets `ssr: false`. Public routes keep the default. Child routes inherit the parent flag, so the generated route tree does not repeat `ssr` on each path.
+- **Phase 4 is complete.** Primitives were added with the shadcn CLI. Component-name differences from this rollout (`toast` instead of `sonner`, `field` instead of `form`) are recorded in [phase-4-shadcn.md](./phase-4-shadcn.md).
 
 ## Rules for every phase
 
@@ -47,7 +49,7 @@ Findings and file citations live in [README.md](./README.md). This document is t
   - [`src/components/history/OrderHistory.tsx`](../../src/components/history/OrderHistory.tsx)
   - [`src/components/history/TradeHistory.tsx`](../../src/components/history/TradeHistory.tsx)
   - [`src/components/wallet/BankAccountList.tsx`](../../src/components/wallet/BankAccountList.tsx)
-  Status pills use feedback and trade tokens. Surfaces use `bg-card`, `border-border`, and the existing shadow scale. Delete the custom `gx-shimmer` skeleton inline styles; a plain token-colored block is enough until Phase 4 adds `skeleton`.
+    Status pills use feedback and trade tokens. Surfaces use `bg-card`, `border-border`, and the existing shadow scale. Delete the custom `gx-shimmer` skeleton inline styles; a plain token-colored block is enough until Phase 4 adds `skeleton`.
 - Replace hardcoded hex in:
   - [`src/components/auth/Signup.tsx`](../../src/components/auth/Signup.tsx)
   - [`src/components/auth/SignInForm.tsx`](../../src/components/auth/SignInForm.tsx)
@@ -101,15 +103,15 @@ Findings and file citations live in [README.md](./README.md). This document is t
 
 **Goal:** Server-render public pages only.
 
-| Keep `ssr` on | Set `ssr: false` |
-| --- | --- |
-| `/` | `/dashboard` |
-| `/about` | `/energy-assets` |
-| `/sign-in` | `/trade` |
-| `/sign-up` | `/wallet` |
-| Future marketing pages | `/profile` |
-|  | `/notifications` |
-|  | History routes |
+| Keep `ssr` on          | Set `ssr: false` |
+| ---------------------- | ---------------- |
+| `/`                    | `/dashboard`     |
+| `/about`               | `/energy-assets` |
+| `/sign-in`             | `/trade`         |
+| `/sign-up`             | `/wallet`        |
+| Future marketing pages | `/profile`       |
+|                        | `/notifications` |
+|                        | History routes   |
 
 **In this phase:**
 
