@@ -3,6 +3,7 @@ import { Eye, EyeOff, LoaderCircle } from 'lucide-react'
 import { z } from 'zod'
 
 import { Button } from '#/components/ui/button'
+import { Field, FieldError, FieldLabel } from '#/components/ui/field'
 import { Checkbox } from '#/components/ui/checkbox'
 import { Input } from '#/components/ui/input'
 import { cn } from '#/lib/utils'
@@ -312,26 +313,18 @@ function FormField({
   children: React.ReactNode
 }) {
   return (
-    <div className="space-y-1.5">
-      <label
+    <Field data-invalid={error ? true : undefined} className="gap-1.5">
+      <FieldLabel
         htmlFor={id}
-        className="block text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+        className="text-xs font-semibold tracking-wide text-muted-foreground uppercase"
       >
         {label}
-      </label>
+      </FieldLabel>
 
       {children}
 
-      {error ? (
-        <p
-          id={`${id}-error`}
-          role="alert"
-          className="text-xs text-feedback-error-text"
-        >
-          {error}
-        </p>
-      ) : null}
-    </div>
+      {error ? <FieldError id={`${id}-error`}>{error}</FieldError> : null}
+    </Field>
   )
 }
 

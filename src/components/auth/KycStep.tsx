@@ -11,6 +11,14 @@ import {
 
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '#/components/ui/select'
 import { cn } from '#/lib/utils'
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024
@@ -159,23 +167,25 @@ export function KycStep({ email, onComplete }: KycStepProps) {
 
           <div className="grid gap-4 sm:grid-cols-2">
             <FormField label="Country" htmlFor="country">
-              <select
-                id="country"
+              <Select
                 value={formData.country}
-                onChange={(event) => updateField('country', event.target.value)}
-                className={cn(
-                  inputClassName,
-                  'w-full appearance-none pr-9 outline-none',
-                  !formData.country && 'text-text-disabled',
-                )}
+                onValueChange={(value) => updateField('country', value ?? '')}
               >
-                <option value="">Select country</option>
-                {COUNTRIES.map((country) => (
-                  <option key={country} value={country}>
-                    {country}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger id="country" className="w-full">
+                  <SelectValue placeholder="Select country">
+                    {formData.country || 'Select country'}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {COUNTRIES.map((country) => (
+                      <SelectItem key={country} value={country}>
+                        {country}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </FormField>
 
             <FormField label="Date of birth" htmlFor="dateOfBirth">

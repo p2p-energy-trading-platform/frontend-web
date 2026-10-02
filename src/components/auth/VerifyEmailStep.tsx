@@ -8,7 +8,12 @@ import {
 } from 'lucide-react'
 
 import { Button } from '#/components/ui/button'
-import { cn } from '#/lib/utils'
+import { Field, FieldLabel } from '#/components/ui/field'
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from '#/components/ui/input-otp'
 
 const OTP_LENGTH = 6
 
@@ -23,78 +28,9 @@ export function VerifyEmailStep({
   onBack,
   onVerified,
 }: VerifyEmailStepProps) {
-  const [digits, setDigits] = React.useState(() =>
-    Array<string>(OTP_LENGTH).fill(''),
-  )
+  const [code, setCode] = React.useState('')
   const [isSubmitting, setIsSubmitting] = React.useState(false)
   const [resendMessage, setResendMessage] = React.useState('')
-  const inputRefs = React.useRef<Array<HTMLInputElement | null>>([])
-
-  const code = digits.join('')
-
-  function applyDigits(startIndex: number, value: string) {
-    const numericValue = value.replace(/\D/g, '')
-
-    if (!numericValue) {
-      setDigits((current) => {
-        const next = [...current]
-        next[startIndex] = ''
-        return next
-      })
-      return
-    }
-
-    setDigits((current) => {
-      const next = [...current]
-
-      numericValue
-        .slice(0, OTP_LENGTH - startIndex)
-        .split('')
-        .forEach((digit, offset) => {
-          next[startIndex + offset] = digit
-        })
-
-      return next
-    })
-
-    const nextIndex = Math.min(startIndex + numericValue.length, OTP_LENGTH - 1)
-    inputRefs.current[nextIndex]?.focus()
-    inputRefs.current[nextIndex]?.select()
-  }
-
-  function handleKeyDown(
-    event: React.KeyboardEvent<HTMLInputElement>,
-    index: number,
-  ) {
-    if (event.key === 'Backspace' && !digits[index] && index > 0) {
-      inputRefs.current[index - 1]?.focus()
-      return
-    }
-
-    if (event.key === 'ArrowLeft' && index > 0) {
-      event.preventDefault()
-      inputRefs.current[index - 1]?.focus()
-    }
-
-    if (event.key === 'ArrowRight' && index < OTP_LENGTH - 1) {
-      event.preventDefault()
-      inputRefs.current[index + 1]?.focus()
-    }
-  }
-
-  function handlePaste(event: React.ClipboardEvent<HTMLInputElement>) {
-    const pastedCode = event.clipboardData
-      .getData('text')
-      .replace(/\D/g, '')
-      .slice(0, OTP_LENGTH)
-
-    if (!pastedCode) {
-      return
-    }
-
-    event.preventDefault()
-    applyDigits(0, pastedCode)
-  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -113,9 +49,8 @@ export function VerifyEmailStep({
   }
 
   function handleResend() {
-    setDigits(Array<string>(OTP_LENGTH).fill(''))
+    setCode('')
     setResendMessage(`A new code was sent to ${email}.`)
-    inputRefs.current[0]?.focus()
   }
 
   return (
@@ -140,40 +75,29 @@ export function VerifyEmailStep({
       </p>
 
       <form onSubmit={handleSubmit} className="mt-8">
-        <fieldset>
-          <legend className="text-xs font-semibold uppercase tracking-[0.025em] text-muted-foreground">
+        <Field>
+          <FieldLabel className="text-xs font-semibold tracking-[0.025em] text-muted-foreground uppercase">
             6-digit verification code
-          </legend>
-
-          <div
-            className="mt-2 flex justify-center gap-2 sm:gap-3"
-            onPaste={handlePaste}
+          </FieldLabel>
+          <InputOTP
+            maxLength={OTP_LENGTH}
+            value={code}
+            onChange={setCode}
+            disabled={isSubmitting}
+            containerClassName="mt-2 justify-center"
+            aria-label="6-digit verification code"
           >
-            {digits.map((digit, index) => (
-              <input
-                key={index}
-                ref={(element) => {
-                  inputRefs.current[index] = element
-                }}
-                aria-label={`Verification code digit ${index + 1}`}
-                inputMode="numeric"
-                autoComplete={index === 0 ? 'one-time-code' : 'off'}
-                autoFocus={index === 0}
-                maxLength={1}
-                value={digit}
-                onChange={(event) => applyDigits(index, event.target.value)}
-                onKeyDown={(event) => handleKeyDown(event, index)}
-                onFocus={(event) => event.currentTarget.select()}
-                disabled={isSubmitting}
-                className={cn(
-                  'h-14 w-0 min-w-0 flex-1 rounded-2xl border-2 border-input bg-secondary text-center font-mono text-xl font-semibold text-foreground outline-none transition sm:h-16 sm:w-14 sm:flex-none',
-                  'focus:border-ring focus:ring-2 focus:ring-ring/20',
-                  'disabled:cursor-not-allowed disabled:opacity-50',
-                )}
-              />
-            ))}
-          </div>
-        </fieldset>
+            <InputOTPGroup>
+              {Array.from({ length: OTP_LENGTH }, (_, index) => (
+                <InputOTPSlot
+                  key={index}
+                  index={index}
+                  className="size-14 text-xl"
+                />
+              ))}
+            </InputOTPGroup>
+          </InputOTP>
+        </Field>
 
         <div className="mt-4 flex items-center gap-2 text-xs text-text-tertiary">
           <Clock3 className="size-3.5 text-accent" />
