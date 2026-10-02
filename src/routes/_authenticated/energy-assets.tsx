@@ -16,6 +16,7 @@ import {
 import { useState } from 'react'
 
 import { cn } from '#/lib/utils'
+import { Tabs, TabsList, TabsTrigger } from '#/components/ui/tabs'
 
 import { EnergyDateBar } from '#/components/energy-assets/EnergyStatBar'
 import { EnergyKpiStrip } from '#/components/energy-assets/EnergyKPIStrip'
@@ -154,40 +155,17 @@ function EnergyPage() {
       </div>
 
       {/* Generation & Usage / Assets tab toggle */}
-      <div
-        role="tablist"
-        aria-label="Energy views"
-        className="inline-flex w-fit rounded-lg border border-border-subtle bg-secondary p-1 text-sm font-medium"
+      <Tabs
+        value={tab}
+        onValueChange={(value) => {
+          if (value === 'usage' || value === 'assets') setTab(value)
+        }}
       >
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === 'usage'}
-          onClick={() => setTab('usage')}
-          className={cn(
-            'rounded-md px-4 py-1.5 transition',
-            tab === 'usage'
-              ? 'bg-card text-text-primary shadow-sm'
-              : 'text-text-tertiary hover:text-text-secondary',
-          )}
-        >
-          Generation &amp; Usage
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={tab === 'assets'}
-          onClick={() => setTab('assets')}
-          className={cn(
-            'rounded-md px-4 py-1.5 transition',
-            tab === 'assets'
-              ? 'bg-card text-text-primary shadow-sm'
-              : 'text-text-tertiary hover:text-text-secondary',
-          )}
-        >
-          Assets
-        </button>
-      </div>
+        <TabsList aria-label="Energy views">
+          <TabsTrigger value="usage">Generation &amp; Usage</TabsTrigger>
+          <TabsTrigger value="assets">Assets</TabsTrigger>
+        </TabsList>
+      </Tabs>
 
       {tab === 'usage' ? <GenerationUsageView /> : <AssetsView />}
     </main>
@@ -436,40 +414,17 @@ function AssetsView() {
   return (
     <div className="flex flex-col gap-4">
       {/* Devices / Automation sub-toggle */}
-      <div
-        role="tablist"
-        aria-label="Asset views"
-        className="inline-flex w-fit rounded-2xl bg-secondary p-1 text-sm font-semibold"
+      <Tabs
+        value={subTab}
+        onValueChange={(value) => {
+          if (value === 'devices' || value === 'automation') setSubTab(value)
+        }}
       >
-        <button
-          type="button"
-          role="tab"
-          aria-selected={subTab === 'devices'}
-          onClick={() => setSubTab('devices')}
-          className={cn(
-            'rounded-xl px-4 py-2 transition',
-            subTab === 'devices'
-              ? 'bg-card text-text-primary shadow-sm'
-              : 'text-text-tertiary hover:text-text-secondary',
-          )}
-        >
-          Devices
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={subTab === 'automation'}
-          onClick={() => setSubTab('automation')}
-          className={cn(
-            'rounded-xl px-4 py-2 transition',
-            subTab === 'automation'
-              ? 'bg-card text-text-primary shadow-sm'
-              : 'text-text-tertiary hover:text-text-secondary',
-          )}
-        >
-          Automation
-        </button>
-      </div>
+        <TabsList aria-label="Asset views">
+          <TabsTrigger value="devices">Devices</TabsTrigger>
+          <TabsTrigger value="automation">Automation</TabsTrigger>
+        </TabsList>
+      </Tabs>
 
       {subTab === 'devices' ? (
         <>
