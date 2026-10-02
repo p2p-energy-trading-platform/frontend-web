@@ -2,8 +2,8 @@ import { MoreHorizontal } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
 import { cn } from '#/lib/utils'
+import { Button } from '#/components/ui/button'
 import { Card, CardContent, CardHeader } from '../ui/card'
-import { Button } from '@base-ui/react/button'
 
 export type AssetHealth = 'Good' | 'Degraded' | 'Poor'
 export type AssetStatus = 'Online' | 'Idle' | 'Offline'
@@ -58,7 +58,6 @@ export function AssetCard({
 }: AssetCardProps) {
   return (
     <Card className="shadow-sm">
-
       <CardHeader>
         <div className="relative flex items-start justify-between">
           <div className="flex items-center gap-2.5">
@@ -77,25 +76,32 @@ export function AssetCard({
           </div>
 
           <div className="relative z-10 flex items-center gap-1.5">
-            <span className={cn('size-2 rounded-full', statusDotClass[status])} />
+            <span
+              className={cn('size-2 rounded-full', statusDotClass[status])}
+            />
             <span className="text-xs font-semibold text-text-tertiary">
               {status}
             </span>
             <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
               onClick={onMenuClick}
               aria-label="More options"
             >
-              <MoreHorizontal className="size-3.5" />
+              <MoreHorizontal />
             </Button>
           </div>
         </div>
-
       </CardHeader>
 
       <CardContent>
         <div className="relative mt-3 flex items-baseline gap-1.5">
           <span
-            className={cn('font-mono text-xl font-extrabold', statValueClassName)}
+            className={cn(
+              'font-mono text-xl font-extrabold',
+              statValueClassName,
+            )}
           >
             {statValue}
           </span>
@@ -132,7 +138,6 @@ export function AssetCard({
           </div>
         </div>
       </CardContent>
-        
     </Card>
   )
 }
