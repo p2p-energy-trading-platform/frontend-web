@@ -18,6 +18,7 @@ import {
   Zap,
 } from 'lucide-react'
 
+import { Avatar, AvatarBadge, AvatarFallback } from '#/components/ui/avatar'
 import { Badge } from '#/components/ui/badge'
 import { Button } from '#/components/ui/button'
 import {
@@ -288,13 +289,15 @@ export default function Profile() {
             </CardHeader>
             <CardContent>
               <div className="mb-6 flex items-center gap-4 rounded-xl border border-border bg-bg-elevated p-4">
-                <div className="relative flex size-16 shrink-0 items-center justify-center rounded-full border-[3px] border-accent/30 bg-accent text-base font-bold text-accent-foreground shadow-md ring-4 ring-accent/10">
-                  {profileUser.initials}
-                  <span
-                    className="absolute bottom-0.5 right-0.5 size-3.5 rounded-full border-[3px] border-bg-elevated bg-feedback-success-icon shadow-sm"
+                <Avatar className="size-16 border-[3px] border-accent/30 bg-accent shadow-md ring-4 ring-accent/10">
+                  <AvatarFallback className="bg-accent text-base font-bold text-accent-foreground">
+                    {profileUser.initials}
+                  </AvatarFallback>
+                  <AvatarBadge
+                    className="size-3.5 border-[3px] border-bg-elevated bg-feedback-success-icon"
                     aria-label="Online"
                   />
-                </div>
+                </Avatar>
                 <div className="min-w-0">
                   <p className="truncate font-heading text-base font-semibold">
                     {profile.fullName}
