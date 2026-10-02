@@ -2,14 +2,7 @@ import { Outlet, createFileRoute } from '@tanstack/react-router'
 
 import PageHeader from '#/components/page-components/Header'
 import Sidebar, { MobileNavButton } from '#/components/page-components/Sidebar'
-
-const user = {
-  name: 'Sara A.',
-  role: 'Prosumer',
-  initials: 'SA',
-  property: 'Villa 47',
-  zone: 'JLT Zone 4',
-}
+import { useSession } from '#/hooks/useProfile'
 
 export const Route = createFileRoute('/_authenticated')({
   ssr: false,
@@ -17,8 +10,10 @@ export const Route = createFileRoute('/_authenticated')({
 })
 
 function AuthenticatedLayout() {
+  const { user, source } = useSession()
+
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen bg-background" data-source={source}>
       <Sidebar user={user} />
       <div className="flex min-w-0 flex-1 flex-col">
         <PageHeader
@@ -26,7 +21,7 @@ function AuthenticatedLayout() {
           propertyName={user.property}
           zoneLabel={user.zone}
           meterOnline
-          notificationCount={3}
+          notificationCount={user.notificationCount}
           user={user}
         />
         <Outlet />
