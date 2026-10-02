@@ -3,9 +3,6 @@ import {
   kycCountries,
   registrationDelayMs,
   registrationSteps,
-  signInBenefits,
-  signInNetworkNodes,
-  signInTestimonial,
 } from '#/data/auth'
 import { saveKycStatus } from '#/lib/kyc-status'
 import type { KycStatus } from '#/components/auth/KycStep'
@@ -44,14 +41,5 @@ export function useKycOptions() {
   return {
     source: 'demo' as const,
     countries: kycCountries,
-  }
-}
-
-export function useSignInShowcase() {
-  return {
-    source: 'demo' as const,
-    benefits: signInBenefits,
-    networkNodes: signInNetworkNodes,
-    testimonial: signInTestimonial,
   }
 }

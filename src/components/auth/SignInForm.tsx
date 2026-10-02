@@ -1,24 +1,16 @@
 import * as React from 'react'
 import { Link, useNavigate } from '@tanstack/react-router'
-import { ArrowRight, Eye, EyeOff, Zap } from 'lucide-react'
+import { Zap } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
 import { Button } from '#/components/ui/button'
 import { Checkbox } from '#/components/ui/checkbox'
 import { Input } from '#/components/ui/input'
-import { useSignInShowcase } from '#/hooks/useAuth'
+import { signInBenefits, signInNetworkNodes, signInTestimonial } from '#/data/auth'
+import { PasswordInput } from '../ui/password-input'
+import { Field, FieldGroup, FieldLabel } from '../ui/field'
 
 export default function SignInForm() {
-  const navigate = useNavigate()
-  const [showPassword, setShowPassword] = React.useState(false)
-  const [email, setEmail] = React.useState('')
-  const [password, setPassword] = React.useState('')
-  const [rememberMe, setRememberMe] = React.useState(false)
-
-  function handleSignIn(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    void navigate({ to: '/dashboard' })
-  }
 
   return (
     <main className="min-h-screen overflow-y-auto bg-background text-foreground">
@@ -33,101 +25,55 @@ export default function SignInForm() {
               </p>
             </header>
 
-            <form onSubmit={handleSignIn} className="mt-7">
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-xs font-semibold uppercase tracking-wide text-muted-foreground"
-                >
-                  Email address
-                </label>
+            <form className="mt-7">
+              <FieldGroup>
+                <Field>
+                  <FieldLabel htmlFor='email'>Email address</FieldLabel>
+                  <Input
+                    id="email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="you@example.com"
+                    className="h-12 rounded-2xl px-4"
 
-                <Input
-                  id="email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="you@example.com"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  className="mt-1.5 h-12 rounded-2xl border-input bg-secondary px-4 text-sm text-foreground shadow-none placeholder:text-text-disabled focus-visible:border-ring focus-visible:ring-ring/20"
-                  required
-                />
-              </div>
-
-              <div className="mt-4">
-                <div className="flex items-center justify-between">
-                  <label
-                    htmlFor="password"
-                    className="text-xs font-semibold uppercase tracking-wide text-muted-foreground"
-                  >
-                    Password
-                  </label>
-
-                  <Button
+                    required
+                  />
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor='password'>Password</FieldLabel>
+                  
+                  <PasswordInput
+                    id="password"
+                    autoComplete="current-password"
+                    placeholder="Enter your password"
+                    className="h-12 rounded-2xl"
+                    innerClass='px-4'
+                    required
+                  />
+                </Field>
+                  
+                <Field orientation='horizontal'>
+                  <Checkbox
+                    id="rememberMe"
+                  />
+                  <FieldLabel htmlFor='rememberMe'>Remember me for 30 days</FieldLabel>
+                   <Button
                     type="button"
                     variant="link"
                     className="h-auto p-0 text-xs font-semibold text-accent"
                   >
                     Forgot password?
                   </Button>
-                </div>
-
-                <div className="relative mt-1.5">
-                  <Input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    autoComplete="current-password"
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    className="h-12 rounded-2xl border-input bg-secondary px-4 pr-12 text-sm text-foreground shadow-none placeholder:text-text-disabled focus-visible:border-ring focus-visible:ring-ring/20"
-                    required
-                  />
-
+                </Field>
+                <Field>
                   <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() =>
-                      setShowPassword((currentValue) => !currentValue)
-                    }
-                    aria-label={
-                      showPassword ? 'Hide password' : 'Show password'
-                    }
-                    className="absolute right-0 top-0 size-12 text-text-disabled hover:bg-transparent hover:text-muted-foreground"
+                    type="submit"
+                    className="h-12 w-full rounded-xl"
                   >
-                    {showPassword ? (
-                      <EyeOff className="size-4" />
-                    ) : (
-                      <Eye className="size-4" />
-                    )}
+                    Sign in
                   </Button>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2.5 py-4">
-                <Checkbox
-                  id="rememberMe"
-                  checked={rememberMe}
-                  onCheckedChange={(checked: boolean) => setRememberMe(checked)}
-                  className="size-5 rounded-[10px] border-2 border-input bg-transparent data-checked:border-accent data-checked:bg-accent"
-                />
-
-                <label
-                  htmlFor="rememberMe"
-                  className="cursor-pointer text-sm text-muted-foreground"
-                >
-                  Remember me for 30 days
-                </label>
-              </div>
-
-              <Button
-                type="submit"
-                disabled={!email || !password}
-                className="h-12 w-full rounded-xl bg-accent text-base font-semibold text-accent-foreground hover:bg-accent/90 disabled:bg-accent/30 disabled:text-text-tertiary"
-              >
-                Sign in
-              </Button>
+                </Field>
+              </FieldGroup>
 
               <div className="my-6 flex items-center gap-3 text-xs font-medium text-text-disabled">
                 <span className="h-px flex-1 bg-muted/50" />
@@ -204,20 +150,6 @@ export default function SignInForm() {
                   Create Account
                 </Link>
               </p>
-
-              <div className="mt-5 border-t border-border-subtle pt-5 text-center">
-                <p className="text-caption uppercase tracking-[0.08em] text-text-disabled">
-                  Demo shortcut
-                </p>
-
-                <Link
-                  to="/"
-                  className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-accent hover:underline"
-                >
-                  Skip to portal
-                  <ArrowRight className="size-3" />
-                </Link>
-              </div>
             </form>
           </div>
         </section>
@@ -229,8 +161,6 @@ export default function SignInForm() {
 }
 
 function SignInVisualPanel() {
-  const showcase = useSignInShowcase()
-
   return (
     <aside className="relative hidden min-h-screen overflow-hidden bg-sidebar px-10 py-10 lg:block">
       <div className="absolute -top-28 right-0 size-125 rounded-full bg-accent/10 blur-[90px]" />
@@ -279,7 +209,7 @@ function SignInVisualPanel() {
             <span className="mt-1 text-caption font-bold">GRIDX</span>
           </div>
 
-          {showcase.networkNodes.map(
+          {signInNetworkNodes.map(
             ({ label, sublabel, icon: Icon, className }) => (
               <div
                 key={label}
@@ -318,7 +248,7 @@ function SignInVisualPanel() {
         </div>
 
         <div className="mt-7 space-y-3">
-          {showcase.benefits.map((benefit) => (
+          {signInBenefits.map((benefit) => (
             <Benefit
               key={benefit.label}
               icon={benefit.icon}
@@ -331,21 +261,21 @@ function SignInVisualPanel() {
           <p className="text-xs tracking-[0.18em] text-chart-3">★★★★★</p>
 
           <p className="mt-2 text-sm italic leading-6 text-sidebar-foreground/80">
-            “{showcase.testimonial.quote}”
+            “{signInTestimonial.quote}”
           </p>
 
           <div className="mt-3 flex items-center gap-2.5">
             <span className="flex size-7 items-center justify-center rounded-full bg-accent/20 text-xs font-bold text-accent">
-              {showcase.testimonial.initials}
+              {signInTestimonial.initials}
             </span>
 
             <div>
               <p className="text-xs font-semibold text-white">
-                {showcase.testimonial.name}
+                {signInTestimonial.name}
               </p>
 
               <p className="text-caption leading-4 text-sidebar-foreground/55">
-                {showcase.testimonial.detail}
+                {signInTestimonial.detail}
               </p>
             </div>
           </div>
