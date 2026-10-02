@@ -26,6 +26,13 @@ import {
   TableRow,
 } from '#/components/ui/table'
 import { toast } from '#/components/ui/toast'
+import { useTrades } from '#/hooks/useHistory'
+import type {
+  HistoryViewState,
+  PresentedTrade,
+  TradeSide,
+  TradeStatus,
+} from '#/components/history/types'
 import {
   Search,
   Download,
@@ -40,185 +47,6 @@ import {
   ArrowUpRight,
   ArrowDownLeft,
 } from 'lucide-react'
-
-type TradeStatus = 'settled' | 'pending' | 'failed'
-type TradeSide = 'buy' | 'sell'
-type HistoryDemoState = 'populated' | 'loading' | 'error' | 'empty'
-
-interface TradeRecord {
-  id: string
-  executedAt: string
-  side: TradeSide
-  slot: string
-  kWh: number
-  basePrice: number
-  gridFee: number
-  effectivePrice: number
-  totalAed: number
-  zone: string
-  status: TradeStatus
-}
-
-// ─── Sample data ─────────────────────────────────────────────────────────────
-
-const TRADES: TradeRecord[] = [
-  {
-    id: 'GX-2847',
-    executedAt: '17 Jul · 14:32',
-    side: 'sell',
-    slot: '14:00–14:30',
-    kWh: 8.4,
-    basePrice: 0.38,
-    gridFee: 0.09,
-    effectivePrice: 0.38,
-    totalAed: 3.192,
-    zone: 'Participant · Dubai South',
-    status: 'settled',
-  },
-  {
-    id: 'GX-2846',
-    executedAt: '17 Jul · 13:15',
-    side: 'buy',
-    slot: '13:00–13:30',
-    kWh: 5.2,
-    basePrice: 0.41,
-    gridFee: 0.09,
-    effectivePrice: 0.41,
-    totalAed: 2.132,
-    zone: 'Participant · JLT Zone 3',
-    status: 'settled',
-  },
-  {
-    id: 'GX-2845',
-    executedAt: '17 Jul · 11:50',
-    side: 'sell',
-    slot: '12:00–12:30',
-    kWh: 12.0,
-    basePrice: 0.36,
-    gridFee: 0.09,
-    effectivePrice: 0.36,
-    totalAed: 4.32,
-    zone: 'Participant · Business Bay',
-    status: 'pending',
-  },
-  {
-    id: 'GX-2844',
-    executedAt: '16 Jul · 10:22',
-    side: 'buy',
-    slot: '10:00–10:30',
-    kWh: 3.8,
-    basePrice: 0.43,
-    gridFee: 0.09,
-    effectivePrice: 0.43,
-    totalAed: 1.634,
-    zone: 'Participant · Jumeirah',
-    status: 'settled',
-  },
-  {
-    id: 'GX-2843',
-    executedAt: '15 Jul · 09:05',
-    side: 'sell',
-    slot: '09:00–09:30',
-    kWh: 9.6,
-    basePrice: 0.37,
-    gridFee: 0.09,
-    effectivePrice: 0.37,
-    totalAed: 3.552,
-    zone: 'Participant · Al Quoz',
-    status: 'failed',
-  },
-  {
-    id: 'GX-2831',
-    executedAt: '14 Jul · 15:40',
-    side: 'sell',
-    slot: '15:30–16:00',
-    kWh: 11.2,
-    basePrice: 0.385,
-    gridFee: 0.09,
-    effectivePrice: 0.385,
-    totalAed: 4.312,
-    zone: 'Participant · Downtown',
-    status: 'settled',
-  },
-  {
-    id: 'GX-2822',
-    executedAt: '13 Jul · 12:18',
-    side: 'buy',
-    slot: '12:00–12:30',
-    kWh: 6.4,
-    basePrice: 0.395,
-    gridFee: 0.09,
-    effectivePrice: 0.395,
-    totalAed: 2.528,
-    zone: 'Participant · DIFC',
-    status: 'settled',
-  },
-  {
-    id: 'GX-2811',
-    executedAt: '12 Jul · 08:45',
-    side: 'sell',
-    slot: '08:30–09:00',
-    kWh: 7.8,
-    basePrice: 0.342,
-    gridFee: 0.09,
-    effectivePrice: 0.342,
-    totalAed: 2.668,
-    zone: 'Participant · Deira',
-    status: 'settled',
-  },
-  {
-    id: 'GX-2798',
-    executedAt: '11 Jul · 16:02',
-    side: 'sell',
-    slot: '16:00–16:30',
-    kWh: 9.6,
-    basePrice: 0.37,
-    gridFee: 0.09,
-    effectivePrice: 0.37,
-    totalAed: 3.552,
-    zone: 'Participant · Al Quoz',
-    status: 'settled',
-  },
-  {
-    id: 'GX-2784',
-    executedAt: '10 Jul · 11:30',
-    side: 'buy',
-    slot: '11:00–11:30',
-    kWh: 4.2,
-    basePrice: 0.42,
-    gridFee: 0.09,
-    effectivePrice: 0.42,
-    totalAed: 1.764,
-    zone: 'Participant · Marina',
-    status: 'settled',
-  },
-  {
-    id: 'GX-2771',
-    executedAt: '09 Jul · 13:55',
-    side: 'sell',
-    slot: '13:30–14:00',
-    kWh: 15.0,
-    basePrice: 0.368,
-    gridFee: 0.09,
-    effectivePrice: 0.368,
-    totalAed: 5.52,
-    zone: 'Participant · Yas Island',
-    status: 'settled',
-  },
-  {
-    id: 'GX-2760',
-    executedAt: '08 Jul · 10:10',
-    side: 'buy',
-    slot: '10:00–10:30',
-    kWh: 2.8,
-    basePrice: 0.44,
-    gridFee: 0.09,
-    effectivePrice: 0.44,
-    totalAed: 1.232,
-    zone: 'Participant · Saadiyat',
-    status: 'failed',
-  },
-]
 
 const PAGE_SIZE = 8
 
@@ -248,7 +76,7 @@ const TRADE_STATUS: Record<
 function StatusPill({ label, cls }: { label: string; cls: string }) {
   return (
     <span
-      className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold border ${cls}`}
+      className={`inline-flex items-center px-2 py-0.5 rounded-full text-caption font-semibold border ${cls}`}
     >
       {label}
     </span>
@@ -256,12 +84,12 @@ function StatusPill({ label, cls }: { label: string; cls: string }) {
 }
 function SidePill({ side }: { side: TradeSide }) {
   return side === 'sell' ? (
-    <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-trade-sell-background text-trade-sell-text">
+    <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-caption font-bold bg-trade-sell-background text-trade-sell-text">
       <ArrowUpRight size={9} />
       Sell
     </span>
   ) : (
-    <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-trade-buy-background text-trade-buy-text">
+    <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-caption font-bold bg-trade-buy-background text-trade-buy-text">
       <ArrowDownLeft size={9} />
       Buy
     </span>
@@ -274,9 +102,10 @@ function TradeDrawer({
   trade,
   onClose,
 }: {
-  trade: TradeRecord
+  trade: PresentedTrade
   onClose: () => void
 }) {
+  const { settlementNote } = useTrades()
   const st = TRADE_STATUS[trade.status]
   return (
     <Dialog
@@ -302,10 +131,10 @@ function TradeDrawer({
           <div className="bg-secondary rounded-xl border border-border divide-y divide-border text-sm">
             {[
               ['Energy', `${trade.kWh} kWh`],
-              ['Base price', `AED ${trade.basePrice.toFixed(3)}/kWh`],
-              ['Grid fee', `AED ${trade.gridFee.toFixed(3)}/kWh`],
-              ['Effective price', `AED ${trade.effectivePrice.toFixed(3)}/kWh`],
-              ['Total', `AED ${trade.totalAed.toFixed(3)}`],
+              ['Base price', trade.basePriceLabel],
+              ['Grid fee', trade.gridFeeLabel],
+              ['Effective price', trade.effectivePriceLabel],
+              ['Total', trade.totalLabel],
               ['Counterparty', trade.zone],
             ].map(([k, v]) => (
               <div key={k} className="flex justify-between px-4 py-2.5">
@@ -320,11 +149,7 @@ function TradeDrawer({
           </div>
           <Alert>
             <AlertCircle />
-            <AlertDescription>
-              Counterparty identity is anonymised per GridX trading rules. Grid
-              fee (AED 0.090/kWh) covers metering, settlement, and grid
-              infrastructure.
-            </AlertDescription>
+            <AlertDescription>{settlementNote}</AlertDescription>
           </Alert>
           {trade.status !== 'failed' && (
             <Button
@@ -351,12 +176,13 @@ function TradeDrawer({
 
 // ─── Trades tab ───────────────────────────────────────────────────────────────
 
-export function TradesTab({ state }: { state: HistoryDemoState }) {
+export function TradesTab({ state }: { state: HistoryViewState }) {
+  const { trades: TRADES, source } = useTrades()
   const [query, setQuery] = useState('')
   const [sideF, setSideF] = useState('all')
   const [statusF, setStatusF] = useState('all')
   const [page, setPage] = useState(1)
-  const [selected, setSelected] = useState<TradeRecord | null>(null)
+  const [selected, setSelected] = useState<PresentedTrade | null>(null)
 
   const filtered = useMemo(() => {
     return TRADES.filter((t) => {
@@ -372,7 +198,7 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
       }
       return true
     })
-  }, [query, sideF, statusF])
+  }, [query, sideF, statusF, TRADES])
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
   const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
@@ -413,7 +239,7 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
     )
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3" data-source={source}>
       {/* Filters */}
       <div className="flex flex-wrap gap-2">
         <div className="relative min-w-[160px] flex-1">
@@ -582,12 +408,12 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
                     {t.slot} · {t.executedAt}
                   </span>
                   <span className="font-mono font-bold text-foreground">
-                    AED {t.totalAed.toFixed(3)}
+                    {t.totalLabel}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-xs mt-1">
                   <span className="text-text-tertiary">
-                    {t.kWh} kWh · AED {t.effectivePrice.toFixed(3)}/kWh
+                    {t.kWh} kWh · {t.effectivePriceLabel}
                   </span>
                   <span className="text-text-tertiary truncate max-w-[120px]">
                     {t.zone}

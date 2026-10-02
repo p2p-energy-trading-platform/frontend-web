@@ -37,151 +37,13 @@ import {
   ArrowDownLeft,
 } from 'lucide-react'
 import { toast } from '#/components/ui/toast'
-
-type OrderStatus =
-  | 'open'
-  | 'partial'
-  | 'filled'
-  | 'cancelled'
-  | 'expired'
-  | 'pending'
-  | 'rejected'
-type TradeSide = 'buy' | 'sell'
-type OrderType = 'market' | 'limit'
-type HistoryDemoState = 'populated' | 'loading' | 'error' | 'empty'
-
-interface OrderRecord {
-  id: string
-  submittedAt: string
-  side: TradeSide
-  type: OrderType
-  requestedQty: number
-  filledQty: number
-  limitPrice?: number
-  slot: string
-  status: OrderStatus
-  closedAt?: string
-}
-
-// ─── Sample data ─────────────────────────────────────────────────────────────
-
-const ORDERS: OrderRecord[] = [
-  {
-    id: 'GX-2847',
-    submittedAt: '17 Jul · 14:28',
-    side: 'sell',
-    type: 'limit',
-    requestedQty: 8.4,
-    filledQty: 8.4,
-    limitPrice: 0.38,
-    slot: '14:00–14:30',
-    status: 'filled',
-    closedAt: '17 Jul · 14:32',
-  },
-  {
-    id: 'GX-2848',
-    submittedAt: '17 Jul · 14:30',
-    side: 'buy',
-    type: 'limit',
-    requestedQty: 6.0,
-    filledQty: 2.1,
-    limitPrice: 0.37,
-    slot: '15:00–15:30',
-    status: 'partial',
-  },
-  {
-    id: 'GX-2849',
-    submittedAt: '17 Jul · 14:31',
-    side: 'buy',
-    type: 'limit',
-    requestedQty: 8.0,
-    filledQty: 0,
-    limitPrice: 0.36,
-    slot: '15:00–15:30',
-    status: 'open',
-  },
-  {
-    id: 'GX-2846',
-    submittedAt: '17 Jul · 13:10',
-    side: 'buy',
-    type: 'market',
-    requestedQty: 5.2,
-    filledQty: 5.2,
-    slot: '13:00–13:30',
-    status: 'filled',
-    closedAt: '17 Jul · 13:15',
-  },
-  {
-    id: 'GX-2845',
-    submittedAt: '17 Jul · 11:45',
-    side: 'sell',
-    type: 'limit',
-    requestedQty: 12.0,
-    filledQty: 0,
-    limitPrice: 0.36,
-    slot: '12:00–12:30',
-    status: 'pending',
-  },
-  {
-    id: 'GX-2840',
-    submittedAt: '16 Jul · 09:00',
-    side: 'sell',
-    type: 'limit',
-    requestedQty: 10.0,
-    filledQty: 0,
-    limitPrice: 0.41,
-    slot: '09:00–09:30',
-    status: 'expired',
-    closedAt: '16 Jul · 09:30',
-  },
-  {
-    id: 'GX-2835',
-    submittedAt: '15 Jul · 08:55',
-    side: 'buy',
-    type: 'limit',
-    requestedQty: 5.0,
-    filledQty: 0,
-    limitPrice: 0.45,
-    slot: '09:00–09:30',
-    status: 'cancelled',
-    closedAt: '15 Jul · 09:05',
-  },
-  {
-    id: 'GX-2830',
-    submittedAt: '14 Jul · 15:35',
-    side: 'sell',
-    type: 'limit',
-    requestedQty: 11.2,
-    filledQty: 11.2,
-    limitPrice: 0.385,
-    slot: '15:30–16:00',
-    status: 'filled',
-    closedAt: '14 Jul · 15:40',
-  },
-  {
-    id: 'GX-2820',
-    submittedAt: '13 Jul · 08:00',
-    side: 'sell',
-    type: 'market',
-    requestedQty: 4.0,
-    filledQty: 0,
-    slot: '08:00–08:30',
-    status: 'rejected',
-    closedAt: '13 Jul · 08:01',
-  },
-  {
-    id: 'GX-2810',
-    submittedAt: '12 Jul · 08:40',
-    side: 'sell',
-    type: 'limit',
-    requestedQty: 7.8,
-    filledQty: 7.8,
-    limitPrice: 0.342,
-    slot: '08:30–09:00',
-    status: 'filled',
-    closedAt: '12 Jul · 08:45',
-  },
-]
+import { useOrders } from '#/hooks/useHistory'
+import type {
+  HistoryViewState,
+  OrderRecord,
+  OrderStatus,
+  TradeSide,
+} from '#/components/history/types'
 
 const PAGE_SIZE = 8
 
@@ -221,7 +83,7 @@ const ORDER_STATUS: Record<OrderStatus, { label: string; cls: string }> = {
 function StatusPill({ label, cls }: { label: string; cls: string }) {
   return (
     <span
-      className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold border ${cls}`}
+      className={`inline-flex items-center px-2 py-0.5 rounded-full text-caption font-semibold border ${cls}`}
     >
       {label}
     </span>
@@ -229,12 +91,12 @@ function StatusPill({ label, cls }: { label: string; cls: string }) {
 }
 function SidePill({ side }: { side: TradeSide }) {
   return side === 'sell' ? (
-    <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-trade-sell-background text-trade-sell-text">
+    <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-caption font-bold bg-trade-sell-background text-trade-sell-text">
       <ArrowUpRight size={9} />
       Sell
     </span>
   ) : (
-    <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-trade-buy-background text-trade-buy-text">
+    <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-caption font-bold bg-trade-buy-background text-trade-buy-text">
       <ArrowDownLeft size={9} />
       Buy
     </span>
@@ -252,6 +114,7 @@ function OrderDrawer({
   onClose: () => void
   onCancel: (id: string) => void
 }) {
+  const { limitPriceLabel } = useOrders()
   const st = ORDER_STATUS[order.status]
   const fillPct =
     order.requestedQty > 0 ? (order.filledQty / order.requestedQty) * 100 : 0
@@ -283,12 +146,7 @@ function OrderDrawer({
               ['Submitted', order.submittedAt],
               ['Requested qty', `${order.requestedQty} kWh`],
               ['Filled qty', `${order.filledQty} kWh`],
-              [
-                'Limit price',
-                order.limitPrice
-                  ? `AED ${order.limitPrice.toFixed(3)}/kWh`
-                  : 'Market',
-              ],
+              ['Limit price', limitPriceLabel(order.limitPrice)],
               ...(order.closedAt ? [['Closed', order.closedAt]] : []),
             ].map(([k, v]) => (
               <div key={k} className="flex justify-between px-4 py-2.5">
@@ -335,13 +193,14 @@ function OrderDrawer({
 
 // ─── Orders tab ───────────────────────────────────────────────────────────────
 
-export function OrdersTab({ state }: { state: HistoryDemoState }) {
+export function OrdersTab({ state }: { state: HistoryViewState }) {
+  const { orders: seedOrders, source } = useOrders()
   const [query, setQuery] = useState('')
   const [sideF, setSideF] = useState('all')
   const [statusF, setStatusF] = useState('all')
   const [page, setPage] = useState(1)
   const [selected, setSelected] = useState<OrderRecord | null>(null)
-  const [orders, setOrders] = useState(ORDERS)
+  const [orders, setOrders] = useState(seedOrders)
 
   const filtered = useMemo(
     () =>
@@ -411,7 +270,7 @@ export function OrdersTab({ state }: { state: HistoryDemoState }) {
     )
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3" data-source={source}>
       <div className="flex flex-wrap gap-2">
         <div className="relative min-w-[160px] flex-1">
           <Search
