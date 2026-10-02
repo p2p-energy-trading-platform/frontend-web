@@ -1,6 +1,15 @@
 import { LayoutGrid, List, Plus } from 'lucide-react'
 
-import { cn } from '#/lib/utils'
+import { Button } from '#/components/ui/button'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '#/components/ui/select'
+import { ToggleGroup, ToggleGroupItem } from '#/components/ui/toggle-group'
 
 export type AssetCategory =
   'All assets' | 'Solar' | 'Battery' | 'EV' | 'Charger' | 'Flex loads'
@@ -14,6 +23,12 @@ const CATEGORIES: Array<AssetCategory> = [
   'Charger',
   'Flex loads',
 ]
+
+const SORT_LABELS: Record<AssetSort, string> = {
+  name: 'Sort by name',
+  output: 'Sort by output',
+  status: 'Sort by status',
+}
 
 export interface AssetFilterBarProps {
   category: AssetCategory
@@ -38,75 +53,70 @@ export function AssetFilterBar({
 }: AssetFilterBarProps) {
   return (
     <div className="flex flex-wrap items-center gap-2 pt-4">
-      <div className="flex flex-wrap rounded-xl bg-secondary p-0.5 text-xs font-semibold">
-        {CATEGORIES.map((c) => (
-          <button
-            key={c}
-            type="button"
-            onClick={() => onCategoryChange(c)}
-            className={cn(
-              'rounded-[10px] px-2.5 py-1.5 transition',
-              c === category
-                ? 'bg-card text-text-primary shadow-sm'
-                : 'text-text-tertiary hover:text-text-secondary',
-            )}
-          >
-            {c}
-          </button>
-        ))}
-      </div>
-
-      <select
-        aria-label="Sort assets"
-        value={sort}
-        onChange={(event) => onSortChange(event.target.value as AssetSort)}
-        className="h-[30.5px] rounded-xl border border-border-subtle bg-card px-2.5 text-xs font-medium text-text-secondary"
+      <ToggleGroup
+        spacing={0}
+        variant="outline"
+        size="sm"
+        aria-label="Asset category"
+        value={[category]}
+        onValueChange={(values) => {
+          const next = values[0]
+          if (next) onCategoryChange(next as AssetCategory)
+        }}
       >
-        <option value="name">Sort by name</option>
-        <option value="output">Sort by output</option>
-        <option value="status">Sort by status</option>
-      </select>
+        {CATEGORIES.map((item) => (
+          <ToggleGroupItem key={item} value={item}>
+            {item}
+          </ToggleGroupItem>
+        ))}
+      </ToggleGroup>
+
+      <Select
+        value={sort}
+        onValueChange={(value) => {
+          if (value === 'name' || value === 'output' || value === 'status') {
+            onSortChange(value)
+          }
+        }}
+      >
+        <SelectTrigger aria-label="Sort assets">
+          <SelectValue>{SORT_LABELS[sort]}</SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem value="name">Sort by name</SelectItem>
+            <SelectItem value="output">Sort by output</SelectItem>
+            <SelectItem value="status">Sort by status</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
 
       <span className="text-xs text-text-tertiary">{deviceCount} devices</span>
 
       <div className="flex items-center gap-2 sm:ml-auto">
-        <div className="flex items-center gap-0.5 rounded-xl bg-secondary p-0.5">
-          <button
-            type="button"
-            onClick={() => onViewChange('grid')}
-            aria-label="Grid view"
-            className={cn(
-              'flex size-7 items-center justify-center rounded-[10px] transition',
-              view === 'grid'
-                ? 'bg-card text-text-primary shadow-sm'
-                : 'text-text-tertiary hover:text-text-secondary',
-            )}
-          >
-            <LayoutGrid className="size-3.5" />
-          </button>
-          <button
-            type="button"
-            onClick={() => onViewChange('list')}
-            aria-label="List view"
-            className={cn(
-              'flex size-7 items-center justify-center rounded-[10px] transition',
-              view === 'list'
-                ? 'bg-card text-text-primary shadow-sm'
-                : 'text-text-tertiary hover:text-text-secondary',
-            )}
-          >
-            <List className="size-3.5" />
-          </button>
-        </div>
-
-        <button
-          type="button"
-          onClick={onAddAsset}
-          className="inline-flex h-[30.5px] items-center gap-1.5 rounded-xl bg-accent px-3 text-xs font-semibold text-accent-foreground transition hover:brightness-95"
+        <ToggleGroup
+          spacing={0}
+          variant="outline"
+          size="sm"
+          aria-label="Asset layout"
+          value={[view]}
+          onValueChange={(values) => {
+            const next = values[0]
+            if (next === 'grid' || next === 'list') onViewChange(next)
+          }}
         >
-          <Plus className="size-3.5" />
+          <ToggleGroupItem value="grid" aria-label="Grid view">
+            <LayoutGrid />
+          </ToggleGroupItem>
+          <ToggleGroupItem value="list" aria-label="List view">
+            <List />
+          </ToggleGroupItem>
+        </ToggleGroup>
+
+        <Button type="button" size="sm" onClick={onAddAsset}>
+          <Plus data-icon="inline-start" />
           Add asset
-        </button>
+        </Button>
       </div>
     </div>
   )
