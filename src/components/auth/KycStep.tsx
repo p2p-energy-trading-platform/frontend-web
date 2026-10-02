@@ -19,8 +19,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '#/components/ui/select'
-import { cn } from '#/lib/utils'
 import { useKycOptions } from '#/hooks/useAuth'
+import { cn } from 'cn'
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024
 const ACCEPTED_FILE_TYPES = ['image/png', 'image/jpeg', 'application/pdf']

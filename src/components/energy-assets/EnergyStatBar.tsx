@@ -6,7 +6,7 @@ import {
   MapPin,
 } from 'lucide-react'
 
-import { cn } from '#/lib/utils'
+import { cn } from 'cn'
 
 export type EnergyPeriod = 'Day' | 'Week' | 'Month' | 'Custom'
 

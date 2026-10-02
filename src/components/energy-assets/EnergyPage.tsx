@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { cn } from '#/lib/utils'
+import { cn } from 'cn'
 import { Tabs, TabsList, TabsTrigger } from '#/components/ui/tabs'
 import { EnergyDateBar } from '#/components/energy-assets/EnergyStatBar'
 import { EnergyKpiStrip } from '#/components/energy-assets/EnergyKPIStrip'

@@ -2,7 +2,7 @@ import { ArrowDownLeft, ArrowUpRight, Home, Sun } from 'lucide-react'
 
 import { Badge } from '#/components/ui/badge'
 import { Card } from '#/components/ui/card'
-import { cn } from '#/lib/utils'
+import { cn } from 'cn'
 
 export interface EnergyPositionCardProps {
   netKwh: number

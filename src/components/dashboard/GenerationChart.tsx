@@ -1,6 +1,6 @@
 import { Card } from '#/components/ui/card'
 import { useGenerationSeries } from '#/hooks/useDashboard'
-import { cn } from '#/lib/utils'
+import { cn } from 'cn'
 
 // Replace with proper charts
 

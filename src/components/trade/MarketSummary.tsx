@@ -3,7 +3,7 @@ import { ArrowDownRight, ArrowUpRight, Clock3 } from 'lucide-react'
 import type { MarketSnapshot } from '#/lib/market-data'
 import { getPercentageChange } from '#/lib/market-data'
 import { useMarketLabels } from '#/hooks/useTrade'
-import { cn } from '#/lib/utils'
+import { cn } from 'cn'
 
 interface MarketSummaryProps {
   snapshot: MarketSnapshot

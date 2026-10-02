@@ -5,7 +5,7 @@ import {
   useRouterState,
 } from '@tanstack/react-router'
 
-import { cn } from '#/lib/utils'
+import { cn } from 'cn'
 
 export const Route = createFileRoute('/_authenticated/history')({
   component: HistoryLayout,

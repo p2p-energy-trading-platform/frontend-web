@@ -1,6 +1,6 @@
 import { Card } from '#/components/ui/card'
 import { useEnergySeries } from '#/hooks/useEnergyAssets'
-import { cn } from '#/lib/utils'
+import { cn } from 'cn'
 
 export interface EnergyTimeSeriesChartProps {
   /** 0-1 normalized values, one entry per series, left to right across the day */

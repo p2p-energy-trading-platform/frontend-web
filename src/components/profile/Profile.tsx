@@ -39,7 +39,7 @@ import {
   SelectValue,
 } from '#/components/ui/select'
 import { Switch } from '#/components/ui/switch'
-import { cn } from '#/lib/utils'
+import { cn } from 'cn'
 import { useProfile } from '#/hooks/useProfile'
 import type { PersonalProfile, TradingPreferences } from '#/hooks/useProfile'
 

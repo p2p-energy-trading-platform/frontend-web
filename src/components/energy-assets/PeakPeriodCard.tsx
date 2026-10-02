@@ -1,6 +1,6 @@
 import { Card } from '#/components/ui/card'
 import { usePeakPeriods } from '#/hooks/useEnergyAssets'
-import { cn } from '#/lib/utils'
+import { cn } from 'cn'
 
 export interface PeakPeriodsCardProps {
   /** 7 rows (Mon-Sun) x N hourly columns, each 0-1 intensity */

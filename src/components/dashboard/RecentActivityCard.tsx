@@ -2,8 +2,8 @@ import { ArrowUpRight } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
 import { Card } from '#/components/ui/card'
-import { cn } from '#/lib/utils'
 import { Button } from '../ui/button'
+import { cn } from 'cn'
 
 export interface ActivityItem {
   icon: LucideIcon

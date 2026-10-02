@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { cn } from '#/lib/utils'
+import { cn } from 'cn'
 import { useCandles, useMarket, useOrderBook } from '#/hooks/useTrade'
 
 import { MarketChart } from './MarketChart'

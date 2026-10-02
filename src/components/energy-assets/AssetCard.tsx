@@ -1,9 +1,9 @@
 import { MoreHorizontal } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
-import { cn } from '#/lib/utils'
 import { Button } from '#/components/ui/button'
 import { Card, CardContent, CardHeader } from '../ui/card'
+import { cn } from 'cn'
 
 export type AssetHealth = 'Good' | 'Degraded' | 'Poor'
 export type AssetStatus = 'Online' | 'Idle' | 'Offline'
