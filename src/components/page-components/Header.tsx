@@ -37,12 +37,10 @@ interface PageHeaderProps {
 export default function PageHeader({
   leading,
   propertyName,
-  zoneLabel,
   meterOnline = true,
   notificationCount = 0,
   user,
   dashboardHref = '/dashboard',
-  onZoneClick,
   onHelpClick,
   onNotificationsClick,
   onUserMenuClick,
@@ -72,15 +70,6 @@ export default function PageHeader({
           </span>
           <span className="text-sm font-semibold">{propertyName}</span>
         </Link>
-
-        {/* <button
-          type="button"
-          onClick={onZoneClick}
-          className="inline-flex items-center gap-1 rounded-full border border-border-subtle bg-secondary px-2.5 py-1 text-xs font-medium text-text-secondary transition hover:bg-muted"
-        >
-          {zoneLabel}
-          <ChevronDown className="size-3.5" />
-        </button> */}
 
         <Badge
           variant="outline"
