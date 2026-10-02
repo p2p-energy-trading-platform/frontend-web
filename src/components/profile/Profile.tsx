@@ -17,6 +17,7 @@ import {
   UserRound,
   Zap,
 } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 
 import { Avatar, AvatarBadge, AvatarFallback } from '#/components/ui/avatar'
 import { Badge } from '#/components/ui/badge'
@@ -38,49 +39,16 @@ import {
   SelectValue,
 } from '#/components/ui/select'
 import { Switch } from '#/components/ui/switch'
-import type { KycStatus } from '#/components/auth/KycStep'
-import { getKycStatus } from '#/lib/kyc-status'
-import { getSmartMeterStatus } from '#/lib/smart-meter-status'
-import type { SmartMeterStatus } from '#/lib/smart-meter-status'
 import { cn } from '#/lib/utils'
+import { useProfile } from '#/hooks/useProfile'
+import type { PersonalProfile, TradingPreferences } from '#/hooks/useProfile'
 
 type Feedback = { tone: 'success' | 'error'; message: string } | null
 
-type PersonalProfile = {
-  fullName: string
-  email: string
-  countryCode: string
-  phone: string
-  country: string
-}
-
-type TradingPreferences = {
-  orderType: string
-  priceMode: string
-  energyLimit: string
-  tradeValue: string
-  recommendPrice: boolean
-  dispatchAutomation: boolean
-}
-
-const PROFILE_STORAGE_KEY = 'gridx-personal-profile'
-const TRADING_PREFERENCES_STORAGE_KEY = 'gridx-trading-preferences'
-
-const defaultProfile: PersonalProfile = {
-  fullName: 'Sara Al-Nuaimi',
-  email: 'sara.alnuaimi@example.ae',
-  countryCode: '+971',
-  phone: '50 123 4567',
-  country: 'United Arab Emirates',
-}
-
-const defaultTradingPreferences: TradingPreferences = {
-  orderType: 'limit',
-  priceMode: 'recommended',
-  energyLimit: '450',
-  tradeValue: '1000',
-  recommendPrice: true,
-  dispatchAutomation: false,
+const integrationIcons: Record<string, LucideIcon> = {
+  'Utility Smart Meter API': RadioTower,
+  'Email delivery': Mail,
+  'Payment rail': CircleDollarSign,
 }
 
 function getInitials(name: string) {
@@ -94,45 +62,24 @@ function getInitials(name: string) {
   return initials || 'U'
 }
 
-const user = {
-  name: 'Sara Al-Nuaimi',
-  role: 'Prosumer',
-  initials: 'SA',
-  property: 'Villa 47',
-  zone: 'JLT Zone 4',
-}
-
 export default function Profile() {
-  const [kycStatus, setKycStatus] = React.useState<KycStatus>('not-submitted')
-  const [meterStatus, setMeterStatus] =
-    React.useState<SmartMeterStatus>('skipped')
-  const [profile, setProfile] = React.useState<PersonalProfile>(() => {
-    if (typeof window === 'undefined') return defaultProfile
-
-    try {
-      const savedProfile = window.localStorage.getItem(PROFILE_STORAGE_KEY)
-      return savedProfile
-        ? { ...defaultProfile, ...JSON.parse(savedProfile) }
-        : defaultProfile
-    } catch {
-      return defaultProfile
-    }
-  })
-  const [tradingPreferences, setTradingPreferences] =
-    React.useState<TradingPreferences>(() => {
-      if (typeof window === 'undefined') return defaultTradingPreferences
-
-      try {
-        const savedPreferences = window.localStorage.getItem(
-          TRADING_PREFERENCES_STORAGE_KEY,
-        )
-        return savedPreferences
-          ? { ...defaultTradingPreferences, ...JSON.parse(savedPreferences) }
-          : defaultTradingPreferences
-      } catch {
-        return defaultTradingPreferences
-      }
-    })
+  const profileState = useProfile()
+  const {
+    user,
+    profile,
+    setProfile,
+    tradingPreferences,
+    setTradingPreferences,
+    kycStatus,
+    meterStatus,
+    countries,
+    countryCodes,
+    integrations,
+    tradeValueCurrency,
+    saveProfile: persistProfile,
+    saveTradingPreferences: persistTradingPreferences,
+    source,
+  } = profileState
   const [profileFeedback, setProfileFeedback] = React.useState<Feedback>(null)
   const [passwordFeedback, setPasswordFeedback] = React.useState<Feedback>(null)
   const [preferencesFeedback, setPreferencesFeedback] =
@@ -140,11 +87,6 @@ export default function Profile() {
   const [integrationFeedback, setIntegrationFeedback] =
     React.useState<Feedback>(null)
   const [showPasswords, setShowPasswords] = React.useState(false)
-
-  React.useEffect(() => {
-    setKycStatus(getKycStatus())
-    setMeterStatus(getSmartMeterStatus())
-  }, [])
 
   const kycStatusDetails = {
     'not-submitted': {
@@ -181,7 +123,7 @@ export default function Profile() {
     event.preventDefault()
 
     try {
-      window.localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(profile))
+      persistProfile()
       setProfileFeedback({
         tone: 'success',
         message: 'Your profile information has been updated.',
@@ -214,10 +156,7 @@ export default function Profile() {
     event.preventDefault()
 
     try {
-      window.localStorage.setItem(
-        TRADING_PREFERENCES_STORAGE_KEY,
-        JSON.stringify(tradingPreferences),
-      )
+      persistTradingPreferences()
       setPreferencesFeedback({
         tone: 'success',
         message: 'Trading preferences saved.',
@@ -239,17 +178,8 @@ export default function Profile() {
   function updatePassword(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const values = new FormData(event.currentTarget)
-    const current = String(values.get('currentPassword'))
     const next = String(values.get('newPassword'))
     const confirmation = String(values.get('confirmPassword'))
-
-    if (current !== 'GridX123!') {
-      setPasswordFeedback({
-        tone: 'error',
-        message: 'The current password you entered is incorrect.',
-      })
-      return
-    }
 
     if (next !== confirmation) {
       setPasswordFeedback({
@@ -267,11 +197,12 @@ export default function Profile() {
   }
 
   return (
-    <main className="mx-auto w-full max-w-340 bg-bg-canvas px-4 py-6 text-text-primary sm:px-6 lg:px-8 lg:py-8">
+    <main
+      className="mx-auto w-full max-w-340 bg-bg-canvas px-4 py-6 text-text-primary sm:px-6 lg:px-8 lg:py-8"
+      data-source={source}
+    >
       <div className="mb-7 max-w-3xl">
-        <h1 className="font-heading text-2xl font-bold sm:text-3xl">
-          Profile settings
-        </h1>
+        <h1 className="font-heading text-heading-1">Profile settings</h1>
         <p className="mt-1 text-sm text-text-tertiary">
           Manage your account, security, trading preferences and connected
           services.
@@ -354,10 +285,11 @@ export default function Profile() {
                           <SelectValue>{profile.countryCode}</SelectValue>
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="+971">UAE (+971)</SelectItem>
-                          <SelectItem value="+60">Malaysia (+60)</SelectItem>
-                          <SelectItem value="+94">Sri Lanka (+94)</SelectItem>
-                          <SelectItem value="+65">Singapore (+65)</SelectItem>
+                          {countryCodes.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                       <Input
@@ -385,12 +317,11 @@ export default function Profile() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="United Arab Emirates">
-                          United Arab Emirates
-                        </SelectItem>
-                        <SelectItem value="Malaysia">Malaysia</SelectItem>
-                        <SelectItem value="Sri Lanka">Sri Lanka</SelectItem>
-                        <SelectItem value="Singapore">Singapore</SelectItem>
+                        {countries.map((country) => (
+                          <SelectItem key={country} value={country}>
+                            {country}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </Field>
@@ -447,9 +378,6 @@ export default function Profile() {
                     </Field>
                   ))}
                 </div>
-                <p className="text-xs text-text-tertiary">
-                  Demo current password: GridX123!
-                </p>
                 <FormActions
                   feedback={passwordFeedback}
                   buttonLabel="Update password"
@@ -543,7 +471,7 @@ export default function Profile() {
                   <Field label="Max Trade Value" htmlFor="tradeValue">
                     <div className="relative">
                       <span className="pointer-events-none absolute left-3 top-2.5 text-xs text-text-tertiary">
-                        RM
+                        {tradeValueCurrency}
                       </span>
                       <Input
                         id="tradeValue"
@@ -605,30 +533,13 @@ export default function Profile() {
             </CardHeader>
             <CardContent className="space-y-5">
               <div className="divide-y divide-border rounded-xl border border-border">
-                <IntegrationRow
-                  icon={RadioTower}
-                  name="Utility Smart Meter API"
-                  description="Connection request not approved yet"
-                  status="Pending approval"
-                  action="Retry request"
-                  tone="warning"
-                />
-                <IntegrationRow
-                  icon={Mail}
-                  name="Email delivery"
-                  description="Account and trading notifications enabled"
-                  status="Connected"
-                  action="Manage"
-                  tone="success"
-                />
-                <IntegrationRow
-                  icon={CircleDollarSign}
-                  name="Payment rail"
-                  description="Connect a payment provider for settlements"
-                  status="Not connected"
-                  action="Connect"
-                  tone="neutral"
-                />
+                {integrations.map((integration) => (
+                  <IntegrationRow
+                    key={integration.name}
+                    icon={integrationIcons[integration.name]}
+                    {...integration}
+                  />
+                ))}
               </div>
               <FormActions
                 feedback={integrationFeedback}
@@ -657,11 +568,7 @@ export default function Profile() {
                 icon={UserRound}
                 label="Trading Mode"
                 value={user.role}
-                description={
-                  user.role === 'Prosumer'
-                    ? 'Can buy and sell verified energy'
-                    : 'Can buy verified energy'
-                }
+                description="Can buy and sell verified energy"
                 tone="success"
               />
               <StatusRow
