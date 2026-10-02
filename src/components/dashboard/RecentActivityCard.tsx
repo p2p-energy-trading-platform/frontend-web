@@ -29,7 +29,7 @@ export function RecentActivityCard({
         <Button
           // type="button"
           onClick={onViewAll}
-          variant={"link"}
+          variant={'link'}
           // className="flex items-center gap-0.5 text-sm font-medium text-accent hover:underline"
         >
           View all
