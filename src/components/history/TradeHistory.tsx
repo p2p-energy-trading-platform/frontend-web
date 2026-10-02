@@ -1,12 +1,36 @@
 import { useState, useMemo } from 'react'
+import { Alert, AlertDescription } from '#/components/ui/alert'
 import { Button } from '#/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '#/components/ui/dialog'
+import { Input } from '#/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '#/components/ui/select'
+import { Skeleton } from '#/components/ui/skeleton'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '#/components/ui/table'
+import { toast } from '#/components/ui/toast'
 import {
   Search,
   Download,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
-  X,
   AlertCircle,
   XCircle,
   Eye,
@@ -16,7 +40,6 @@ import {
   ArrowUpRight,
   ArrowDownLeft,
 } from 'lucide-react'
-import { toast } from 'sonner'
 
 type TradeStatus = 'settled' | 'pending' | 'failed'
 type TradeSide = 'buy' | 'sell'
@@ -256,29 +279,20 @@ function TradeDrawer({
 }) {
   const st = TRADE_STATUS[trade.status]
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
-      onClick={onClose}
+    <Dialog
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose()
+      }}
     >
-      <div
-        className="bg-card rounded-2xl border border-border shadow-lg w-full max-w-md"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between px-5 py-4 border-b border-border">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-bold text-foreground font-mono">
-              {trade.id}
-            </span>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2 font-mono">
+            {trade.id}
             <StatusPill {...st} />
-          </div>
-          <button
-            onClick={onClose}
-            className="text-text-tertiary hover:text-foreground transition-colors"
-          >
-            <X size={17} />
-          </button>
-        </div>
-        <div className="p-5 space-y-4">
+          </DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
           <div className="flex items-center gap-2">
             <SidePill side={trade.side} />
             <span className="text-sm text-text-secondary">
@@ -304,19 +318,24 @@ function TradeDrawer({
               </div>
             ))}
           </div>
-          <p className="text-[11px] text-text-tertiary flex items-start gap-1.5">
-            <AlertCircle size={11} className="shrink-0 mt-0.5" />
-            Counterparty identity is anonymised per GridX trading rules. Grid
-            fee (AED 0.090/kWh) covers metering, settlement, and grid
-            infrastructure.
-          </p>
+          <Alert>
+            <AlertCircle />
+            <AlertDescription>
+              Counterparty identity is anonymised per GridX trading rules. Grid
+              fee (AED 0.090/kWh) covers metering, settlement, and grid
+              infrastructure.
+            </AlertDescription>
+          </Alert>
           {trade.status !== 'failed' && (
             <Button
               variant="secondary"
               size="sm"
               className="w-full"
               onClick={() => {
-                toast.success('Receipt downloaded.')
+                toast.add({
+                  type: 'success',
+                  title: 'Receipt downloaded.',
+                })
                 onClose()
               }}
             >
@@ -325,8 +344,8 @@ function TradeDrawer({
             </Button>
           )}
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 
@@ -376,7 +395,7 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
           <Button
             variant="secondary"
             size="sm"
-            onClick={() => toast.info('Retrying…')}
+            onClick={() => toast.add({ type: 'info', title: 'Retrying…' })}
           >
             <RefreshCw size={12} />
             Retry
@@ -397,73 +416,59 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
     <div className="space-y-3">
       {/* Filters */}
       <div className="flex flex-wrap gap-2">
-        <div className="relative flex-1 min-w-[160px]">
+        <div className="relative min-w-[160px] flex-1">
           <Search
             size={13}
-            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-text-tertiary pointer-events-none"
+            className="pointer-events-none absolute top-1/2 left-2.5 -translate-y-1/2 text-text-tertiary"
           />
-          <input
+          <Input
             value={query}
             onChange={(e) => {
               setQuery(e.target.value)
               setPage(1)
             }}
             placeholder="Search ID, zone, slot…"
-            className="w-full bg-background pl-8 pr-3 py-2 text-sm text-text-primary border border-input rounded-lg outline-none focus:border-accent focus:ring-2 focus:ring-accent/15 transition-all"
+            aria-label="Search trades"
+            className="bg-background pl-8"
           />
         </div>
-        {[
-          {
-            val: sideF,
-            set: (v: string) => {
-              setSideF(v)
-              setPage(1)
-            },
-            opts: [
-              { v: 'all', l: 'All sides' },
-              { v: 'sell', l: 'Sell' },
-              { v: 'buy', l: 'Buy' },
-            ],
-          },
-          {
-            val: statusF,
-            set: (v: string) => {
-              setStatusF(v)
-              setPage(1)
-            },
-            opts: [
-              { v: 'all', l: 'All status' },
-              { v: 'settled', l: 'Settled' },
-              { v: 'pending', l: 'Pending' },
-              { v: 'failed', l: 'Failed' },
-            ],
-          },
-        ].map((f, fi) => (
-          <div key={fi} className="relative">
-            <select
-              value={f.val}
-              onChange={(e) => f.set(e.target.value)}
-              className="appearance-none bg-background pl-3 pr-8 py-2 text-sm text-text-primary border border-input rounded-lg outline-none focus:border-accent focus:ring-2 focus:ring-accent/15 cursor-pointer"
-            >
-              {f.opts.map((o) => (
-                <option key={o.v} value={o.v}>
-                  {o.l}
-                </option>
-              ))}
-            </select>
-            <ChevronDown
-              size={12}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-text-tertiary pointer-events-none"
-            />
-          </div>
-        ))}
-        <button
-          onClick={() => toast.success('CSV export started.')}
-          className="flex items-center gap-1.5 px-3 py-2 text-sm border border-border rounded-lg text-text-secondary hover:text-foreground hover:bg-secondary transition-all font-medium"
+        <FilterSelect
+          label="Filter by side"
+          value={sideF}
+          onValueChange={(value) => {
+            setSideF(value)
+            setPage(1)
+          }}
+          options={[
+            { v: 'all', l: 'All sides' },
+            { v: 'sell', l: 'Sell' },
+            { v: 'buy', l: 'Buy' },
+          ]}
+        />
+        <FilterSelect
+          label="Filter by status"
+          value={statusF}
+          onValueChange={(value) => {
+            setStatusF(value)
+            setPage(1)
+          }}
+          options={[
+            { v: 'all', l: 'All status' },
+            { v: 'settled', l: 'Settled' },
+            { v: 'pending', l: 'Pending' },
+            { v: 'failed', l: 'Failed' },
+          ]}
+        />
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() =>
+            toast.add({ type: 'success', title: 'CSV export started.' })
+          }
         >
-          <Download size={13} />
+          <Download />
           Export
-        </button>
+        </Button>
       </div>
 
       {filtered.length === 0 ? (
@@ -475,86 +480,84 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
       ) : (
         <>
           {/* Desktop table */}
-          <div className="hidden md:block bg-card rounded-2xl border border-border overflow-hidden shadow-sm">
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs">
-                <thead>
-                  <tr className="border-b border-border bg-secondary/60">
-                    {[
-                      'Time',
-                      'ID',
-                      'Side',
-                      'Slot',
-                      'Energy',
-                      'Base',
-                      'Fee',
-                      'Eff. price',
-                      'Total',
-                      'Zone',
-                      'Status',
-                      '',
-                    ].map((h) => (
-                      <th
-                        key={h}
-                        className="px-3 py-2.5 text-left font-semibold text-text-tertiary uppercase tracking-wide whitespace-nowrap"
-                      >
-                        {h}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  {paged.map((t) => (
-                    <tr
-                      key={t.id}
-                      className="hover:bg-secondary/40 transition-colors"
+          <div className="hidden overflow-hidden rounded-2xl border border-border bg-card shadow-sm md:block">
+            <Table className="text-xs">
+              <TableHeader>
+                <TableRow className="border-border bg-secondary/60 hover:bg-secondary/60">
+                  {[
+                    'Time',
+                    'ID',
+                    'Side',
+                    'Slot',
+                    'Energy',
+                    'Base',
+                    'Fee',
+                    'Eff. price',
+                    'Total',
+                    'Zone',
+                    'Status',
+                    '',
+                  ].map((h) => (
+                    <TableHead
+                      key={h || 'actions'}
+                      className="px-3 py-2.5 text-left font-semibold tracking-wide whitespace-nowrap text-text-tertiary uppercase"
                     >
-                      <td className="px-3 py-3 text-text-secondary whitespace-nowrap">
-                        {t.executedAt}
-                      </td>
-                      <td className="px-3 py-3 font-mono font-semibold text-foreground">
-                        {t.id}
-                      </td>
-                      <td className="px-3 py-3">
-                        <SidePill side={t.side} />
-                      </td>
-                      <td className="px-3 py-3 font-mono text-text-primary whitespace-nowrap">
-                        {t.slot}
-                      </td>
-                      <td className="px-3 py-3 font-mono text-foreground">
-                        {t.kWh}
-                      </td>
-                      <td className="px-3 py-3 font-mono text-foreground">
-                        {t.basePrice.toFixed(3)}
-                      </td>
-                      <td className="px-3 py-3 font-mono text-text-secondary">
-                        {t.gridFee.toFixed(3)}
-                      </td>
-                      <td className="px-3 py-3 font-mono text-foreground">
-                        {t.effectivePrice.toFixed(3)}
-                      </td>
-                      <td className="px-3 py-3 font-mono font-semibold text-foreground">
-                        {t.totalAed.toFixed(3)}
-                      </td>
-                      <td className="px-3 py-3 text-text-secondary max-w-[120px] truncate">
-                        {t.zone}
-                      </td>
-                      <td className="px-3 py-3">
-                        <StatusPill {...TRADE_STATUS[t.status]} />
-                      </td>
-                      <td className="px-3 py-3">
-                        <button
-                          onClick={() => setSelected(t)}
-                          className="p-1.5 rounded-lg text-text-tertiary hover:text-foreground hover:bg-secondary transition-all"
-                        >
-                          <Eye size={13} />
-                        </button>
-                      </td>
-                    </tr>
+                      {h || 'Actions'}
+                    </TableHead>
                   ))}
-                </tbody>
-              </table>
-            </div>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {paged.map((t) => (
+                  <TableRow key={t.id} className="border-border">
+                    <TableCell className="px-3 py-3 whitespace-nowrap text-text-secondary">
+                      {t.executedAt}
+                    </TableCell>
+                    <TableCell className="px-3 py-3 font-mono font-semibold text-foreground">
+                      {t.id}
+                    </TableCell>
+                    <TableCell className="px-3 py-3">
+                      <SidePill side={t.side} />
+                    </TableCell>
+                    <TableCell className="px-3 py-3 font-mono whitespace-nowrap text-text-primary">
+                      {t.slot}
+                    </TableCell>
+                    <TableCell className="px-3 py-3 font-mono text-foreground">
+                      {t.kWh}
+                    </TableCell>
+                    <TableCell className="px-3 py-3 font-mono text-foreground">
+                      {t.basePrice.toFixed(3)}
+                    </TableCell>
+                    <TableCell className="px-3 py-3 font-mono text-text-secondary">
+                      {t.gridFee.toFixed(3)}
+                    </TableCell>
+                    <TableCell className="px-3 py-3 font-mono text-foreground">
+                      {t.effectivePrice.toFixed(3)}
+                    </TableCell>
+                    <TableCell className="px-3 py-3 font-mono font-semibold text-foreground">
+                      {t.totalAed.toFixed(3)}
+                    </TableCell>
+                    <TableCell className="max-w-[120px] truncate px-3 py-3 text-text-secondary">
+                      {t.zone}
+                    </TableCell>
+                    <TableCell className="px-3 py-3">
+                      <StatusPill {...TRADE_STATUS[t.status]} />
+                    </TableCell>
+                    <TableCell className="px-3 py-3">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon-sm"
+                        aria-label={`View trade ${t.id}`}
+                        onClick={() => setSelected(t)}
+                      >
+                        <Eye />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
 
           {/* Mobile cards */}
@@ -601,20 +604,26 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
               {page} of {totalPages}
             </p>
             <div className="flex items-center gap-1">
-              <button
+              <Button
+                type="button"
+                variant="outline"
+                size="icon-sm"
+                aria-label="Previous page"
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="p-1.5 rounded-lg border border-border text-text-tertiary hover:text-foreground hover:bg-secondary transition-all disabled:opacity-30 disabled:cursor-not-allowed"
               >
-                <ChevronLeft size={14} />
-              </button>
-              <button
+                <ChevronLeft />
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon-sm"
+                aria-label="Next page"
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page === totalPages}
-                className="p-1.5 rounded-lg border border-border text-text-tertiary hover:text-foreground hover:bg-secondary transition-all disabled:opacity-30 disabled:cursor-not-allowed"
               >
-                <ChevronRight size={14} />
-              </button>
+                <ChevronRight />
+              </Button>
             </div>
           </div>
         </>
@@ -626,11 +635,40 @@ export function TradesTab({ state }: { state: HistoryDemoState }) {
   )
 }
 
-{
-  /* TODO: Need to check */
-}
-function Skeleton({ className = '' }: { className?: string }) {
-  return <div className={`rounded-lg bg-muted ${className}`} />
+function FilterSelect({
+  label,
+  value,
+  onValueChange,
+  options,
+}: {
+  label: string
+  value: string
+  onValueChange: (value: string) => void
+  options: Array<{ v: string; l: string }>
+}) {
+  const selected = options.find((option) => option.v === value)
+
+  return (
+    <Select
+      value={value}
+      onValueChange={(next) => {
+        if (next) onValueChange(next)
+      }}
+    >
+      <SelectTrigger aria-label={label}>
+        <SelectValue>{selected?.l}</SelectValue>
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          {options.map((option) => (
+            <SelectItem key={option.v} value={option.v}>
+              {option.l}
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  )
 }
 
 // ─── EmptyState ───────────────────────────────────────────────────────────────

@@ -1,12 +1,34 @@
 import { useState, useMemo } from 'react'
 import { Button } from '#/components/ui/button'
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '#/components/ui/dialog'
+import { Input } from '#/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '#/components/ui/select'
+import { Skeleton } from '#/components/ui/skeleton'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '#/components/ui/table'
+import {
   Search,
   FileText,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
-  X,
   XCircle,
   Eye,
   Filter,
@@ -14,7 +36,7 @@ import {
   ArrowUpRight,
   ArrowDownLeft,
 } from 'lucide-react'
-import { toast } from 'sonner'
+import { toast } from '#/components/ui/toast'
 
 type OrderStatus =
   | 'open'
@@ -235,29 +257,20 @@ function OrderDrawer({
     order.requestedQty > 0 ? (order.filledQty / order.requestedQty) * 100 : 0
   const canCancel = order.status === 'open' || order.status === 'partial'
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
-      onClick={onClose}
+    <Dialog
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose()
+      }}
     >
-      <div
-        className="bg-card rounded-2xl border border-border shadow-lg w-full max-w-md"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between px-5 py-4 border-b border-border">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-bold text-foreground font-mono">
-              {order.id}
-            </span>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2 font-mono">
+            {order.id}
             <StatusPill {...st} />
-          </div>
-          <button
-            onClick={onClose}
-            className="text-text-tertiary hover:text-foreground transition-colors"
-          >
-            <X size={17} />
-          </button>
-        </div>
-        <div className="p-5 space-y-4">
+          </DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
           <div className="flex items-center gap-2">
             <SidePill side={order.side} />
             <span className="text-xs text-text-secondary uppercase tracking-wide font-semibold">
@@ -315,8 +328,8 @@ function OrderDrawer({
             </Button>
           )}
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 
@@ -360,7 +373,10 @@ export function OrdersTab({ state }: { state: HistoryDemoState }) {
       ),
     )
 
-    toast.success(`Order ${id} cancelled.`)
+    toast.add({
+      type: 'success',
+      title: `Order ${id} cancelled.`,
+    })
   }
 
   if (state === 'loading')
@@ -397,69 +413,52 @@ export function OrdersTab({ state }: { state: HistoryDemoState }) {
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap gap-2">
-        <div className="relative flex-1 min-w-[160px]">
+        <div className="relative min-w-[160px] flex-1">
           <Search
             size={13}
-            className="absolute left-2.5 top-1/2 -translate-y-1/2 text-text-tertiary pointer-events-none"
+            className="pointer-events-none absolute top-1/2 left-2.5 -translate-y-1/2 text-text-tertiary"
           />
-          <input
+          <Input
             value={query}
             onChange={(e) => {
               setQuery(e.target.value)
               setPage(1)
             }}
             placeholder="Search order ID or slot…"
-            className="w-full bg-background pl-8 pr-3 py-2 text-sm text-text-primary border border-input rounded-lg outline-none focus:border-accent focus:ring-2 focus:ring-accent/15 transition-all"
+            aria-label="Search orders"
+            className="bg-background pl-8"
           />
         </div>
-        {[
-          {
-            val: sideF,
-            set: (v: string) => {
-              setSideF(v)
-              setPage(1)
-            },
-            opts: [
-              { v: 'all', l: 'All sides' },
-              { v: 'sell', l: 'Sell' },
-              { v: 'buy', l: 'Buy' },
-            ],
-          },
-          {
-            val: statusF,
-            set: (v: string) => {
-              setStatusF(v)
-              setPage(1)
-            },
-            opts: [
-              { v: 'all', l: 'All status' },
-              { v: 'open', l: 'Open' },
-              { v: 'partial', l: 'Partial' },
-              { v: 'filled', l: 'Filled' },
-              { v: 'cancelled', l: 'Cancelled' },
-              { v: 'expired', l: 'Expired' },
-              { v: 'rejected', l: 'Rejected' },
-            ],
-          },
-        ].map((f, fi) => (
-          <div key={fi} className="relative">
-            <select
-              value={f.val}
-              onChange={(e) => f.set(e.target.value)}
-              className="appearance-none bg-background pl-3 pr-8 py-2 text-sm text-text-primary border border-input rounded-lg outline-none focus:border-accent focus:ring-2 focus:ring-accent/15 cursor-pointer"
-            >
-              {f.opts.map((o) => (
-                <option key={o.v} value={o.v}>
-                  {o.l}
-                </option>
-              ))}
-            </select>
-            <ChevronDown
-              size={12}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-text-tertiary pointer-events-none"
-            />
-          </div>
-        ))}
+        <FilterSelect
+          label="Filter by side"
+          value={sideF}
+          onValueChange={(value) => {
+            setSideF(value)
+            setPage(1)
+          }}
+          options={[
+            { v: 'all', l: 'All sides' },
+            { v: 'sell', l: 'Sell' },
+            { v: 'buy', l: 'Buy' },
+          ]}
+        />
+        <FilterSelect
+          label="Filter by status"
+          value={statusF}
+          onValueChange={(value) => {
+            setStatusF(value)
+            setPage(1)
+          }}
+          options={[
+            { v: 'all', l: 'All status' },
+            { v: 'open', l: 'Open' },
+            { v: 'partial', l: 'Partial' },
+            { v: 'filled', l: 'Filled' },
+            { v: 'cancelled', l: 'Cancelled' },
+            { v: 'expired', l: 'Expired' },
+            { v: 'rejected', l: 'Rejected' },
+          ]}
+        />
       </div>
 
       {filtered.length === 0 ? (
@@ -471,98 +470,97 @@ export function OrdersTab({ state }: { state: HistoryDemoState }) {
       ) : (
         <>
           {/* Desktop table */}
-          <div className="hidden md:block bg-card rounded-2xl border border-border overflow-hidden shadow-sm">
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs">
-                <thead>
-                  <tr className="border-b border-border bg-secondary/60">
-                    {[
-                      'Submitted',
-                      'ID',
-                      'Side',
-                      'Type',
-                      'Req. qty',
-                      'Filled',
-                      'Limit price',
-                      'Slot',
-                      'Status',
-                      'Actions',
-                    ].map((h) => (
-                      <th
-                        key={h}
-                        className="px-3 py-2.5 text-left font-semibold text-text-tertiary uppercase tracking-wide whitespace-nowrap"
-                      >
-                        {h}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  {paged.map((o) => {
-                    const canCancel =
-                      o.status === 'open' || o.status === 'partial'
-                    return (
-                      <tr
-                        key={o.id}
-                        className="hover:bg-secondary/40 transition-colors"
-                      >
-                        <td className="px-3 py-3 text-text-secondary whitespace-nowrap">
-                          {o.submittedAt}
-                        </td>
-                        <td className="px-3 py-3 font-mono font-semibold text-foreground">
-                          {o.id}
-                        </td>
-                        <td className="px-3 py-3">
-                          <SidePill side={o.side} />
-                        </td>
-                        <td className="px-3 py-3 text-text-primary capitalize font-medium">
-                          {o.type}
-                        </td>
-                        <td className="px-3 py-3 font-mono text-foreground">
-                          {o.requestedQty}
-                        </td>
-                        <td className="px-3 py-3 font-mono text-foreground">
-                          {o.filledQty}
-                        </td>
-                        <td className="px-3 py-3 font-mono text-foreground">
-                          {o.limitPrice ? (
-                            o.limitPrice.toFixed(3)
-                          ) : (
-                            <span className="text-text-tertiary">Market</span>
-                          )}
-                        </td>
-                        <td className="px-3 py-3 font-mono text-text-primary whitespace-nowrap">
-                          {o.slot}
-                        </td>
-                        <td className="px-3 py-3">
-                          <StatusPill {...ORDER_STATUS[o.status]} />
-                        </td>
-                        <td className="px-3 py-3">
-                          <div className="flex items-center gap-1">
-                            <button
-                              onClick={() => setSelected(o)}
-                              className="p-1.5 rounded-lg text-text-tertiary hover:text-foreground hover:bg-secondary transition-all"
-                              title="View"
+          <div className="hidden overflow-hidden rounded-2xl border border-border bg-card shadow-sm md:block">
+            <Table className="text-xs">
+              <TableHeader>
+                <TableRow className="border-border bg-secondary/60 hover:bg-secondary/60">
+                  {[
+                    'Submitted',
+                    'ID',
+                    'Side',
+                    'Type',
+                    'Req. qty',
+                    'Filled',
+                    'Limit price',
+                    'Slot',
+                    'Status',
+                    'Actions',
+                  ].map((h) => (
+                    <TableHead
+                      key={h}
+                      className="px-3 py-2.5 text-left font-semibold tracking-wide whitespace-nowrap text-text-tertiary uppercase"
+                    >
+                      {h}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {paged.map((o) => {
+                  const canCancel =
+                    o.status === 'open' || o.status === 'partial'
+                  return (
+                    <TableRow key={o.id} className="border-border">
+                      <TableCell className="px-3 py-3 whitespace-nowrap text-text-secondary">
+                        {o.submittedAt}
+                      </TableCell>
+                      <TableCell className="px-3 py-3 font-mono font-semibold text-foreground">
+                        {o.id}
+                      </TableCell>
+                      <TableCell className="px-3 py-3">
+                        <SidePill side={o.side} />
+                      </TableCell>
+                      <TableCell className="px-3 py-3 font-medium text-text-primary capitalize">
+                        {o.type}
+                      </TableCell>
+                      <TableCell className="px-3 py-3 font-mono text-foreground">
+                        {o.requestedQty}
+                      </TableCell>
+                      <TableCell className="px-3 py-3 font-mono text-foreground">
+                        {o.filledQty}
+                      </TableCell>
+                      <TableCell className="px-3 py-3 font-mono text-foreground">
+                        {o.limitPrice ? (
+                          o.limitPrice.toFixed(3)
+                        ) : (
+                          <span className="text-text-tertiary">Market</span>
+                        )}
+                      </TableCell>
+                      <TableCell className="px-3 py-3 font-mono whitespace-nowrap text-text-primary">
+                        {o.slot}
+                      </TableCell>
+                      <TableCell className="px-3 py-3">
+                        <StatusPill {...ORDER_STATUS[o.status]} />
+                      </TableCell>
+                      <TableCell className="px-3 py-3">
+                        <div className="flex items-center gap-1">
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon-sm"
+                            aria-label={`View order ${o.id}`}
+                            onClick={() => setSelected(o)}
+                          >
+                            <Eye />
+                          </Button>
+                          {canCancel && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon-sm"
+                              aria-label={`Cancel order ${o.id}`}
+                              onClick={() => cancelOrder(o.id)}
                             >
-                              <Eye size={13} />
-                            </button>
-                            {canCancel && (
-                              <button
-                                onClick={() => cancelOrder(o.id)}
-                                className="p-1.5 rounded-lg text-text-tertiary hover:text-feedback-error-icon hover:bg-feedback-error-background transition-all"
-                                title="Cancel"
-                              >
-                                <XCircle size={13} />
-                              </button>
-                            )}
-                          </div>
-                        </td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
+                              <XCircle />
+                            </Button>
+                          )}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
+              </TableBody>
+            </Table>
           </div>
 
           {/* Mobile cards */}
@@ -592,22 +590,28 @@ export function OrdersTab({ state }: { state: HistoryDemoState }) {
                     {o.filledQty}/{o.requestedQty} kWh
                   </span>
                 </div>
-                <div className="flex gap-2 mt-3">
-                  <button
+                <div className="mt-3 flex gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="flex-1"
                     onClick={() => setSelected(o)}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg border border-border text-xs font-medium text-text-secondary hover:bg-secondary transition-all"
                   >
-                    <Eye size={12} />
+                    <Eye />
                     View
-                  </button>
+                  </Button>
                   {(o.status === 'open' || o.status === 'partial') && (
-                    <button
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      className="flex-1"
                       onClick={() => cancelOrder(o.id)}
-                      className="flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg border border-feedback-error-border text-xs font-medium text-feedback-error-text hover:bg-feedback-error-background transition-all"
                     >
-                      <XCircle size={12} />
+                      <XCircle />
                       Cancel
-                    </button>
+                    </Button>
                   )}
                 </div>
               </div>
@@ -620,20 +624,26 @@ export function OrdersTab({ state }: { state: HistoryDemoState }) {
               {page} of {totalPages}
             </p>
             <div className="flex items-center gap-1">
-              <button
+              <Button
+                type="button"
+                variant="outline"
+                size="icon-sm"
+                aria-label="Previous page"
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="p-1.5 rounded-lg border border-border text-text-tertiary hover:text-foreground hover:bg-secondary transition-all disabled:opacity-30 disabled:cursor-not-allowed"
               >
-                <ChevronLeft size={14} />
-              </button>
-              <button
+                <ChevronLeft />
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon-sm"
+                aria-label="Next page"
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page === totalPages}
-                className="p-1.5 rounded-lg border border-border text-text-tertiary hover:text-foreground hover:bg-secondary transition-all disabled:opacity-30 disabled:cursor-not-allowed"
               >
-                <ChevronRight size={14} />
-              </button>
+                <ChevronRight />
+              </Button>
             </div>
           </div>
         </>
@@ -649,11 +659,40 @@ export function OrdersTab({ state }: { state: HistoryDemoState }) {
   )
 }
 
-{
-  /* TODO: Need to check */
-}
-function Skeleton({ className = '' }: { className?: string }) {
-  return <div className={`rounded-lg bg-muted ${className}`} />
+function FilterSelect({
+  label,
+  value,
+  onValueChange,
+  options,
+}: {
+  label: string
+  value: string
+  onValueChange: (value: string) => void
+  options: Array<{ v: string; l: string }>
+}) {
+  const selected = options.find((option) => option.v === value)
+
+  return (
+    <Select
+      value={value}
+      onValueChange={(next) => {
+        if (next) onValueChange(next)
+      }}
+    >
+      <SelectTrigger aria-label={label}>
+        <SelectValue>{selected?.l}</SelectValue>
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          {options.map((option) => (
+            <SelectItem key={option.v} value={option.v}>
+              {option.l}
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  )
 }
 
 // ─── EmptyState ───────────────────────────────────────────────────────────────
