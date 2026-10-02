@@ -11,6 +11,8 @@ Findings and file citations live in [README.md](./README.md). This document is t
 - **Phase 2 is complete.** Authenticated pages share [`src/routes/_authenticated.tsx`](../../src/routes/_authenticated.tsx). Marketing header and footer wrap only `/` and `/about`. Sign-in and sign-up are full-screen. Sidebar links use router `Link`s. `/energyassets`, `/notification`, `/orderhistory`, and `/tradehistory` redirect to the new paths.
 - **Phase 3 is complete.** The authenticated layout sets `ssr: false`. Public routes keep the default. Child routes inherit the parent flag, so the generated route tree does not repeat `ssr` on each path.
 - **Phase 4 is complete.** Primitives were added with the shadcn CLI. Component-name differences from this rollout (`toast` instead of `sonner`, `field` instead of `form`) are recorded in [phase-4-shadcn.md](./phase-4-shadcn.md).
+- **Phase 5 is complete.** Sample records live in [`src/data`](../../src/data) and screens read them through [`src/hooks`](../../src/hooks). Display currency is AED with the Gulf Standard Time market locale. Sign-in no longer uses `alert`, and the demo password is gone.
+- **Phase 6 is complete.** Arbitrary `text-[Npx]` sizes use the type scale in [`src/styles.css`](../../src/styles.css). Inter is the only font.
 
 ## Rules for every phase
 
