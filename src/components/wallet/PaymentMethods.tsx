@@ -10,7 +10,7 @@ export function PaymentMethods() {
   const [tab, setTab] = useState<'cards' | 'banks'>('cards')
 
   return (
-    <div className="bg-card rounded-2xl border border-border-default p-5">
+    <div className="w-full rounded-2xl border border-border-default bg-card p-5 lg:min-w-0 lg:flex-1">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-bold text-foreground">Payment methods</h3>
 

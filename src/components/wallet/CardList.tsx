@@ -1,5 +1,11 @@
 import { Check, CreditCard, Trash2 } from 'lucide-react'
 
+import { Button } from '#/components/ui/button'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '#/components/ui/tooltip'
 import type { PaymentCard } from './paymentMethodData'
 import { CardLogo } from './CardLogo'
 
@@ -39,9 +45,21 @@ export function CardList({ cards }: CardListProps) {
             </p>
           </div>
 
-          <button className="text-text-tertiary p-1">
-            <Trash2 size={14} />
-          </button>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-sm"
+                  aria-label={`Remove card ending ${card.last4}`}
+                />
+              }
+            >
+              <Trash2 />
+            </TooltipTrigger>
+            <TooltipContent>Remove card</TooltipContent>
+          </Tooltip>
         </div>
       ))}
     </div>

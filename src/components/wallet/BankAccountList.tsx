@@ -1,6 +1,13 @@
 import { AlertTriangle, Building2, Check, Info, Trash2 } from 'lucide-react'
 
+import { Alert, AlertDescription } from '#/components/ui/alert'
 import { Badge } from '#/components/ui/badge.tsx'
+import { Button } from '#/components/ui/button'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '#/components/ui/tooltip'
 import type { BankAccount } from './paymentMethodData'
 
 interface BankAccountListProps {
@@ -65,20 +72,31 @@ export function BankAccountList({ accounts }: BankAccountListProps) {
             )}
           </div>
 
-          <button className="text-text-tertiary p-1">
-            <Trash2 size={14} />
-          </button>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-sm"
+                  aria-label={`Remove ${account.bankName} account`}
+                />
+              }
+            >
+              <Trash2 />
+            </TooltipTrigger>
+            <TooltipContent>Remove account</TooltipContent>
+          </Tooltip>
         </div>
       ))}
 
-      <div className="flex items-start gap-2 p-3 rounded-xl border border-default">
-        <Info size={11} className="mt-0.5 text-chart-2" />
-
-        <span className="text-text-tertiary text-caption">
+      <Alert>
+        <Info />
+        <AlertDescription>
           Bank accounts are verified via two micro-deposits (AED 0.01–0.99).
           Verification typically takes 1–2 business days.
-        </span>
-      </div>
+        </AlertDescription>
+      </Alert>
     </div>
   )
 }

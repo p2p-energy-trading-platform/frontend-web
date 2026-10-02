@@ -1,7 +1,14 @@
 import { Info, Wallet, Zap } from 'lucide-react'
 import { useState } from 'react'
 
-import { cn } from '#/lib/utils'
+import { Button } from '#/components/ui/button'
+import { Input } from '#/components/ui/input'
+import { Tabs, TabsList, TabsTrigger } from '#/components/ui/tabs'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '#/components/ui/tooltip'
 
 import type { OrderSide, OrderType } from './types'
 
@@ -22,25 +29,18 @@ export function OrderPanel() {
 
   return (
     <section className="overflow-hidden rounded-xl border border-border-subtle bg-card shadow-sm">
-      <div className="grid grid-cols-2 border-b border-border-subtle">
-        {(['buy', 'sell'] as const).map((tab) => (
-          <button
-            key={tab}
-            type="button"
-            onClick={() => setSide(tab)}
-            className={cn(
-              'border-b-2 px-4 py-4 text-sm font-semibold transition',
-              side === tab
-                ? tab === 'buy'
-                  ? 'border-accent bg-accent/5 text-accent'
-                  : 'border-destructive bg-destructive/5 text-destructive'
-                : 'border-transparent text-text-tertiary hover:bg-bg-elevated',
-            )}
-          >
-            {tab === 'buy' ? 'Buy Energy' : 'Sell Energy'}
-          </button>
-        ))}
-      </div>
+      <Tabs
+        value={side}
+        onValueChange={(value) => {
+          if (value === 'buy' || value === 'sell') setSide(value)
+        }}
+        className="border-b border-border-subtle"
+      >
+        <TabsList className="grid h-auto w-full grid-cols-2 rounded-none bg-transparent">
+          <TabsTrigger value="buy">Buy Energy</TabsTrigger>
+          <TabsTrigger value="sell">Sell Energy</TabsTrigger>
+        </TabsList>
+      </Tabs>
       <div className="space-y-5 p-5">
         <div className="flex items-center justify-between rounded-lg bg-bg-elevated p-3">
           <span className="flex items-center gap-2 text-xs text-text-secondary">
@@ -59,23 +59,17 @@ export function OrderPanel() {
           <label className="mb-2 block text-xs font-medium text-text-secondary">
             Order Type
           </label>
-          <div className="grid grid-cols-2 rounded-lg bg-bg-elevated p-1">
-            {(['market', 'limit'] as const).map((type) => (
-              <button
-                key={type}
-                type="button"
-                onClick={() => setOrderType(type)}
-                className={cn(
-                  'rounded-md px-2 py-2 text-xs font-medium transition',
-                  orderType === type
-                    ? 'bg-card text-text-primary shadow-sm'
-                    : 'text-text-tertiary',
-                )}
-              >
-                {type === 'market' ? 'Market Order' : 'Limit Order'}
-              </button>
-            ))}
-          </div>
+          <Tabs
+            value={orderType}
+            onValueChange={(value) => {
+              if (value === 'market' || value === 'limit') setOrderType(value)
+            }}
+          >
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="market">Market Order</TabsTrigger>
+              <TabsTrigger value="limit">Limit Order</TabsTrigger>
+            </TabsList>
+          </Tabs>
           {exceedsEnergyBalance && (
             <p className="mt-2 text-xs text-destructive">
               Amount exceeds your available energy balance.
@@ -90,14 +84,14 @@ export function OrderPanel() {
             Amount (kWh)
           </label>
           <div className="relative">
-            <input
+            <Input
               id="amount"
               min="0"
               step="1"
               type="number"
               value={amount}
               onChange={(event) => setAmount(event.target.value)}
-              className="h-11 w-full rounded-lg border border-border-default bg-background px-3 pr-14 text-sm font-medium text-text-primary outline-none focus:border-accent focus:ring-2 focus:ring-accent/15"
+              className="h-11 pr-14"
             />
             <span className="absolute right-3 top-3 text-xs text-text-tertiary">
               kWh
@@ -105,19 +99,15 @@ export function OrderPanel() {
           </div>
           <div className="mt-2 grid grid-cols-4 gap-2">
             {[10, 25, 50, 100].map((preset) => (
-              <button
+              <Button
                 type="button"
                 key={preset}
+                variant={amount === String(preset) ? 'default' : 'outline'}
+                size="sm"
                 onClick={() => setAmount(String(preset))}
-                className={cn(
-                  'rounded-md border py-1.5 text-xs transition',
-                  amount === String(preset)
-                    ? 'border-accent bg-accent/10 text-accent'
-                    : 'border-border-default text-text-secondary hover:bg-bg-elevated',
-                )}
               >
                 {preset}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
@@ -126,18 +116,33 @@ export function OrderPanel() {
             htmlFor="price"
             className="mb-2 flex items-center gap-1 text-xs font-medium text-text-secondary"
           >
-            Price (RM/kWh) <Info className="size-3 text-text-tertiary" />
+            Price (RM/kWh){' '}
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon-xs"
+                    aria-label="About price"
+                  />
+                }
+              >
+                <Info />
+              </TooltipTrigger>
+              <TooltipContent>Price per kilowatt-hour</TooltipContent>
+            </Tooltip>
           </label>
           <div className="relative">
-            <input
+            <Input
               id="price"
               min="0"
               step="0.001"
-              type="number"
+              type={orderType === 'market' ? 'text' : 'number'}
               disabled={orderType === 'market'}
               value={orderType === 'market' ? 'Best market price' : price}
               onChange={(event) => setPrice(event.target.value)}
-              className="h-11 w-full rounded-lg border border-border-default bg-background px-3 pr-20 text-sm font-medium text-text-primary outline-none disabled:bg-bg-elevated disabled:text-text-tertiary focus:border-accent focus:ring-2 focus:ring-accent/15"
+              className="h-11 pr-20"
             />
             <span className="absolute right-3 top-3 text-xs text-text-tertiary">
               RM/kWh
@@ -162,18 +167,14 @@ export function OrderPanel() {
             </span>
           </div>
         </div>
-        <button
+        <Button
           type="button"
           disabled={!valid}
-          className={cn(
-            'h-11 w-full rounded-lg text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:opacity-40',
-            side === 'buy'
-              ? 'bg-accent hover:brightness-95'
-              : 'bg-destructive hover:brightness-95',
-          )}
+          variant={side === 'buy' ? 'default' : 'destructive'}
+          className="h-11 w-full"
         >
           {side === 'buy' ? 'Buy' : 'Sell'} {valid ? quantity : 0} kWh
-        </button>
+        </Button>
         <p className="text-center text-[11px] leading-4 text-text-tertiary">
           Orders are matched with verified participants in your energy zone.
         </p>
