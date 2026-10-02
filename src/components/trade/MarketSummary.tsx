@@ -2,6 +2,7 @@ import { ArrowDownRight, ArrowUpRight, Clock3 } from 'lucide-react'
 
 import type { MarketSnapshot } from '#/lib/market-data'
 import { getPercentageChange } from '#/lib/market-data'
+import { useMarketLabels } from '#/hooks/useTrade'
 import { cn } from '#/lib/utils'
 
 interface MarketSummaryProps {
@@ -9,11 +10,12 @@ interface MarketSummaryProps {
 }
 
 export function MarketSummary({ snapshot }: MarketSummaryProps) {
+  const market = useMarketLabels()
   const change = getPercentageChange(snapshot)
   const increasing = change >= 0
   const marketOpen = snapshot.status === 'open'
   const updatedLabel = snapshot.updatedAt
-    ? new Intl.DateTimeFormat('en-MY', {
+    ? new Intl.DateTimeFormat(market.locale, {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
@@ -61,15 +63,15 @@ export function MarketSummary({ snapshot }: MarketSummaryProps) {
             id="market-summary-heading"
             className="text-xs font-medium text-text-tertiary"
           >
-            ENERGY / RM
+            {market.pairLabel}
           </h2>
           <div className="mt-1 flex flex-wrap items-center gap-3">
             <output
               aria-live="polite"
-              aria-label={`Current energy price RM ${snapshot.currentPrice.toFixed(3)} per kilowatt-hour`}
+              aria-label={`Current energy price ${market.formatPrice(snapshot.currentPrice)} per kilowatt-hour`}
               className="text-3xl font-semibold tracking-tight text-text-primary"
             >
-              RM {snapshot.currentPrice.toFixed(3)}{' '}
+              {market.formatPrice(snapshot.currentPrice)}{' '}
               <small className="text-sm font-normal text-text-tertiary">
                 /kWh
               </small>
@@ -99,9 +101,9 @@ export function MarketSummary({ snapshot }: MarketSummaryProps) {
         </div>
 
         {[
-          ['24h High', `RM ${snapshot.high24h.toFixed(3)}`],
-          ['24h Low', `RM ${snapshot.low24h.toFixed(3)}`],
-          ['24h Volume', `${snapshot.volume24h.toLocaleString('en-MY')} kWh`],
+          ['24h High', market.formatPrice(snapshot.high24h)],
+          ['24h Low', market.formatPrice(snapshot.low24h)],
+          ['24h Volume', market.formatVolume(snapshot.volume24h)],
         ].map(([label, value]) => (
           <div key={label} className="flex flex-col justify-center">
             <span className="text-xs text-text-tertiary">{label}</span>

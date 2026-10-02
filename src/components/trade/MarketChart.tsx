@@ -1,3 +1,4 @@
+import type { CandlestickData, Time } from 'lightweight-charts'
 import {
   CandlestickSeries,
   ColorType,
@@ -5,10 +6,7 @@ import {
   LineStyle,
   createChart,
 } from 'lightweight-charts'
-import type { CandlestickData, Time } from 'lightweight-charts'
 import { useEffect, useRef, useState } from 'react'
-
-import type { Timeframe } from './types'
 
 interface TooltipData {
   left: number
@@ -17,38 +15,11 @@ interface TooltipData {
   candle: CandlestickData<Time>
 }
 
-function makeCandles(timeframe: Timeframe): Array<CandlestickData<Time>> {
-  const intervals: Record<Timeframe, number> = {
-    '1m': 60,
-    '5m': 300,
-    '15m': 900,
-    '1H': 3600,
-    '4H': 14400,
-    '1D': 86400,
-  }
-  const step = intervals[timeframe]
-  const now = Math.floor(Date.now() / 1000 / step) * step
-  let last = 0.444
-
-  return Array.from({ length: 72 }, (_, index) => {
-    const drift =
-      Math.sin(index * 0.57) * 0.0026 + Math.cos(index * 0.21) * 0.0012
-    const open = last
-    const close = Math.max(0.41, open + drift)
-    const high = Math.max(open, close) + 0.0012 + (index % 3) * 0.00035
-    const low = Math.min(open, close) - 0.0011 - (index % 4) * 0.00025
-    last = close
-    return {
-      time: (now - (71 - index) * step) as Time,
-      open,
-      high,
-      low,
-      close,
-    }
-  })
-}
-
-export function MarketChart({ timeframe }: { timeframe: Timeframe }) {
+export function MarketChart({
+  candles,
+}: {
+  candles: Array<CandlestickData<Time>>
+}) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [tooltip, setTooltip] = useState<TooltipData | null>(null)
 
@@ -74,7 +45,8 @@ export function MarketChart({ timeframe }: { timeframe: Timeframe }) {
       layout: {
         background: { type: ColorType.Solid, color: 'transparent' },
         textColor: text,
-        fontFamily: 'Inter, sans-serif',
+        fontFamily:
+          token('--font-sans') || 'Inter, ui-sans-serif, system-ui, sans-serif',
       },
       grid: {
         vertLines: { color: withAlpha(text, 0.1) },
@@ -96,7 +68,7 @@ export function MarketChart({ timeframe }: { timeframe: Timeframe }) {
       wickDownColor: danger,
       priceFormat: { type: 'price', precision: 3, minMove: 0.001 },
     })
-    series.setData(makeCandles(timeframe))
+    series.setData(candles)
     ;[0.47, 0.452].forEach((price) =>
       series.createPriceLine({
         price,
@@ -136,7 +108,7 @@ export function MarketChart({ timeframe }: { timeframe: Timeframe }) {
       observer.disconnect()
       chart.remove()
     }
-  }, [timeframe])
+  }, [candles])
 
   return (
     <div className="relative min-h-97.5 w-full" ref={containerRef}>

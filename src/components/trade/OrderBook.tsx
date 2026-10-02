@@ -1,24 +1,8 @@
 import { Activity } from 'lucide-react'
-import { useEffect, useState } from 'react'
 
 import { cn } from '#/lib/utils'
 
 import type { OrderSide } from './types'
-
-const asks = [
-  [0.476, 148],
-  [0.475, 224],
-  [0.474, 95],
-  [0.473, 310],
-  [0.472, 182],
-] as const
-const bids = [
-  [0.47, 265],
-  [0.469, 144],
-  [0.468, 380],
-  [0.467, 216],
-  [0.466, 105],
-] as const
 
 function OrderBookRow({
   row,
@@ -40,30 +24,19 @@ function OrderBookRow({
   )
 }
 
-export function OrderBook() {
-  const [liveAsks, setLiveAsks] = useState(
-    asks.map((row) => [...row] as [number, number]),
-  )
-  const [liveBids, setLiveBids] = useState(
-    bids.map((row) => [...row] as [number, number]),
-  )
-
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      const update = (rows: Array<[number, number]>) =>
-        rows.map(
-          ([price, quantity]) =>
-            [
-              price,
-              Math.max(20, quantity + Math.round((Math.random() - 0.5) * 18)),
-            ] as [number, number],
-        )
-      setLiveAsks(update)
-      setLiveBids(update)
-    }, 2200)
-    return () => window.clearInterval(timer)
-  }, [])
-
+export function OrderBook({
+  asks,
+  bids,
+  spreadLabel,
+  priceHeading,
+  totalHeading,
+}: {
+  asks: Array<[number, number]>
+  bids: Array<[number, number]>
+  spreadLabel: string
+  priceHeading: string
+  totalHeading: string
+}) {
   return (
     <section className="rounded-xl border border-border-subtle bg-card p-4 shadow-sm">
       <div className="mb-4 flex items-center justify-between">
@@ -79,8 +52,8 @@ export function OrderBook() {
       <div className="grid grid-cols-1 gap-4 2xl:grid-cols-2">
         {(
           [
-            ['Asks', liveAsks, 'sell'],
-            ['Bids', liveBids, 'buy'],
+            ['Asks', asks, 'sell'],
+            ['Bids', bids, 'buy'],
           ] as const
         ).map(([label, rows, side]) => (
           <div key={label}>
@@ -92,10 +65,10 @@ export function OrderBook() {
             >
               {label}
             </span>
-            <div className="grid grid-cols-3 border-b border-border-subtle pb-1 text-[10px] uppercase tracking-wide text-text-tertiary">
-              <span>Price (RM)</span>
+            <div className="grid grid-cols-3 border-b border-border-subtle pb-1 text-caption uppercase tracking-wide text-text-tertiary">
+              <span>{priceHeading}</span>
               <span className="text-right">Qty (kWh)</span>
-              <span className="text-right">Total (RM)</span>
+              <span className="text-right">{totalHeading}</span>
             </div>
             {rows.map((row) => (
               <OrderBookRow key={row[0]} row={row} side={side} />
@@ -105,7 +78,7 @@ export function OrderBook() {
       </div>
       <div className="mt-3 flex items-center justify-center gap-2 rounded-lg bg-bg-elevated py-2 text-xs text-text-secondary">
         <Activity className="size-3.5 text-accent" /> Spread:{' '}
-        <strong className="text-text-primary">RM 0.002</strong>
+        <strong className="text-text-primary">{spreadLabel}</strong>
       </div>
     </section>
   )

@@ -9,23 +9,29 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '#/components/ui/tooltip'
+import { useOrderQuote } from '#/hooks/useTrade'
 
 import type { OrderSide, OrderType } from './types'
 
 export function OrderPanel() {
-  const availableEnergy = 328.4
+  const quote = useOrderQuote()
+  const availableEnergy = quote.availableEnergyKwh
   const [side, setSide] = useState<OrderSide>('buy')
   const [orderType, setOrderType] = useState<OrderType>('limit')
-  const [amount, setAmount] = useState('25')
-  const [price, setPrice] = useState('0.470')
+  const [amount, setAmount] = useState(quote.defaultAmount)
+  const [price, setPrice] = useState(quote.defaultPrice)
   const quantity = Number(amount)
   const unitPrice =
-    orderType === 'market' ? (side === 'buy' ? 0.472 : 0.47) : Number(price)
+    orderType === 'market'
+      ? side === 'buy'
+        ? quote.marketBuyPrice
+        : quote.marketSellPrice
+      : Number(price)
   const exceedsEnergyBalance = side === 'sell' && quantity > availableEnergy
   const valid = quantity > 0 && unitPrice > 0 && !exceedsEnergyBalance
   const subtotal = valid ? quantity * unitPrice : 0
-  const fee = subtotal * 0.02
-  const money = (value: number) => `RM ${value.toFixed(2)}`
+  const fee = subtotal * quote.feeRate
+  const money = quote.formatMoney
 
   return (
     <section className="overflow-hidden rounded-xl border border-border-subtle bg-card shadow-sm">
@@ -52,7 +58,9 @@ export function OrderPanel() {
             {side === 'buy' ? 'Available Balance' : 'Available Energy'}
           </span>
           <strong className="text-sm text-text-primary">
-            {side === 'buy' ? 'RM 2,847.50' : `${availableEnergy} kWh`}
+            {side === 'buy'
+              ? quote.availableBalanceLabel
+              : `${availableEnergy} kWh`}
           </strong>
         </div>
         <div>
@@ -98,7 +106,7 @@ export function OrderPanel() {
             </span>
           </div>
           <div className="mt-2 grid grid-cols-4 gap-2">
-            {[10, 25, 50, 100].map((preset) => (
+            {[...quote.amountPresets].map((preset) => (
               <Button
                 type="button"
                 key={preset}
@@ -116,7 +124,7 @@ export function OrderPanel() {
             htmlFor="price"
             className="mb-2 flex items-center gap-1 text-xs font-medium text-text-secondary"
           >
-            Price (RM/kWh){' '}
+            Price ({quote.unitLabel}){' '}
             <Tooltip>
               <TooltipTrigger
                 render={
@@ -145,7 +153,7 @@ export function OrderPanel() {
               className="h-11 pr-20"
             />
             <span className="absolute right-3 top-3 text-xs text-text-tertiary">
-              RM/kWh
+              {quote.unitLabel}
             </span>
           </div>
         </div>
@@ -157,7 +165,7 @@ export function OrderPanel() {
             </span>
           </div>
           <div className="flex justify-between text-text-secondary">
-            <span>Platform Fee (2%)</span>
+            <span>Platform Fee ({quote.feeRate * 100}%)</span>
             <span className="tabular-nums text-text-primary">{money(fee)}</span>
           </div>
           <div className="flex justify-between pt-1 text-sm font-semibold text-text-primary">
@@ -175,7 +183,7 @@ export function OrderPanel() {
         >
           {side === 'buy' ? 'Buy' : 'Sell'} {valid ? quantity : 0} kWh
         </Button>
-        <p className="text-center text-[11px] leading-4 text-text-tertiary">
+        <p className="text-center text-caption leading-4 text-text-tertiary">
           Orders are matched with verified participants in your energy zone.
         </p>
       </div>
