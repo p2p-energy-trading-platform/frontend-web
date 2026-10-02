@@ -2,8 +2,11 @@ import { Link } from '@tanstack/react-router'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Check, ArrowRight } from 'lucide-react'
+import { useMarketing } from '#/hooks/useMarketing'
 
 function HeroContent() {
+  const marketing = useMarketing()
+
   return (
     <div>
       <Badge variant="secondary" className="mt-10">
@@ -34,29 +37,12 @@ function HeroContent() {
       </div>
 
       <div className="mt-6 flex flex-wrap items-center justify-center gap-6">
-        <div className="mt-6 flex items-center gap-2">
-          <Check className="h-4 w-4 text-feedback-success-icon" />
-
-          <span className="text-xs text-muted-foreground/70">
-            No lock-in contracts
-          </span>
-        </div>
-
-        <div className="mt-6 flex items-center gap-2">
-          <Check className="h-4 w-4 text-feedback-success-icon" />
-
-          <span className="text-xs text-muted-foreground/70">
-            AED wallet, instant settlement
-          </span>
-        </div>
-
-        <div className="mt-6 flex items-center gap-2">
-          <Check className="h-4 w-4 text-feedback-success-icon" />
-
-          <span className="text-xs text-muted-foreground/70">
-            Smart-meter verified
-          </span>
-        </div>
+        {marketing.heroChecks.map((label) => (
+          <div key={label} className="mt-6 flex items-center gap-2">
+            <Check className="h-4 w-4 text-feedback-success-icon" />
+            <span className="text-xs text-muted-foreground/70">{label}</span>
+          </div>
+        ))}
       </div>
     </div>
   )

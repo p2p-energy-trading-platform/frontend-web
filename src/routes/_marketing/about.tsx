@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowLeft, Layers, Palette, RouteIcon } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 
 import { Badge } from '#/components/ui/badge'
 import {
@@ -9,50 +9,30 @@ import {
   CardHeader,
   CardTitle,
 } from '#/components/ui/card'
+import { useMarketing } from '#/hooks/useMarketing'
 
 export const Route = createFileRoute('/_marketing/about')({
   component: About,
 })
 
-const notes = [
-  {
-    title: 'Token-driven styling',
-    description:
-      'The demo uses GridX design-system tokens instead of TanStack starter colors.',
-    icon: Palette,
-  },
-  {
-    title: 'Base UI shadcn components',
-    description:
-      'Cards, badges, and action buttons now follow the updated Base UI component setup.',
-    icon: Layers,
-  },
-  {
-    title: 'TanStack routing',
-    description:
-      'The starter route structure remains intact while the visual layer is replaced.',
-    icon: RouteIcon,
-  },
-]
-
 function About() {
+  const { about } = useMarketing()
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       <section className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-12 sm:px-6 lg:px-8">
         <Card className="border-border-subtle bg-card">
           <CardHeader>
             <Badge variant="secondary" className="w-fit">
-              About this demo
+              {about.badge}
             </Badge>
 
             <CardTitle className="max-w-3xl text-display-lg">
-              A temporary GridX interface built on the final design direction.
+              {about.title}
             </CardTitle>
 
             <CardDescription className="max-w-3xl text-base leading-8">
-              This page exists only to replace the default TanStack starter
-              visuals. The actual GridX product content can be added later
-              without carrying forward the old demo theme.
+              {about.description}
             </CardDescription>
           </CardHeader>
 
@@ -68,7 +48,7 @@ function About() {
         </Card>
 
         <section className="grid gap-4 md:grid-cols-3">
-          {notes.map((note) => {
+          {about.notes.map((note) => {
             const Icon = note.icon
 
             return (

@@ -14,6 +14,7 @@ import {
   Star,
 } from 'lucide-react'
 import { Card } from '../ui/card'
+import { useMarketing } from '#/hooks/useMarketing'
 
 function BenefitsHeader() {
   return (
@@ -32,58 +33,14 @@ function BenefitsHeader() {
   )
 }
 
-const BuyerBenefits = [
-  {
-    text: 'Pay 5-20% below standard retail tariff on qualifying trades',
-    icon: <TrendingDown className="size-4 text-brand-accent" />,
-  },
-  {
-    text: 'Choose renewable-sourced energy from verified local prosumers',
-    icon: <Leaf className="size-4 text-brand-accent" />,
-  },
-  {
-    text: 'Real-time pricing, no monthly contracts or fixed plans',
-    icon: <Zap className="size-4 text-brand-accent" />,
-  },
-  {
-    text: 'AED wallet with instant top-up via bank transfer or card',
-    icon: <Wallet className="size-4 text-brand-accent" />,
-  },
-  {
-    text: 'Filter listings by zone, asset type, price, and delivery window',
-    icon: <Globe className="size-4 text-brand-accent" />,
-  },
-  {
-    text: 'Price alerts when rates hit your target in your grid zone',
-    icon: <Bell className="size-4 text-brand-accent" />,
-  },
-]
-
-const ProsumerBenefits = [
-  {
-    text: 'Earn AED from every kWh of surplus solor you export to neighbours',
-    icon: <ArrowUpRight className="size-4 text-brand-accent" />,
-  },
-  {
-    text: 'Set your own price per kWh — zone parameters apply as guide',
-    icon: <Gauge className="size-4 text-brand-accent" />,
-  },
-  {
-    text: 'Battery storage and EV vehicle -to-grid  exports fully supported',
-    icon: <BatteryCharging className="size-4 text-brand-accent" />,
-  },
-  {
-    text: 'Typical prosumer earnings AED 200-800 per month',
-    icon: <TrendingUp className="size-4 text-brand-accent" />,
-  },
-  {
-    text: 'Automatic meter reading — no manual logging or estimates',
-    icon: <CircleCheck className="size-4 text-brand-accent" />,
-  },
-  {
-    text: 'Build a verified trading reputation across grid zones',
-    icon: <Star className="size-4 text-brand-accent" />,
-  },
+const buyerIcons = [TrendingDown, Leaf, Zap, Wallet, Globe, Bell]
+const prosumerIcons = [
+  ArrowUpRight,
+  Gauge,
+  BatteryCharging,
+  TrendingUp,
+  CircleCheck,
+  Star,
 ]
 
 interface ParticipantCardProps {
@@ -123,18 +80,34 @@ function ParticipantCard({ label, title, benefits }: ParticipantCardProps) {
 }
 
 function ParticipantSection() {
+  const marketing = useMarketing()
+  const buyerBenefits = marketing.buyerBenefits.map((text, index) => {
+    const Icon = buyerIcons[index]
+    return {
+      text,
+      icon: <Icon className="size-4 text-brand-accent" />,
+    }
+  })
+  const prosumerBenefits = marketing.prosumerBenefits.map((text, index) => {
+    const Icon = prosumerIcons[index]
+    return {
+      text,
+      icon: <Icon className="size-4 text-brand-accent" />,
+    }
+  })
+
   return (
     <div className="w-full py-6 flex flex-row justify-center gap-6">
       <ParticipantCard
         label="For buyers"
         title="Access clean local energy"
-        benefits={BuyerBenefits}
+        benefits={buyerBenefits}
       />
 
       <ParticipantCard
         label="For prosumers"
         title="Monetise your energy assets"
-        benefits={ProsumerBenefits}
+        benefits={prosumerBenefits}
       />
     </div>
   )
