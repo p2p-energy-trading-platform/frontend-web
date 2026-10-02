@@ -1,5 +1,4 @@
-import * as React from 'react'
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { Zap } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
