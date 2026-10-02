@@ -8,13 +8,17 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '#/components/ui/tooltip'
-import type { BankAccount } from './paymentMethodData'
+import type { BankAccount } from './payment-types'
 
 interface BankAccountListProps {
   accounts: BankAccount[]
+  verificationNote: string
 }
 
-export function BankAccountList({ accounts }: BankAccountListProps) {
+export function BankAccountList({
+  accounts,
+  verificationNote,
+}: BankAccountListProps) {
   return (
     <div className="space-y-2">
       {accounts.map((account) => (
@@ -92,10 +96,7 @@ export function BankAccountList({ accounts }: BankAccountListProps) {
 
       <Alert>
         <Info />
-        <AlertDescription>
-          Bank accounts are verified via two micro-deposits (AED 0.01–0.99).
-          Verification typically takes 1–2 business days.
-        </AlertDescription>
+        <AlertDescription>{verificationNote}</AlertDescription>
       </Alert>
     </div>
   )

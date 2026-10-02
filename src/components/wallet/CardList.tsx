@@ -6,7 +6,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '#/components/ui/tooltip'
-import type { PaymentCard } from './paymentMethodData'
+import type { PaymentCard } from './payment-types'
 import { CardLogo } from './CardLogo'
 
 interface CardListProps {

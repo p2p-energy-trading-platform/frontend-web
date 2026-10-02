@@ -4,9 +4,10 @@ import { Plus } from 'lucide-react'
 import { CardList } from './CardList'
 import { BankAccountList } from './BankAccountList'
 import { PaymentMethodTabs } from './PaymentMethodTabs'
-import { SAMPLE_CARDS, SAMPLE_ACCOUNTS } from './paymentMethodData'
+import { useWallet } from '#/hooks/useWallet'
 
 export function PaymentMethods() {
+  const wallet = useWallet()
   const [tab, setTab] = useState<'cards' | 'banks'>('cards')
 
   return (
@@ -23,9 +24,12 @@ export function PaymentMethods() {
       <PaymentMethodTabs tab={tab} setTab={setTab} />
 
       {tab === 'cards' ? (
-        <CardList cards={SAMPLE_CARDS} />
+        <CardList cards={wallet.cards} />
       ) : (
-        <BankAccountList accounts={SAMPLE_ACCOUNTS} />
+        <BankAccountList
+          accounts={wallet.accounts}
+          verificationNote={wallet.balance.verificationNote}
+        />
       )}
     </div>
   )

@@ -12,24 +12,15 @@ import {
   SelectValue,
 } from '#/components/ui/select'
 
-const transactions = [
-  {
-    title: 'Energy purchase',
-    date: '07 Aug 2026 · 10:30 AM',
-    amount: '- AED 25.00',
-    type: 'buy',
-  },
-  {
-    title: 'Energy sold',
-    date: '06 Aug 2026 · 04:15 PM',
-    amount: '+ AED 42.50',
-    type: 'sell',
-  },
-]
+import { useWallet } from '#/hooks/useWallet'
 
 export function TransactionHistory() {
+  const wallet = useWallet()
   return (
-    <Card className="flex w-full flex-col gap-6 border-border-subtle bg-card p-6 lg:w-3/5">
+    <Card
+      className="flex w-full flex-col gap-6 border-border-subtle bg-card p-6 lg:w-3/5"
+      data-source={wallet.source}
+    >
       <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
         <h2 className="text-heading-4 text-text-secondary">
           Transaction History
@@ -69,7 +60,7 @@ export function TransactionHistory() {
         </Select>
       </div>
 
-      {transactions.map((transaction) => (
+      {wallet.transactions.map((transaction) => (
         <div
           key={transaction.title}
           className="flex items-center justify-between border-b border-border-subtle pb-3"

@@ -13,7 +13,7 @@ function Wallet() {
     <main className="mx-auto flex w-full flex-col gap-5 p-6">
       <BalanceHero />
 
-      <div className="flex flex-row w-full gap-7">
+      <div className="flex w-full flex-col gap-7 lg:flex-row">
         <TransactionHistory />
         <PaymentMethods />
       </div>

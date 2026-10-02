@@ -1,4 +1,4 @@
-import type { CardBrand } from './paymentMethodData'
+import type { CardBrand } from './payment-types'
 
 export function CardLogo({ brand }: { brand: CardBrand }) {
   const colors: Record<CardBrand, string> = {
