@@ -1,12 +1,16 @@
 import { Link, useNavigate } from '@tanstack/react-router'
+import type { ReactNode } from 'react'
 import { Bell, ChevronDown, Home, HelpCircle } from 'lucide-react'
 
+import { Avatar, AvatarFallback } from '#/components/ui/avatar'
 import { Badge } from '#/components/ui/badge'
 import { Button } from '#/components/ui/button'
 import ThemeToggle from '#/components/ThemeToggle'
 import { cn } from '#/lib/utils'
 
 interface PageHeaderProps {
+  /** Extra control rendered at the start of the bar, such as the mobile nav button. */
+  leading?: ReactNode
   /** e.g. "Villa 47" */
   propertyName: string
   /** e.g. "JLT Zone 4" */
@@ -31,6 +35,7 @@ interface PageHeaderProps {
 }
 
 export default function PageHeader({
+  leading,
   propertyName,
   zoneLabel,
   meterOnline = true,
@@ -56,10 +61,11 @@ export default function PageHeader({
   return (
     <header className="sticky top-0 z-50 border-b border-border-subtle bg-card">
       <div className="flex h-14 items-center gap-3 px-4 sm:px-6">
+        {leading}
         {/* Left: property + zone + meter status */}
         <Link
           to={dashboardHref}
-          className="inline-flex items-center gap-2 rounded-lg px-1.5 py-1 text-text-primary no-underline transition hover:bg-secondary"
+          className="max-sm:hidden inline-flex items-center gap-2 rounded-lg px-1.5 py-1 text-text-primary no-underline transition hover:bg-secondary"
         >
           <span className="flex size-7 items-center justify-center rounded-lg bg-secondary text-accent">
             <Home className="size-4" />
@@ -67,14 +73,14 @@ export default function PageHeader({
           <span className="text-sm font-semibold">{propertyName}</span>
         </Link>
 
-        <button
+        {/* <button
           type="button"
           onClick={onZoneClick}
           className="inline-flex items-center gap-1 rounded-full border border-border-subtle bg-secondary px-2.5 py-1 text-xs font-medium text-text-secondary transition hover:bg-muted"
         >
           {zoneLabel}
           <ChevronDown className="size-3.5" />
-        </button>
+        </button> */}
 
         <Badge
           variant="outline"
@@ -99,6 +105,7 @@ export default function PageHeader({
             size="icon"
             aria-label="Help"
             onClick={onHelpClick}
+            className="max-sm:hidden"
           >
             <HelpCircle className="size-4.5 text-text-secondary" />
           </Button>
@@ -124,9 +131,11 @@ export default function PageHeader({
             onClick={onUserMenuClick}
             className="ml-1 flex items-center gap-2 rounded-lg py-1 pl-1 pr-2 no-underline transition hover:bg-bg-elevated"
           >
-            <span className="flex size-8 items-center justify-center rounded-full border border-accent/30 bg-accent text-xs font-semibold text-accent-foreground shadow-sm ring-2 ring-accent/10">
-              {user.initials}
-            </span>
+            <Avatar className="size-8 border border-accent/30 bg-accent shadow-sm ring-2 ring-accent/10">
+              <AvatarFallback className="bg-accent text-xs font-semibold text-accent-foreground">
+                {user.initials}
+              </AvatarFallback>
+            </Avatar>
             <span className="hidden flex-col items-start leading-tight sm:flex">
               <span className="text-sm font-medium text-text-primary">
                 {user.name}

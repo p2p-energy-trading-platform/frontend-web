@@ -5,14 +5,23 @@ import {
   ChevronsLeft,
   History,
   LayoutGrid,
+  Menu,
   Settings,
   TrendingUp,
   Wallet,
   Zap,
 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Badge } from '#/components/ui/badge'
+import { Button } from '#/components/ui/button'
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '#/components/ui/sheet'
 import { cn } from '#/lib/utils'
 
 const navItems = [
@@ -27,27 +36,76 @@ const navItems = [
 
 const navGroups = [navItems.slice(0, 4), navItems.slice(4)]
 
+interface SidebarUser {
+  name: string
+  property: string
+  zone: string
+  initials: string
+}
+
 interface SidebarProps {
-  user: {
-    name: string
-    property: string
-    zone: string
-    initials: string
-  }
+  user: SidebarUser
+}
+
+export function MobileNavButton({ user }: SidebarProps) {
+  const [open, setOpen] = useState(false)
+  const pathname = useRouterState({ select: (s) => s.location.pathname })
+
+  useEffect(() => {
+    setOpen(false)
+  }, [pathname])
+
+  return (
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger
+        className="md:hidden"
+        render={
+          <Button variant="ghost" size="icon" aria-label="Open navigation" />
+        }
+      >
+        <Menu />
+      </SheetTrigger>
+      <SheetContent side="left" className="w-72 p-0">
+        <SheetHeader className="sr-only">
+          <SheetTitle>Navigation</SheetTitle>
+        </SheetHeader>
+        <SidebarPanel user={user} collapsed={false} />
+      </SheetContent>
+    </Sheet>
+  )
 }
 
 export default function Sidebar({ user }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false)
-  const pathname = useRouterState({ select: (s) => s.location.pathname })
 
   return (
     <aside
       className={cn(
-        'sticky top-0 flex h-screen shrink-0 flex-col border-r border-sidebar-border bg-sidebar transition-all',
+        'sticky top-0 hidden h-screen shrink-0 flex-col border-r border-sidebar-border bg-sidebar transition-all md:flex',
         collapsed ? 'w-19' : 'w-55',
       )}
     >
-      {/* Brand */}
+      <SidebarPanel
+        user={user}
+        collapsed={collapsed}
+        onToggleCollapse={() => setCollapsed((current) => !current)}
+      />
+    </aside>
+  )
+}
+
+function SidebarPanel({
+  user,
+  collapsed,
+  onToggleCollapse,
+}: SidebarProps & {
+  collapsed: boolean
+  onToggleCollapse?: () => void
+}) {
+  const pathname = useRouterState({ select: (s) => s.location.pathname })
+
+  return (
+    <>
       <div className="flex items-center gap-2 border-b border-sidebar-border px-4 py-4">
         <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
           <Zap className="size-4.5 fill-current" />
@@ -67,12 +125,8 @@ export default function Sidebar({ user }: SidebarProps) {
         )}
       </div>
 
-      {/* User summary */}
       <div className="border-b border-sidebar-border py-2">
-        <button
-          type="button"
-          className="mx-2 flex w-[calc(100%-1rem)] items-center gap-2 rounded-lg px-2 py-2 text-left transition hover:bg-sidebar-accent"
-        >
+        <div className="mx-2 flex w-[calc(100%-1rem)] items-center gap-2 rounded-lg px-2 py-2 text-left">
           <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-accent-foreground">
             {user.initials}
           </span>
@@ -89,10 +143,9 @@ export default function Sidebar({ user }: SidebarProps) {
               <ChevronDown className="ml-auto size-4 shrink-0 text-sidebar-foreground/50" />
             </>
           )}
-        </button>
+        </div>
       </div>
 
-      {/* Nav */}
       <nav className="flex flex-1 flex-col px-2 py-2">
         {navGroups.map((group, groupIndex) => (
           <div
@@ -126,20 +179,22 @@ export default function Sidebar({ user }: SidebarProps) {
         ))}
       </nav>
 
-      {/* Collapse toggle */}
-      <button
-        type="button"
-        onClick={() => setCollapsed((c) => !c)}
-        className="m-2 flex items-center gap-2 rounded-lg px-2.5 py-2 text-sm font-medium text-sidebar-foreground/60 transition hover:bg-sidebar-accent hover:text-sidebar-foreground"
-      >
-        <ChevronsLeft
-          className={cn(
-            'size-4.5 transition-transform',
-            collapsed && 'rotate-180',
-          )}
-        />
-        {!collapsed && <span>Collapse</span>}
-      </button>
-    </aside>
+      {onToggleCollapse && (
+        <button
+          type="button"
+          onClick={onToggleCollapse}
+          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          className="m-2 flex items-center gap-2 rounded-lg px-2.5 py-2 text-sm font-medium text-sidebar-foreground/60 transition hover:bg-sidebar-accent hover:text-sidebar-foreground"
+        >
+          <ChevronsLeft
+            className={cn(
+              'size-4.5 transition-transform',
+              collapsed && 'rotate-180',
+            )}
+          />
+          {!collapsed && <span>Collapse</span>}
+        </button>
+      )}
+    </>
   )
 }
