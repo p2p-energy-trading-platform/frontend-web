@@ -293,7 +293,7 @@ export function CreateAccountForm({
           )}
         </Button>
 
-        <p className="mt-3.5 text-center text-[11px] leading-4 text-text-disabled">
+        <p className="mt-3.5 text-center text-caption leading-4 text-text-disabled">
           Complete all fields and accept the terms to continue.
         </p>
       </div>

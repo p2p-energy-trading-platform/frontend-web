@@ -42,7 +42,7 @@ export function RegistrationStepper({
             <div className="flex min-w-0 flex-1 flex-col items-center gap-1.5 text-center">
               <span
                 className={cn(
-                  'flex size-[34px] shrink-0 items-center justify-center rounded-full border text-[13px] font-semibold transition-colors',
+                  'flex size-[34px] shrink-0 items-center justify-center rounded-full border text-label-lg font-semibold transition-colors',
                   isComplete &&
                     'border-accent bg-accent text-accent-foreground',
                   isActive && 'border-accent bg-accent/10 text-accent',
@@ -60,7 +60,7 @@ export function RegistrationStepper({
 
               <span
                 className={cn(
-                  'truncate text-[13px] font-semibold leading-[18px]',
+                  'truncate text-label-lg font-semibold leading-[18px]',
                   isComplete || isActive
                     ? 'text-foreground'
                     : 'text-text-disabled',
@@ -71,7 +71,7 @@ export function RegistrationStepper({
 
               <span
                 className={cn(
-                  'hidden text-[10px] leading-[14px] sm:block',
+                  'hidden text-caption leading-[14px] sm:block',
                   isActive ? 'text-text-tertiary' : 'text-text-disabled',
                 )}
               >

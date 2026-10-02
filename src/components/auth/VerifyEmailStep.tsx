@@ -59,11 +59,11 @@ export function VerifyEmailStep({
         <MailCheck className="size-[22px]" />
       </div>
 
-      <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.1em] text-accent">
+      <p className="mt-4 text-caption font-bold uppercase tracking-[0.1em] text-accent">
         Email verification
       </p>
 
-      <h1 className="mt-1 font-heading text-[26px] font-bold leading-[34px]">
+      <h1 className="mt-1 font-heading text-heading-1 font-bold leading-[34px]">
         Verify your email
       </h1>
 

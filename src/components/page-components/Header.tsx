@@ -120,7 +120,7 @@ export default function PageHeader({
           >
             <Bell className="size-4.5 text-text-secondary" />
             {notificationCount > 0 && (
-              <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-accent text-[10px] font-semibold leading-none text-accent-foreground">
+              <span className="absolute -right-0.5 -top-0.5 flex size-4 items-center justify-center rounded-full bg-accent text-caption font-semibold leading-none text-accent-foreground">
                 {notificationCount > 9 ? '9+' : notificationCount}
               </span>
             )}

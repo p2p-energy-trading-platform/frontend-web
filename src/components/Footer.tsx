@@ -14,9 +14,7 @@ export default function Footer() {
             GridX
           </div>
 
-          <p className="m-0 text-sm">
-            &copy; {year} GridX. Temporary demo interface.
-          </p>
+          <p className="m-0 text-sm">&copy; {year} GridX.</p>
         </div>
 
         <div className="flex items-center gap-3">

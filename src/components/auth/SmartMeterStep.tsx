@@ -51,10 +51,10 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
     <div>
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-accent">
+          <p className="text-caption font-bold uppercase tracking-[0.1em] text-accent">
             Step 4 · Optional smart meter
           </p>
-          <h1 className="mt-1 font-heading text-[26px] font-bold leading-[34px]">
+          <h1 className="mt-1 font-heading text-heading-1 font-bold leading-[34px]">
             Connect your smart meter
           </h1>
         </div>
@@ -96,7 +96,7 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
           />
           <p
             id="smartMeterId-help"
-            className="text-[11px] leading-4 text-text-disabled"
+            className="text-caption leading-4 text-text-disabled"
           >
             Find this ID below the barcode on the front of your meter.
           </p>
@@ -104,7 +104,7 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
             <p
               id="smartMeterId-error"
               role="alert"
-              className="text-xs text-[var(--feedback-error-text)]"
+              className="text-xs text-feedback-error-text"
             >
               Enter an ID in the format MTR-7829-XY.
             </p>

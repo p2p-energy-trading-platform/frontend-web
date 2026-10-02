@@ -55,7 +55,7 @@ export function NotificationFilterBar({
               {typeof count === 'number' && count > 0 && (
                 <span
                   className={cn(
-                    'flex min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-semibold',
+                    'flex min-w-4 items-center justify-center rounded-full px-1 text-caption font-semibold',
                     active
                       ? 'bg-accent text-accent-foreground'
                       : 'bg-muted text-text-tertiary',
