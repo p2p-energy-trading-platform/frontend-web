@@ -242,7 +242,7 @@ export function TradesTab({ state }: { state: HistoryViewState }) {
     <div className="space-y-3" data-source={source}>
       {/* Filters */}
       <div className="flex flex-wrap gap-2">
-        <div className="relative min-w-[160px] flex-1">
+        <div className="relative min-w-40 flex-1">
           <Search
             size={13}
             className="pointer-events-none absolute top-1/2 left-2.5 -translate-y-1/2 text-text-tertiary"
@@ -363,7 +363,7 @@ export function TradesTab({ state }: { state: HistoryViewState }) {
                     <TableCell className="px-3 py-3 font-mono font-semibold text-foreground">
                       {t.totalAed.toFixed(3)}
                     </TableCell>
-                    <TableCell className="max-w-[120px] truncate px-3 py-3 text-text-secondary">
+                    <TableCell className="max-w-30 truncate px-3 py-3 text-text-secondary">
                       {t.zone}
                     </TableCell>
                     <TableCell className="px-3 py-3">
@@ -415,7 +415,7 @@ export function TradesTab({ state }: { state: HistoryViewState }) {
                   <span className="text-text-tertiary">
                     {t.kWh} kWh · {t.effectivePriceLabel}
                   </span>
-                  <span className="text-text-tertiary truncate max-w-[120px]">
+                  <span className="text-text-tertiary truncate max-w-30">
                     {t.zone}
                   </span>
                 </div>

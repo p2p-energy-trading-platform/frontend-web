@@ -272,7 +272,7 @@ export function OrdersTab({ state }: { state: HistoryViewState }) {
   return (
     <div className="space-y-3" data-source={source}>
       <div className="flex flex-wrap gap-2">
-        <div className="relative min-w-[160px] flex-1">
+        <div className="relative min-w-40 flex-1">
           <Search
             size={13}
             className="pointer-events-none absolute top-1/2 left-2.5 -translate-y-1/2 text-text-tertiary"
