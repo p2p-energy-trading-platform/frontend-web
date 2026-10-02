@@ -1,24 +1,15 @@
 import * as React from 'react'
-import { Link } from '@tanstack/react-router'
-import {
-  ArrowRight,
-  BatteryCharging,
-  Eye,
-  EyeOff,
-  Gauge,
-  House,
-  RefreshCw,
-  ShieldCheck,
-  Sun,
-  Zap,
-} from 'lucide-react'
+import { Link, useNavigate } from '@tanstack/react-router'
+import { ArrowRight, Eye, EyeOff, Zap } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
 import { Button } from '#/components/ui/button'
 import { Checkbox } from '#/components/ui/checkbox'
 import { Input } from '#/components/ui/input'
+import { useSignInShowcase } from '#/hooks/useAuth'
 
 export default function SignInForm() {
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = React.useState(false)
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
@@ -26,7 +17,7 @@ export default function SignInForm() {
 
   function handleSignIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    alert(`Welcome back, ${email}!`)
+    void navigate({ to: '/dashboard' })
   }
 
   return (
@@ -35,9 +26,7 @@ export default function SignInForm() {
         <section className="flex justify-center bg-background px-6 py-12 sm:px-10 lg:px-16 lg:py-16">
           <div className="w-full max-w-105">
             <header>
-              <h1 className="font-heading text-2xl font-bold leading-8">
-                Welcome back
-              </h1>
+              <h1 className="font-heading text-heading-1">Welcome back</h1>
 
               <p className="mt-1.5 text-sm text-text-tertiary">
                 Sign in to your GridX account
@@ -160,7 +149,7 @@ export default function SignInForm() {
 
                 <span className="flex-1 text-left">UAE PASS</span>
 
-                <span className="shrink-0 rounded-full bg-background-well px-1.5 py-0.5 font-mono text-[10px] font-medium leading-3.75 text-text-tertiary dark:bg-white/10 dark:text-text-secondary">
+                <span className="shrink-0 rounded-full bg-background-well px-1.5 py-0.5 font-mono text-caption font-medium leading-3.75 text-text-tertiary dark:bg-white/10 dark:text-text-secondary">
                   UAE Digital ID
                 </span>
 
@@ -202,7 +191,7 @@ export default function SignInForm() {
                 </Button>
               </div>
 
-              <p className="mt-2.5 text-center text-[10px] text-text-disabled">
+              <p className="mt-2.5 text-center text-caption text-text-disabled">
                 These options may not yet be available in all regions.
               </p>
 
@@ -217,7 +206,7 @@ export default function SignInForm() {
               </p>
 
               <div className="mt-5 border-t border-border-subtle pt-5 text-center">
-                <p className="text-[10px] uppercase tracking-[0.08em] text-text-disabled">
+                <p className="text-caption uppercase tracking-[0.08em] text-text-disabled">
                   Demo shortcut
                 </p>
 
@@ -240,44 +229,7 @@ export default function SignInForm() {
 }
 
 function SignInVisualPanel() {
-  const networkNodes = [
-    {
-      label: 'Solar PV',
-      sublabel: 'JLT Zone 4',
-      icon: Sun,
-      className: 'left-[8%] top-[12%]',
-    },
-    {
-      label: 'Battery',
-      sublabel: 'DIFC',
-      icon: BatteryCharging,
-      className: 'left-1/2 top-[2%] -translate-x-1/2',
-    },
-    {
-      label: 'EV Export',
-      sublabel: 'Downtown',
-      icon: Zap,
-      className: 'right-[8%] top-[12%]',
-    },
-    {
-      label: 'Villa',
-      sublabel: 'Al Quoz',
-      icon: House,
-      className: 'left-[8%] bottom-[4%]',
-    },
-    {
-      label: 'Apartment',
-      sublabel: 'Business Bay',
-      icon: House,
-      className: 'left-1/2 bottom-[-2%] -translate-x-1/2',
-    },
-    {
-      label: 'Townhouse',
-      sublabel: 'JBR',
-      icon: House,
-      className: 'right-[8%] bottom-[4%]',
-    },
-  ]
+  const showcase = useSignInShowcase()
 
   return (
     <aside className="relative hidden min-h-screen overflow-hidden bg-sidebar px-10 py-10 lg:block">
@@ -294,13 +246,13 @@ function SignInVisualPanel() {
             GridX
           </span>
 
-          <span className="rounded-full border border-accent/30 bg-accent/10 px-1.5 py-0.5 text-[9px] text-accent">
+          <span className="rounded-full border border-accent/30 bg-accent/10 px-1.5 py-0.5 text-caption text-accent">
             Beta
           </span>
         </div>
 
         <div className="mt-8">
-          <span className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1.5 text-[10px] font-bold tracking-[0.12em] text-accent">
+          <span className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1.5 text-caption font-bold tracking-[0.12em] text-accent">
             <span className="size-1.5 rounded-full bg-accent shadow-[0_0_8px_currentColor]" />
             LIVE ENERGY MARKETPLACE
           </span>
@@ -324,27 +276,29 @@ function SignInVisualPanel() {
 
           <div className="absolute left-1/2 top-1/2 flex size-20 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full border border-accent bg-accent/10 text-accent shadow-lg shadow-accent/20">
             <Zap className="size-5 fill-current" />
-            <span className="mt-1 text-[8px] font-bold">GRIDX</span>
+            <span className="mt-1 text-caption font-bold">GRIDX</span>
           </div>
 
-          {networkNodes.map(({ label, sublabel, icon: Icon, className }) => (
-            <div
-              key={label}
-              className={`absolute flex size-16 flex-col items-center justify-center rounded-full border border-accent/45 bg-white/10 text-center ring-1 ring-accent/10 ${className}`}
-            >
-              <Icon className="size-3.5 text-accent" />
+          {showcase.networkNodes.map(
+            ({ label, sublabel, icon: Icon, className }) => (
+              <div
+                key={label}
+                className={`absolute flex size-16 flex-col items-center justify-center rounded-full border border-accent/45 bg-white/10 text-center ring-1 ring-accent/10 ${className}`}
+              >
+                <Icon className="size-3.5 text-accent" />
 
-              <span className="mt-1 text-[8px] font-semibold leading-2.5 text-sidebar-foreground">
-                {label}
-              </span>
+                <span className="mt-1 text-caption font-semibold leading-2.5 text-sidebar-foreground">
+                  {label}
+                </span>
 
-              <span className="mt-0.5 text-[6px] leading-2 text-sidebar-foreground/60">
-                {sublabel}
-              </span>
-            </div>
-          ))}
+                <span className="mt-0.5 text-caption leading-2 text-sidebar-foreground/60">
+                  {sublabel}
+                </span>
+              </div>
+            ),
+          )}
 
-          <p className="absolute bottom-0 left-0 flex items-center gap-1.5 text-[8px] text-text-disabled">
+          <p className="absolute bottom-0 left-0 flex items-center gap-1.5 text-caption text-text-disabled">
             <span className="size-1.5 rounded-full bg-accent" />
             Energy trading in progress · Live
           </p>
@@ -364,29 +318,34 @@ function SignInVisualPanel() {
         </div>
 
         <div className="mt-7 space-y-3">
-          <Benefit icon={Gauge} label="24/7 live energy marketplace" />
-          <Benefit icon={ShieldCheck} label="Bank-grade encrypted sessions" />
-          <Benefit icon={RefreshCw} label="Instant portfolio sync" />
+          {showcase.benefits.map((benefit) => (
+            <Benefit
+              key={benefit.label}
+              icon={benefit.icon}
+              label={benefit.label}
+            />
+          ))}
         </div>
 
         <div className="mt-auto border-t border-sidebar-border pt-5">
           <p className="text-xs tracking-[0.18em] text-chart-3">★★★★★</p>
 
           <p className="mt-2 text-sm italic leading-6 text-sidebar-foreground/80">
-            “Sold 18 kWh this month to neighbours — earned more than my
-            electricity bill.”
+            “{showcase.testimonial.quote}”
           </p>
 
           <div className="mt-3 flex items-center gap-2.5">
             <span className="flex size-7 items-center justify-center rounded-full bg-accent/20 text-xs font-bold text-accent">
-              SA
+              {showcase.testimonial.initials}
             </span>
 
             <div>
-              <p className="text-xs font-semibold text-white">Sara A.</p>
+              <p className="text-xs font-semibold text-white">
+                {showcase.testimonial.name}
+              </p>
 
-              <p className="text-[10px] leading-4 text-sidebar-foreground/55">
-                Solar prosumer · JLT Zone 4
+              <p className="text-caption leading-4 text-sidebar-foreground/55">
+                {showcase.testimonial.detail}
               </p>
             </div>
           </div>

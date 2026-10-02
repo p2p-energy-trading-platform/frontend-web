@@ -6,7 +6,6 @@ import {
   FileCheck2,
   Gauge,
   IdCard,
-  Leaf,
   LockKeyhole,
   MailCheck,
   RadioTower,
@@ -24,25 +23,10 @@ import { RegistrationStepper } from '#/components/auth/RegistrationStepper'
 import { SmartMeterStep } from '#/components/auth/SmartMeterStep'
 import type { SmartMeterStatus } from '#/components/auth/SmartMeterStep'
 import { VerifyEmailStep } from '#/components/auth/VerifyEmailStep'
-import { saveKycStatus } from '#/lib/kyc-status'
-import { saveSmartMeterStatus } from '#/lib/smart-meter-status'
-
-const REGISTRATION_STEPS = [
-  { id: 1, label: 'Account', description: 'Email & password' },
-  { id: 2, label: 'Verify email', description: 'One-time code' },
-  { id: 3, label: 'Identity', description: 'KYC verification' },
-  { id: 4, label: 'Smart Meter', description: 'Optional connection' },
-]
-
-const ACCOUNT_BENEFITS = [
-  { icon: Zap, text: 'Trade energy across 16 Dubai grid zones' },
-  { icon: WalletCards, text: 'AED wallet with instant settlement' },
-  { icon: ShieldCheck, text: 'Verified prosumer network you can trust' },
-  { icon: Leaf, text: 'Measurable sustainability impact' },
-  { icon: BarChart3, text: 'Real-time pricing and trade analytics' },
-]
+import { useRegistration } from '#/hooks/useAuth'
 
 export default function Signup() {
+  const registration = useRegistration()
   const [view, setView] = React.useState<
     'account' | 'verify-email' | 'kyc' | 'smart-meter' | 'complete'
   >('account')
@@ -67,7 +51,7 @@ export default function Signup() {
     setIsLoading(true)
 
     try {
-      await new Promise((resolve) => window.setTimeout(resolve, 700))
+      await registration.submitAccount()
       setUserEmail(data.email)
       setView('verify-email')
     } finally {
@@ -76,30 +60,31 @@ export default function Signup() {
   }
 
   async function handleEmailVerified() {
-    await new Promise((resolve) => window.setTimeout(resolve, 600))
+    await registration.advanceStep()
     setView('kyc')
   }
 
   async function handleKycComplete(status: KycStatus) {
-    await new Promise((resolve) => window.setTimeout(resolve, 600))
-    saveKycStatus(status)
+    await registration.completeKyc(status)
     setKycStatus(status)
     setView('smart-meter')
   }
 
   async function handleSmartMeterComplete(status: SmartMeterStatus) {
-    await new Promise((resolve) => window.setTimeout(resolve, 600))
-    saveSmartMeterStatus(status)
+    await registration.completeSmartMeter(status)
     setMeterStatus(status)
     setView('complete')
   }
 
   return (
-    <main className="min-h-screen overflow-y-auto bg-background text-foreground">
+    <main
+      className="min-h-screen overflow-y-auto bg-background text-foreground"
+      data-source={registration.source}
+    >
       <section className="h-[120px] overflow-hidden bg-card px-5 py-4 sm:px-10 lg:px-[72px]">
         <div className="mx-auto max-w-[1197px]">
           <RegistrationStepper
-            steps={REGISTRATION_STEPS}
+            steps={registration.steps}
             currentStep={currentStep}
           />
         </div>
@@ -110,7 +95,7 @@ export default function Signup() {
           <div className="w-full max-w-[460px]">
             {view === 'account' ? (
               <>
-                <h1 className="font-heading text-[26px] font-bold leading-[34px]">
+                <h1 className="font-heading text-heading-1 font-bold leading-[34px]">
                   Create your account
                 </h1>
 
@@ -177,7 +162,7 @@ export default function Signup() {
               )}
             </div>
 
-            <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.1em] text-accent">
+            <p className="mt-4 text-caption font-bold uppercase tracking-[0.1em] text-accent">
               Step {Math.min(currentStep, 4)} of 4
             </p>
 
@@ -207,7 +192,7 @@ export default function Signup() {
 
             {view === 'account' ? (
               <ul className="mt-6 space-y-3.5">
-                {ACCOUNT_BENEFITS.map(({ icon: Icon, text }) => (
+                {registration.benefits.map(({ icon: Icon, text }) => (
                   <li
                     key={text}
                     className="flex items-center gap-3 text-sm text-sidebar-foreground/80"
@@ -312,11 +297,11 @@ export default function Signup() {
             )}
 
             <div className="mt-auto border-t border-sidebar-border pt-6">
-              <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-sidebar-foreground/50">
+              <p className="text-caption font-bold uppercase tracking-[0.1em] text-sidebar-foreground/50">
                 Privacy & security
               </p>
 
-              <ul className="mt-3 space-y-2 text-[11px] text-sidebar-foreground/55">
+              <ul className="mt-3 space-y-2 text-caption text-sidebar-foreground/55">
                 <li className="flex items-center gap-2">
                   <LockKeyhole className="size-3 text-accent" />
                   Your data is encrypted end-to-end
@@ -365,11 +350,11 @@ function RegistrationComplete({
         <Check className="size-7" />
       </div>
 
-      <p className="mt-5 text-[10px] font-bold uppercase tracking-[0.1em] text-accent">
+      <p className="mt-5 text-caption font-bold uppercase tracking-[0.1em] text-accent">
         Onboarding complete
       </p>
 
-      <h1 className="mt-2 font-heading text-[28px] font-bold leading-tight">
+      <h1 className="mt-2 font-heading text-heading-1 font-bold leading-tight">
         Registration saved
       </h1>
 

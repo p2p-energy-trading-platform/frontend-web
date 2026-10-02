@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from '#/components/ui/select'
 import { cn } from '#/lib/utils'
+import { useKycOptions } from '#/hooks/useAuth'
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024
 const ACCEPTED_FILE_TYPES = ['image/png', 'image/jpeg', 'application/pdf']
@@ -45,19 +46,8 @@ const INITIAL_FORM: KycFormData = {
   dateOfBirth: '',
 }
 
-const COUNTRIES = [
-  'United Arab Emirates',
-  'Bahrain',
-  'Kuwait',
-  'Oman',
-  'Qatar',
-  'Saudi Arabia',
-  'Sri Lanka',
-  'United Kingdom',
-  'United States',
-]
-
 export function KycStep({ email, onComplete }: KycStepProps) {
+  const { countries } = useKycOptions()
   const [formData, setFormData] = React.useState(INITIAL_FORM)
   const [document, setDocument] = React.useState<File | null>(null)
   const [fileError, setFileError] = React.useState('')
@@ -121,10 +111,10 @@ export function KycStep({ email, onComplete }: KycStepProps) {
     <div>
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-accent">
+          <p className="text-caption font-bold uppercase tracking-[0.1em] text-accent">
             Step 3 · Optional identity verification
           </p>
-          <h1 className="mt-1 font-heading text-[26px] font-bold leading-[34px]">
+          <h1 className="mt-1 font-heading text-heading-1 font-bold leading-[34px]">
             Verify your identity
           </h1>
         </div>
@@ -178,7 +168,7 @@ export function KycStep({ email, onComplete }: KycStepProps) {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    {COUNTRIES.map((country) => (
+                    {countries.map((country) => (
                       <SelectItem key={country} value={country}>
                         {country}
                       </SelectItem>
