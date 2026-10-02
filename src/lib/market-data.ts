@@ -1,3 +1,5 @@
+import { MARKET_TIME_ZONE } from '#/data/currency'
+
 export type MarketStatus = 'open' | 'closed'
 
 export interface MarketSnapshot {
@@ -20,10 +22,10 @@ export const initialMarketSnapshot: MarketSnapshot = {
   updatedAt: 0,
 }
 
-/** Demo market hours: Monday-Friday, 08:00-22:00 Malaysia time. */
+/** Demo market hours: Monday-Friday, 08:00-22:00 Gulf Standard Time. */
 export function getMarketStatus(date: Date): MarketStatus {
   const parts = new Intl.DateTimeFormat('en-GB', {
-    timeZone: 'Asia/Kuala_Lumpur',
+    timeZone: MARKET_TIME_ZONE,
     weekday: 'short',
     hour: '2-digit',
     hour12: false,

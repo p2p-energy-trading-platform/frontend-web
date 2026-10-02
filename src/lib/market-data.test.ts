@@ -18,7 +18,7 @@ describe('market data', () => {
     ).toBeLessThan(0)
   })
 
-  it('derives market status from Malaysia trading hours', () => {
+  it('derives market status from Gulf Standard Time trading hours', () => {
     expect(getMarketStatus(new Date('2026-08-07T04:00:00Z'))).toBe('open')
     expect(getMarketStatus(new Date('2026-08-08T04:00:00Z'))).toBe('closed')
   })
