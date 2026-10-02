@@ -1,0 +1,211 @@
+import {
+  ArrowDownLeft,
+  ArrowUpRight,
+  BatteryCharging,
+  Bell,
+  Car,
+  CircleGauge,
+  Home,
+  Plus,
+  Sun,
+  Wallet,
+  Zap,
+} from 'lucide-react'
+
+import { formatAed, formatAedPerKwh } from '#/data/currency'
+import { sessionUser } from '#/data/profile'
+
+export const generationPoints = [
+  0, 0, 0, 0.02, 0.05, 0.15, 0.35, 0.6, 0.82, 0.94, 1, 0.97, 0.88, 0.7, 0.45,
+  0.22, 0.08, 0.02, 0, 0, 0, 0, 0, 0,
+]
+
+export const generationAxis = {
+  yLabels: ['8 kW', '6 kW', '4 kW', '2 kW', '0 kW'],
+  xLabels: [
+    '00:00',
+    '02:00',
+    '04:00',
+    '06:00',
+    '08:00',
+    '10:00',
+    '12:00',
+    '14:00',
+    '16:00',
+    '18:00',
+    '20:00',
+    '22:00',
+  ],
+}
+
+export const dashboardView = {
+  greetingName: sessionUser.givenName,
+  subtitle: 'Thursday, 17 Jul 2025 · 14:38 GST · JLT Zone 4',
+  position: {
+    netKwh: 12.4,
+    generatedKwh: 42.6,
+    consumedKwh: 30.2,
+    exportedKwh: 8.4,
+    importedKwh: 0,
+  },
+  stats: [
+    {
+      icon: Wallet,
+      iconClassName: 'bg-accent/12 text-accent',
+      value: formatAed(284.5),
+      label: 'Wallet balance',
+    },
+    {
+      icon: ArrowUpRight,
+      iconClassName: 'bg-accent/12 text-accent',
+      value: formatAed(3.19, 2, 'always'),
+      label: 'Trading P&L',
+    },
+    {
+      icon: CircleGauge,
+      iconClassName: 'bg-chart-4/12 text-chart-4',
+      value: formatAed(1.6),
+      label: 'Saved vs tariff',
+    },
+    {
+      icon: Sun,
+      iconClassName: 'bg-chart-3/12 text-chart-3',
+      value: '18.4 kg',
+      label: 'Avoided carbon',
+    },
+    {
+      icon: ArrowUpRight,
+      iconClassName: 'bg-accent/12 text-accent',
+      value: '8.4 kWh',
+      label: 'Sold today',
+    },
+    {
+      icon: ArrowDownLeft,
+      iconClassName: 'bg-chart-4/12 text-chart-4',
+      value: '0 kWh',
+      label: 'Bought today',
+    },
+    {
+      icon: BatteryCharging,
+      iconClassName: 'bg-accent/12 text-accent',
+      value: '94%',
+      label: 'Battery SoC',
+    },
+  ],
+  actions: [
+    { label: 'Buy energy', icon: ArrowDownLeft, primary: true },
+    { label: 'Sell surplus', icon: ArrowUpRight },
+    { label: 'Deposit funds', icon: Wallet },
+    { label: 'Add asset', icon: Plus },
+  ],
+  slot: {
+    timeRange: '14:30 – 15:00',
+    pricePerKwh: formatAed(0.38),
+    remainingLabel: '18:21',
+    exportKw: '3.2 kW',
+    progressPercent: 62,
+  },
+  devices: [
+    {
+      icon: Sun,
+      iconWrapClassName: 'bg-chart-3/12 text-chart-3',
+      title: 'Solar PV',
+      subtitle: 'Rooftop · 6 kWp',
+      statusLabel: 'Generating',
+      value: '3.8',
+      valueLabel: 'kW',
+    },
+    {
+      icon: BatteryCharging,
+      iconWrapClassName: 'bg-accent/12 text-accent',
+      title: 'Home Battery',
+      subtitle: '14 kWh · AC-coupled',
+      statusLabel: 'Charging',
+      value: '1.2',
+      valueLabel: 'kW',
+      progressPercent: 94,
+    },
+    {
+      icon: Car,
+      iconWrapClassName: 'bg-chart-4/12 text-chart-4',
+      title: 'EV',
+      subtitle: 'Plugged in · V2G ready',
+      statusLabel: 'Charging',
+      value: '11',
+      valueLabel: 'kW',
+      progressPercent: 67,
+    },
+  ],
+  flow: [
+    { icon: Sun, label: 'Solar PV', value: '3.8 kW', tone: 'warning' as const },
+    { icon: Home, label: 'Home', value: '2.5 kW', tone: 'default' as const },
+    {
+      icon: BatteryCharging,
+      label: 'Battery',
+      value: '1.2 kW ↑',
+      tone: 'primary' as const,
+    },
+    {
+      icon: ArrowUpRight,
+      label: 'Grid export',
+      value: '0.1 kW',
+      tone: 'info' as const,
+    },
+  ],
+  activity: [
+    {
+      icon: ArrowUpRight,
+      iconClassName: 'bg-accent/12 text-accent',
+      title: 'Sold 8.4 kWh',
+      subtitle: 'to M. Al-Rashidi · JLT',
+      amount: formatAed(3.19, 2, 'always'),
+      amountClassName: 'text-accent',
+      time: '14:32',
+    },
+    {
+      icon: Bell,
+      iconClassName: 'bg-chart-4/12 text-chart-4',
+      title: 'Price alert',
+      subtitle: `Dubai South hit ${formatAedPerKwh(0.38, 2)}`,
+      time: '13:50',
+    },
+    {
+      icon: ArrowDownLeft,
+      iconClassName: 'bg-secondary text-text-secondary',
+      title: 'Bought 5.2 kWh',
+      subtitle: 'from F. Al-Mansouri · JLT',
+      amount: formatAed(-2.13),
+      amountClassName: 'text-destructive',
+      time: '13:15',
+    },
+    {
+      icon: Zap,
+      iconClassName: 'bg-secondary text-text-secondary',
+      title: 'Meter sync',
+      subtitle: `${sessionUser.meterId} · 15-min read`,
+      amount: '42.6 kWh',
+      time: '12:00',
+    },
+    {
+      icon: Wallet,
+      iconClassName: 'bg-accent/12 text-accent',
+      title: 'Funds deposited',
+      subtitle: 'Bank transfer confirmed',
+      amount: formatAed(100, 0, 'always'),
+      amountClassName: 'text-accent',
+      time: '09:18',
+    },
+  ],
+  market: {
+    listingCount: 4,
+    bestBuyPrice: formatAed(0.34),
+    sellFloorPrice: formatAed(0.38),
+    demandZone: 'Zone 4',
+    traderCount: 8,
+    traders: [
+      { name: 'M. Al-Rashidi', detail: '8.4 kWh · Solar', price: '0.34' },
+      { name: 'F. Al-Mansouri', detail: '12 kWh · Solar', price: '0.36' },
+      { name: 'K. Al-Marri', detail: '5.6 kWh · Battery', price: '0.38' },
+    ],
+  },
+}
