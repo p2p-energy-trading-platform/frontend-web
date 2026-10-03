@@ -3,10 +3,7 @@ import {
   Activity,
   BadgeCheck,
   Building2,
-  CheckCircle2,
   CircleDollarSign,
-  Eye,
-  EyeOff,
   Gauge,
   Link2,
   LockKeyhole,
@@ -17,7 +14,6 @@ import {
   UserRound,
   Zap,
 } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
 
 import { Avatar, AvatarBadge, AvatarFallback } from '#/components/ui/avatar'
 import { Badge } from '#/components/ui/badge'
@@ -41,52 +37,20 @@ import {
 import { Switch } from '#/components/ui/switch'
 import { cn } from 'cn'
 import { useProfile } from '#/hooks/useProfile'
-import type { PersonalProfile, TradingPreferences } from '#/hooks/useProfile'
-
-type Feedback = { tone: 'success' | 'error'; message: string } | null
-
-const integrationIcons: Record<string, LucideIcon> = {
-  'Utility Smart Meter API': RadioTower,
-  'Email delivery': Mail,
-  'Payment rail': CircleDollarSign,
-}
-
-function getInitials(name: string) {
-  const initials = name
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part[0].toUpperCase())
-    .join('')
-
-  return initials || 'U'
-}
+import { Field, FieldGroup, FieldLabel } from '../ui/field'
+import { PasswordInput } from '../ui/password-input'
 
 export default function Profile() {
   const profileState = useProfile()
   const {
     user,
-    profile,
-    setProfile,
-    tradingPreferences,
-    setTradingPreferences,
     kycStatus,
     meterStatus,
     countries,
     countryCodes,
-    integrations,
     tradeValueCurrency,
-    saveProfile: persistProfile,
-    saveTradingPreferences: persistTradingPreferences,
     source,
   } = profileState
-  const [profileFeedback, setProfileFeedback] = React.useState<Feedback>(null)
-  const [passwordFeedback, setPasswordFeedback] = React.useState<Feedback>(null)
-  const [preferencesFeedback, setPreferencesFeedback] =
-    React.useState<Feedback>(null)
-  const [integrationFeedback, setIntegrationFeedback] =
-    React.useState<Feedback>(null)
-  const [showPasswords, setShowPasswords] = React.useState(false)
 
   const kycStatusDetails = {
     'not-submitted': {
@@ -119,81 +83,8 @@ export default function Profile() {
           tone: 'warning' as const,
         }
 
-  function saveProfile(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-
-    try {
-      persistProfile()
-      setProfileFeedback({
-        tone: 'success',
-        message: 'Your profile information has been updated.',
-      })
-    } catch {
-      setProfileFeedback({
-        tone: 'error',
-        message: 'We could not save your changes. Please try again.',
-      })
-    }
-  }
-
-  function updateProfile<TField extends keyof PersonalProfile>(
-    field: TField,
-    value: PersonalProfile[TField],
-  ) {
-    setProfile((current) => ({ ...current, [field]: value }))
-    setProfileFeedback(null)
-  }
-
-  function updateTradingPreference<TField extends keyof TradingPreferences>(
-    field: TField,
-    value: TradingPreferences[TField],
-  ) {
-    setTradingPreferences((current) => ({ ...current, [field]: value }))
-    setPreferencesFeedback(null)
-  }
-
-  function saveTradingPreferences(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-
-    try {
-      persistTradingPreferences()
-      setPreferencesFeedback({
-        tone: 'success',
-        message: 'Trading preferences saved.',
-      })
-    } catch {
-      setPreferencesFeedback({
-        tone: 'error',
-        message: 'We could not save your preferences. Please try again.',
-      })
-    }
-  }
-
   const profileUser = {
     ...user,
-    name: profile.fullName,
-    initials: getInitials(profile.fullName),
-  }
-
-  function updatePassword(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    const values = new FormData(event.currentTarget)
-    const next = String(values.get('newPassword'))
-    const confirmation = String(values.get('confirmPassword'))
-
-    if (next !== confirmation) {
-      setPasswordFeedback({
-        tone: 'error',
-        message: 'New password and confirmation do not match.',
-      })
-      return
-    }
-
-    setPasswordFeedback({
-      tone: 'success',
-      message: 'Your password has been updated securely.',
-    })
-    event.currentTarget.reset()
   }
 
   return (
@@ -231,7 +122,7 @@ export default function Profile() {
                 </Avatar>
                 <div className="min-w-0">
                   <p className="truncate font-heading text-base font-semibold">
-                    {profile.fullName}
+                    Name
                   </p>
                   <p className="text-sm text-text-tertiary">
                     Prosumer · Individual Account
@@ -242,94 +133,82 @@ export default function Profile() {
                 </div>
               </div>
 
-              <form onSubmit={saveProfile} className="space-y-5">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <Field label="Full Name" htmlFor="fullName">
-                    <Input
-                      id="fullName"
-                      name="fullName"
-                      value={profile.fullName}
-                      onChange={(event) =>
-                        updateProfile('fullName', event.target.value)
-                      }
-                      autoComplete="name"
-                      required
-                    />
-                  </Field>
-                  <Field label="Email Address" htmlFor="email">
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={profile.email}
-                      onChange={(event) =>
-                        updateProfile('email', event.target.value)
-                      }
-                      autoComplete="email"
-                      required
-                    />
-                  </Field>
-                  <Field label="Phone Number" htmlFor="phone">
-                    <div className="grid grid-cols-[124px_minmax(0,1fr)] gap-2">
-                      <Select
-                        value={profile.countryCode}
-                        onValueChange={(value) =>
-                          updateProfile('countryCode', value ?? '')
-                        }
-                        name="countryCode"
-                      >
-                        <SelectTrigger
-                          aria-label="Country code"
-                          className="h-9 w-full"
+              <form className="space-y-5">
+                <FieldGroup>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Field>
+                      <FieldLabel htmlFor="fullName">Full Name</FieldLabel>
+                      <Input
+                        id="fullName"
+                        name="fullName"
+                  
+                        required
+                      />
+                    </Field>
+                    <Field>
+                      <FieldLabel htmlFor='email'>Email</FieldLabel>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        required
+                      />
+                    </Field>
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Field>
+                      <FieldLabel htmlFor='phone'>Phone</FieldLabel>
+                      <div className="grid grid-cols-[124px_minmax(0,1fr)] gap-2">
+                        <Select
+                          name="countryCode"
                         >
-                          <SelectValue>{profile.countryCode}</SelectValue>
+                          <SelectTrigger
+                            aria-label="Country code"
+                            className="h-9 w-full"
+                          >
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {countryCodes.map((option) => (
+                              <SelectItem key={option.value} value={option.value}>
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <Input
+                          id="phone"
+                          name="phone"
+                          type="tel"
+                          required
+                        />
+                      </div>
+                    </Field>
+                    <Field>
+                      <FieldLabel htmlFor='country'>Country / Region</FieldLabel>
+                      <Select
+                        name="country"
+                      >
+                        <SelectTrigger id="country" className="h-9 w-full">
+                          <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {countryCodes.map((option) => (
-                            <SelectItem key={option.value} value={option.value}>
-                              {option.label}
+                          {countries.map((country) => (
+                            <SelectItem key={country} value={country}>
+                              {country}
                             </SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        type="tel"
-                        value={profile.phone}
-                        onChange={(event) =>
-                          updateProfile('phone', event.target.value)
-                        }
-                        autoComplete="tel-national"
-                        required
-                      />
-                    </div>
+                    </Field>
+                  </div>
+                  <Field orientation="horizontal">
+                    <Button className="px-4">
+                      <Save className="size-4" />
+                      Save
+                    </Button>
                   </Field>
-                  <Field label="Country / Region" htmlFor="country">
-                    <Select
-                      value={profile.country}
-                      onValueChange={(value) =>
-                        updateProfile('country', value ?? '')
-                      }
-                      name="country"
-                    >
-                      <SelectTrigger id="country" className="h-9 w-full">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {countries.map((country) => (
-                          <SelectItem key={country} value={country}>
-                            {country}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </Field>
-                </div>
-                <FormActions
-                  feedback={profileFeedback}
-                  buttonLabel="Save Changes"
-                />
+                </FieldGroup>
               </form>
             </CardContent>
           </Card>
@@ -345,43 +224,44 @@ export default function Profile() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={updatePassword} className="space-y-5">
-                <div className="grid gap-4 sm:grid-cols-3">
-                  {[
-                    ['Current Password', 'currentPassword'],
-                    ['New Password', 'newPassword'],
-                    ['Confirm Password', 'confirmPassword'],
-                  ].map(([label, name]) => (
-                    <Field key={name} label={label} htmlFor={name}>
-                      <div className="relative">
-                        <Input
-                          id={name}
-                          name={name}
-                          type={showPasswords ? 'text' : 'password'}
-                          required
-                          minLength={8}
-                          className="pr-10"
-                        />
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="absolute right-0.5 top-0.5"
-                          aria-label={
-                            showPasswords ? 'Hide passwords' : 'Show passwords'
-                          }
-                          onClick={() => setShowPasswords((shown) => !shown)}
-                        >
-                          {showPasswords ? <EyeOff /> : <Eye />}
-                        </Button>
-                      </div>
+              <form className="space-y-5">
+                <FieldGroup>
+                  <div className="grid gap-4 sm:grid-cols-3">
+                    <Field>
+                      <FieldLabel htmlFor='name'>Current Password</FieldLabel>
+                      <PasswordInput
+                        id="currentPassword"
+                        name="currentPassword"
+                        required
+                        minLength={8}
+                      />
                     </Field>
-                  ))}
-                </div>
-                <FormActions
-                  feedback={passwordFeedback}
-                  buttonLabel="Update password"
-                />
+                    <Field>
+                      <FieldLabel htmlFor='name'>New Password</FieldLabel>
+                      <PasswordInput
+                        id="newPassword"
+                        name="newPassword"
+                        required
+                        minLength={8}
+                      />
+                    </Field>
+                    <Field>
+                      <FieldLabel htmlFor='name'>Confirm Password</FieldLabel>
+                      <PasswordInput
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        required
+                        minLength={8}
+                      />
+                    </Field>
+                  </div>
+                  <Field orientation="horizontal">
+                    <Button className="px-4">
+                      <Save className="size-4" />
+                      Save
+                    </Button>
+                  </Field>
+                </FieldGroup>
               </form>
             </CardContent>
           </Card>
@@ -397,124 +277,90 @@ export default function Profile() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={saveTradingPreferences} className="space-y-5">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <Field label="Default Order Type" htmlFor="orderType">
-                    <Select
-                      value={tradingPreferences.orderType}
-                      onValueChange={(value) =>
-                        updateTradingPreference('orderType', value ?? '')
-                      }
-                      name="orderType"
-                    >
-                      <SelectTrigger id="orderType" className="h-9 w-full">
-                        <SelectValue>
-                          {tradingPreferences.orderType === 'market'
-                            ? 'Market order'
-                            : 'Limit order'}
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="limit">Limit order</SelectItem>
-                        <SelectItem value="market">Market order</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </Field>
-                  <Field label="Default Price Mode" htmlFor="priceMode">
-                    <Select
-                      value={tradingPreferences.priceMode}
-                      onValueChange={(value) =>
-                        updateTradingPreference('priceMode', value ?? '')
-                      }
-                      name="priceMode"
-                    >
-                      <SelectTrigger id="priceMode" className="h-9 w-full">
-                        <SelectValue>
-                          {tradingPreferences.priceMode === 'manual'
-                            ? 'Manual price'
-                            : tradingPreferences.priceMode === 'market'
-                              ? 'Market price'
-                              : 'Recommended price'}
-                        </SelectValue>
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="recommended">
-                          Recommended price
-                        </SelectItem>
-                        <SelectItem value="manual">Manual price</SelectItem>
-                        <SelectItem value="market">Market price</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </Field>
-                  <Field label="Monthly Energy Limit" htmlFor="energyLimit">
-                    <div className="relative">
-                      <Input
-                        id="energyLimit"
-                        name="energyLimit"
-                        type="number"
-                        min="0"
-                        value={tradingPreferences.energyLimit}
-                        onChange={(event) =>
-                          updateTradingPreference(
-                            'energyLimit',
-                            event.target.value,
-                          )
-                        }
-                        required
-                        className="pr-14"
-                      />
-                      <span className="pointer-events-none absolute right-3 top-2.5 text-xs text-text-tertiary">
-                        kWh
-                      </span>
-                    </div>
-                  </Field>
-                  <Field label="Max Trade Value" htmlFor="tradeValue">
-                    <div className="relative">
-                      <span className="pointer-events-none absolute left-3 top-2.5 text-xs text-text-tertiary">
-                        {tradeValueCurrency}
-                      </span>
-                      <Input
-                        id="tradeValue"
-                        name="tradeValue"
-                        type="number"
-                        min="0"
-                        value={tradingPreferences.tradeValue}
-                        onChange={(event) =>
-                          updateTradingPreference(
-                            'tradeValue',
-                            event.target.value,
-                          )
-                        }
-                        required
-                        className="pl-10"
-                      />
-                    </div>
-                  </Field>
-                </div>
+              <form className="space-y-5">
+                <FieldGroup>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <Field>
+                      <FieldLabel htmlFor='orderType'>Default Order Type</FieldLabel>
+                      <Select
+                        name="orderType"
+                      >
+                        <SelectTrigger id="orderType" className="h-9 w-full">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="limit">Limit order</SelectItem>
+                          <SelectItem value="market">Market order</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </Field>
+                    <Field>
+                      <FieldLabel htmlFor='priceMode'>Default Price Mode</FieldLabel>
+                      <Select
+                        name="priceMode"
+                      >
+                        <SelectTrigger id="priceMode" className="h-9 w-full">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="recommended">
+                            Recommended price
+                          </SelectItem>
+                          <SelectItem value="manual">Manual price</SelectItem>
+                          <SelectItem value="market">Market price</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </Field>
+                    <Field>
+                      <FieldLabel htmlFor='energyLimit'>Monthly Energy Limit</FieldLabel>
+                      <div className="relative">
+                        <Input
+                          id="energyLimit"
+                          name="energyLimit"
+                          type="number"
+                          min="0"
+                          required
+                          className="pr-14"
+                        />
+                        <span className="pointer-events-none absolute right-3 top-2.5 text-xs text-text-tertiary">
+                          kWh
+                        </span>
+                      </div>
+                    </Field>
+                    <Field>
+                      <FieldLabel htmlFor="tradeValue">Max Trade Value</FieldLabel>
+                      <div className="relative">
+                        <span className="pointer-events-none absolute left-3 top-2.5 text-xs text-text-tertiary">
+                          {tradeValueCurrency}
+                        </span>
+                        <Input
+                          id="tradeValue"
+                          name="tradeValue"
+                          type="number"
+                          min="0"
+                          required
+                          className="pl-10"
+                        />
+                      </div>
+                    </Field>
+                  </div>
+
+                </FieldGroup>
                 <div className="divide-y divide-border rounded-xl border border-border">
                   <PreferenceToggle
                     id="recommendPrice"
                     icon={Gauge}
                     title="Auto-recommend sell price"
                     description="Suggest a price using live order book depth."
-                    checked={tradingPreferences.recommendPrice}
-                    onCheckedChange={(checked) =>
-                      updateTradingPreference('recommendPrice', checked)
-                    }
                   />
                   <PreferenceToggle
                     id="dispatchAutomation"
                     icon={Zap}
                     title="Allow dispatch automation"
                     description="Let GridX optimise battery and EV usage within your limits."
-                    checked={tradingPreferences.dispatchAutomation}
-                    onCheckedChange={(checked) =>
-                      updateTradingPreference('dispatchAutomation', checked)
-                    }
                   />
                 </div>
                 <FormActions
-                  feedback={preferencesFeedback}
                   buttonLabel="Save preferences"
                 />
               </form>
@@ -533,23 +379,27 @@ export default function Profile() {
             </CardHeader>
             <CardContent className="space-y-5">
               <div className="divide-y divide-border rounded-xl border border-border">
-                {integrations.map((integration) => (
-                  <IntegrationRow
-                    key={integration.name}
-                    icon={integrationIcons[integration.name]}
-                    {...integration}
-                  />
-                ))}
+                <IntegrationRow
+                  icon={RadioTower}
+                  name='Utility Smart Meter API'
+                  description='Connection request not approved yet'
+                  status='completed'
+                />
+                <IntegrationRow
+                  icon={Mail}
+                  name='Email delivery'
+                  description='Account and trading notifications enabled'
+                  status='completed'
+                />
+                <IntegrationRow
+                  icon={CircleDollarSign}
+                  name='Payment rail'
+                  description='Connect a payment provider for settlements'
+                  status='completed'
+                />
               </div>
               <FormActions
-                feedback={integrationFeedback}
                 buttonLabel="Save settings"
-                onClick={() =>
-                  setIntegrationFeedback({
-                    tone: 'success',
-                    message: 'Integration settings saved.',
-                  })
-                }
               />
             </CardContent>
           </Card>
@@ -596,49 +446,15 @@ export default function Profile() {
   )
 }
 
-function Field({
-  label,
-  htmlFor,
-  children,
-}: {
-  label: string
-  htmlFor: string
-  children: React.ReactNode
-}) {
-  return (
-    <div className="space-y-2">
-      <Label htmlFor={htmlFor}>{label}</Label>
-      {children}
-    </div>
-  )
-}
-
 function FormActions({
-  feedback,
   buttonLabel,
   onClick,
 }: {
-  feedback: Feedback
   buttonLabel: string
   onClick?: () => void
 }) {
   return (
     <div className="flex flex-col-reverse gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
-      <div aria-live="polite">
-        {feedback ? (
-          <p
-            className={cn(
-              'flex items-center gap-1.5 text-sm',
-              feedback.tone === 'success'
-                ? 'text-brand-primary'
-                : 'text-destructive',
-            )}
-          >
-            {feedback.tone === 'success' && <CheckCircle2 className="size-4" />}
-            {feedback.message}
-          </p>
-        ) : null}
-      </div>
       <Button
         type={onClick ? 'button' : 'submit'}
         onClick={onClick}
@@ -700,15 +516,11 @@ function PreferenceToggle({
   icon: Icon,
   title,
   description,
-  checked,
-  onCheckedChange,
 }: {
   id: string
   icon: React.ComponentType<{ className?: string }>
   title: string
   description: string
-  checked: boolean
-  onCheckedChange: (checked: boolean) => void
 }) {
   return (
     <div className="flex items-center gap-3 p-4">
@@ -726,8 +538,6 @@ function PreferenceToggle({
       <Switch
         id={id}
         name={id}
-        checked={checked}
-        onCheckedChange={onCheckedChange}
       />
     </div>
   )
@@ -738,15 +548,11 @@ function IntegrationRow({
   name,
   description,
   status,
-  action,
-  tone,
 }: {
   icon: React.ComponentType<{ className?: string }>
   name: string
   description: string
-  status: string
-  action: string
-  tone: 'success' | 'warning' | 'neutral'
+  status: 'pending' | 'completed'
 }) {
   return (
     <div className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center">
@@ -758,19 +564,12 @@ function IntegrationRow({
         <p className="mt-1 text-xs text-text-tertiary">{description}</p>
       </div>
       <Badge
-        variant="outline"
-        className={cn(
-          tone === 'success' &&
-            'border-brand-primary/30 bg-brand-primary-muted text-brand-primary',
-          tone === 'warning' &&
-            'border-brand-warning/30 bg-brand-warning-muted text-brand-warning',
-          tone === 'neutral' && 'text-text-tertiary',
-        )}
+        variant={status === 'completed' ? "default" : "destructive"}
       >
         {status}
       </Badge>
-      <Button type="button" variant="outline" size="sm">
-        {action}
+      <Button type="button" variant="outline">
+        {status === 'completed' ? 'manage' : 'connect'}
       </Button>
     </div>
   )
