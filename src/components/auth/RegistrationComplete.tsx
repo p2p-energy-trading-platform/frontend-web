@@ -1,6 +1,8 @@
 import { Check, IdCard, RadioTower } from "lucide-react"
 import type { KycStatus, SmartMeterStatus } from "./types"
 import { Link } from "@tanstack/react-router"
+import { buttonVariants } from "../ui/button"
+import { cn } from "cn"
 
 export default function RegistrationComplete({
   kycStatus,
@@ -57,10 +59,10 @@ export default function RegistrationComplete({
           </div>
         </div>
       </div>
-
       <Link
         to="/profile"
-        className="mt-7 flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-semibold text-accent-foreground transition hover:bg-accent/90"
+        className={cn(buttonVariants({ variant: 'default'}), 'mt-6 h-12 w-full rounded-xl')}
+        // className="mt-7 flex h-12 w-full items-center justify-center rounded-xl bg-accent text-base font-semibold text-accent-foreground transition hover:bg-accent/90"
       >
         View Profile
       </Link>

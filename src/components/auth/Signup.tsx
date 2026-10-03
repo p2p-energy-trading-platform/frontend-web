@@ -1,8 +1,6 @@
 import * as React from 'react'
-import { Link } from '@tanstack/react-router'
 
 import { CreateAccountForm } from '#/components/auth/CreateAccountForm'
-import type { CreateAccountFormData } from '#/components/auth/CreateAccountForm'
 import { KycStep } from '#/components/auth/KycStep'
 import { RegistrationStepper } from '#/components/auth/RegistrationStepper'
 import { SmartMeterStep } from '#/components/auth/SmartMeterStep'
@@ -16,8 +14,6 @@ import RegistrationComplete from './RegistrationComplete'
 export default function Signup() {
   const registration = useRegistration()
   const [view, setView] = React.useState<SIGN_UP_STATES>('account')
-  const [isLoading, setIsLoading] = React.useState(false)
-  const [userEmail, setUserEmail] = React.useState('')
   const [kycStatus, setKycStatus] = React.useState<KycStatus>('not-submitted')
   const [meterStatus, setMeterStatus] =
     React.useState<SmartMeterStatus>('skipped')
@@ -39,16 +35,8 @@ export default function Signup() {
 
   const currentStep = getCurrentStep(view);
 
-  async function handleCreateAccount(data: CreateAccountFormData) {
-    setIsLoading(true)
-
-    try {
-      await registration.submitAccount()
-      setUserEmail(data.email)
-      setView('verify-email')
-    } finally {
-      setIsLoading(false)
-    }
+  async function handleCreateAccount() {
+    setView('verify-email');
   }
 
   async function handleEmailVerified() {
@@ -86,38 +74,21 @@ export default function Signup() {
         <section className="flex justify-center overflow-y-auto bg-background px-5 py-10 sm:px-10 lg:px-16">
           <div className="w-full max-w-lg">
             {view === 'account' ? (
-              <>
-                <h1 className="font-heading text-heading-1 font-bold leading-8.5">
-                  Create your account
-                </h1>
-
-                <p className="mt-1 flex gap-1 text-sm leading-5 text-text-tertiary">
-                  Already have an account?{' '}
-                  <Link
-                    to="/sign-in"
-                    className="font-semibold text-accent hover:underline"
-                  >
-                    Sign in
-                  </Link>
-                </p>
-
-                <CreateAccountForm
-                  onSuccess={handleCreateAccount}
-                  isLoading={isLoading}
-                />
-              </>
+              <CreateAccountForm
+                onSuccess={handleCreateAccount}
+              />
             ) : null}
 
             {view === 'verify-email' ? (
               <VerifyEmailStep
-                email={userEmail}
+                email="test@example.com"
                 onBack={() => setView('account')}
                 onVerified={handleEmailVerified}
               />
             ) : null}
 
             {view === 'kyc' ? (
-              <KycStep email={userEmail} onComplete={handleKycComplete} />
+              <KycStep onComplete={handleKycComplete} />
             ) : null}
 
             {view === 'smart-meter' ? (
