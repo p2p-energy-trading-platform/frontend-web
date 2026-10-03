@@ -6,7 +6,6 @@ import {
   FileCheck2,
   Gauge,
   IdCard,
-  LockKeyhole,
   MailCheck,
   RadioTower,
   ShieldCheck,
@@ -78,11 +77,11 @@ export default function Signup() {
 
   return (
     <main
-      className="min-h-screen overflow-y-auto bg-background text-foreground"
+      className="flex h-screen flex-col overflow-hidden bg-background text-foreground"
       data-source={registration.source}
     >
-      <section className="h-[120px] overflow-hidden bg-card px-5 py-4 sm:px-10 lg:px-[72px]">
-        <div className="mx-auto max-w-[1197px]">
+      <section className="shrink-0 overflow-hidden bg-card px-5 py-4 sm:px-10">
+        <div className="mx-auto">
           <RegistrationStepper
             steps={registration.steps}
             currentStep={currentStep}
@@ -90,12 +89,12 @@ export default function Signup() {
         </div>
       </section>
 
-      <div className="grid min-h-[calc(100vh-120px)] lg:grid-cols-2">
-        <section className="flex justify-center bg-background px-5 py-10 sm:px-10 lg:px-16">
-          <div className="w-full max-w-[460px]">
+      <div className="grid flex-1 min-h-0 lg:grid-cols-2">
+        <section className="flex justify-center overflow-y-auto bg-background px-5 py-10 sm:px-10 lg:px-16">
+          <div className="w-full max-w-lg">
             {view === 'account' ? (
               <>
-                <h1 className="font-heading text-heading-1 font-bold leading-[34px]">
+                <h1 className="font-heading text-heading-1 font-bold leading-8.5">
                   Create your account
                 </h1>
 
@@ -141,32 +140,32 @@ export default function Signup() {
           </div>
         </section>
 
-        <aside className="relative hidden min-h-[808px] overflow-hidden bg-sidebar px-8 py-10 lg:block">
-          <div className="absolute -top-32 right-0 size-[400px] rounded-full bg-accent/10 blur-[80px]" />
-          <div className="absolute -bottom-16 -left-16 size-64 rounded-full bg-chart-4/[0.06] blur-[80px]" />
+        <aside className="relative max-lg:hidden overflow-y-auto bg-sidebar px-8 py-10">
+          <div className="absolute -top-32 right-0 size-100 rounded-full bg-accent/10 blur-[80px]" />
+          {/* <div className="absolute -bottom-16 -left-16 size-64 rounded-full bg-chart-4/6 blur-[80px]" /> */}
 
-          <div className="relative mx-auto flex h-full max-w-[606px] flex-col">
+          <div className="relative mx-auto flex h-full max-w-xl flex-col gap-5">
             <GridXBrand />
 
-            <div className="mt-10 flex size-12 items-center justify-center rounded-2xl border border-accent/25 bg-accent/15 text-accent">
+            <div className="flex size-12 items-center justify-center rounded-2xl border border-accent/25 bg-accent/15 text-accent">
               {view === 'account' ? (
-                <UserRoundPlus className="size-[22px]" />
+                <UserRoundPlus className="size-4" />
               ) : view === 'verify-email' ? (
-                <MailCheck className="size-[22px]" />
+                <MailCheck className="size-4" />
               ) : view === 'kyc' ? (
-                <IdCard className="size-[22px]" />
+                <IdCard className="size-4" />
               ) : view === 'smart-meter' ? (
-                <RadioTower className="size-[22px]" />
+                <RadioTower className="size-4" />
               ) : (
-                <FileCheck2 className="size-[22px]" />
+                <FileCheck2 className="size-4" />
               )}
             </div>
 
-            <p className="mt-4 text-caption font-bold uppercase tracking-[0.1em] text-accent">
+            <p className="mt-4 text-caption font-bold uppercase tracking-widest text-accent">
               Step {Math.min(currentStep, 4)} of 4
             </p>
 
-            <h2 className="mt-1 font-heading text-xl font-bold leading-[25px] text-white">
+            <h2 className="mt-1 font-heading text-xl font-bold">
               {view === 'account'
                 ? 'Start trading in minutes'
                 : view === 'verify-email'
@@ -178,7 +177,7 @@ export default function Signup() {
                       : 'Your account is ready'}
             </h2>
 
-            <p className="mt-2 text-sm leading-[22px] text-sidebar-foreground/70">
+            <p className="mt-2 text-sm leading-5.5 text-sidebar-foreground/70">
               {view === 'account'
                 ? 'Your GridX account gives you access to the full peer-to-peer energy marketplace.'
                 : view === 'verify-email'
@@ -197,7 +196,7 @@ export default function Signup() {
                     key={text}
                     className="flex items-center gap-3 text-sm text-sidebar-foreground/80"
                   >
-                    <span className="flex size-7 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.08] text-accent">
+                    <span className="flex size-7 shrink-0 items-center justify-center rounded-xl border text-accent">
                       <Icon className="size-3.5" />
                     </span>
 
@@ -206,8 +205,8 @@ export default function Signup() {
                 ))}
               </ul>
             ) : view === 'verify-email' ? (
-              <div className="mt-7 rounded-2xl border border-white/10 bg-white/10 p-5 shadow-sm">
-                <p className="text-sm font-semibold text-white">
+              <div className="rounded-2xl border p-5 shadow-sm">
+                <p className="text-sm font-semibold">
                   What happens next?
                 </p>
 
@@ -271,7 +270,7 @@ export default function Signup() {
                 </li>
               </ul>
             ) : (
-              <div className="mt-7 rounded-2xl border border-accent/20 bg-accent/[0.06] p-5">
+              <div className="mt-7 rounded-2xl border border-accent/20 bg-accent/6 p-5">
                 <div className="flex items-start gap-3">
                   <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground">
                     <Check className="size-4" />
@@ -296,8 +295,8 @@ export default function Signup() {
               </div>
             )}
 
-            <div className="mt-auto border-t border-sidebar-border pt-6">
-              <p className="text-caption font-bold uppercase tracking-[0.1em] text-sidebar-foreground/50">
+            {/* <div className="mt-auto border-t border-sidebar-border pt-6">
+              <p className="text-caption font-bold uppercase tracking-widest text-sidebar-foreground/50">
                 Privacy & security
               </p>
 
@@ -317,7 +316,7 @@ export default function Signup() {
                   ISO 27001-aligned security practices
                 </li>
               </ul>
-            </div>
+            </div> */}
           </div>
         </aside>
       </div>
@@ -329,7 +328,7 @@ function GridXBrand() {
   return (
     <div className="flex items-center gap-2.5">
       <span className="flex size-8 items-center justify-center rounded-xl bg-accent text-accent-foreground">
-        <Zap className="size-[15px] fill-current" />
+        <Zap className="size-3.75 fill-current" />
       </span>
 
       <span className="font-heading text-lg font-bold text-white">GridX</span>
@@ -350,7 +349,7 @@ function RegistrationComplete({
         <Check className="size-7" />
       </div>
 
-      <p className="mt-5 text-caption font-bold uppercase tracking-[0.1em] text-accent">
+      <p className="mt-5 text-caption font-bold uppercase tracking-widest text-accent">
         Onboarding complete
       </p>
 
