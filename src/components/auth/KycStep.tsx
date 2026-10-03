@@ -1,7 +1,5 @@
 import * as React from 'react'
-import {
-  Check,
-} from 'lucide-react'
+import { Check } from 'lucide-react'
 
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
@@ -31,7 +29,7 @@ export function KycStep({ onComplete }: KycStepProps) {
       <form onSubmit={handleSubmit} className="my-6">
         <FieldGroup>
           <Field>
-            <FieldLabel htmlFor='legalName'>Legal Full Name</FieldLabel>
+            <FieldLabel htmlFor="legalName">Legal Full Name</FieldLabel>
             <Input
               id="legalName"
               autoComplete="name"
@@ -40,7 +38,9 @@ export function KycStep({ onComplete }: KycStepProps) {
             />
           </Field>
           <Field>
-            <FieldLabel htmlFor='identityNumber'>National ID / Passport</FieldLabel>
+            <FieldLabel htmlFor="identityNumber">
+              National ID / Passport
+            </FieldLabel>
             <Input
               id="identityNumber"
               autoComplete="off"
@@ -49,7 +49,7 @@ export function KycStep({ onComplete }: KycStepProps) {
             />
           </Field>
           <Field>
-            <FieldLabel htmlFor='dateOfBirth'>Date of birth</FieldLabel>
+            <FieldLabel htmlFor="dateOfBirth">Date of birth</FieldLabel>
             <Input
               id="dateOfBirth"
               type="date"
@@ -59,10 +59,8 @@ export function KycStep({ onComplete }: KycStepProps) {
             />
           </Field>
           <Field>
-            <FieldLabel htmlFor='identityUpload'>Identity Photo</FieldLabel>
-            <FileDropzone
-              id='identityUpload'
-            />
+            <FieldLabel htmlFor="identityUpload">Identity Photo</FieldLabel>
+            <FileDropzone id="identityUpload" />
           </Field>
           <Field orientation={'horizontal'} className="justify-between">
             <Button
@@ -73,16 +71,12 @@ export function KycStep({ onComplete }: KycStepProps) {
               Skip for Now
             </Button>
 
-            <Button
-              type="submit"
-              className="h-12 flex-1 rounded-xl"
-            >
+            <Button type="submit" className="h-12 flex-1 rounded-xl">
               Submit KYC
               <Check className="size-4" />
             </Button>
           </Field>
         </FieldGroup>
-
       </form>
     </>
   )

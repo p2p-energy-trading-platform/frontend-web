@@ -1,7 +1,4 @@
-import {
-  kycCountries,
-  registrationDelayMs,
-} from '#/data/auth'
+import { kycCountries, registrationDelayMs } from '#/data/auth'
 
 function wait(ms: number) {
   return new Promise((resolve) => {
@@ -23,7 +20,6 @@ export function useRegistration() {
     },
     async completeSmartMeter() {
       await wait(registrationDelayMs.step)
-
     },
   }
 }

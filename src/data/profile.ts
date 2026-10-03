@@ -20,7 +20,6 @@ export type PersonalProfile = {
   country: string
 }
 
-
 export const defaultProfile: PersonalProfile = {
   fullName: sessionUser.fullName,
   email: 'sara.alnuaimi@example.ae',

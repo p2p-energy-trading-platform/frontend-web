@@ -9,14 +9,11 @@ interface CreateAccountFormProps {
   onSuccess: () => Promise<void> | void
 }
 
-export function CreateAccountForm({
-  onSuccess,
-}: CreateAccountFormProps) {
-
+export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    await onSuccess();
+    await onSuccess()
   }
 
   return (
@@ -37,7 +34,7 @@ export function CreateAccountForm({
       <form onSubmit={handleSubmit} noValidate className="my-6">
         <FieldGroup>
           <Field>
-            <FieldLabel htmlFor='email'>Email Address</FieldLabel>
+            <FieldLabel htmlFor="email">Email Address</FieldLabel>
             <Input
               id="email"
               name="email"
@@ -48,32 +45,30 @@ export function CreateAccountForm({
             />
           </Field>
           <Field>
-            <FieldLabel htmlFor='password'>Password</FieldLabel>
+            <FieldLabel htmlFor="password">Password</FieldLabel>
             <PasswordInput
               id="password"
               name="password"
               className="h-12 rounded-2xl"
-              innerClass='px-4'
+              innerClass="px-4"
               autoComplete="new-password"
               placeholder="Create a strong password"
             />
           </Field>
           <Field>
-            <FieldLabel htmlFor='confirmPassword'>Confirm Password</FieldLabel>
+            <FieldLabel htmlFor="confirmPassword">Confirm Password</FieldLabel>
             <PasswordInput
               id="confirmPassword"
               name="confirmPassword"
               autoComplete="new-password"
               placeholder="Re-enter your password"
               className="h-12 rounded-2xl"
-              innerClass='px-4'
+              innerClass="px-4"
             />
           </Field>
           <Field orientation="horizontal">
-            <Checkbox
-              id="termsAccepted"
-            />
-            <FieldLabel htmlFor='termsAccepted'>
+            <Checkbox id="termsAccepted" />
+            <FieldLabel htmlFor="termsAccepted">
               I agree to the{' '}
               <a
                 href="/terms"
@@ -91,10 +86,7 @@ export function CreateAccountForm({
             </FieldLabel>
           </Field>
           <Field>
-            <Button
-              type="submit"
-              className="h-12 w-full rounded-xl"
-            >
+            <Button type="submit" className="h-12 w-full rounded-xl">
               Create Account
             </Button>
             <p className="mt-3.5 text-center text-caption leading-4 text-text-disabled">

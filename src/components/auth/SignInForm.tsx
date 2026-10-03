@@ -5,12 +5,15 @@ import type { LucideIcon } from 'lucide-react'
 import { Button } from '#/components/ui/button'
 import { Checkbox } from '#/components/ui/checkbox'
 import { Input } from '#/components/ui/input'
-import { signInBenefits, signInNetworkNodes, signInTestimonial } from '#/data/auth'
+import {
+  signInBenefits,
+  signInNetworkNodes,
+  signInTestimonial,
+} from '#/data/auth'
 import { PasswordInput } from '../ui/password-input'
 import { Field, FieldGroup, FieldLabel } from '../ui/field'
 
 export default function SignInForm() {
-
   return (
     <main className="min-h-screen overflow-y-auto bg-background text-foreground">
       <div className="grid min-h-screen lg:grid-cols-2">
@@ -27,7 +30,7 @@ export default function SignInForm() {
             <form className="mt-7">
               <FieldGroup>
                 <Field>
-                  <FieldLabel htmlFor='email'>Email address</FieldLabel>
+                  <FieldLabel htmlFor="email">Email address</FieldLabel>
                   <Input
                     id="email"
                     type="email"
@@ -39,24 +42,24 @@ export default function SignInForm() {
                   />
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor='password'>Password</FieldLabel>
-                  
+                  <FieldLabel htmlFor="password">Password</FieldLabel>
+
                   <PasswordInput
                     id="password"
                     autoComplete="current-password"
                     placeholder="Enter your password"
                     className="h-12 rounded-2xl"
-                    innerClass='px-4'
+                    innerClass="px-4"
                     required
                   />
                 </Field>
-                  
-                <Field orientation='horizontal'>
-                  <Checkbox
-                    id="rememberMe"
-                  />
-                  <FieldLabel htmlFor='rememberMe'>Remember me for 30 days</FieldLabel>
-                   <Button
+
+                <Field orientation="horizontal">
+                  <Checkbox id="rememberMe" />
+                  <FieldLabel htmlFor="rememberMe">
+                    Remember me for 30 days
+                  </FieldLabel>
+                  <Button
                     type="button"
                     variant="link"
                     className="h-auto p-0 text-xs font-semibold text-accent"
@@ -65,10 +68,7 @@ export default function SignInForm() {
                   </Button>
                 </Field>
                 <Field>
-                  <Button
-                    type="submit"
-                    className="h-12 w-full rounded-xl"
-                  >
+                  <Button type="submit" className="h-12 w-full rounded-xl">
                     Sign in
                   </Button>
                 </Field>

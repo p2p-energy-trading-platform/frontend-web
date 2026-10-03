@@ -7,9 +7,7 @@ import ExternalServices from './ExternalServices'
 
 export default function Profile() {
   const profileState = useProfile()
-  const {
-    source,
-  } = profileState
+  const { source } = profileState
 
   return (
     <main
@@ -32,7 +30,7 @@ export default function Profile() {
 
           <TradingPreferences />
 
-          <ExternalServices />          
+          <ExternalServices />
         </div>
 
         <aside className="space-y-6 xl:sticky xl:top-20">
@@ -42,7 +40,3 @@ export default function Profile() {
     </main>
   )
 }
-
-
-
-

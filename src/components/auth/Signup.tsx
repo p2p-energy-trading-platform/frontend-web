@@ -21,22 +21,22 @@ export default function Signup() {
   function getCurrentStep(stepView: SIGN_UP_STATES) {
     switch (stepView) {
       case 'account':
-        return 1;
+        return 1
       case 'verify-email':
-        return 2;
+        return 2
       case 'kyc':
-        return 3;
+        return 3
       case 'smart-meter':
-        return 4;
+        return 4
       case 'complete':
-        return 5;
+        return 5
     }
   }
 
-  const currentStep = getCurrentStep(view);
+  const currentStep = getCurrentStep(view)
 
   async function handleCreateAccount() {
-    setView('verify-email');
+    setView('verify-email')
   }
 
   async function handleEmailVerified() {
@@ -74,9 +74,7 @@ export default function Signup() {
         <section className="flex justify-center overflow-y-auto bg-background px-5 py-10 sm:px-10 lg:px-16">
           <div className="w-full max-w-lg">
             {view === 'account' ? (
-              <CreateAccountForm
-                onSuccess={handleCreateAccount}
-              />
+              <CreateAccountForm onSuccess={handleCreateAccount} />
             ) : null}
 
             {view === 'verify-email' ? (
@@ -87,9 +85,7 @@ export default function Signup() {
               />
             ) : null}
 
-            {view === 'kyc' ? (
-              <KycStep onComplete={handleKycComplete} />
-            ) : null}
+            {view === 'kyc' ? <KycStep onComplete={handleKycComplete} /> : null}
 
             {view === 'smart-meter' ? (
               <SmartMeterStep onComplete={handleSmartMeterComplete} />
@@ -116,4 +112,3 @@ export default function Signup() {
     </main>
   )
 }
-

@@ -1,51 +1,56 @@
-import { BadgeCheck, Building2, ShieldCheck, UserRound } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
-import { cn } from "cn";
+import { BadgeCheck, Building2, ShieldCheck, UserRound } from 'lucide-react'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '../ui/card'
+import { cn } from 'cn'
 
 export default function AccountStatus() {
-
-    return (
-        <>
-            <Card>
-                <CardHeader className="border-b border-border">
-                    <CardTitle>Account status</CardTitle>
-                    <CardDescription>
-                        Your current access and pending actions.
-                    </CardDescription>
-                </CardHeader>
-                <CardContent className="divide-y divide-border">
-                    <StatusRow
-                        icon={UserRound}
-                        label="Trading Mode"
-                        value="Prosumer"
-                        description="Can buy and sell verified energy"
-                        tone="success"
-                    />
-                    <StatusRow
-                        icon={BadgeCheck}
-                        label="KYC status"
-                        value="Pending"
-                        description="Identity verified and higher limits available"
-                        tone="success"
-                    />
-                    <StatusRow
-                        icon={Building2}
-                        label="Smart meter"
-                        value="Connected"
-                        description="Smart meter is connected and reporting"
-                        tone="success"
-                    />
-                </CardContent>
-            </Card>
-            <div className="flex items-start gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary-muted p-4 text-sm">
-                <ShieldCheck className="mt-0.5 size-4 shrink-0 text-brand-primary" />
-                <p className="leading-5 text-text-secondary">
-                    Your account information is encrypted and only shared with
-                    services you approve.
-                </p>
-            </div>
-        </>
-    );
+  return (
+    <>
+      <Card>
+        <CardHeader className="border-b border-border">
+          <CardTitle>Account status</CardTitle>
+          <CardDescription>
+            Your current access and pending actions.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="divide-y divide-border">
+          <StatusRow
+            icon={UserRound}
+            label="Trading Mode"
+            value="Prosumer"
+            description="Can buy and sell verified energy"
+            tone="success"
+          />
+          <StatusRow
+            icon={BadgeCheck}
+            label="KYC status"
+            value="Pending"
+            description="Identity verified and higher limits available"
+            tone="success"
+          />
+          <StatusRow
+            icon={Building2}
+            label="Smart meter"
+            value="Connected"
+            description="Smart meter is connected and reporting"
+            tone="success"
+          />
+        </CardContent>
+      </Card>
+      <div className="flex items-start gap-3 rounded-xl border border-brand-primary/20 bg-brand-primary-muted p-4 text-sm">
+        <ShieldCheck className="mt-0.5 size-4 shrink-0 text-brand-primary" />
+        <p className="leading-5 text-text-secondary">
+          Your account information is encrypted and only shared with services
+          you approve.
+        </p>
+      </div>
+    </>
+  )
 }
 
 function StatusRow({
@@ -74,9 +79,7 @@ function StatusRow({
               aria-hidden="true"
               className={cn(
                 'size-2 rounded-full',
-                tone === 'success'
-                  ? 'bg-brand-primary'
-                  : 'bg-brand-warning',
+                tone === 'success' ? 'bg-brand-primary' : 'bg-brand-warning',
               )}
             />
             {value}

@@ -1,10 +1,5 @@
 import * as React from 'react'
-import {
-  ArrowLeft,
-  ArrowRight,
-  Clock3,
-  MailCheck,
-} from 'lucide-react'
+import { ArrowLeft, ArrowRight, Clock3, MailCheck } from 'lucide-react'
 
 import { Button } from '#/components/ui/button'
 import { Field, FieldGroup, FieldLabel } from '#/components/ui/field'
@@ -27,7 +22,6 @@ export function VerifyEmailStep({
   onBack,
   onVerified,
 }: VerifyEmailStepProps) {
-
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
@@ -82,10 +76,7 @@ export function VerifyEmailStep({
             Code expires in 10 minutes
           </div>
           <Field>
-            <Button
-              type="submit"
-              className="h-12 rounded-xl"
-            >
+            <Button type="submit" className="h-12 rounded-xl">
               Verify Email
               <ArrowRight className="size-4" />
             </Button>
@@ -104,12 +95,7 @@ export function VerifyEmailStep({
         </Button>
       </p>
 
-      <Button
-        type="button"
-        variant="link"
-        onClick={onBack}
-        className="mt-6"
-      >
+      <Button type="button" variant="link" onClick={onBack} className="mt-6">
         <ArrowLeft className="size-4" />
         Back to account details
       </Button>

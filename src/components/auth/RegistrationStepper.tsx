@@ -60,8 +60,7 @@ export function RegistrationStepper({
                   'relative z-10 flex size-8 items-center justify-center rounded-full border-2 bg-card text-sm font-semibold sm:size-9',
                   isComplete &&
                     'border-accent bg-accent text-accent-foreground',
-                  isActive &&
-                    'border-accent text-accent ring-4 ring-accent/15',
+                  isActive && 'border-accent text-accent ring-4 ring-accent/15',
                   !isComplete &&
                     !isActive &&
                     'border-border-strong text-text-disabled',

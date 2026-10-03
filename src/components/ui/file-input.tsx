@@ -1,11 +1,13 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { UploadCloud } from "lucide-react"
-import { cn } from "cn"
+import * as React from 'react'
+import { UploadCloud } from 'lucide-react'
+import { cn } from 'cn'
 
-export interface FileDropzoneProps
-  extends Omit<React.ComponentProps<"button">, "onChange" | "title"> {
+export interface FileDropzoneProps extends Omit<
+  React.ComponentProps<'button'>,
+  'onChange' | 'title'
+> {
   /** Callback fired when a file is selected or dropped */
   onFileSelect?: (file: File | null) => void
   /** Accepted MIME types or extensions */
@@ -21,10 +23,10 @@ export interface FileDropzoneProps
 export function FileDropzone({
   className,
   onFileSelect,
-  accept = "image/png, image/jpeg, application/pdf",
+  accept = 'image/png, image/jpeg, application/pdf',
   disabled = false,
   title,
-  description = "PNG, JPG, PDF up to 10 MB",
+  description = 'PNG, JPG, PDF up to 10 MB',
   icon,
   onClick,
   ref,
@@ -73,7 +75,7 @@ export function FileDropzone({
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     handleFiles(event.target.files)
-    event.target.value = ""
+    event.target.value = ''
   }
 
   return (
@@ -97,11 +99,12 @@ export function FileDropzone({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         className={cn(
-          "mt-1.5 flex min-h-28 w-full flex-col items-center justify-center rounded-2xl border border-dashed border-strong bg-secondary/60 px-4 text-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-          "hover:border-accent/60 hover:bg-accent/[0.05]",
-          isDragging && "border-accent bg-accent/[0.08]",
-          disabled && "cursor-not-allowed opacity-50 hover:border-strong hover:bg-secondary/60",
-          className
+          'mt-1.5 flex min-h-28 w-full flex-col items-center justify-center rounded-2xl border border-dashed border-strong bg-secondary/60 px-4 text-center transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+          'hover:border-accent/60 hover:bg-accent/[0.05]',
+          isDragging && 'border-accent bg-accent/[0.08]',
+          disabled &&
+            'cursor-not-allowed opacity-50 hover:border-strong hover:bg-secondary/60',
+          className,
         )}
         {...props}
       >
@@ -109,15 +112,13 @@ export function FileDropzone({
         <span className="mt-2 text-sm font-semibold">
           {title ?? (
             <>
-              Drop your document here or{" "}
+              Drop your document here or{' '}
               <span className="text-accent">browse</span>
             </>
           )}
         </span>
         {description && (
-          <span className="mt-1 text-xs text-text-tertiary">
-            {description}
-          </span>
+          <span className="mt-1 text-xs text-text-tertiary">{description}</span>
         )}
       </button>
     </div>
