@@ -21,11 +21,10 @@ import {
 } from '#/components/ui/select'
 import { useKycOptions } from '#/hooks/useAuth'
 import { cn } from 'cn'
+import type { KycStatus } from './types'
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024
 const ACCEPTED_FILE_TYPES = ['image/png', 'image/jpeg', 'application/pdf']
-
-export type KycStatus = 'not-submitted' | 'pending' | 'verified'
 
 interface KycStepProps {
   email: string

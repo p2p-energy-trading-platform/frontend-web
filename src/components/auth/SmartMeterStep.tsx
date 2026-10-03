@@ -9,9 +9,7 @@ import {
 
 import { Button } from '#/components/ui/button'
 import { Input } from '#/components/ui/input'
-import type { SmartMeterStatus } from '#/lib/smart-meter-status'
-
-export type { SmartMeterStatus } from '#/lib/smart-meter-status'
+import type { SmartMeterStatus } from './types'
 
 interface SmartMeterStepProps {
   onComplete: (status: SmartMeterStatus) => Promise<void> | void

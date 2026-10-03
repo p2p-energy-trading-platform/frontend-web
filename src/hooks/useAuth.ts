@@ -1,13 +1,7 @@
 import {
-  accountBenefits,
   kycCountries,
   registrationDelayMs,
-  registrationSteps,
 } from '#/data/auth'
-import { saveKycStatus } from '#/lib/kyc-status'
-import type { KycStatus } from '#/components/auth/KycStep'
-import { saveSmartMeterStatus } from '#/lib/smart-meter-status'
-import type { SmartMeterStatus } from '#/lib/smart-meter-status'
 
 function wait(ms: number) {
   return new Promise((resolve) => {
@@ -18,21 +12,18 @@ function wait(ms: number) {
 export function useRegistration() {
   return {
     source: 'demo' as const,
-    steps: registrationSteps,
-    benefits: accountBenefits,
     submitAccount() {
       return wait(registrationDelayMs.account)
     },
     advanceStep() {
       return wait(registrationDelayMs.step)
     },
-    async completeKyc(status: KycStatus) {
+    async completeKyc() {
       await wait(registrationDelayMs.step)
-      saveKycStatus(status)
     },
-    async completeSmartMeter(status: SmartMeterStatus) {
+    async completeSmartMeter() {
       await wait(registrationDelayMs.step)
-      saveSmartMeterStatus(status)
+
     },
   }
 }
