@@ -18,7 +18,7 @@ import type {
 import { AssetCard } from '#/components/energy-assets/AssetCard'
 import { useEnergyAssets } from '#/hooks/useEnergyAssets'
 
-export function EnergyPage() {
+export default function EnergyView() {
   const energy = useEnergyAssets()
   const [tab, setTab] = useState<'usage' | 'assets'>('usage')
 

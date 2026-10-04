@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import { EnergyPage } from '#/components/energy-assets/EnergyPage'
+import EnergyView from '#/components/energy-assets/EnergyView'
 
 export const Route = createFileRoute('/_authenticated/energy-assets')({
-  component: EnergyPage,
+  component: EnergyView,
 })
