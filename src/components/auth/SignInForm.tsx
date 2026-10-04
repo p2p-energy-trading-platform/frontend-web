@@ -37,9 +37,7 @@ export default function SignInForm() {
 
         <Field orientation="horizontal">
           <Checkbox id="rememberMe" />
-          <FieldLabel htmlFor="rememberMe">
-            Remember me for 30 days
-          </FieldLabel>
+          <FieldLabel htmlFor="rememberMe">Remember me for 30 days</FieldLabel>
           <Button
             type="button"
             variant="link"

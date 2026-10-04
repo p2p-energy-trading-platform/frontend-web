@@ -10,11 +10,7 @@ export function BalanceActions() {
         Deposit
       </Button>
 
-      <Button
-        variant="outline"
-        className="px-4"
-        size="lg"
-      >
+      <Button variant="outline" className="px-4" size="lg">
         <ArrowUpRight />
         Withdraw
       </Button>

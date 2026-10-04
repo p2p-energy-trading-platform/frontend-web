@@ -70,11 +70,7 @@ export function NotificationFilterBar({
         })}
       </div>
 
-      <Button
-        onClick={onMarkAllRead}
-      >
-        Mark all read
-      </Button>
+      <Button onClick={onMarkAllRead}>Mark all read</Button>
     </div>
   )
 }

@@ -19,7 +19,7 @@ export function PaymentMethods() {
           <h3 className="text-sm font-bold text-foreground">Payment methods</h3>
 
           <Button variant="outline">
-            <Plus className='size-4' />
+            <Plus className="size-4" />
             Add
           </Button>
         </div>

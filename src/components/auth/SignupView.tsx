@@ -14,8 +14,7 @@ export default function SignupView() {
   const registration = useRegistration()
   const [view, setView] = useState<SIGN_UP_STATES>('account')
   const [kycStatus, setKycStatus] = useState<KycStatus>('not-submitted')
-  const [meterStatus, setMeterStatus] =
-    useState<SmartMeterStatus>('skipped')
+  const [meterStatus, setMeterStatus] = useState<SmartMeterStatus>('skipped')
 
   function getCurrentStep(stepView: SIGN_UP_STATES) {
     switch (stepView) {

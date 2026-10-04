@@ -41,7 +41,7 @@ const PAGE_SIZE = 8
 
 // ─── Status badges ────────────────────────────────────────────────────────────
 
-const ORDER_STATUS: Record<OrderStatus, { label: string; }> = {
+const ORDER_STATUS: Record<OrderStatus, { label: string }> = {
   open: {
     label: 'Open',
   },
@@ -92,7 +92,7 @@ function OrderDrawer({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 font-mono">
             {order.id}
-            <BadgePill variant={"default"}>{st.label}</BadgePill>
+            <BadgePill variant={'default'}>{st.label}</BadgePill>
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">

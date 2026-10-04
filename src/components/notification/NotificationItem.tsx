@@ -68,7 +68,7 @@ export function NotificationItem({
       </div>
 
       <Button
-        size={"icon-sm"}
+        size={'icon-sm'}
         variant="ghost"
         onClick={onDismiss}
         aria-label="More options"

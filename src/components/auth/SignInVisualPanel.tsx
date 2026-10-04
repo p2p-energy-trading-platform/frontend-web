@@ -1,6 +1,10 @@
-import { signInBenefits, signInNetworkNodes, signInTestimonial } from "#/data/auth";
-import { Zap  } from "lucide-react";
-import type {LucideIcon} from "lucide-react";
+import {
+  signInBenefits,
+  signInNetworkNodes,
+  signInTestimonial,
+} from '#/data/auth'
+import { Zap } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 
 export default function SignInVisualPanel() {
   return (

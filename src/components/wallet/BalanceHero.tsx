@@ -8,11 +8,8 @@ export function BalanceHero() {
   const wallet = useWallet()
 
   return (
-    <Card
-      className=" p-5"
-      data-source={wallet.source}
-    >
-      <CardContent className='flex flex-col gap-5'>
+    <Card className=" p-5" data-source={wallet.source}>
+      <CardContent className="flex flex-col gap-5">
         <BalanceOverview
           available={wallet.balance.available}
           creditNote={wallet.balance.creditNote}

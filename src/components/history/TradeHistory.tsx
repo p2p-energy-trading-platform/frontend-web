@@ -44,10 +44,7 @@ const PAGE_SIZE = 8
 
 // ─── Status badges ────────────────────────────────────────────────────────────
 
-const TRADE_STATUS: Record<
-  TradeStatus,
-  { label: string; }
-> = {
+const TRADE_STATUS: Record<TradeStatus, { label: string }> = {
   settled: {
     label: 'Settled',
   },
@@ -56,7 +53,6 @@ const TRADE_STATUS: Record<
   },
   failed: {
     label: 'Failed',
-
   },
 }
 
@@ -365,7 +361,7 @@ export function TradesTab({ state }: { state: HistoryViewState }) {
                       {t.id}
                     </span>
                   </div>
-                    <Badge>{TRADE_STATUS[t.status].label}</Badge>
+                  <Badge>{TRADE_STATUS[t.status].label}</Badge>
                 </div>
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-text-secondary">

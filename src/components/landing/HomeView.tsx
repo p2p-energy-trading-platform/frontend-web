@@ -5,7 +5,6 @@ import AssetsSection from '#/components/landing/AssetSection'
 import FAQSection from '#/components/landing/FAQSection'
 import CTASection from '#/components/landing/CTASection'
 
-
 export default function HomeView() {
   return (
     <main>

@@ -17,7 +17,7 @@ export function BalanceMetricCard({
 }: Props) {
   return (
     <Card className="flex-1">
-      <CardContent className='flex flex-col gap-5'>
+      <CardContent className="flex flex-col gap-5">
         <div className="flex flex-row items-center justify-start gap-2">
           <Icon className="size-5 text-text-secondary" />
 

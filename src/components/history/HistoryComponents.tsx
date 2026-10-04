@@ -1,16 +1,23 @@
-import { ArrowDownLeft, ArrowUpRight } from "lucide-react";
-import { Badge } from "../ui/badge";
-import type { TradeSide } from "./types";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { ArrowDownLeft, ArrowUpRight } from 'lucide-react'
+import { Badge } from '../ui/badge'
+import type { TradeSide } from './types'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select'
 
 export function SidePill({ side }: { side: TradeSide }) {
   return side === 'sell' ? (
-    <Badge variant={"default"}>
+    <Badge variant={'default'}>
       <ArrowUpRight size={9} />
       Sell
     </Badge>
   ) : (
-    <Badge variant={"destructive"}>
+    <Badge variant={'destructive'}>
       <ArrowDownLeft size={9} />
       Sell
     </Badge>
