@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import { TradingTerminal } from '#/components/trade/TradingTerminal'
+import TradingTerminalView from '#/components/trade/TradingTerminalView'
 
 export const Route = createFileRoute('/_authenticated/trade')({
-  component: TradingTerminal,
+  component: TradingTerminalView,
 })

@@ -10,7 +10,7 @@ import { OrderPanel } from './OrderPanel'
 import { timeframes } from './types'
 import type { Timeframe } from './types'
 
-export function TradingTerminal() {
+export default function TradingTerminalView() {
   const [timeframe, setTimeframe] = useState<Timeframe>('1H')
   const market = useMarket()
   const candles = useCandles(timeframe)
