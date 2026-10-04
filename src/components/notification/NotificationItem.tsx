@@ -2,6 +2,7 @@ import type { LucideIcon } from 'lucide-react'
 import { MoreHorizontal } from 'lucide-react'
 
 import { cn } from 'cn'
+import { Button } from '../ui/button'
 
 export interface NotificationItemData {
   id: string
@@ -55,24 +56,25 @@ export function NotificationItem({
         </p>
 
         {actionLabel && (
-          <button
-            type="button"
+          <Button
+            size="xs"
+            variant="link"
             onClick={onAction}
-            className="mt-1.5 text-xs font-medium text-accent hover:underline"
+            className="text-accent"
           >
             {actionLabel}
-          </button>
+          </Button>
         )}
       </div>
 
-      <button
-        type="button"
+      <Button
+        size={"icon-sm"}
+        variant="ghost"
         onClick={onDismiss}
         aria-label="More options"
-        className="flex size-6 shrink-0 items-center justify-center self-start rounded-md text-text-tertiary transition hover:bg-muted hover:text-text-primary"
       >
         <MoreHorizontal className="size-3.5" />
-      </button>
+      </Button>
     </div>
   )
 }

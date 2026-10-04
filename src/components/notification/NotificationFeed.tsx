@@ -13,7 +13,7 @@ export function NotificationFeed({
   groups: Array<NotificationGroup>
 }) {
   return (
-    <Card className="gap-0 divide-y divide-border-subtle border-border-subtle bg-card p-0">
+    <Card className="gap-0 p-0">
       {groups.map((group) => (
         <div key={group.dateLabel} className="px-5 py-3">
           <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-text-tertiary">

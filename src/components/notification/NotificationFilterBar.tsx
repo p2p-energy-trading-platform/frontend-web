@@ -1,4 +1,5 @@
 import { cn } from 'cn'
+import { Button } from '../ui/button'
 
 export type NotificationCategory =
   | 'All'
@@ -69,13 +70,11 @@ export function NotificationFilterBar({
         })}
       </div>
 
-      <button
-        type="button"
+      <Button
         onClick={onMarkAllRead}
-        className="whitespace-nowrap text-xs font-medium text-accent hover:underline"
       >
         Mark all read
-      </button>
+      </Button>
     </div>
   )
 }
