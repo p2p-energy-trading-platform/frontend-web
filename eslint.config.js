@@ -14,7 +14,8 @@ export default [
       '**/node_modules/**',
       'eslint.config.js',
       'prettier.config.js',
-      'commitlint.config.js'
+      'commitlint.config.js',
+      'src/routeTree.gen.ts'
 
     ],
   },
