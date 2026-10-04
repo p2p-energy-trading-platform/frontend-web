@@ -5,7 +5,7 @@ import TradingPreferences from './TradingPreferences'
 import AccountStatus from './AccountStatus'
 import ExternalServices from './ExternalServices'
 
-export default function Profile() {
+export default function ProfileView() {
   const profileState = useProfile()
   const { source } = profileState
 
