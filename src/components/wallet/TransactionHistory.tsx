@@ -18,7 +18,7 @@ export function TransactionHistory() {
   const wallet = useWallet()
   return (
     <Card
-      className="flex w-full flex-col gap-6 border-border-subtle bg-card p-6 lg:w-3/5"
+      className="flex w-full flex-col gap-6 border-border-subtle bg-card p-6 lg:min-h-96 lg:w-3/5"
       data-source={wallet.source}
     >
       <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">

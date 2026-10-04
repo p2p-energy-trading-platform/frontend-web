@@ -12,7 +12,7 @@ export function BalanceMetrics({
   lifetimeIn: string
 }) {
   return (
-    <div className="flex flex-row items-center justify-between gap-2">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
       <BalanceMetricCard
         icon={Clock}
         title="PENDING"

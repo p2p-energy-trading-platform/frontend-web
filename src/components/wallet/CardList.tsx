@@ -15,7 +15,7 @@ interface CardListProps {
 
 export function CardList({ cards }: CardListProps) {
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 w-full">
       {cards.map((card) => (
         <div
           key={card.id}
