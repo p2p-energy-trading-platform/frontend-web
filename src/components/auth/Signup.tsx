@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 import { CreateAccountForm } from '#/components/auth/CreateAccountForm'
 import { KycStep } from '#/components/auth/KycStep'
 import { RegistrationStepper } from '#/components/auth/RegistrationStepper'
@@ -10,13 +8,14 @@ import type { KycStatus, SIGN_UP_STATES, SmartMeterStatus } from './types'
 import { registrationSteps } from '#/data/auth'
 import SignupSidebar from './SignupSidebar'
 import RegistrationComplete from './RegistrationComplete'
+import { useState } from 'react'
 
 export default function Signup() {
   const registration = useRegistration()
-  const [view, setView] = React.useState<SIGN_UP_STATES>('account')
-  const [kycStatus, setKycStatus] = React.useState<KycStatus>('not-submitted')
+  const [view, setView] = useState<SIGN_UP_STATES>('account')
+  const [kycStatus, setKycStatus] = useState<KycStatus>('not-submitted')
   const [meterStatus, setMeterStatus] =
-    React.useState<SmartMeterStatus>('skipped')
+    useState<SmartMeterStatus>('skipped')
 
   function getCurrentStep(stepView: SIGN_UP_STATES) {
     switch (stepView) {
