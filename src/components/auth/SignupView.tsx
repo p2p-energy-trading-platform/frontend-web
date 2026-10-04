@@ -10,7 +10,7 @@ import SignupSidebar from './SignupSidebar'
 import RegistrationComplete from './RegistrationComplete'
 import { useState } from 'react'
 
-export default function Signup() {
+export default function SignupView() {
   const registration = useRegistration()
   const [view, setView] = useState<SIGN_UP_STATES>('account')
   const [kycStatus, setKycStatus] = useState<KycStatus>('not-submitted')
