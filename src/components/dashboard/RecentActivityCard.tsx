@@ -1,43 +1,45 @@
-import { ArrowUpRight } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
-import { Card } from '#/components/ui/card'
-import { cn } from '#/lib/utils'
+import { Card } from '#/components/ui/card';
+import { Button } from '../ui/button';
+import { cn } from 'cn';
 
 export interface ActivityItem {
-  icon: LucideIcon
-  iconClassName: string
-  title: string
-  subtitle: string
-  amount?: string
-  amountClassName?: string
-  time: string
+  icon: LucideIcon;
+  iconClassName: string;
+  title: string;
+  subtitle: string;
+  amount?: string;
+  amountClassName?: string;
+  time: string;
 }
 
 export function RecentActivityCard({
   items,
   onViewAll,
 }: {
-  items: Array<ActivityItem>
-  onViewAll?: () => void
+  items: Array<ActivityItem>;
+  onViewAll?: () => void;
 }) {
   return (
     <Card className="gap-1 border-border-subtle bg-card p-4">
       <div className="mb-2 flex items-center justify-between">
         <h3 className="text-heading-4 text-text-primary">Recent activity</h3>
-        <button
-          type="button"
+        <Button
+          // type="button"
           onClick={onViewAll}
-          className="flex items-center gap-0.5 text-sm font-medium text-accent hover:underline"
+          variant={'link'}
+          // className="flex items-center gap-0.5 text-sm font-medium text-accent hover:underline"
         >
           View all
           <ArrowUpRight className="size-3.5 rotate-45" />
-        </button>
+        </Button>
       </div>
 
       <div className="divide-y divide-border-subtle">
         {items.map((item, i) => {
-          const Icon = item.icon
+          const Icon = item.icon;
           return (
             <div key={i} className="flex items-center gap-3 py-3">
               <span
@@ -70,9 +72,9 @@ export function RecentActivityCard({
                 <p className="text-xs text-text-tertiary">{item.time}</p>
               </div>
             </div>
-          )
+          );
         })}
       </div>
     </Card>
-  )
+  );
 }

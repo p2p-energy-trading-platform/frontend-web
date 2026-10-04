@@ -1,7 +1,7 @@
-import { Github, Zap } from 'lucide-react'
+import { Github, Zap } from 'lucide-react';
 
 export default function Footer() {
-  const year = new Date().getFullYear()
+  const year = new Date().getFullYear();
 
   return (
     <footer className="border-t border-border-subtle bg-background px-4 py-10 text-text-secondary">
@@ -14,9 +14,7 @@ export default function Footer() {
             GridX
           </div>
 
-          <p className="m-0 text-sm">
-            &copy; {year} GridX. Temporary demo interface.
-          </p>
+          <p className="m-0 text-sm">&copy; {year} GridX.</p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -36,5 +34,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

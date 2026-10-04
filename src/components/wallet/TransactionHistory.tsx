@@ -1,28 +1,27 @@
-import { ArrowDownLeft, ArrowUpRight } from 'lucide-react'
+import { ArrowDownLeft, ArrowUpRight } from 'lucide-react';
 
-import { Card } from '#/components/ui/card'
-import { Input } from '#/components/ui/input'
-import { Button } from '#/components/ui/button'
+import { Button } from '#/components/ui/button';
+import { Card } from '#/components/ui/card';
+import { Input } from '#/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '#/components/ui/select';
 
-const transactions = [
-  {
-    title: 'Energy purchase',
-    date: '07 Aug 2026 · 10:30 AM',
-    amount: '- AED 25.00',
-    type: 'buy',
-  },
-  {
-    title: 'Energy sold',
-    date: '06 Aug 2026 · 04:15 PM',
-    amount: '+ AED 42.50',
-    type: 'sell',
-  },
-]
+import { useWallet } from '#/hooks/useWallet';
 
 export function TransactionHistory() {
+  const wallet = useWallet();
   return (
-    <Card className="flex flex-col w-3/5 gap-6 border-border-subtle bg-card p-6">
-      <div className="flex flex-row justify-between items-center">
+    <Card
+      className="flex w-full flex-col gap-6 border-border-subtle bg-card p-6 lg:min-h-96 lg:w-3/5"
+      data-source={wallet.source}
+    >
+      <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
         <h2 className="text-heading-4 text-text-secondary">
           Transaction History
         </h2>
@@ -37,17 +36,31 @@ export function TransactionHistory() {
         </Button>
       </div>
 
-      <div className="flex flex-row justify-between items-center gap-3">
-        <Input placeholder="Search description or reference" />
+      <div className="flex flex-col items-stretch justify-between gap-3 sm:flex-row sm:items-center">
+        <Input
+          placeholder="Search description or reference"
+          aria-label="Search transactions"
+          className="w-full"
+        />
 
-        <select className="h-9 rounded-lg border border-input bg-transparent px-3 text-sm text-text-primary outline-none">
-          <option value="all">All Transactions</option>
-          <option value="buy">Buy</option>
-          <option value="sell">Sell</option>
-        </select>
+        <Select defaultValue="all">
+          <SelectTrigger
+            aria-label="Filter transactions"
+            className="w-full sm:w-fit"
+          >
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem value="all">All Transactions</SelectItem>
+              <SelectItem value="buy">Buy</SelectItem>
+              <SelectItem value="sell">Sell</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
 
-      {transactions.map((transaction) => (
+      {wallet.transactions.map((transaction) => (
         <div
           key={transaction.title}
           className="flex items-center justify-between border-b border-border-subtle pb-3"
@@ -80,5 +93,5 @@ export function TransactionHistory() {
         </div>
       ))}
     </Card>
-  )
+  );
 }

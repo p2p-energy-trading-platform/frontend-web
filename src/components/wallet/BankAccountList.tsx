@@ -1,13 +1,24 @@
-import { AlertTriangle, Building2, Check, Info, Trash2 } from 'lucide-react'
+import { AlertTriangle, Building2, Check, Info, Trash2 } from 'lucide-react';
 
-import { Badge } from '#/components/ui/badge.tsx'
-import type { BankAccount } from './paymentMethodData'
+import { Alert, AlertDescription } from '#/components/ui/alert';
+import { Badge } from '#/components/ui/badge.tsx';
+import { Button } from '#/components/ui/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '#/components/ui/tooltip';
+import type { BankAccount } from './payment-types';
 
 interface BankAccountListProps {
-  accounts: BankAccount[]
+  accounts: BankAccount[];
+  verificationNote: string;
 }
 
-export function BankAccountList({ accounts }: BankAccountListProps) {
+export function BankAccountList({
+  accounts,
+  verificationNote,
+}: BankAccountListProps) {
   return (
     <div className="space-y-2">
       {accounts.map((account) => (
@@ -48,7 +59,7 @@ export function BankAccountList({ accounts }: BankAccountListProps) {
               )}
             </div>
 
-            <p className="text-xs text-gx-fg4 font-mono mt-0.5">
+            <p className="text-xs text-text-tertiary font-mono mt-0.5">
               {account.maskedIban}
             </p>
 
@@ -59,26 +70,34 @@ export function BankAccountList({ accounts }: BankAccountListProps) {
             )}
 
             {!account.verified && (
-              <p className="text-caption text-amber-500 font-medium">
+              <p className="text-caption text-feedback-warning-text font-medium">
                 Micro-deposit verification pending
               </p>
             )}
           </div>
 
-          <button className="text-text-tertiary p-1">
-            <Trash2 size={14} />
-          </button>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-sm"
+                  aria-label={`Remove ${account.bankName} account`}
+                />
+              }
+            >
+              <Trash2 />
+            </TooltipTrigger>
+            <TooltipContent>Remove account</TooltipContent>
+          </Tooltip>
         </div>
       ))}
 
-      <div className="flex items-start gap-2 p-3 rounded-xl border border-default">
-        <Info size={11} className="mt-0.5 text-chart-2" />
-
-        <span className="text-text-tertiary text-caption">
-          Bank accounts are verified via two micro-deposits (AED 0.01–0.99).
-          Verification typically takes 1–2 business days.
-        </span>
-      </div>
+      <Alert>
+        <Info />
+        <AlertDescription>{verificationNote}</AlertDescription>
+      </Alert>
     </div>
-  )
+  );
 }

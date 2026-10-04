@@ -14,7 +14,8 @@ export default [
       '**/node_modules/**',
       'eslint.config.js',
       'prettier.config.js',
-      'commitlint.config.js'
+      'commitlint.config.js',
+      'src/routeTree.gen.ts'
 
     ],
   },
@@ -27,6 +28,7 @@ export default [
       '@typescript-eslint/array-type': 'off',
       '@typescript-eslint/require-await': 'off',
       'pnpm/json-enforce-catalog': 'off',
+      'semi': ['error', 'always'],
     },
   },
   {

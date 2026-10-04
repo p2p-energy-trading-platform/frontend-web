@@ -1,19 +1,18 @@
-import type { LucideIcon } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react';
 
-import { Badge } from '#/components/ui/badge'
-import { Card } from '#/components/ui/card'
-import { cn } from '#/lib/utils'
+import { Badge } from '#/components/ui/badge';
+import { Card } from '#/components/ui/card';
+import { cn } from 'cn';
 
 export interface DeviceCardProps {
-  icon: LucideIcon
-  iconWrapClassName: string
-  title: string
-  subtitle: string
-  statusLabel: string
-  value: string
-  valueLabel: string
-  progressPercent?: number
-  footnote: string
+  icon: LucideIcon;
+  iconWrapClassName: string;
+  title: string;
+  subtitle: string;
+  statusLabel: string;
+  value: string;
+  valueLabel: string;
+  progressPercent?: number;
 }
 
 /** Used for Solar PV / Home Battery / EV cards — same component, different props. */
@@ -26,7 +25,6 @@ export function DeviceCard({
   value,
   valueLabel,
   progressPercent,
-  footnote,
 }: DeviceCardProps) {
   return (
     <Card className="gap-3 border-border-subtle bg-card p-4">
@@ -72,11 +70,6 @@ export function DeviceCard({
           </div>
         </div>
       )}
-
-      <p className="flex items-center gap-1 text-xs text-text-tertiary">
-        <span className="text-[10px]">≡</span>
-        {footnote}
-      </p>
     </Card>
-  )
+  );
 }

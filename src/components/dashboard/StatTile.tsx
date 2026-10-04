@@ -1,13 +1,13 @@
-import type { LucideIcon } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react';
 
-import { Card } from '#/components/ui/card'
-import { cn } from '#/lib/utils'
+import { Card } from '#/components/ui/card';
+import { cn } from 'cn';
 
 export interface StatTileProps {
-  icon: LucideIcon
-  iconClassName?: string
-  value: string
-  label: string
+  icon: LucideIcon;
+  iconClassName?: string;
+  value: string;
+  label: string;
 }
 
 export function StatTile({
@@ -17,7 +17,7 @@ export function StatTile({
   label,
 }: StatTileProps) {
   return (
-    <Card className="gap-2 border-border-subtle bg-card p-4">
+    <Card className="gap-2 p-4">
       <span
         className={cn(
           'flex size-7 items-center justify-center rounded-md bg-secondary text-text-secondary',
@@ -31,5 +31,5 @@ export function StatTile({
       </span>
       <span className="text-xs text-text-tertiary">{label}</span>
     </Card>
-  )
+  );
 }
