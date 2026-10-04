@@ -1,20 +1,20 @@
-import * as React from 'react'
-import { Check } from 'lucide-react'
+import * as React from 'react';
+import { Check } from 'lucide-react';
 
-import { Button } from '#/components/ui/button'
-import { Input } from '#/components/ui/input'
-import type { KycStatus } from './types'
-import { Field, FieldGroup, FieldLabel } from '../ui/field'
-import { FileDropzone } from '../ui/file-input'
+import { Button } from '#/components/ui/button';
+import { Input } from '#/components/ui/input';
+import type { KycStatus } from './types';
+import { Field, FieldGroup, FieldLabel } from '../ui/field';
+import { FileDropzone } from '../ui/file-input';
 
 interface KycStepProps {
-  onComplete: (status: KycStatus) => Promise<void> | void
+  onComplete: (status: KycStatus) => Promise<void> | void;
 }
 
 export function KycStep({ onComplete }: KycStepProps) {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    await onComplete('pending')
+    event.preventDefault();
+    await onComplete('pending');
   }
 
   return (
@@ -79,5 +79,5 @@ export function KycStep({ onComplete }: KycStepProps) {
         </FieldGroup>
       </form>
     </>
-  )
+  );
 }

@@ -1,15 +1,15 @@
-import { ArrowDownLeft, Clock, Lock } from 'lucide-react'
+import { ArrowDownLeft, Clock, Lock } from 'lucide-react';
 
-import { BalanceMetricCard } from './BalanceMetricCard'
+import { BalanceMetricCard } from './BalanceMetricCard';
 
 export function BalanceMetrics({
   pending,
   reserved,
   lifetimeIn,
 }: {
-  pending: string
-  reserved: string
-  lifetimeIn: string
+  pending: string;
+  reserved: string;
+  lifetimeIn: string;
 }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
@@ -34,5 +34,5 @@ export function BalanceMetrics({
         description="All deposits"
       />
     </div>
-  )
+  );
 }

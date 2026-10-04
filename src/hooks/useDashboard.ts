@@ -2,13 +2,13 @@ import {
   dashboardView,
   generationAxis,
   generationPoints,
-} from '#/data/dashboard'
+} from '#/data/dashboard';
 
 export function useDashboard() {
   return {
     source: 'demo' as const,
     ...dashboardView,
-  }
+  };
 }
 
 export function useGenerationSeries() {
@@ -16,5 +16,5 @@ export function useGenerationSeries() {
     source: 'demo' as const,
     points: generationPoints,
     ...generationAxis,
-  }
+  };
 }

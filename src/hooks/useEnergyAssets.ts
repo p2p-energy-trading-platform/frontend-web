@@ -14,7 +14,7 @@ import {
   peakHourLabels,
   peakMatrix,
   usageCategories,
-} from '#/data/energy-assets'
+} from '#/data/energy-assets';
 
 export function useEnergyAssets() {
   return {
@@ -25,7 +25,7 @@ export function useEnergyAssets() {
     categories: usageCategories,
     balance: energyBalance,
     insights: energyInsights,
-  }
+  };
 }
 
 export function useEnergySeries() {
@@ -34,7 +34,7 @@ export function useEnergySeries() {
     generated: generatedSeries,
     consumed: consumedSeries,
     ...energySeriesAxis,
-  }
+  };
 }
 
 export function useForecastSeries() {
@@ -43,7 +43,7 @@ export function useForecastSeries() {
     forecast: forecastSeries,
     actual: forecastActual,
     ...forecastAxis,
-  }
+  };
 }
 
 export function usePeakPeriods() {
@@ -52,5 +52,5 @@ export function usePeakPeriods() {
     days: peakDays,
     matrix: peakMatrix,
     hourLabels: peakHourLabels,
-  }
+  };
 }

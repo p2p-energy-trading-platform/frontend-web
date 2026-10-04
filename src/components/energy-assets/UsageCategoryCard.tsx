@@ -1,37 +1,37 @@
-import { Badge } from '#/components/ui/badge'
-import { Card } from '#/components/ui/card'
+import { Badge } from '#/components/ui/badge';
+import { Card } from '#/components/ui/card';
 
 export interface UsageCategory {
-  label: string
-  valueKwh: number
-  colorClass: string
+  label: string;
+  valueKwh: number;
+  colorClass: string;
   /** stroke color used in the donut segment, e.g. 'var(--action-accent)' */
-  strokeColor: string
+  strokeColor: string;
 }
 
 export function UsageCategoryCard({
   categories,
 }: {
-  categories: Array<UsageCategory>
+  categories: Array<UsageCategory>;
 }) {
-  const total = categories.reduce((sum, c) => sum + c.valueKwh, 0)
-  const maxValue = Math.max(...categories.map((c) => c.valueKwh))
+  const total = categories.reduce((sum, c) => sum + c.valueKwh, 0);
+  const maxValue = Math.max(...categories.map((c) => c.valueKwh));
 
   // Build donut segments
-  const radius = 46
-  const circumference = 2 * Math.PI * radius
-  let offsetAcc = 0
+  const radius = 46;
+  const circumference = 2 * Math.PI * radius;
+  let offsetAcc = 0;
   const segments = categories.map((c) => {
-    const fraction = c.valueKwh / total
-    const dash = fraction * circumference
+    const fraction = c.valueKwh / total;
+    const dash = fraction * circumference;
     const seg = {
       ...c,
       dasharray: `${dash} ${circumference - dash}`,
       dashoffset: -offsetAcc,
-    }
-    offsetAcc += dash
-    return seg
-  })
+    };
+    offsetAcc += dash;
+    return seg;
+  });
 
   return (
     <Card className="gap-4 border-border-subtle bg-card p-5">
@@ -93,5 +93,5 @@ export function UsageCategoryCard({
         </div>
       </div>
     </Card>
-  )
+  );
 }

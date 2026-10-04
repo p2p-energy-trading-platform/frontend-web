@@ -1,11 +1,11 @@
-import { Badge } from '#/components/ui/badge'
-import { Card } from '#/components/ui/card'
-import { Button } from '../ui/button'
+import { Badge } from '#/components/ui/badge';
+import { Card } from '#/components/ui/card';
+import { Button } from '../ui/button';
 
 export interface MarketTrader {
-  name: string
-  detail: string
-  price: string
+  name: string;
+  detail: string;
+  price: string;
 }
 
 export function MarketCard({
@@ -17,13 +17,13 @@ export function MarketCard({
   traders,
   onBrowseAll,
 }: {
-  listingCount: number
-  bestBuyPrice: string
-  sellFloorPrice: string
-  demandZone: string
-  traderCount: number
-  traders: Array<MarketTrader>
-  onBrowseAll?: () => void
+  listingCount: number;
+  bestBuyPrice: string;
+  sellFloorPrice: string;
+  demandZone: string;
+  traderCount: number;
+  traders: Array<MarketTrader>;
+  onBrowseAll?: () => void;
 }) {
   return (
     <Card className="gap-3 border-border-subtle bg-card p-4">
@@ -92,5 +92,5 @@ export function MarketCard({
         Browse all listings
       </Button>
     </Card>
-  )
+  );
 }

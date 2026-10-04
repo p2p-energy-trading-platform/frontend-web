@@ -1,57 +1,57 @@
-import { CreateAccountForm } from '#/components/auth/CreateAccountForm'
-import { KycStep } from '#/components/auth/KycStep'
-import { RegistrationStepper } from '#/components/auth/RegistrationStepper'
-import { SmartMeterStep } from '#/components/auth/SmartMeterStep'
-import { VerifyEmailStep } from '#/components/auth/VerifyEmailStep'
-import { useRegistration } from '#/hooks/useAuth'
-import type { KycStatus, SIGN_UP_STATES, SmartMeterStatus } from './types'
-import { registrationSteps } from '#/data/auth'
-import SignupSidebar from './SignupSidebar'
-import RegistrationComplete from './RegistrationComplete'
-import { useState } from 'react'
+import { CreateAccountForm } from '#/components/auth/CreateAccountForm';
+import { KycStep } from '#/components/auth/KycStep';
+import { RegistrationStepper } from '#/components/auth/RegistrationStepper';
+import { SmartMeterStep } from '#/components/auth/SmartMeterStep';
+import { VerifyEmailStep } from '#/components/auth/VerifyEmailStep';
+import { useRegistration } from '#/hooks/useAuth';
+import type { KycStatus, SIGN_UP_STATES, SmartMeterStatus } from './types';
+import { registrationSteps } from '#/data/auth';
+import SignupSidebar from './SignupSidebar';
+import RegistrationComplete from './RegistrationComplete';
+import { useState } from 'react';
 
 export default function SignupView() {
-  const registration = useRegistration()
-  const [view, setView] = useState<SIGN_UP_STATES>('account')
-  const [kycStatus, setKycStatus] = useState<KycStatus>('not-submitted')
-  const [meterStatus, setMeterStatus] = useState<SmartMeterStatus>('skipped')
+  const registration = useRegistration();
+  const [view, setView] = useState<SIGN_UP_STATES>('account');
+  const [kycStatus, setKycStatus] = useState<KycStatus>('not-submitted');
+  const [meterStatus, setMeterStatus] = useState<SmartMeterStatus>('skipped');
 
   function getCurrentStep(stepView: SIGN_UP_STATES) {
     switch (stepView) {
       case 'account':
-        return 1
+        return 1;
       case 'verify-email':
-        return 2
+        return 2;
       case 'kyc':
-        return 3
+        return 3;
       case 'smart-meter':
-        return 4
+        return 4;
       case 'complete':
-        return 5
+        return 5;
     }
   }
 
-  const currentStep = getCurrentStep(view)
+  const currentStep = getCurrentStep(view);
 
   async function handleCreateAccount() {
-    setView('verify-email')
+    setView('verify-email');
   }
 
   async function handleEmailVerified() {
-    await registration.advanceStep()
-    setView('kyc')
+    await registration.advanceStep();
+    setView('kyc');
   }
 
   async function handleKycComplete(status: KycStatus) {
-    await registration.completeKyc()
-    setKycStatus(status)
-    setView('smart-meter')
+    await registration.completeKyc();
+    setKycStatus(status);
+    setView('smart-meter');
   }
 
   async function handleSmartMeterComplete(status: SmartMeterStatus) {
-    await registration.completeSmartMeter()
-    setMeterStatus(status)
-    setView('complete')
+    await registration.completeSmartMeter();
+    setMeterStatus(status);
+    setView('complete');
   }
 
   return (
@@ -108,5 +108,5 @@ export default function SignupView() {
         </aside>
       </div>
     </main>
-  )
+  );
 }

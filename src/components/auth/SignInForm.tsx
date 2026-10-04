@@ -1,10 +1,10 @@
-import { Link } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router';
 
-import { Button } from '#/components/ui/button'
-import { Checkbox } from '#/components/ui/checkbox'
-import { Input } from '#/components/ui/input'
-import { PasswordInput } from '../ui/password-input'
-import { Field, FieldGroup, FieldLabel } from '../ui/field'
+import { Button } from '#/components/ui/button';
+import { Checkbox } from '#/components/ui/checkbox';
+import { Input } from '#/components/ui/input';
+import { PasswordInput } from '../ui/password-input';
+import { Field, FieldGroup, FieldLabel } from '../ui/field';
 
 export default function SignInForm() {
   return (
@@ -129,5 +129,5 @@ export default function SignInForm() {
         </Link>
       </p>
     </form>
-  )
+  );
 }

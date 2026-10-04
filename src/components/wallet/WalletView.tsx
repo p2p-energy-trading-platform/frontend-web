@@ -1,6 +1,6 @@
-import { BalanceHero } from '#/components/wallet/BalanceHero'
-import { TransactionHistory } from '#/components/wallet/TransactionHistory'
-import { PaymentMethods } from '#/components/wallet/PaymentMethods.tsx'
+import { BalanceHero } from '#/components/wallet/BalanceHero';
+import { TransactionHistory } from '#/components/wallet/TransactionHistory';
+import { PaymentMethods } from '#/components/wallet/PaymentMethods.tsx';
 
 export default function WalletView() {
   return (
@@ -12,5 +12,5 @@ export default function WalletView() {
         <PaymentMethods />
       </div>
     </main>
-  )
+  );
 }

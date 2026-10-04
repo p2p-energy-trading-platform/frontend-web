@@ -1,4 +1,4 @@
-import { notificationCounts, notificationGroups } from '#/data/notifications'
+import { notificationCounts, notificationGroups } from '#/data/notifications';
 
 export function useNotifications() {
   return {
@@ -6,5 +6,5 @@ export function useNotifications() {
     unreadCount: notificationCounts.All,
     counts: notificationCounts,
     groups: notificationGroups,
-  }
+  };
 }

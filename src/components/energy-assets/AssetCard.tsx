@@ -1,45 +1,45 @@
-import { MoreHorizontal } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
+import { MoreHorizontal } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
-import { Button } from '#/components/ui/button'
-import { Card, CardContent, CardHeader } from '../ui/card'
-import { cn } from 'cn'
+import { Button } from '#/components/ui/button';
+import { Card, CardContent, CardHeader } from '../ui/card';
+import { cn } from 'cn';
 
-export type AssetHealth = 'Good' | 'Degraded' | 'Poor'
-export type AssetStatus = 'Online' | 'Idle' | 'Offline'
-export type AssetControlMode = 'Controllable' | 'Monitoring only'
+export type AssetHealth = 'Good' | 'Degraded' | 'Poor';
+export type AssetStatus = 'Online' | 'Idle' | 'Offline';
+export type AssetControlMode = 'Controllable' | 'Monitoring only';
 
 export interface AssetCardProps {
-  icon: LucideIcon
-  iconWrapClassName: string
-  name: string
-  brandModel: string
-  status: AssetStatus
+  icon: LucideIcon;
+  iconWrapClassName: string;
+  name: string;
+  brandModel: string;
+  status: AssetStatus;
   /** Big colored live-reading number, e.g. "+3.4" or "0" */
-  statValue: string
-  statValueClassName: string
-  statUnit: string
-  statLabel: string
-  socPercent?: number
-  health: AssetHealth
-  healthPercent: number
-  lastUpdated: string
-  controlMode: AssetControlMode
-  onClick?: () => void
-  onMenuClick?: () => void
+  statValue: string;
+  statValueClassName: string;
+  statUnit: string;
+  statLabel: string;
+  socPercent?: number;
+  health: AssetHealth;
+  healthPercent: number;
+  lastUpdated: string;
+  controlMode: AssetControlMode;
+  onClick?: () => void;
+  onMenuClick?: () => void;
 }
 
 const statusDotClass: Record<AssetStatus, string> = {
   Online: 'bg-accent',
   Idle: 'bg-text-tertiary',
   Offline: 'bg-text-tertiary',
-}
+};
 
 const healthBarClass: Record<AssetHealth, string> = {
   Good: 'bg-accent',
   Degraded: 'bg-chart-4',
   Poor: 'bg-destructive',
-}
+};
 
 export function AssetCard({
   icon: Icon,
@@ -139,5 +139,5 @@ export function AssetCard({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

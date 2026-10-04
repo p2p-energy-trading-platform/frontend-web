@@ -1,14 +1,14 @@
-import type { LucideIcon } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react';
 
-import { Badge } from '#/components/ui/badge'
-import { Card } from '#/components/ui/card'
-import { cn } from 'cn'
+import { Badge } from '#/components/ui/badge';
+import { Card } from '#/components/ui/card';
+import { cn } from 'cn';
 
 export interface FlowTile {
-  icon: LucideIcon
-  label: string
-  value: string
-  tone: 'warning' | 'default' | 'primary' | 'info'
+  icon: LucideIcon;
+  label: string;
+  value: string;
+  tone: 'warning' | 'default' | 'primary' | 'info';
 }
 
 export function LiveEnergyFlowCard({ tiles }: { tiles: Array<FlowTile> }) {
@@ -17,7 +17,7 @@ export function LiveEnergyFlowCard({ tiles }: { tiles: Array<FlowTile> }) {
     default: 'bg-secondary text-text-secondary',
     primary: 'bg-accent/12 text-accent',
     info: 'bg-chart-4/12 text-chart-4',
-  }
+  };
 
   return (
     <Card className="gap-3 border-border-subtle bg-card p-4">
@@ -33,7 +33,7 @@ export function LiveEnergyFlowCard({ tiles }: { tiles: Array<FlowTile> }) {
 
       <div className="grid grid-cols-2 gap-2">
         {tiles.map((tile) => {
-          const Icon = tile.icon
+          const Icon = tile.icon;
           return (
             <div
               key={tile.label}
@@ -48,9 +48,9 @@ export function LiveEnergyFlowCard({ tiles }: { tiles: Array<FlowTile> }) {
                 <p className="text-xs opacity-80">{tile.label}</p>
               </div>
             </div>
-          )
+          );
         })}
       </div>
     </Card>
-  )
+  );
 }

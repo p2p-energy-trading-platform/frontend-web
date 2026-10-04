@@ -1,24 +1,24 @@
-import { tradeValueCurrency } from '#/data/profile'
-import { Activity, Gauge, Save, Zap } from 'lucide-react'
-import { Button } from '../ui/button'
+import { tradeValueCurrency } from '#/data/profile';
+import { Activity, Gauge, Save, Zap } from 'lucide-react';
+import { Button } from '../ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../ui/card'
-import { Field, FieldGroup, FieldLabel } from '../ui/field'
+} from '../ui/card';
+import { Field, FieldGroup, FieldLabel } from '../ui/field';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../ui/select'
-import { Input } from '../ui/input'
-import { Label } from '../ui/label'
-import { Switch } from '../ui/switch'
+} from '../ui/select';
+import { Input } from '../ui/input';
+import { Label } from '../ui/label';
+import { Switch } from '../ui/switch';
 
 export default function TradingPreferences() {
   return (
@@ -122,7 +122,7 @@ export default function TradingPreferences() {
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function PreferenceToggle({
@@ -131,10 +131,10 @@ function PreferenceToggle({
   title,
   description,
 }: {
-  id: string
-  icon: React.ComponentType<{ className?: string }>
-  title: string
-  description: string
+  id: string;
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  description: string;
 }) {
   return (
     <div className="flex items-center gap-3 p-4">
@@ -151,5 +151,5 @@ function PreferenceToggle({
       </Label>
       <Switch id={id} name={id} />
     </div>
-  )
+  );
 }

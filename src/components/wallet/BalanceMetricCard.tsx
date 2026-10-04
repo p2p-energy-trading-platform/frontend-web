@@ -1,13 +1,13 @@
-import type { LucideIcon } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react';
 
-import { Card, CardContent } from '#/components/ui/card'
+import { Card, CardContent } from '#/components/ui/card';
 
 type Props = {
-  icon: LucideIcon
-  title: string
-  amount: string
-  description: string
-}
+  icon: LucideIcon;
+  title: string;
+  amount: string;
+  description: string;
+};
 
 export function BalanceMetricCard({
   icon: Icon,
@@ -33,5 +33,5 @@ export function BalanceMetricCard({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -1,12 +1,12 @@
-import { Badge } from '#/components/ui/badge'
-import { Card } from '#/components/ui/card'
+import { Badge } from '#/components/ui/badge';
+import { Card } from '#/components/ui/card';
 
 export interface CurrentSlotCardProps {
-  timeRange: string
-  pricePerKwh: string
-  remainingLabel: string
-  exportKw: string
-  progressPercent: number
+  timeRange: string;
+  pricePerKwh: string;
+  remainingLabel: string;
+  exportKw: string;
+  progressPercent: number;
 }
 
 export function CurrentSlotCard({
@@ -50,5 +50,5 @@ export function CurrentSlotCard({
         </div>
       </div>
     </Card>
-  )
+  );
 }

@@ -1,8 +1,8 @@
-import { Link } from '@tanstack/react-router'
-import { Zap } from 'lucide-react'
+import { Link } from '@tanstack/react-router';
+import { Zap } from 'lucide-react';
 
-import ThemeToggle from './ThemeToggle'
-import { buttonVariants } from './ui/button'
+import ThemeToggle from './ThemeToggle';
+import { buttonVariants } from './ui/button';
 
 export default function Header() {
   return (
@@ -26,5 +26,5 @@ export default function Header() {
         </div>
       </nav>
     </header>
-  )
+  );
 }

@@ -1,20 +1,20 @@
-import * as React from 'react'
-import { ArrowLeft, ArrowRight, Clock3, MailCheck } from 'lucide-react'
+import * as React from 'react';
+import { ArrowLeft, ArrowRight, Clock3, MailCheck } from 'lucide-react';
 
-import { Button } from '#/components/ui/button'
-import { Field, FieldGroup, FieldLabel } from '#/components/ui/field'
+import { Button } from '#/components/ui/button';
+import { Field, FieldGroup, FieldLabel } from '#/components/ui/field';
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
-} from '#/components/ui/input-otp'
+} from '#/components/ui/input-otp';
 
-const OTP_LENGTH = 6
+const OTP_LENGTH = 6;
 
 interface VerifyEmailStepProps {
-  email: string
-  onBack: () => void
-  onVerified: () => Promise<void> | void
+  email: string;
+  onBack: () => void;
+  onVerified: () => Promise<void> | void;
 }
 
 export function VerifyEmailStep({
@@ -23,9 +23,9 @@ export function VerifyEmailStep({
   onVerified,
 }: VerifyEmailStepProps) {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+    event.preventDefault();
 
-    await onVerified()
+    await onVerified();
   }
 
   return (
@@ -100,5 +100,5 @@ export function VerifyEmailStep({
         Back to account details
       </Button>
     </>
-  )
+  );
 }

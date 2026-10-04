@@ -4,23 +4,23 @@ import {
   Calendar,
   Download,
   MapPin,
-} from 'lucide-react'
+} from 'lucide-react';
 
-import { cn } from 'cn'
+import { cn } from 'cn';
 
-export type EnergyPeriod = 'Day' | 'Week' | 'Month' | 'Custom'
+export type EnergyPeriod = 'Day' | 'Week' | 'Month' | 'Custom';
 
 export interface EnergyDateBarProps {
-  period: EnergyPeriod
-  onPeriodChange: (period: EnergyPeriod) => void
-  dateLabel: string
-  onPrevDate?: () => void
-  onNextDate?: () => void
-  zoneLabel: string
-  onExportCsv?: () => void
+  period: EnergyPeriod;
+  onPeriodChange: (period: EnergyPeriod) => void;
+  dateLabel: string;
+  onPrevDate?: () => void;
+  onNextDate?: () => void;
+  zoneLabel: string;
+  onExportCsv?: () => void;
 }
 
-const PERIODS: Array<EnergyPeriod> = ['Day', 'Week', 'Month', 'Custom']
+const PERIODS: Array<EnergyPeriod> = ['Day', 'Week', 'Month', 'Custom'];
 
 export function EnergyDateBar({
   period,
@@ -93,5 +93,5 @@ export function EnergyDateBar({
         Export CSV
       </button>
     </div>
-  )
+  );
 }

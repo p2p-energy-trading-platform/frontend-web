@@ -1,19 +1,19 @@
-import type { LucideIcon } from 'lucide-react'
-import { MoreHorizontal } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react';
+import { MoreHorizontal } from 'lucide-react';
 
-import { cn } from 'cn'
-import { Button } from '../ui/button'
+import { cn } from 'cn';
+import { Button } from '../ui/button';
 
 export interface NotificationItemData {
-  id: string
-  icon: LucideIcon
-  iconClassName: string
-  title: string
-  time: string
-  description: string
-  actionLabel?: string
-  onAction?: () => void
-  unread?: boolean
+  id: string;
+  icon: LucideIcon;
+  iconClassName: string;
+  title: string;
+  time: string;
+  description: string;
+  actionLabel?: string;
+  onAction?: () => void;
+  unread?: boolean;
 }
 
 export function NotificationItem({
@@ -76,5 +76,5 @@ export function NotificationItem({
         <MoreHorizontal className="size-3.5" />
       </Button>
     </div>
-  )
+  );
 }

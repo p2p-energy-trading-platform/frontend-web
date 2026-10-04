@@ -1,26 +1,26 @@
-import { ArrowDownRight, ArrowUpRight, Clock3 } from 'lucide-react'
+import { ArrowDownRight, ArrowUpRight, Clock3 } from 'lucide-react';
 
-import type { MarketSnapshot } from '#/lib/market-data'
-import { getPercentageChange } from '#/lib/market-data'
-import { useMarketLabels } from '#/hooks/useTrade'
-import { cn } from 'cn'
+import type { MarketSnapshot } from '#/lib/market-data';
+import { getPercentageChange } from '#/lib/market-data';
+import { useMarketLabels } from '#/hooks/useTrade';
+import { cn } from 'cn';
 
 interface MarketSummaryProps {
-  snapshot: MarketSnapshot
+  snapshot: MarketSnapshot;
 }
 
 export function MarketSummary({ snapshot }: MarketSummaryProps) {
-  const market = useMarketLabels()
-  const change = getPercentageChange(snapshot)
-  const increasing = change >= 0
-  const marketOpen = snapshot.status === 'open'
+  const market = useMarketLabels();
+  const change = getPercentageChange(snapshot);
+  const increasing = change >= 0;
+  const marketOpen = snapshot.status === 'open';
   const updatedLabel = snapshot.updatedAt
     ? new Intl.DateTimeFormat(market.locale, {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
       }).format(snapshot.updatedAt)
-    : 'Connecting…'
+    : 'Connecting…';
 
   return (
     <>
@@ -114,5 +114,5 @@ export function MarketSummary({ snapshot }: MarketSummaryProps) {
         ))}
       </section>
     </>
-  )
+  );
 }

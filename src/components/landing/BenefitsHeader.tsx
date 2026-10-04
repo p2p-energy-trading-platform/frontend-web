@@ -1,4 +1,4 @@
-import { Badge } from '../ui/badge'
+import { Badge } from '../ui/badge';
 import {
   TrendingDown,
   Leaf,
@@ -12,9 +12,9 @@ import {
   TrendingUp,
   CircleCheck,
   Star,
-} from 'lucide-react'
-import { Card } from '../ui/card'
-import { useMarketing } from '#/hooks/useMarketing'
+} from 'lucide-react';
+import { Card } from '../ui/card';
+import { useMarketing } from '#/hooks/useMarketing';
 
 function BenefitsHeader() {
   return (
@@ -30,10 +30,10 @@ function BenefitsHeader() {
         cheaper electricity - GrideX is for you.
       </p>
     </div>
-  )
+  );
 }
 
-const buyerIcons = [TrendingDown, Leaf, Zap, Wallet, Globe, Bell]
+const buyerIcons = [TrendingDown, Leaf, Zap, Wallet, Globe, Bell];
 const prosumerIcons = [
   ArrowUpRight,
   Gauge,
@@ -41,15 +41,15 @@ const prosumerIcons = [
   TrendingUp,
   CircleCheck,
   Star,
-]
+];
 
 interface ParticipantCardProps {
-  label: string
-  title: string
+  label: string;
+  title: string;
   benefits: {
-    text: string
-    icon: React.ReactNode
-  }[]
+    text: string;
+    icon: React.ReactNode;
+  }[];
 }
 
 function ParticipantCard({ label, title, benefits }: ParticipantCardProps) {
@@ -76,25 +76,25 @@ function ParticipantCard({ label, title, benefits }: ParticipantCardProps) {
         </ul>
       </div>
     </Card>
-  )
+  );
 }
 
 function ParticipantSection() {
-  const marketing = useMarketing()
+  const marketing = useMarketing();
   const buyerBenefits = marketing.buyerBenefits.map((text, index) => {
-    const Icon = buyerIcons[index]
+    const Icon = buyerIcons[index];
     return {
       text,
       icon: <Icon className="size-4 text-brand-accent" />,
-    }
-  })
+    };
+  });
   const prosumerBenefits = marketing.prosumerBenefits.map((text, index) => {
-    const Icon = prosumerIcons[index]
+    const Icon = prosumerIcons[index];
     return {
       text,
       icon: <Icon className="size-4 text-brand-accent" />,
-    }
-  })
+    };
+  });
 
   return (
     <div className="w-full py-6 flex flex-row justify-center gap-6">
@@ -110,7 +110,7 @@ function ParticipantSection() {
         benefits={prosumerBenefits}
       />
     </div>
-  )
+  );
 }
 
 export default function BenefitsSection() {
@@ -120,5 +120,5 @@ export default function BenefitsSection() {
 
       <ParticipantSection />
     </section>
-  )
+  );
 }

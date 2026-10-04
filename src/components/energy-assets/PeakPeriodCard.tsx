@@ -1,24 +1,24 @@
-import { Card } from '#/components/ui/card'
-import { usePeakPeriods } from '#/hooks/useEnergyAssets'
-import { cn } from 'cn'
+import { Card } from '#/components/ui/card';
+import { usePeakPeriods } from '#/hooks/useEnergyAssets';
+import { cn } from 'cn';
 
 export interface PeakPeriodsCardProps {
   /** 7 rows (Mon-Sun) x N hourly columns, each 0-1 intensity */
-  matrix?: Array<Array<number>>
-  hourLabels?: Array<string>
+  matrix?: Array<Array<number>>;
+  hourLabels?: Array<string>;
 }
 
 function intensityClass(v: number) {
-  if (v > 0.66) return 'bg-accent'
-  if (v > 0.33) return 'bg-accent/50'
-  return 'bg-accent/15'
+  if (v > 0.66) return 'bg-accent';
+  if (v > 0.33) return 'bg-accent/50';
+  return 'bg-accent/15';
 }
 
 export function PeakPeriodsCard({ matrix, hourLabels }: PeakPeriodsCardProps) {
-  const peak = usePeakPeriods()
-  const cells = matrix ?? peak.matrix
-  const hours = hourLabels ?? peak.hourLabels
-  const days = peak.days
+  const peak = usePeakPeriods();
+  const cells = matrix ?? peak.matrix;
+  const hours = hourLabels ?? peak.hourLabels;
+  const days = peak.days;
   return (
     <Card className="gap-4 border-border-subtle bg-card p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -65,7 +65,7 @@ export function PeakPeriodsCard({ matrix, hourLabels }: PeakPeriodsCardProps) {
         </p>
       </div>
     </Card>
-  )
+  );
 }
 
 function Legend({ colorClass, label }: { colorClass: string; label: string }) {
@@ -74,5 +74,5 @@ function Legend({ colorClass, label }: { colorClass: string; label: string }) {
       <span className={cn('size-2.5 rounded-sm', colorClass)} />
       {label}
     </span>
-  )
+  );
 }

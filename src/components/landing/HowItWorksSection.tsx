@@ -1,5 +1,5 @@
-import { Card } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 export default function HowItWorksSection() {
   return (
@@ -100,5 +100,5 @@ export default function HowItWorksSection() {
         </Card>
       </div>
     </section>
-  )
+  );
 }

@@ -1,7 +1,7 @@
-import { ArrowRight } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Badge } from '../ui/badge'
-import { Card } from '../ui/card'
+import { ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '../ui/badge';
+import { Card } from '../ui/card';
 
 function CTAActions() {
   return (
@@ -15,7 +15,7 @@ function CTAActions() {
         Request demo
       </Button>
     </div>
-  )
+  );
 }
 
 function CTAHeader() {
@@ -33,7 +33,7 @@ function CTAHeader() {
         hardware.
       </p>
     </div>
-  )
+  );
 }
 
 export default function CTASection() {
@@ -44,5 +44,5 @@ export default function CTASection() {
         <CTAActions />
       </Card>
     </section>
-  )
+  );
 }

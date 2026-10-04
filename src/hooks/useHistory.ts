@@ -3,14 +3,14 @@ import {
   orderRecords,
   presentedTrades,
   tradeSettlementNote,
-} from '#/data/history'
+} from '#/data/history';
 
 export function useOrders() {
   return {
     source: 'demo' as const,
     orders: orderRecords,
     limitPriceLabel,
-  }
+  };
 }
 
 export function useTrades() {
@@ -18,5 +18,5 @@ export function useTrades() {
     source: 'demo' as const,
     trades: presentedTrades,
     settlementNote: tradeSettlementNote,
-  }
+  };
 }

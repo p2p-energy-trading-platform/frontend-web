@@ -1,15 +1,15 @@
 // import { Input as InputPrimitive } from '@base-ui/react/input'
-import { useState } from 'react'
-import { cn } from 'cn'
-import { InputGroup, InputGroupButton, InputGroupInput } from './input-group'
-import { Eye, EyeOff } from 'lucide-react'
+import { useState } from 'react';
+import { cn } from 'cn';
+import { InputGroup, InputGroupButton, InputGroupInput } from './input-group';
+import { Eye, EyeOff } from 'lucide-react';
 
 function PasswordInput({
   className,
   innerClass,
   ...props
 }: React.ComponentProps<'input'> & { innerClass?: string }) {
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <InputGroup
       className={cn('bg-transparent shadow-xs dark:bg-transparent', className)}
@@ -31,7 +31,7 @@ function PasswordInput({
         )}
       </InputGroupButton>
     </InputGroup>
-  )
+  );
 }
 
-export { PasswordInput }
+export { PasswordInput };

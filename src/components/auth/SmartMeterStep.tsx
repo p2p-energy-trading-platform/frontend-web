@@ -1,25 +1,25 @@
-import * as React from 'react'
-import { Check, RadioTower, ShieldCheck } from 'lucide-react'
+import * as React from 'react';
+import { Check, RadioTower, ShieldCheck } from 'lucide-react';
 
-import { Button } from '#/components/ui/button'
-import { Input } from '#/components/ui/input'
-import type { SmartMeterStatus } from './types'
-import { Field, FieldDescription, FieldGroup, FieldLabel } from '../ui/field'
-import { Card, CardDescription } from '../ui/card'
+import { Button } from '#/components/ui/button';
+import { Input } from '#/components/ui/input';
+import type { SmartMeterStatus } from './types';
+import { Field, FieldDescription, FieldGroup, FieldLabel } from '../ui/field';
+import { Card, CardDescription } from '../ui/card';
 
 interface SmartMeterStepProps {
-  onComplete: (status: SmartMeterStatus) => Promise<void> | void
+  onComplete: (status: SmartMeterStatus) => Promise<void> | void;
 }
 
 export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
   async function complete(status: SmartMeterStatus) {
-    await onComplete(status)
+    await onComplete(status);
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+    event.preventDefault();
 
-    await onComplete('pending')
+    await onComplete('pending');
   }
 
   return (
@@ -82,5 +82,5 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
         </FieldGroup>
       </form>
     </>
-  )
+  );
 }

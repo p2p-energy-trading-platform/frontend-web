@@ -11,15 +11,15 @@ import {
   UserRoundPlus,
   WalletCards,
   Zap,
-} from 'lucide-react'
-import type { KycStatus, SIGN_UP_STATES, SmartMeterStatus } from './types'
-import { signInBenefits } from '#/data/auth'
+} from 'lucide-react';
+import type { KycStatus, SIGN_UP_STATES, SmartMeterStatus } from './types';
+import { signInBenefits } from '#/data/auth';
 
 interface SigupSidebarProps {
-  view: SIGN_UP_STATES
-  step: number
-  kycStatus: KycStatus
-  meterStatus: SmartMeterStatus
+  view: SIGN_UP_STATES;
+  step: number;
+  kycStatus: KycStatus;
+  meterStatus: SmartMeterStatus;
 }
 
 export default function SignupSidebar({
@@ -29,74 +29,74 @@ export default function SignupSidebar({
   meterStatus,
 }: SigupSidebarProps) {
   function getIcon(iconView: SIGN_UP_STATES) {
-    let iconValue = <FileWarningIcon />
+    let iconValue = <FileWarningIcon />;
     switch (iconView) {
       case 'account':
-        iconValue = <UserRoundPlus className="size-4" />
-        break
+        iconValue = <UserRoundPlus className="size-4" />;
+        break;
       case 'verify-email':
-        iconValue = <MailCheck className="size-4" />
-        break
+        iconValue = <MailCheck className="size-4" />;
+        break;
       case 'kyc':
-        iconValue = <IdCard className="size-4" />
-        break
+        iconValue = <IdCard className="size-4" />;
+        break;
       case 'smart-meter':
-        iconValue = <IdCard className="size-4" />
-        break
+        iconValue = <IdCard className="size-4" />;
+        break;
       case 'complete':
-        iconValue = <FileCheck2 className="size-4" />
+        iconValue = <FileCheck2 className="size-4" />;
     }
 
-    return iconValue
+    return iconValue;
   }
 
   function getHeading(headingView: SIGN_UP_STATES) {
-    let headingValue = 'Error'
+    let headingValue = 'Error';
     switch (headingView) {
       case 'account':
-        headingValue = 'Start trading in minutes'
-        break
+        headingValue = 'Start trading in minutes';
+        break;
       case 'verify-email':
-        headingValue = 'Verify your email address'
-        break
+        headingValue = 'Verify your email address';
+        break;
       case 'kyc':
-        headingValue = 'Why we need to verify you'
-        break
+        headingValue = 'Why we need to verify you';
+        break;
       case 'smart-meter':
-        headingValue = 'Bring your energy data online'
-        break
+        headingValue = 'Bring your energy data online';
+        break;
       case 'complete':
-        headingValue = 'Your account is ready'
+        headingValue = 'Your account is ready';
     }
 
-    return headingValue
+    return headingValue;
   }
 
   function getDescription(descriptionView: SIGN_UP_STATES) {
-    let descriptionValue = 'Error'
+    let descriptionValue = 'Error';
     switch (descriptionView) {
       case 'account':
         descriptionValue =
-          'Your GridX account gives you access to the full peer-to-peer energy marketplace.'
-        break
+          'Your GridX account gives you access to the full peer-to-peer energy marketplace.';
+        break;
       case 'verify-email':
         descriptionValue =
-          'Email verification protects your account and confirms where GridX should send important trading updates.'
-        break
+          'Email verification protects your account and confirms where GridX should send important trading updates.';
+        break;
       case 'kyc':
         descriptionValue =
-          'Identity verification is optional now, and helps GridX keep higher-value trades and payouts secure.'
-        break
+          'Identity verification is optional now, and helps GridX keep higher-value trades and payouts secure.';
+        break;
       case 'smart-meter':
         descriptionValue =
-          'A secure meter connection gives you live usage, generation data, and access to peer-to-peer trading.'
-        break
+          'A secure meter connection gives you live usage, generation data, and access to peer-to-peer trading.';
+        break;
       case 'complete':
         descriptionValue =
-          'All onboarding choices are saved. You can review verification and device status from your Profile.'
+          'All onboarding choices are saved. You can review verification and device status from your Profile.';
     }
 
-    return descriptionValue
+    return descriptionValue;
   }
 
   return (
@@ -130,7 +130,7 @@ export default function SignupSidebar({
         />
       </div>
     </>
-  )
+  );
 }
 
 function GridXBrand() {
@@ -142,7 +142,7 @@ function GridXBrand() {
 
       <span className="font-heading text-lg font-bold text-white">GridX</span>
     </div>
-  )
+  );
 }
 
 function CustomSidebarContent({
@@ -150,21 +150,21 @@ function CustomSidebarContent({
   kycStatus,
   meterStatus,
 }: {
-  view: SIGN_UP_STATES
-  kycStatus: KycStatus
-  meterStatus: SmartMeterStatus
+  view: SIGN_UP_STATES;
+  kycStatus: KycStatus;
+  meterStatus: SmartMeterStatus;
 }) {
   switch (view) {
     case 'account':
-      return <CreateAccountContent />
+      return <CreateAccountContent />;
     case 'verify-email':
-      return <VerifyEmailContent />
+      return <VerifyEmailContent />;
     case 'kyc':
-      return <IdentityContent />
+      return <IdentityContent />;
     case 'smart-meter':
-      return <SmartMeterContent />
+      return <SmartMeterContent />;
     case 'complete':
-      return <FinalContent kycStatus={kycStatus} meterStatus={meterStatus} />
+      return <FinalContent kycStatus={kycStatus} meterStatus={meterStatus} />;
   }
 }
 
@@ -184,7 +184,7 @@ function CreateAccountContent() {
         </li>
       ))}
     </ul>
-  )
+  );
 }
 
 function VerifyEmailContent() {
@@ -209,7 +209,7 @@ function VerifyEmailContent() {
         </li>
       </ol>
     </div>
-  )
+  );
 }
 
 function IdentityContent() {
@@ -234,7 +234,7 @@ function IdentityContent() {
         Documents are encrypted and reviewed securely
       </li>
     </ul>
-  )
+  );
 }
 
 function SmartMeterContent() {
@@ -259,15 +259,15 @@ function SmartMeterContent() {
         Compatible with SMETS2 &amp; most SMETS1 meters
       </li>
     </ul>
-  )
+  );
 }
 
 function FinalContent({
   kycStatus,
   meterStatus,
 }: {
-  kycStatus: KycStatus
-  meterStatus: SmartMeterStatus
+  kycStatus: KycStatus;
+  meterStatus: SmartMeterStatus;
 }) {
   return (
     <div className="mt-7 rounded-2xl border border-accent/20 bg-accent/6 p-5">
@@ -287,5 +287,5 @@ function FinalContent({
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,11 +1,11 @@
-import { Card, CardContent } from '#/components/ui/card'
-import { useWallet } from '#/hooks/useWallet'
-import { BalanceOverview } from './BalanceOverview'
-import { BalanceMetrics } from './BalanceMetrics'
-import { BalanceActions } from './BalanceActions'
+import { Card, CardContent } from '#/components/ui/card';
+import { useWallet } from '#/hooks/useWallet';
+import { BalanceOverview } from './BalanceOverview';
+import { BalanceMetrics } from './BalanceMetrics';
+import { BalanceActions } from './BalanceActions';
 
 export function BalanceHero() {
-  const wallet = useWallet()
+  const wallet = useWallet();
 
   return (
     <Card className=" p-5" data-source={wallet.source}>
@@ -24,5 +24,5 @@ export function BalanceHero() {
         <BalanceActions />
       </CardContent>
     </Card>
-  )
+  );
 }

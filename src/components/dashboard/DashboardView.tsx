@@ -1,19 +1,19 @@
-import { Plus } from 'lucide-react'
+import { Plus } from 'lucide-react';
 
-import { StatTile } from '#/components/dashboard/StatTile'
-import { EnergyPositionCard } from '#/components/dashboard/EnergyPositionCard'
-import { GenerationChart } from '#/components/dashboard/GenerationChart'
-import { DeviceCard } from '#/components/dashboard/DeviceCard'
-import { QuickActionsCard } from '#/components/dashboard/QuickActionsCard'
-import { CurrentSlotCard } from '#/components/dashboard/CurrentSlotCard'
-import { LiveEnergyFlowCard } from '#/components/dashboard/LiveEnergyFlowCard'
-import { RecentActivityCard } from '#/components/dashboard/RecentActivityCard'
-import { MarketCard } from '#/components/dashboard/MarketCard'
-import { Button } from '#/components/ui/button'
-import { useDashboard } from '#/hooks/useDashboard'
+import { StatTile } from '#/components/dashboard/StatTile';
+import { EnergyPositionCard } from '#/components/dashboard/EnergyPositionCard';
+import { GenerationChart } from '#/components/dashboard/GenerationChart';
+import { DeviceCard } from '#/components/dashboard/DeviceCard';
+import { QuickActionsCard } from '#/components/dashboard/QuickActionsCard';
+import { CurrentSlotCard } from '#/components/dashboard/CurrentSlotCard';
+import { LiveEnergyFlowCard } from '#/components/dashboard/LiveEnergyFlowCard';
+import { RecentActivityCard } from '#/components/dashboard/RecentActivityCard';
+import { MarketCard } from '#/components/dashboard/MarketCard';
+import { Button } from '#/components/ui/button';
+import { useDashboard } from '#/hooks/useDashboard';
 
 export default function DashboardView() {
-  const dashboard = useDashboard()
+  const dashboard = useDashboard();
 
   return (
     <main
@@ -68,5 +68,5 @@ export default function DashboardView() {
         <MarketCard {...dashboard.market} />
       </div>
     </main>
-  )
+  );
 }

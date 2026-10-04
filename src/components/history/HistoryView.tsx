@@ -1,10 +1,10 @@
-import { Link, Outlet, useRouterState } from '@tanstack/react-router'
-import { cn } from 'cn'
+import { Link, Outlet, useRouterState } from '@tanstack/react-router';
+import { cn } from 'cn';
 
 export default function HistoryView() {
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
-  })
+  });
   return (
     <main className="mx-auto flex w-full flex-col gap-5 p-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -28,7 +28,7 @@ export default function HistoryView() {
       </div>
       <Outlet />
     </main>
-  )
+  );
 }
 
 function HistoryLink({
@@ -36,9 +36,9 @@ function HistoryLink({
   active,
   children,
 }: {
-  to: '/history/orders' | '/history/trades'
-  active: boolean
-  children: string
+  to: '/history/orders' | '/history/trades';
+  active: boolean;
+  children: string;
 }) {
   return (
     <Link
@@ -52,5 +52,5 @@ function HistoryLink({
     >
       {children}
     </Link>
-  )
+  );
 }

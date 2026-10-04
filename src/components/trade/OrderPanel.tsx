@@ -1,44 +1,44 @@
-import { Info, Wallet, Zap } from 'lucide-react'
-import { useState } from 'react'
+import { Info, Wallet, Zap } from 'lucide-react';
+import { useState } from 'react';
 
-import { Button } from '#/components/ui/button'
-import { Input } from '#/components/ui/input'
-import { Tabs, TabsList, TabsTrigger } from '#/components/ui/tabs'
+import { Button } from '#/components/ui/button';
+import { Input } from '#/components/ui/input';
+import { Tabs, TabsList, TabsTrigger } from '#/components/ui/tabs';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '#/components/ui/tooltip'
-import { useOrderQuote } from '#/hooks/useTrade'
+} from '#/components/ui/tooltip';
+import { useOrderQuote } from '#/hooks/useTrade';
 
-import type { OrderSide, OrderType } from './types'
+import type { OrderSide, OrderType } from './types';
 
 export function OrderPanel() {
-  const quote = useOrderQuote()
-  const availableEnergy = quote.availableEnergyKwh
-  const [side, setSide] = useState<OrderSide>('buy')
-  const [orderType, setOrderType] = useState<OrderType>('limit')
-  const [amount, setAmount] = useState(quote.defaultAmount)
-  const [price, setPrice] = useState(quote.defaultPrice)
-  const quantity = Number(amount)
+  const quote = useOrderQuote();
+  const availableEnergy = quote.availableEnergyKwh;
+  const [side, setSide] = useState<OrderSide>('buy');
+  const [orderType, setOrderType] = useState<OrderType>('limit');
+  const [amount, setAmount] = useState(quote.defaultAmount);
+  const [price, setPrice] = useState(quote.defaultPrice);
+  const quantity = Number(amount);
   const unitPrice =
     orderType === 'market'
       ? side === 'buy'
         ? quote.marketBuyPrice
         : quote.marketSellPrice
-      : Number(price)
-  const exceedsEnergyBalance = side === 'sell' && quantity > availableEnergy
-  const valid = quantity > 0 && unitPrice > 0 && !exceedsEnergyBalance
-  const subtotal = valid ? quantity * unitPrice : 0
-  const fee = subtotal * quote.feeRate
-  const money = quote.formatMoney
+      : Number(price);
+  const exceedsEnergyBalance = side === 'sell' && quantity > availableEnergy;
+  const valid = quantity > 0 && unitPrice > 0 && !exceedsEnergyBalance;
+  const subtotal = valid ? quantity * unitPrice : 0;
+  const fee = subtotal * quote.feeRate;
+  const money = quote.formatMoney;
 
   return (
     <section className="overflow-hidden rounded-xl border border-border-subtle bg-card shadow-sm">
       <Tabs
         value={side}
         onValueChange={(value) => {
-          if (value === 'buy' || value === 'sell') setSide(value)
+          if (value === 'buy' || value === 'sell') setSide(value);
         }}
         className="border-b border-border-subtle"
       >
@@ -70,7 +70,7 @@ export function OrderPanel() {
           <Tabs
             value={orderType}
             onValueChange={(value) => {
-              if (value === 'market' || value === 'limit') setOrderType(value)
+              if (value === 'market' || value === 'limit') setOrderType(value);
             }}
           >
             <TabsList className="grid w-full grid-cols-2">
@@ -188,5 +188,5 @@ export function OrderPanel() {
         </p>
       </div>
     </section>
-  )
+  );
 }

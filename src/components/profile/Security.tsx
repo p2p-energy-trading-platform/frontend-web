@@ -1,14 +1,14 @@
-import { LockKeyhole, Save } from 'lucide-react'
-import { Button } from '../ui/button'
+import { LockKeyhole, Save } from 'lucide-react';
+import { Button } from '../ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../ui/card'
-import { Field, FieldGroup, FieldLabel } from '../ui/field'
-import { PasswordInput } from '../ui/password-input'
+} from '../ui/card';
+import { Field, FieldGroup, FieldLabel } from '../ui/field';
+import { PasswordInput } from '../ui/password-input';
 
 export default function Security() {
   return (
@@ -64,5 +64,5 @@ export default function Security() {
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }

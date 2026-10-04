@@ -1,16 +1,16 @@
-import { useState } from 'react'
-import { Plus } from 'lucide-react'
+import { useState } from 'react';
+import { Plus } from 'lucide-react';
 
-import { CardList } from './CardList'
-import { BankAccountList } from './BankAccountList'
-import { PaymentMethodTabs } from './PaymentMethodTabs'
-import { useWallet } from '#/hooks/useWallet'
-import { Button } from '../ui/button'
-import { Card, CardContent } from '../ui/card'
+import { CardList } from './CardList';
+import { BankAccountList } from './BankAccountList';
+import { PaymentMethodTabs } from './PaymentMethodTabs';
+import { useWallet } from '#/hooks/useWallet';
+import { Button } from '../ui/button';
+import { Card, CardContent } from '../ui/card';
 
 export function PaymentMethods() {
-  const wallet = useWallet()
-  const [tab, setTab] = useState<'cards' | 'banks'>('cards')
+  const wallet = useWallet();
+  const [tab, setTab] = useState<'cards' | 'banks'>('cards');
 
   return (
     <Card className="w-full lg:min-w-0 lg:flex-1">
@@ -36,5 +36,5 @@ export function PaymentMethods() {
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

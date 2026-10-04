@@ -1,15 +1,15 @@
-import { Check, IdCard, RadioTower } from 'lucide-react'
-import type { KycStatus, SmartMeterStatus } from './types'
-import { Link } from '@tanstack/react-router'
-import { buttonVariants } from '../ui/button'
-import { cn } from 'cn'
+import { Check, IdCard, RadioTower } from 'lucide-react';
+import type { KycStatus, SmartMeterStatus } from './types';
+import { Link } from '@tanstack/react-router';
+import { buttonVariants } from '../ui/button';
+import { cn } from 'cn';
 
 export default function RegistrationComplete({
   kycStatus,
   meterStatus,
 }: {
-  kycStatus: KycStatus
-  meterStatus: SmartMeterStatus
+  kycStatus: KycStatus;
+  meterStatus: SmartMeterStatus;
 }) {
   return (
     <div>
@@ -70,5 +70,5 @@ export default function RegistrationComplete({
         View Profile
       </Link>
     </div>
-  )
+  );
 }

@@ -3,7 +3,7 @@ import {
   paymentCards,
   walletBalance,
   walletTransactions,
-} from '#/data/wallet'
+} from '#/data/wallet';
 
 export function useWallet() {
   return {
@@ -12,5 +12,5 @@ export function useWallet() {
     cards: paymentCards,
     accounts: bankAccounts,
     transactions: walletTransactions,
-  }
+  };
 }

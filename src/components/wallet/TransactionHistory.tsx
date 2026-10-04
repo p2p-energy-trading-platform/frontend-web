@@ -1,8 +1,8 @@
-import { ArrowDownLeft, ArrowUpRight } from 'lucide-react'
+import { ArrowDownLeft, ArrowUpRight } from 'lucide-react';
 
-import { Button } from '#/components/ui/button'
-import { Card } from '#/components/ui/card'
-import { Input } from '#/components/ui/input'
+import { Button } from '#/components/ui/button';
+import { Card } from '#/components/ui/card';
+import { Input } from '#/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -10,12 +10,12 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '#/components/ui/select'
+} from '#/components/ui/select';
 
-import { useWallet } from '#/hooks/useWallet'
+import { useWallet } from '#/hooks/useWallet';
 
 export function TransactionHistory() {
-  const wallet = useWallet()
+  const wallet = useWallet();
   return (
     <Card
       className="flex w-full flex-col gap-6 border-border-subtle bg-card p-6 lg:min-h-96 lg:w-3/5"
@@ -93,5 +93,5 @@ export function TransactionHistory() {
         </div>
       ))}
     </Card>
-  )
+  );
 }

@@ -1,23 +1,23 @@
-'use client'
+'use client';
 
-import * as React from 'react'
-import { UploadCloud } from 'lucide-react'
-import { cn } from 'cn'
+import * as React from 'react';
+import { UploadCloud } from 'lucide-react';
+import { cn } from 'cn';
 
 export interface FileDropzoneProps extends Omit<
   React.ComponentProps<'button'>,
   'onChange' | 'title'
 > {
   /** Callback fired when a file is selected or dropped */
-  onFileSelect?: (file: File | null) => void
+  onFileSelect?: (file: File | null) => void;
   /** Accepted MIME types or extensions */
-  accept?: string
+  accept?: string;
   /** Primary label/heading */
-  title?: React.ReactNode
+  title?: React.ReactNode;
   /** Subtext or constraint notes */
-  description?: React.ReactNode
+  description?: React.ReactNode;
   /** Custom icon component */
-  icon?: React.ReactNode
+  icon?: React.ReactNode;
 }
 
 export function FileDropzone({
@@ -32,51 +32,51 @@ export function FileDropzone({
   ref,
   ...props
 }: FileDropzoneProps) {
-  const [isDragging, setIsDragging] = React.useState(false)
-  const inputRef = React.useRef<HTMLInputElement>(null)
+  const [isDragging, setIsDragging] = React.useState(false);
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   const handleFiles = (files: FileList | null) => {
-    if (!files || files.length === 0) return
-    onFileSelect?.(files[0])
-  }
+    if (!files || files.length === 0) return;
+    onFileSelect?.(files[0]);
+  };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    onClick?.(event)
+    onClick?.(event);
     if (!event.defaultPrevented) {
-      inputRef.current?.click()
+      inputRef.current?.click();
     }
-  }
+  };
 
   const handleDragEnter = (event: React.DragEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-    event.stopPropagation()
-    if (!disabled) setIsDragging(true)
-  }
+    event.preventDefault();
+    event.stopPropagation();
+    if (!disabled) setIsDragging(true);
+  };
 
   const handleDragOver = (event: React.DragEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-    event.stopPropagation()
-  }
+    event.preventDefault();
+    event.stopPropagation();
+  };
 
   const handleDragLeave = (event: React.DragEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-    event.stopPropagation()
-    setIsDragging(false)
-  }
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(false);
+  };
 
   const handleDrop = (event: React.DragEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-    event.stopPropagation()
-    setIsDragging(false)
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDragging(false);
 
-    if (disabled) return
-    handleFiles(event.dataTransfer.files)
-  }
+    if (disabled) return;
+    handleFiles(event.dataTransfer.files);
+  };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    handleFiles(event.target.files)
-    event.target.value = ''
-  }
+    handleFiles(event.target.files);
+    event.target.value = '';
+  };
 
   return (
     <div className="relative w-full">
@@ -122,5 +122,5 @@ export function FileDropzone({
         )}
       </button>
     </div>
-  )
+  );
 }

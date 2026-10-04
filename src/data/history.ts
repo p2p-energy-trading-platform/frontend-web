@@ -1,5 +1,5 @@
-import { formatAed, formatAedPerKwh } from '#/data/currency'
-import type { OrderRecord, TradeRecord } from '#/components/history/types'
+import { formatAed, formatAedPerKwh } from '#/data/currency';
+import type { OrderRecord, TradeRecord } from '#/components/history/types';
 
 export const orderRecords: Array<OrderRecord> = [
   {
@@ -117,7 +117,7 @@ export const orderRecords: Array<OrderRecord> = [
     status: 'filled',
     closedAt: '12 Jul · 08:45',
   },
-]
+];
 
 export const tradeRecords: Array<TradeRecord> = [
   {
@@ -276,13 +276,13 @@ export const tradeRecords: Array<TradeRecord> = [
     zone: 'Participant · Saadiyat',
     status: 'failed',
   },
-]
+];
 
 export function limitPriceLabel(price?: number) {
-  return price == null ? 'Market' : formatAedPerKwh(price)
+  return price == null ? 'Market' : formatAedPerKwh(price);
 }
 
-export const tradeSettlementNote = `Counterparty identity is anonymised per GridX trading rules. Grid fee (${formatAedPerKwh(0.09)}) covers metering, settlement, and grid infrastructure.`
+export const tradeSettlementNote = `Counterparty identity is anonymised per GridX trading rules. Grid fee (${formatAedPerKwh(0.09)}) covers metering, settlement, and grid infrastructure.`;
 
 export const presentedTrades = tradeRecords.map((trade) => ({
   ...trade,
@@ -290,4 +290,4 @@ export const presentedTrades = tradeRecords.map((trade) => ({
   effectivePriceLabel: formatAedPerKwh(trade.effectivePrice),
   basePriceLabel: formatAedPerKwh(trade.basePrice),
   gridFeeLabel: formatAedPerKwh(trade.gridFee),
-}))
+}));

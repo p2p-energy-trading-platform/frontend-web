@@ -1,12 +1,12 @@
-import { BadgeCheck, Building2, ShieldCheck, UserRound } from 'lucide-react'
+import { BadgeCheck, Building2, ShieldCheck, UserRound } from 'lucide-react';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../ui/card'
-import { cn } from 'cn'
+} from '../ui/card';
+import { cn } from 'cn';
 
 export default function AccountStatus() {
   return (
@@ -50,7 +50,7 @@ export default function AccountStatus() {
         </p>
       </div>
     </>
-  )
+  );
 }
 
 function StatusRow({
@@ -60,11 +60,11 @@ function StatusRow({
   description,
   tone,
 }: {
-  icon: React.ComponentType<{ className?: string }>
-  label: string
-  value: string
-  description: string
-  tone: 'success' | 'warning'
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  value: string;
+  description: string;
+  tone: 'success' | 'warning';
 }) {
   return (
     <div className="flex gap-3 py-4 first:pt-0 last:pb-0">
@@ -90,5 +90,5 @@ function StatusRow({
         </p>
       </div>
     </div>
-  )
+  );
 }

@@ -9,14 +9,14 @@ import {
   Sun,
   WalletCards,
   Zap,
-} from 'lucide-react'
+} from 'lucide-react';
 
 export const registrationSteps = [
   { id: 1, label: 'Account', description: 'Email & password' },
   { id: 2, label: 'Verify email', description: 'One-time code' },
   { id: 3, label: 'Identity', description: 'KYC verification' },
   { id: 4, label: 'Smart Meter', description: 'Optional connection' },
-]
+];
 
 export const accountBenefits = [
   { icon: Zap, text: 'Trade energy across 16 Dubai grid zones' },
@@ -24,7 +24,7 @@ export const accountBenefits = [
   { icon: ShieldCheck, text: 'Verified prosumer network you can trust' },
   { icon: Leaf, text: 'Measurable sustainability impact' },
   { icon: BarChart3, text: 'Real-time pricing and trade analytics' },
-]
+];
 
 export const kycCountries = [
   'United Arab Emirates',
@@ -36,13 +36,13 @@ export const kycCountries = [
   'Sri Lanka',
   'United Kingdom',
   'United States',
-]
+];
 
 export const signInBenefits = [
   { icon: Gauge, label: '24/7 live energy marketplace' },
   { icon: ShieldCheck, label: 'Bank-grade encrypted sessions' },
   { icon: RefreshCw, label: 'Instant portfolio sync' },
-]
+];
 
 export const signInNetworkNodes = [
   {
@@ -81,7 +81,7 @@ export const signInNetworkNodes = [
     icon: House,
     className: 'right-[8%] bottom-[4%]',
   },
-]
+];
 
 export const signInTestimonial = {
   quote:
@@ -89,9 +89,9 @@ export const signInTestimonial = {
   name: 'Sara A.',
   initials: 'SA',
   detail: 'Solar prosumer · JLT Zone 4',
-}
+};
 
 export const registrationDelayMs = {
   account: 700,
   step: 600,
-}
+};

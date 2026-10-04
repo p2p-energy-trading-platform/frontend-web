@@ -1,34 +1,34 @@
-import { ArrowDownLeft, Battery, Sun, Zap } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
+import { ArrowDownLeft, Battery, Sun, Zap } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
-import { Badge } from '#/components/ui/badge'
-import { Card } from '#/components/ui/card'
-import { cn } from 'cn'
+import { Badge } from '#/components/ui/badge';
+import { Card } from '#/components/ui/card';
+import { cn } from 'cn';
 
 export interface EnergySourceSplit {
-  label: string
-  value: string
+  label: string;
+  value: string;
 }
 
 export interface EnergySourceRow {
-  icon: LucideIcon
-  iconClassName: string
-  label: string
-  total: string
+  icon: LucideIcon;
+  iconClassName: string;
+  label: string;
+  total: string;
   /** relative widths (0-100) for the stacked bar segments, same order as splits */
-  segmentWidths: Array<number>
-  splits: Array<EnergySourceSplit>
+  segmentWidths: Array<number>;
+  splits: Array<EnergySourceSplit>;
 }
 
 export interface EnergyBalanceCardProps {
   summary: Array<{
-    icon: LucideIcon
-    iconClassName?: string
-    value: string
-    label: string
-  }>
-  sources: Array<EnergySourceRow>
-  exportEarnings: string
+    icon: LucideIcon;
+    iconClassName?: string;
+    value: string;
+    label: string;
+  }>;
+  sources: Array<EnergySourceRow>;
+  exportEarnings: string;
 }
 
 export function EnergyBalanceCard({
@@ -50,7 +50,7 @@ export function EnergyBalanceCard({
 
       <div className="grid grid-cols-3 gap-2">
         {summary.map((s) => {
-          const Icon = s.icon
+          const Icon = s.icon;
           return (
             <div
               key={s.label}
@@ -67,13 +67,13 @@ export function EnergyBalanceCard({
                 <p className="truncate text-xs opacity-80">{s.label}</p>
               </div>
             </div>
-          )
+          );
         })}
       </div>
 
       <div className="flex flex-col gap-5">
         {sources.map((source) => {
-          const Icon = source.icon
+          const Icon = source.icon;
           return (
             <div key={source.label} className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
@@ -125,7 +125,7 @@ export function EnergyBalanceCard({
                 ))}
               </div>
             </div>
-          )
+          );
         })}
       </div>
 
@@ -136,7 +136,7 @@ export function EnergyBalanceCard({
         </span>
       </div>
     </Card>
-  )
+  );
 }
 
-export const energyBalanceIcons = { Sun, Zap, Battery, ArrowDownLeft }
+export const energyBalanceIcons = { Sun, Zap, Battery, ArrowDownLeft };

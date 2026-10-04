@@ -1,22 +1,22 @@
-import type { LucideIcon } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react';
 
-import { Badge } from '#/components/ui/badge'
-import { Card } from '#/components/ui/card'
-import { cn } from 'cn'
+import { Badge } from '#/components/ui/badge';
+import { Card } from '#/components/ui/card';
+import { cn } from 'cn';
 
 export interface Insight {
-  icon: LucideIcon
-  iconClassName: string
-  title: string
-  description: string
+  icon: LucideIcon;
+  iconClassName: string;
+  title: string;
+  description: string;
 }
 
 export function InsightsPanel({
   insights,
   newCount,
 }: {
-  insights: Array<Insight>
-  newCount?: number
+  insights: Array<Insight>;
+  newCount?: number;
 }) {
   return (
     <Card className="gap-0 divide-y divide-border-subtle border-border-subtle bg-card p-0">
@@ -28,7 +28,7 @@ export function InsightsPanel({
       </div>
 
       {insights.map((insight, i) => {
-        const Icon = insight.icon
+        const Icon = insight.icon;
         return (
           <div key={i} className="flex gap-3 px-5 py-4">
             <span
@@ -48,8 +48,8 @@ export function InsightsPanel({
               </p>
             </div>
           </div>
-        )
+        );
       })}
     </Card>
-  )
+  );
 }

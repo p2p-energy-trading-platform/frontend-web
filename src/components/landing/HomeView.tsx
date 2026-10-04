@@ -1,9 +1,9 @@
-import HowItWorksSection from '#/components/landing/HowItWorksSection'
-import HeroSection from '#/components/landing/HeroSection'
-import BenefitsSection from '#/components/landing/BenefitsHeader'
-import AssetsSection from '#/components/landing/AssetSection'
-import FAQSection from '#/components/landing/FAQSection'
-import CTASection from '#/components/landing/CTASection'
+import HowItWorksSection from '#/components/landing/HowItWorksSection';
+import HeroSection from '#/components/landing/HeroSection';
+import BenefitsSection from '#/components/landing/BenefitsHeader';
+import AssetsSection from '#/components/landing/AssetSection';
+import FAQSection from '#/components/landing/FAQSection';
+import CTASection from '#/components/landing/CTASection';
 
 export default function HomeView() {
   return (
@@ -20,5 +20,5 @@ export default function HomeView() {
 
       <CTASection />
     </main>
-  )
+  );
 }

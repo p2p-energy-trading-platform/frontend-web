@@ -4,10 +4,10 @@ function EmptyState({
   description,
   action,
 }: {
-  icon: React.ElementType
-  title: string
-  description: string
-  action?: React.ReactNode
+  icon: React.ElementType;
+  title: string;
+  description: string;
+  action?: React.ReactNode;
 }) {
   return (
     <div className="flex flex-col items-center justify-center py-12 px-8 text-center">
@@ -20,7 +20,7 @@ function EmptyState({
       <p className="text-sm text-text-secondary max-w-xs mb-5">{description}</p>
       {action}
     </div>
-  )
+  );
 }
 
-export { EmptyState }
+export { EmptyState };

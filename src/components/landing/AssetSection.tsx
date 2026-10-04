@@ -1,5 +1,5 @@
-import { Card } from '@/components/ui/card'
-import { Badge } from '../ui/badge'
+import { Card } from '@/components/ui/card';
+import { Badge } from '../ui/badge';
 
 function AssetsCard() {
   return (
@@ -69,7 +69,7 @@ function AssetsCard() {
         </div>
       </Card>
     </div>
-  )
+  );
 }
 
 function AssetsHeader() {
@@ -87,7 +87,7 @@ function AssetsHeader() {
         Three asset types, one unified marketplace.
       </p>
     </div>
-  )
+  );
 }
 
 export default function AssetsSection() {
@@ -97,5 +97,5 @@ export default function AssetsSection() {
 
       <AssetsCard />
     </section>
-  )
+  );
 }

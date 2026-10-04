@@ -1,23 +1,23 @@
-import { countries, countryCodes } from '#/data/profile'
-import { Save } from 'lucide-react'
-import { Avatar, AvatarBadge, AvatarFallback } from '../ui/avatar'
-import { Button } from '../ui/button'
+import { countries, countryCodes } from '#/data/profile';
+import { Save } from 'lucide-react';
+import { Avatar, AvatarBadge, AvatarFallback } from '../ui/avatar';
+import { Button } from '../ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../ui/card'
-import { Field, FieldGroup, FieldLabel } from '../ui/field'
-import { Input } from '../ui/input'
+} from '../ui/card';
+import { Field, FieldGroup, FieldLabel } from '../ui/field';
+import { Input } from '../ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../ui/select'
+} from '../ui/select';
 
 export default function PersonalInformation() {
   return (
@@ -117,5 +117,5 @@ export default function PersonalInformation() {
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }

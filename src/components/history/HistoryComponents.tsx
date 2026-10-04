@@ -1,6 +1,6 @@
-import { ArrowDownLeft, ArrowUpRight } from 'lucide-react'
-import { Badge } from '../ui/badge'
-import type { TradeSide } from './types'
+import { ArrowDownLeft, ArrowUpRight } from 'lucide-react';
+import { Badge } from '../ui/badge';
+import type { TradeSide } from './types';
 import {
   Select,
   SelectContent,
@@ -8,7 +8,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../ui/select'
+} from '../ui/select';
 
 export function SidePill({ side }: { side: TradeSide }) {
   return side === 'sell' ? (
@@ -21,7 +21,7 @@ export function SidePill({ side }: { side: TradeSide }) {
       <ArrowDownLeft size={9} />
       Sell
     </Badge>
-  )
+  );
 }
 
 export function FilterSelect({
@@ -30,18 +30,18 @@ export function FilterSelect({
   onValueChange,
   options,
 }: {
-  label: string
-  value: string
-  onValueChange: (value: string) => void
-  options: Array<{ v: string; l: string }>
+  label: string;
+  value: string;
+  onValueChange: (value: string) => void;
+  options: Array<{ v: string; l: string }>;
 }) {
-  const selected = options.find((option) => option.v === value)
+  const selected = options.find((option) => option.v === value);
 
   return (
     <Select
       value={value}
       onValueChange={(next) => {
-        if (next) onValueChange(next)
+        if (next) onValueChange(next);
       }}
     >
       <SelectTrigger aria-label={label}>
@@ -57,5 +57,5 @@ export function FilterSelect({
         </SelectGroup>
       </SelectContent>
     </Select>
-  )
+  );
 }

@@ -1,16 +1,16 @@
-import { Outlet, createFileRoute } from '@tanstack/react-router'
+import { Outlet, createFileRoute } from '@tanstack/react-router';
 
-import PageHeader from '#/components/page-components/Header'
-import Sidebar, { MobileNavButton } from '#/components/page-components/Sidebar'
-import { useSession } from '#/hooks/useProfile'
+import PageHeader from '#/components/page-components/Header';
+import Sidebar, { MobileNavButton } from '#/components/page-components/Sidebar';
+import { useSession } from '#/hooks/useProfile';
 
 export const Route = createFileRoute('/_authenticated')({
   ssr: false,
   component: AuthenticatedLayout,
-})
+});
 
 function AuthenticatedLayout() {
-  const { user, source } = useSession()
+  const { user, source } = useSession();
 
   return (
     <div className="flex min-h-screen bg-background" data-source={source}>
@@ -27,5 +27,5 @@ function AuthenticatedLayout() {
         <Outlet />
       </div>
     </div>
-  )
+  );
 }

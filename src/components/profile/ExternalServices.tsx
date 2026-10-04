@@ -1,13 +1,13 @@
-import { CircleDollarSign, Link2, Mail, RadioTower } from 'lucide-react'
+import { CircleDollarSign, Link2, Mail, RadioTower } from 'lucide-react';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '../ui/card'
-import { Badge } from '../ui/badge'
-import { Button } from '../ui/button'
+} from '../ui/card';
+import { Badge } from '../ui/badge';
+import { Button } from '../ui/button';
 
 export default function ExternalServices() {
   return (
@@ -44,7 +44,7 @@ export default function ExternalServices() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function IntegrationRow({
@@ -53,10 +53,10 @@ function IntegrationRow({
   description,
   status,
 }: {
-  icon: React.ComponentType<{ className?: string }>
-  name: string
-  description: string
-  status: 'pending' | 'completed'
+  icon: React.ComponentType<{ className?: string }>;
+  name: string;
+  description: string;
+  status: 'pending' | 'completed';
 }) {
   return (
     <div className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center">
@@ -74,5 +74,5 @@ function IntegrationRow({
         {status === 'completed' ? 'manage' : 'connect'}
       </Button>
     </div>
-  )
+  );
 }

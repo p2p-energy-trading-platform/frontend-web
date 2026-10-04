@@ -1,12 +1,12 @@
-import { Card } from '#/components/ui/card'
-import { useForecastSeries } from '#/hooks/useEnergyAssets'
+import { Card } from '#/components/ui/card';
+import { useForecastSeries } from '#/hooks/useEnergyAssets';
 
 export interface ForecastCardProps {
   /** 0-1 normalized forecast curve */
-  forecast?: Array<number>
+  forecast?: Array<number>;
   /** 0-1 normalized actual points (dots) */
-  actual?: Array<number>
-  accuracyPercent?: string
+  actual?: Array<number>;
+  accuracyPercent?: string;
 }
 
 export function ForecastCard({
@@ -14,20 +14,20 @@ export function ForecastCard({
   actual,
   accuracyPercent,
 }: ForecastCardProps) {
-  const series = useForecastSeries()
-  const forecastPoints = forecast ?? series.forecast
-  const actualPoints = actual ?? series.actual
-  const accuracy = accuracyPercent ?? series.accuracyPercent
-  const width = 900
-  const height = 160
-  const step = width / (forecastPoints.length - 1)
+  const series = useForecastSeries();
+  const forecastPoints = forecast ?? series.forecast;
+  const actualPoints = actual ?? series.actual;
+  const accuracy = accuracyPercent ?? series.accuracyPercent;
+  const width = 900;
+  const height = 160;
+  const step = width / (forecastPoints.length - 1);
 
   const forecastPath = forecastPoints
     .map((v, i) => `${i === 0 ? 'M' : 'L'} ${i * step} ${height - v * height}`)
-    .join(' ')
+    .join(' ');
 
-  const xLabels = series.xLabels
-  const yLabels = series.yLabels
+  const xLabels = series.xLabels;
+  const yLabels = series.yLabels;
 
   return (
     <Card className="gap-4 border-border-subtle bg-card p-5">
@@ -113,5 +113,5 @@ export function ForecastCard({
         </div>
       </div>
     </Card>
-  )
+  );
 }

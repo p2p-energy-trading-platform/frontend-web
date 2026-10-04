@@ -3,7 +3,7 @@ import {
   buyerBenefits,
   heroChecks,
   prosumerBenefits,
-} from '#/data/marketing'
+} from '#/data/marketing';
 
 export function useMarketing() {
   return {
@@ -12,5 +12,5 @@ export function useMarketing() {
     buyerBenefits,
     prosumerBenefits,
     about: aboutPage,
-  }
+  };
 }

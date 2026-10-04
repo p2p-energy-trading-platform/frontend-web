@@ -1,11 +1,11 @@
-import { Link } from '@tanstack/react-router'
-import { Button, buttonVariants } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Check, ArrowRight } from 'lucide-react'
-import { useMarketing } from '#/hooks/useMarketing'
+import { Link } from '@tanstack/react-router';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Check, ArrowRight } from 'lucide-react';
+import { useMarketing } from '#/hooks/useMarketing';
 
 function HeroContent() {
-  const marketing = useMarketing()
+  const marketing = useMarketing();
 
   return (
     <div>
@@ -45,7 +45,7 @@ function HeroContent() {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 function HeroVisual() {
@@ -56,7 +56,7 @@ function HeroVisual() {
         alt="GridX energy ecosystem connecting solar, battery, EV and smart homes"
       />
     </div>
-  )
+  );
 }
 
 export default function HeroSection() {
@@ -66,5 +66,5 @@ export default function HeroSection() {
 
       <HeroVisual />
     </section>
-  )
+  );
 }

@@ -1,6 +1,6 @@
-import { LayoutGrid, List, Plus } from 'lucide-react'
+import { LayoutGrid, List, Plus } from 'lucide-react';
 
-import { Button } from '#/components/ui/button'
+import { Button } from '#/components/ui/button';
 import {
   Select,
   SelectContent,
@@ -8,12 +8,12 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '#/components/ui/select'
-import { ToggleGroup, ToggleGroupItem } from '#/components/ui/toggle-group'
+} from '#/components/ui/select';
+import { ToggleGroup, ToggleGroupItem } from '#/components/ui/toggle-group';
 
 export type AssetCategory =
-  'All assets' | 'Solar' | 'Battery' | 'EV' | 'Charger' | 'Flex loads'
-export type AssetSort = 'name' | 'output' | 'status'
+  'All assets' | 'Solar' | 'Battery' | 'EV' | 'Charger' | 'Flex loads';
+export type AssetSort = 'name' | 'output' | 'status';
 
 const CATEGORIES: Array<AssetCategory> = [
   'All assets',
@@ -22,23 +22,23 @@ const CATEGORIES: Array<AssetCategory> = [
   'EV',
   'Charger',
   'Flex loads',
-]
+];
 
 const SORT_LABELS: Record<AssetSort, string> = {
   name: 'Sort by name',
   output: 'Sort by output',
   status: 'Sort by status',
-}
+};
 
 export interface AssetFilterBarProps {
-  category: AssetCategory
-  onCategoryChange: (category: AssetCategory) => void
-  deviceCount: number
-  view: 'grid' | 'list'
-  onViewChange: (view: 'grid' | 'list') => void
-  sort: AssetSort
-  onSortChange: (sort: AssetSort) => void
-  onAddAsset?: () => void
+  category: AssetCategory;
+  onCategoryChange: (category: AssetCategory) => void;
+  deviceCount: number;
+  view: 'grid' | 'list';
+  onViewChange: (view: 'grid' | 'list') => void;
+  sort: AssetSort;
+  onSortChange: (sort: AssetSort) => void;
+  onAddAsset?: () => void;
 }
 
 export function AssetFilterBar({
@@ -60,8 +60,8 @@ export function AssetFilterBar({
         aria-label="Asset category"
         value={[category]}
         onValueChange={(values) => {
-          const next = values[0]
-          if (next) onCategoryChange(next as AssetCategory)
+          const next = values[0];
+          if (next) onCategoryChange(next as AssetCategory);
         }}
       >
         {CATEGORIES.map((item) => (
@@ -75,7 +75,7 @@ export function AssetFilterBar({
         value={sort}
         onValueChange={(value) => {
           if (value === 'name' || value === 'output' || value === 'status') {
-            onSortChange(value)
+            onSortChange(value);
           }
         }}
       >
@@ -101,8 +101,8 @@ export function AssetFilterBar({
           aria-label="Asset layout"
           value={[view]}
           onValueChange={(values) => {
-            const next = values[0]
-            if (next === 'grid' || next === 'list') onViewChange(next)
+            const next = values[0];
+            if (next === 'grid' || next === 'list') onViewChange(next);
           }}
         >
           <ToggleGroupItem value="grid" aria-label="Grid view">
@@ -119,5 +119,5 @@ export function AssetFilterBar({
         </Button>
       </div>
     </div>
-  )
+  );
 }

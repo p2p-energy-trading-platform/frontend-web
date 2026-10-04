@@ -1,14 +1,14 @@
-import { Card } from '#/components/ui/card'
-import { useGenerationSeries } from '#/hooks/useDashboard'
-import { cn } from 'cn'
+import { Card } from '#/components/ui/card';
+import { useGenerationSeries } from '#/hooks/useDashboard';
+import { cn } from 'cn';
 
 // Replace with proper charts
 
 export interface GenerationChartProps {
   /** 0-1 normalized points across the day, left to right */
-  points?: Array<number>
-  range?: 'Day' | 'Week' | 'Month'
-  onRangeChange?: (range: 'Day' | 'Week' | 'Month') => void
+  points?: Array<number>;
+  range?: 'Day' | 'Week' | 'Month';
+  onRangeChange?: (range: 'Day' | 'Week' | 'Month') => void;
 }
 
 export function GenerationChart({
@@ -16,27 +16,27 @@ export function GenerationChart({
   range = 'Day',
   onRangeChange,
 }: GenerationChartProps) {
-  const series = useGenerationSeries()
-  const chartPoints = points ?? series.points
-  const width = 900
-  const height = 260
-  const paddingBottom = 24
-  const chartHeight = height - paddingBottom
+  const series = useGenerationSeries();
+  const chartPoints = points ?? series.points;
+  const width = 900;
+  const height = 260;
+  const paddingBottom = 24;
+  const chartHeight = height - paddingBottom;
 
-  const step = width / (chartPoints.length - 1)
+  const step = width / (chartPoints.length - 1);
   const coords = chartPoints.map((p, i) => [
     i * step,
     chartHeight - p * chartHeight,
-  ])
+  ]);
 
   const linePath = coords
     .map(([x, y], i) => `${i === 0 ? 'M' : 'L'} ${x} ${y}`)
-    .join(' ')
+    .join(' ');
 
-  const areaPath = `${linePath} L ${width} ${chartHeight} L 0 ${chartHeight} Z`
+  const areaPath = `${linePath} L ${width} ${chartHeight} L 0 ${chartHeight} Z`;
 
-  const yLabels = series.yLabels
-  const xLabels = series.xLabels
+  const yLabels = series.yLabels;
+  const xLabels = series.xLabels;
 
   return (
     <Card className="gap-4 border-border-subtle bg-card p-5">
@@ -129,7 +129,7 @@ export function GenerationChart({
         </div>
       </div>
     </Card>
-  )
+  );
 }
 
 /** Private helper — only used inside GenerationChart, so it lives here rather than its own file. */
@@ -138,9 +138,9 @@ function Legend({
   label,
   dashed,
 }: {
-  swatchClass: string
-  label: string
-  dashed?: boolean
+  swatchClass: string;
+  label: string;
+  dashed?: boolean;
 }) {
   return (
     <span className="flex items-center gap-1.5 text-xs text-text-tertiary">
@@ -153,5 +153,5 @@ function Legend({
       />
       {label}
     </span>
-  )
+  );
 }

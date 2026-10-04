@@ -1,8 +1,8 @@
-import { Tabs, TabsList, TabsTrigger } from '#/components/ui/tabs'
+import { Tabs, TabsList, TabsTrigger } from '#/components/ui/tabs';
 
 interface PaymentMethodTabsProps {
-  tab: 'cards' | 'banks'
-  setTab: (tab: 'cards' | 'banks') => void
+  tab: 'cards' | 'banks';
+  setTab: (tab: 'cards' | 'banks') => void;
 }
 
 export function PaymentMethodTabs({ tab, setTab }: PaymentMethodTabsProps) {
@@ -10,7 +10,7 @@ export function PaymentMethodTabs({ tab, setTab }: PaymentMethodTabsProps) {
     <Tabs
       value={tab}
       onValueChange={(value) => {
-        if (value === 'cards' || value === 'banks') setTab(value)
+        if (value === 'cards' || value === 'banks') setTab(value);
       }}
       className="mb-4"
     >
@@ -19,5 +19,5 @@ export function PaymentMethodTabs({ tab, setTab }: PaymentMethodTabsProps) {
         <TabsTrigger value="banks">Bank accounts</TabsTrigger>
       </TabsList>
     </Tabs>
-  )
+  );
 }

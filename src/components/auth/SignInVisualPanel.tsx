@@ -2,9 +2,9 @@ import {
   signInBenefits,
   signInNetworkNodes,
   signInTestimonial,
-} from '#/data/auth'
-import { Zap } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
+} from '#/data/auth';
+import { Zap } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 export default function SignInVisualPanel() {
   return (
@@ -128,7 +128,7 @@ export default function SignInVisualPanel() {
         </div>
       </div>
     </aside>
-  )
+  );
 }
 
 function Benefit({ icon: Icon, label }: { icon: LucideIcon; label: string }) {
@@ -142,5 +142,5 @@ function Benefit({ icon: Icon, label }: { icon: LucideIcon; label: string }) {
         {label}
       </p>
     </div>
-  )
+  );
 }

@@ -1,5 +1,5 @@
-import SignInForm from './SignInForm'
-import SignInVisualPanel from './SignInVisualPanel'
+import SignInForm from './SignInForm';
+import SignInVisualPanel from './SignInVisualPanel';
 
 export default function SignInView() {
   return (
@@ -22,5 +22,5 @@ export default function SignInView() {
         <SignInVisualPanel />
       </div>
     </main>
-  )
+  );
 }

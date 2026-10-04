@@ -1,13 +1,13 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
-import { NotificationFilterBar } from '#/components/notification/NotificationFilterBar'
-import type { NotificationCategory } from '#/components/notification/NotificationFilterBar'
-import { NotificationFeed } from '#/components/notification/NotificationFeed'
-import { useNotifications } from '#/hooks/useNotifications'
+import { NotificationFilterBar } from '#/components/notification/NotificationFilterBar';
+import type { NotificationCategory } from '#/components/notification/NotificationFilterBar';
+import { NotificationFeed } from '#/components/notification/NotificationFeed';
+import { useNotifications } from '#/hooks/useNotifications';
 
 export default function NotificationView() {
-  const [category, setCategory] = useState<NotificationCategory>('All')
-  const notifications = useNotifications()
+  const [category, setCategory] = useState<NotificationCategory>('All');
+  const notifications = useNotifications();
 
   return (
     <main
@@ -29,5 +29,5 @@ export default function NotificationView() {
 
       <NotificationFeed groups={notifications.groups} />
     </main>
-  )
+  );
 }

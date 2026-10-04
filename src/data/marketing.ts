@@ -1,10 +1,10 @@
-import { Layers, Palette, RouteIcon } from 'lucide-react'
+import { Layers, Palette, RouteIcon } from 'lucide-react';
 
 export const heroChecks = [
   'No lock-in contracts',
   'AED wallet, instant settlement',
   'Smart-meter verified',
-]
+];
 
 export const buyerBenefits = [
   'Pay 5-20% below standard retail tariff on qualifying trades',
@@ -13,14 +13,14 @@ export const buyerBenefits = [
   'AED wallet with instant top-up via bank transfer or card',
   'Filter listings by zone, asset type, price, and delivery window',
   'Price alerts when rates hit your target in your grid zone',
-]
+];
 
 export const prosumerBenefits = [
   'Earn AED from every kWh of surplus solor you export to neighbours',
   'Set your own price per kWh — zone parameters apply as guide',
   'Battery storage and EV vehicle -to-grid  exports fully supported',
   'Typical prosumer earnings AED 200-800 per month',
-]
+];
 
 export const aboutPage = {
   badge: 'About GridX',
@@ -47,4 +47,4 @@ export const aboutPage = {
       icon: RouteIcon,
     },
   ],
-}
+};

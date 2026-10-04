@@ -1,23 +1,23 @@
-import type { LucideIcon } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react';
 
-import { Card } from '#/components/ui/card'
-import { cn } from 'cn'
+import { Card } from '#/components/ui/card';
+import { cn } from 'cn';
 
 export interface EnergyKpi {
-  icon: LucideIcon
-  iconClassName?: string
-  value: string
-  unit: string
-  label: string
-  trend: string
-  trendClassName?: string
+  icon: LucideIcon;
+  iconClassName?: string;
+  value: string;
+  unit: string;
+  label: string;
+  trend: string;
+  trendClassName?: string;
 }
 
 export function EnergyKpiStrip({ kpis }: { kpis: Array<EnergyKpi> }) {
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
       {kpis.map((kpi) => {
-        const Icon = kpi.icon
+        const Icon = kpi.icon;
         return (
           <Card
             key={kpi.label}
@@ -47,8 +47,8 @@ export function EnergyKpiStrip({ kpis }: { kpis: Array<EnergyKpi> }) {
               {kpi.trend}
             </p>
           </Card>
-        )
+        );
       })}
     </div>
-  )
+  );
 }

@@ -1,20 +1,20 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
-import { cn } from 'cn'
-import { useCandles, useMarket, useOrderBook } from '#/hooks/useTrade'
+import { cn } from 'cn';
+import { useCandles, useMarket, useOrderBook } from '#/hooks/useTrade';
 
-import { MarketChart } from './MarketChart'
-import { MarketSummary } from './MarketSummary'
-import { OrderBook } from './OrderBook'
-import { OrderPanel } from './OrderPanel'
-import { timeframes } from './types'
-import type { Timeframe } from './types'
+import { MarketChart } from './MarketChart';
+import { MarketSummary } from './MarketSummary';
+import { OrderBook } from './OrderBook';
+import { OrderPanel } from './OrderPanel';
+import { timeframes } from './types';
+import type { Timeframe } from './types';
 
 export default function TradingTerminalView() {
-  const [timeframe, setTimeframe] = useState<Timeframe>('1H')
-  const market = useMarket()
-  const candles = useCandles(timeframe)
-  const book = useOrderBook()
+  const [timeframe, setTimeframe] = useState<Timeframe>('1H');
+  const market = useMarket();
+  const candles = useCandles(timeframe);
+  const book = useOrderBook();
 
   return (
     <main
@@ -63,5 +63,5 @@ export default function TradingTerminalView() {
         <OrderPanel />
       </div>
     </main>
-  )
+  );
 }

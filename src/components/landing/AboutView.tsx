@@ -1,18 +1,18 @@
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react';
 
-import { Badge } from '#/components/ui/badge'
+import { Badge } from '#/components/ui/badge';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '#/components/ui/card'
-import { useMarketing } from '#/hooks/useMarketing'
-import { Link } from '@tanstack/react-router'
+} from '#/components/ui/card';
+import { useMarketing } from '#/hooks/useMarketing';
+import { Link } from '@tanstack/react-router';
 
 export default function AboutView() {
-  const { about } = useMarketing()
+  const { about } = useMarketing();
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -45,7 +45,7 @@ export default function AboutView() {
 
         <section className="grid gap-4 md:grid-cols-3">
           {about.notes.map((note) => {
-            const Icon = note.icon
+            const Icon = note.icon;
 
             return (
               <Card key={note.title} className="border-border-subtle bg-card">
@@ -57,10 +57,10 @@ export default function AboutView() {
                   <CardDescription>{note.description}</CardDescription>
                 </CardHeader>
               </Card>
-            )
+            );
           })}
         </section>
       </section>
     </main>
-  )
+  );
 }

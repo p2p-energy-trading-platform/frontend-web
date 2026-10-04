@@ -1,5 +1,5 @@
-import { cn } from 'cn'
-import { Button } from '../ui/button'
+import { cn } from 'cn';
+import { Button } from '../ui/button';
 
 export type NotificationCategory =
   | 'All'
@@ -8,14 +8,14 @@ export type NotificationCategory =
   | 'Meter & assets'
   | 'Verification'
   | 'Forecast'
-  | 'System'
+  | 'System';
 
 export interface NotificationFilterBarProps {
-  category: NotificationCategory
-  onCategoryChange: (category: NotificationCategory) => void
+  category: NotificationCategory;
+  onCategoryChange: (category: NotificationCategory) => void;
   /** Unread count per category — categories without an entry show no badge */
-  counts: Partial<Record<NotificationCategory, number>>
-  onMarkAllRead?: () => void
+  counts: Partial<Record<NotificationCategory, number>>;
+  onMarkAllRead?: () => void;
 }
 
 const CATEGORIES: Array<NotificationCategory> = [
@@ -26,7 +26,7 @@ const CATEGORIES: Array<NotificationCategory> = [
   'Verification',
   'Forecast',
   'System',
-]
+];
 
 export function NotificationFilterBar({
   category,
@@ -38,8 +38,8 @@ export function NotificationFilterBar({
     <div className="flex flex-wrap items-center justify-between gap-3">
       <div className="flex flex-wrap items-center gap-1.5">
         {CATEGORIES.map((c) => {
-          const count = counts[c]
-          const active = c === category
+          const count = counts[c];
+          const active = c === category;
           return (
             <button
               key={c}
@@ -66,11 +66,11 @@ export function NotificationFilterBar({
                 </span>
               )}
             </button>
-          )
+          );
         })}
       </div>
 
       <Button onClick={onMarkAllRead}>Mark all read</Button>
     </div>
-  )
+  );
 }

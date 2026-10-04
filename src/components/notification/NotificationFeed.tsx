@@ -1,16 +1,16 @@
-import { Card } from '#/components/ui/card'
-import { NotificationItem } from './NotificationItem'
-import type { NotificationItemData } from './NotificationItem'
+import { Card } from '#/components/ui/card';
+import { NotificationItem } from './NotificationItem';
+import type { NotificationItemData } from './NotificationItem';
 
 export interface NotificationGroup {
-  dateLabel: string
-  items: Array<NotificationItemData>
+  dateLabel: string;
+  items: Array<NotificationItemData>;
 }
 
 export function NotificationFeed({
   groups,
 }: {
-  groups: Array<NotificationGroup>
+  groups: Array<NotificationGroup>;
 }) {
   return (
     <Card className="gap-0 p-0">
@@ -27,5 +27,5 @@ export function NotificationFeed({
         </div>
       ))}
     </Card>
-  )
+  );
 }

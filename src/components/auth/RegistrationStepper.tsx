@@ -1,16 +1,16 @@
-import { Check } from 'lucide-react'
+import { Check } from 'lucide-react';
 
-import { cn } from 'cn'
+import { cn } from 'cn';
 
 export interface RegistrationStep {
-  id: number
-  label: string
-  description: string
+  id: number;
+  label: string;
+  description: string;
 }
 
 interface RegistrationStepperProps {
-  steps: RegistrationStep[]
-  currentStep: number
+  steps: RegistrationStep[];
+  currentStep: number;
 }
 
 export function RegistrationStepper({
@@ -18,9 +18,9 @@ export function RegistrationStepper({
   currentStep,
 }: RegistrationStepperProps) {
   const activeStep =
-    steps.find((step) => step.id === currentStep) ?? steps.at(-1)
+    steps.find((step) => step.id === currentStep) ?? steps.at(-1);
   const allComplete =
-    steps.length > 0 && steps.every((step) => currentStep > step.id)
+    steps.length > 0 && steps.every((step) => currentStep > step.id);
 
   return (
     <nav aria-label="Registration progress" className="w-full">
@@ -31,13 +31,13 @@ export function RegistrationStepper({
         }}
       >
         {steps.map((step, index) => {
-          const isComplete = currentStep > step.id
-          const isActive = currentStep === step.id
+          const isComplete = currentStep > step.id;
+          const isActive = currentStep === step.id;
           const status = isComplete
             ? 'completed'
             : isActive
               ? 'current step'
-              : 'not started'
+              : 'not started';
 
           return (
             <li
@@ -99,7 +99,7 @@ export function RegistrationStepper({
                 </span>
               </span>
             </li>
-          )
+          );
         })}
       </ol>
 
@@ -114,5 +114,5 @@ export function RegistrationStepper({
         </p>
       ) : null}
     </nav>
-  )
+  );
 }

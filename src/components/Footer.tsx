@@ -1,7 +1,7 @@
-import { Github, Zap } from 'lucide-react'
+import { Github, Zap } from 'lucide-react';
 
 export default function Footer() {
-  const year = new Date().getFullYear()
+  const year = new Date().getFullYear();
 
   return (
     <footer className="border-t border-border-subtle bg-background px-4 py-10 text-text-secondary">
@@ -34,5 +34,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

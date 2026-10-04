@@ -1,18 +1,18 @@
-import { AlertTriangle, Building2, Check, Info, Trash2 } from 'lucide-react'
+import { AlertTriangle, Building2, Check, Info, Trash2 } from 'lucide-react';
 
-import { Alert, AlertDescription } from '#/components/ui/alert'
-import { Badge } from '#/components/ui/badge.tsx'
-import { Button } from '#/components/ui/button'
+import { Alert, AlertDescription } from '#/components/ui/alert';
+import { Badge } from '#/components/ui/badge.tsx';
+import { Button } from '#/components/ui/button';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '#/components/ui/tooltip'
-import type { BankAccount } from './payment-types'
+} from '#/components/ui/tooltip';
+import type { BankAccount } from './payment-types';
 
 interface BankAccountListProps {
-  accounts: BankAccount[]
-  verificationNote: string
+  accounts: BankAccount[];
+  verificationNote: string;
 }
 
 export function BankAccountList({
@@ -99,5 +99,5 @@ export function BankAccountList({
         <AlertDescription>{verificationNote}</AlertDescription>
       </Alert>
     </div>
-  )
+  );
 }

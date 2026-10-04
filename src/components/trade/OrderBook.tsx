@@ -1,15 +1,15 @@
-import { Activity } from 'lucide-react'
+import { Activity } from 'lucide-react';
 
-import { cn } from 'cn'
+import { cn } from 'cn';
 
-import type { OrderSide } from './types'
+import type { OrderSide } from './types';
 
 function OrderBookRow({
   row,
   side,
 }: {
-  row: readonly [number, number]
-  side: OrderSide
+  row: readonly [number, number];
+  side: OrderSide;
 }) {
   return (
     <div className="grid grid-cols-3 py-1.5 text-xs tabular-nums">
@@ -21,7 +21,7 @@ function OrderBookRow({
         {(row[0] * row[1]).toFixed(2)}
       </span>
     </div>
-  )
+  );
 }
 
 export function OrderBook({
@@ -31,11 +31,11 @@ export function OrderBook({
   priceHeading,
   totalHeading,
 }: {
-  asks: Array<[number, number]>
-  bids: Array<[number, number]>
-  spreadLabel: string
-  priceHeading: string
-  totalHeading: string
+  asks: Array<[number, number]>;
+  bids: Array<[number, number]>;
+  spreadLabel: string;
+  priceHeading: string;
+  totalHeading: string;
 }) {
   return (
     <section className="rounded-xl border border-border-subtle bg-card p-4 shadow-sm">
@@ -81,5 +81,5 @@ export function OrderBook({
         <strong className="text-text-primary">{spreadLabel}</strong>
       </div>
     </section>
-  )
+  );
 }

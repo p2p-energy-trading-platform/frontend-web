@@ -1,13 +1,13 @@
-import type { LucideIcon } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react';
 
-import { Card } from '#/components/ui/card'
-import { Button } from '../ui/button'
+import { Card } from '#/components/ui/card';
+import { Button } from '../ui/button';
 
 export interface QuickAction {
-  label: string
-  icon: LucideIcon
-  onClick?: () => void
-  primary?: boolean
+  label: string;
+  icon: LucideIcon;
+  onClick?: () => void;
+  primary?: boolean;
 }
 
 export function QuickActionsCard({ actions }: { actions: Array<QuickAction> }) {
@@ -16,7 +16,7 @@ export function QuickActionsCard({ actions }: { actions: Array<QuickAction> }) {
       <h3 className="text-heading-4 text-text-primary">Quick actions</h3>
       <div className="grid grid-cols-2 gap-2">
         {actions.map((action) => {
-          const Icon = action.icon
+          const Icon = action.icon;
           return (
             <Button
               key={action.label}
@@ -33,9 +33,9 @@ export function QuickActionsCard({ actions }: { actions: Array<QuickAction> }) {
               <Icon className="size-4" />
               {action.label}
             </Button>
-          )
+          );
         })}
       </div>
     </Card>
-  )
+  );
 }

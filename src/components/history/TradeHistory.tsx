@@ -1,14 +1,14 @@
-import { useState, useMemo } from 'react'
-import { Alert, AlertDescription } from '#/components/ui/alert'
-import { Button } from '#/components/ui/button'
+import { useState, useMemo } from 'react';
+import { Alert, AlertDescription } from '#/components/ui/alert';
+import { Button } from '#/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '#/components/ui/dialog'
-import { Input } from '#/components/ui/input'
-import { Skeleton } from '#/components/ui/skeleton'
+} from '#/components/ui/dialog';
+import { Input } from '#/components/ui/input';
+import { Skeleton } from '#/components/ui/skeleton';
 import {
   Table,
   TableBody,
@@ -16,14 +16,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '#/components/ui/table'
-import { toast } from '#/components/ui/toast'
-import { useTrades } from '#/hooks/useHistory'
+} from '#/components/ui/table';
+import { toast } from '#/components/ui/toast';
+import { useTrades } from '#/hooks/useHistory';
 import type {
   HistoryViewState,
   PresentedTrade,
   TradeStatus,
-} from '#/components/history/types'
+} from '#/components/history/types';
 import {
   Search,
   Download,
@@ -35,12 +35,12 @@ import {
   BarChart2,
   Filter,
   RefreshCw,
-} from 'lucide-react'
-import { EmptyState } from '../ui/empty-state'
-import { Badge } from '../ui/badge'
-import { FilterSelect, SidePill } from './HistoryComponents'
+} from 'lucide-react';
+import { EmptyState } from '../ui/empty-state';
+import { Badge } from '../ui/badge';
+import { FilterSelect, SidePill } from './HistoryComponents';
 
-const PAGE_SIZE = 8
+const PAGE_SIZE = 8;
 
 // ─── Status badges ────────────────────────────────────────────────────────────
 
@@ -54,7 +54,7 @@ const TRADE_STATUS: Record<TradeStatus, { label: string }> = {
   failed: {
     label: 'Failed',
   },
-}
+};
 
 // ─── Trade detail drawer ──────────────────────────────────────────────────────
 
@@ -62,16 +62,16 @@ function TradeDrawer({
   trade,
   onClose,
 }: {
-  trade: PresentedTrade
-  onClose: () => void
+  trade: PresentedTrade;
+  onClose: () => void;
 }) {
-  const { settlementNote } = useTrades()
-  const st = TRADE_STATUS[trade.status]
+  const { settlementNote } = useTrades();
+  const st = TRADE_STATUS[trade.status];
   return (
     <Dialog
       open
       onOpenChange={(open) => {
-        if (!open) onClose()
+        if (!open) onClose();
       }}
     >
       <DialogContent className="sm:max-w-md">
@@ -120,8 +120,8 @@ function TradeDrawer({
                 toast.add({
                   type: 'success',
                   title: 'Receipt downloaded.',
-                })
-                onClose()
+                });
+                onClose();
               }}
             >
               <Download size={12} />
@@ -131,37 +131,37 @@ function TradeDrawer({
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 // ─── Trades tab ───────────────────────────────────────────────────────────────
 
 export function TradesTab({ state }: { state: HistoryViewState }) {
-  const { trades: TRADES, source } = useTrades()
-  const [query, setQuery] = useState('')
-  const [sideF, setSideF] = useState('all')
-  const [statusF, setStatusF] = useState('all')
-  const [page, setPage] = useState(1)
-  const [selected, setSelected] = useState<PresentedTrade | null>(null)
+  const { trades: TRADES, source } = useTrades();
+  const [query, setQuery] = useState('');
+  const [sideF, setSideF] = useState('all');
+  const [statusF, setStatusF] = useState('all');
+  const [page, setPage] = useState(1);
+  const [selected, setSelected] = useState<PresentedTrade | null>(null);
 
   const filtered = useMemo(() => {
     return TRADES.filter((t) => {
-      if (sideF !== 'all' && t.side !== sideF) return false
-      if (statusF !== 'all' && t.status !== statusF) return false
+      if (sideF !== 'all' && t.side !== sideF) return false;
+      if (statusF !== 'all' && t.status !== statusF) return false;
       if (query) {
-        const q = query.toLowerCase()
+        const q = query.toLowerCase();
         return (
           t.id.toLowerCase().includes(q) ||
           t.zone.toLowerCase().includes(q) ||
           t.slot.includes(q)
-        )
+        );
       }
-      return true
-    })
-  }, [query, sideF, statusF, TRADES])
+      return true;
+    });
+  }, [query, sideF, statusF, TRADES]);
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
-  const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   if (state === 'loading')
     return (
@@ -170,7 +170,7 @@ export function TradesTab({ state }: { state: HistoryViewState }) {
           <Skeleton key={i} className="h-14 w-full rounded-xl" />
         ))}
       </div>
-    )
+    );
   if (state === 'error')
     return (
       <EmptyState
@@ -188,7 +188,7 @@ export function TradesTab({ state }: { state: HistoryViewState }) {
           </Button>
         }
       />
-    )
+    );
   if (state === 'empty')
     return (
       <EmptyState
@@ -196,7 +196,7 @@ export function TradesTab({ state }: { state: HistoryViewState }) {
         title="No trades yet"
         description="Your executed trades will appear here once you have placed and matched orders on the GridX market."
       />
-    )
+    );
 
   return (
     <div className="space-y-3" data-source={source}>
@@ -210,8 +210,8 @@ export function TradesTab({ state }: { state: HistoryViewState }) {
           <Input
             value={query}
             onChange={(e) => {
-              setQuery(e.target.value)
-              setPage(1)
+              setQuery(e.target.value);
+              setPage(1);
             }}
             placeholder="Search ID, zone, slot…"
             aria-label="Search trades"
@@ -222,8 +222,8 @@ export function TradesTab({ state }: { state: HistoryViewState }) {
           label="Filter by side"
           value={sideF}
           onValueChange={(value) => {
-            setSideF(value)
-            setPage(1)
+            setSideF(value);
+            setPage(1);
           }}
           options={[
             { v: 'all', l: 'All sides' },
@@ -235,8 +235,8 @@ export function TradesTab({ state }: { state: HistoryViewState }) {
           label="Filter by status"
           value={statusF}
           onValueChange={(value) => {
-            setStatusF(value)
-            setPage(1)
+            setStatusF(value);
+            setPage(1);
           }}
           options={[
             { v: 'all', l: 'All status' },
@@ -418,5 +418,5 @@ export function TradesTab({ state }: { state: HistoryViewState }) {
         <TradeDrawer trade={selected} onClose={() => setSelected(null)} />
       )}
     </div>
-  )
+  );
 }

@@ -1,13 +1,13 @@
-import { useState, useMemo } from 'react'
-import { Button } from '#/components/ui/button'
+import { useState, useMemo } from 'react';
+import { Button } from '#/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '#/components/ui/dialog'
-import { Input } from '#/components/ui/input'
-import { Skeleton } from '#/components/ui/skeleton'
+} from '#/components/ui/dialog';
+import { Input } from '#/components/ui/input';
+import { Skeleton } from '#/components/ui/skeleton';
 import {
   Table,
   TableBody,
@@ -15,7 +15,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '#/components/ui/table'
+} from '#/components/ui/table';
 import {
   Search,
   FileText,
@@ -25,19 +25,19 @@ import {
   Eye,
   Filter,
   RefreshCw,
-} from 'lucide-react'
-import { Badge as BadgePill } from '#/components/ui/badge'
-import { toast } from '#/components/ui/toast'
-import { useOrders } from '#/hooks/useHistory'
+} from 'lucide-react';
+import { Badge as BadgePill } from '#/components/ui/badge';
+import { toast } from '#/components/ui/toast';
+import { useOrders } from '#/hooks/useHistory';
 import type {
   HistoryViewState,
   OrderRecord,
   OrderStatus,
-} from '#/components/history/types'
-import { EmptyState } from '../ui/empty-state'
-import { FilterSelect, SidePill } from './HistoryComponents'
+} from '#/components/history/types';
+import { EmptyState } from '../ui/empty-state';
+import { FilterSelect, SidePill } from './HistoryComponents';
 
-const PAGE_SIZE = 8
+const PAGE_SIZE = 8;
 
 // ─── Status badges ────────────────────────────────────────────────────────────
 
@@ -63,7 +63,7 @@ const ORDER_STATUS: Record<OrderStatus, { label: string }> = {
   rejected: {
     label: 'Rejected',
   },
-}
+};
 
 // ─── Order detail drawer ──────────────────────────────────────────────────────
 
@@ -72,20 +72,20 @@ function OrderDrawer({
   onClose,
   onCancel,
 }: {
-  order: OrderRecord
-  onClose: () => void
-  onCancel: (id: string) => void
+  order: OrderRecord;
+  onClose: () => void;
+  onCancel: (id: string) => void;
 }) {
-  const { limitPriceLabel } = useOrders()
-  const st = ORDER_STATUS[order.status]
+  const { limitPriceLabel } = useOrders();
+  const st = ORDER_STATUS[order.status];
   const fillPct =
-    order.requestedQty > 0 ? (order.filledQty / order.requestedQty) * 100 : 0
-  const canCancel = order.status === 'open' || order.status === 'partial'
+    order.requestedQty > 0 ? (order.filledQty / order.requestedQty) * 100 : 0;
+  const canCancel = order.status === 'open' || order.status === 'partial';
   return (
     <Dialog
       open
       onOpenChange={(open) => {
-        if (!open) onClose()
+        if (!open) onClose();
       }}
     >
       <DialogContent className="sm:max-w-md">
@@ -140,8 +140,8 @@ function OrderDrawer({
               size="sm"
               className="w-full"
               onClick={() => {
-                onCancel(order.id)
-                onClose()
+                onCancel(order.id);
+                onClose();
               }}
             >
               Cancel order
@@ -150,36 +150,36 @@ function OrderDrawer({
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 // ─── Orders tab ───────────────────────────────────────────────────────────────
 
 export function OrdersTab({ state }: { state: HistoryViewState }) {
-  const { orders: seedOrders, source } = useOrders()
-  const [query, setQuery] = useState('')
-  const [sideF, setSideF] = useState('all')
-  const [statusF, setStatusF] = useState('all')
-  const [page, setPage] = useState(1)
-  const [selected, setSelected] = useState<OrderRecord | null>(null)
-  const [orders, setOrders] = useState(seedOrders)
+  const { orders: seedOrders, source } = useOrders();
+  const [query, setQuery] = useState('');
+  const [sideF, setSideF] = useState('all');
+  const [statusF, setStatusF] = useState('all');
+  const [page, setPage] = useState(1);
+  const [selected, setSelected] = useState<OrderRecord | null>(null);
+  const [orders, setOrders] = useState(seedOrders);
 
   const filtered = useMemo(
     () =>
       orders.filter((o) => {
-        if (sideF !== 'all' && o.side !== sideF) return false
-        if (statusF !== 'all' && o.status !== statusF) return false
+        if (sideF !== 'all' && o.side !== sideF) return false;
+        if (statusF !== 'all' && o.status !== statusF) return false;
         if (query) {
-          const q = query.toLowerCase()
-          return o.id.toLowerCase().includes(q) || o.slot.includes(q)
+          const q = query.toLowerCase();
+          return o.id.toLowerCase().includes(q) || o.slot.includes(q);
         }
-        return true
+        return true;
       }),
     [query, sideF, statusF, orders],
-  )
+  );
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
-  const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const paged = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   function cancelOrder(id: string) {
     setOrders((prev) =>
@@ -192,12 +192,12 @@ export function OrdersTab({ state }: { state: HistoryViewState }) {
             }
           : o,
       ),
-    )
+    );
 
     toast.add({
       type: 'success',
       title: `Order ${id} cancelled.`,
-    })
+    });
   }
 
   if (state === 'loading')
@@ -207,7 +207,7 @@ export function OrdersTab({ state }: { state: HistoryViewState }) {
           <Skeleton key={i} className="h-14 w-full rounded-xl" />
         ))}
       </div>
-    )
+    );
   if (state === 'error')
     return (
       <EmptyState
@@ -221,7 +221,7 @@ export function OrdersTab({ state }: { state: HistoryViewState }) {
           </Button>
         }
       />
-    )
+    );
   if (state === 'empty')
     return (
       <EmptyState
@@ -229,7 +229,7 @@ export function OrdersTab({ state }: { state: HistoryViewState }) {
         title="No orders yet"
         description="Orders you place will appear here. Head to the Trade terminal to get started."
       />
-    )
+    );
 
   return (
     <div className="space-y-3" data-source={source}>
@@ -242,8 +242,8 @@ export function OrdersTab({ state }: { state: HistoryViewState }) {
           <Input
             value={query}
             onChange={(e) => {
-              setQuery(e.target.value)
-              setPage(1)
+              setQuery(e.target.value);
+              setPage(1);
             }}
             placeholder="Search order ID or slot…"
             aria-label="Search orders"
@@ -254,8 +254,8 @@ export function OrdersTab({ state }: { state: HistoryViewState }) {
           label="Filter by side"
           value={sideF}
           onValueChange={(value) => {
-            setSideF(value)
-            setPage(1)
+            setSideF(value);
+            setPage(1);
           }}
           options={[
             { v: 'all', l: 'All sides' },
@@ -267,8 +267,8 @@ export function OrdersTab({ state }: { state: HistoryViewState }) {
           label="Filter by status"
           value={statusF}
           onValueChange={(value) => {
-            setStatusF(value)
-            setPage(1)
+            setStatusF(value);
+            setPage(1);
           }}
           options={[
             { v: 'all', l: 'All status' },
@@ -319,7 +319,7 @@ export function OrdersTab({ state }: { state: HistoryViewState }) {
               <TableBody>
                 {paged.map((o) => {
                   const canCancel =
-                    o.status === 'open' || o.status === 'partial'
+                    o.status === 'open' || o.status === 'partial';
                   return (
                     <TableRow key={o.id} className="border-border">
                       <TableCell className="px-3 py-3 whitespace-nowrap text-text-secondary">
@@ -378,7 +378,7 @@ export function OrdersTab({ state }: { state: HistoryViewState }) {
                         </div>
                       </TableCell>
                     </TableRow>
-                  )
+                  );
                 })}
               </TableBody>
             </Table>
@@ -477,5 +477,5 @@ export function OrdersTab({ state }: { state: HistoryViewState }) {
         />
       )}
     </div>
-  )
+  );
 }

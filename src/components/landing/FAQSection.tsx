@@ -1,6 +1,6 @@
-import { ChevronDown } from 'lucide-react'
-import { Card } from '../ui/card'
-import { Badge } from '../ui/badge'
+import { ChevronDown } from 'lucide-react';
+import { Card } from '../ui/card';
+import { Badge } from '../ui/badge';
 
 function FAQCard() {
   return (
@@ -59,7 +59,7 @@ function FAQCard() {
         </div>
       </Card>
     </div>
-  )
+  );
 }
 
 function FAQHeader() {
@@ -76,7 +76,7 @@ function FAQHeader() {
         <span className="text-brand-accent text-caption">Contact us</span>
       </p>
     </div>
-  )
+  );
 }
 
 export default function FAQSection() {
@@ -86,5 +86,5 @@ export default function FAQSection() {
 
       <FAQCard />
     </section>
-  )
+  );
 }

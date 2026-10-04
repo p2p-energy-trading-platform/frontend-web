@@ -1,13 +1,13 @@
-import { useProfile } from '#/hooks/useProfile'
-import PersonalInformation from './PersonalInformation'
-import Security from './Security'
-import TradingPreferences from './TradingPreferences'
-import AccountStatus from './AccountStatus'
-import ExternalServices from './ExternalServices'
+import { useProfile } from '#/hooks/useProfile';
+import PersonalInformation from './PersonalInformation';
+import Security from './Security';
+import TradingPreferences from './TradingPreferences';
+import AccountStatus from './AccountStatus';
+import ExternalServices from './ExternalServices';
 
 export default function ProfileView() {
-  const profileState = useProfile()
-  const { source } = profileState
+  const profileState = useProfile();
+  const { source } = profileState;
 
   return (
     <main
@@ -38,5 +38,5 @@ export default function ProfileView() {
         </aside>
       </div>
     </main>
-  )
+  );
 }

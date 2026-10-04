@@ -1,37 +1,37 @@
-import { Link, useNavigate } from '@tanstack/react-router'
-import type { ReactNode } from 'react'
-import { Bell, ChevronDown, Home, HelpCircle } from 'lucide-react'
+import { Link, useNavigate } from '@tanstack/react-router';
+import type { ReactNode } from 'react';
+import { Bell, ChevronDown, Home, HelpCircle } from 'lucide-react';
 
-import { Avatar, AvatarFallback } from '#/components/ui/avatar'
-import { Badge } from '#/components/ui/badge'
-import { Button } from '#/components/ui/button'
-import ThemeToggle from '#/components/ThemeToggle'
-import { cn } from 'cn'
+import { Avatar, AvatarFallback } from '#/components/ui/avatar';
+import { Badge } from '#/components/ui/badge';
+import { Button } from '#/components/ui/button';
+import ThemeToggle from '#/components/ThemeToggle';
+import { cn } from 'cn';
 
 interface PageHeaderProps {
   /** Extra control rendered at the start of the bar, such as the mobile nav button. */
-  leading?: ReactNode
+  leading?: ReactNode;
   /** e.g. "Villa 47" */
-  propertyName: string
+  propertyName: string;
   /** e.g. "JLT Zone 4" */
-  zoneLabel: string
+  zoneLabel: string;
   /** Whether the smart meter is currently reporting */
-  meterOnline?: boolean
+  meterOnline?: boolean;
   /** Unread notification count shown on the bell icon */
-  notificationCount?: number
+  notificationCount?: number;
   /** Currently signed-in user */
   user: {
-    name: string
-    role: string
+    name: string;
+    role: string;
     /** 2-letter avatar initials, e.g. "SA" */
-    initials: string
-  }
+    initials: string;
+  };
   /** Route to send the user to when they click the property/help/bell area — defaults to the dashboard */
-  dashboardHref?: string
-  onZoneClick?: () => void
-  onHelpClick?: () => void
-  onNotificationsClick?: () => void
-  onUserMenuClick?: () => void
+  dashboardHref?: string;
+  onZoneClick?: () => void;
+  onHelpClick?: () => void;
+  onNotificationsClick?: () => void;
+  onUserMenuClick?: () => void;
 }
 
 export default function PageHeader({
@@ -45,16 +45,16 @@ export default function PageHeader({
   onNotificationsClick,
   onUserMenuClick,
 }: PageHeaderProps) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleNotificationsClick = () => {
     if (onNotificationsClick) {
-      onNotificationsClick()
-      return
+      onNotificationsClick();
+      return;
     }
 
-    navigate({ to: '/notifications' })
-  }
+    navigate({ to: '/notifications' });
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-border-subtle bg-card">
@@ -136,5 +136,5 @@ export default function PageHeader({
         </div>
       </div>
     </header>
-  )
+  );
 }

@@ -1,16 +1,16 @@
-import { Check, CreditCard, Trash2 } from 'lucide-react'
+import { Check, CreditCard, Trash2 } from 'lucide-react';
 
-import { Button } from '#/components/ui/button'
+import { Button } from '#/components/ui/button';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '#/components/ui/tooltip'
-import type { PaymentCard } from './payment-types'
-import { CardLogo } from './CardLogo'
+} from '#/components/ui/tooltip';
+import type { PaymentCard } from './payment-types';
+import { CardLogo } from './CardLogo';
 
 interface CardListProps {
-  cards: PaymentCard[]
+  cards: PaymentCard[];
 }
 
 export function CardList({ cards }: CardListProps) {
@@ -63,5 +63,5 @@ export function CardList({ cards }: CardListProps) {
         </div>
       ))}
     </div>
-  )
+  );
 }

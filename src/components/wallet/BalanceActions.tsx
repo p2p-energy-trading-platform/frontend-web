@@ -1,6 +1,6 @@
-import { ArrowDownLeft, ArrowUpRight } from 'lucide-react'
+import { ArrowDownLeft, ArrowUpRight } from 'lucide-react';
 
-import { Button } from '#/components/ui/button'
+import { Button } from '#/components/ui/button';
 
 export function BalanceActions() {
   return (
@@ -15,5 +15,5 @@ export function BalanceActions() {
         Withdraw
       </Button>
     </div>
-  )
+  );
 }

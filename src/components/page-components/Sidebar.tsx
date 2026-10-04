@@ -1,4 +1,4 @@
-import { Link, useRouterState } from '@tanstack/react-router'
+import { Link, useRouterState } from '@tanstack/react-router';
 import {
   Bell,
   ChevronDown,
@@ -10,19 +10,19 @@ import {
   TrendingUp,
   Wallet,
   Zap,
-} from 'lucide-react'
-import { useEffect, useState } from 'react'
+} from 'lucide-react';
+import { useEffect, useState } from 'react';
 
-import { Badge } from '#/components/ui/badge'
-import { Button } from '#/components/ui/button'
+import { Badge } from '#/components/ui/badge';
+import { Button } from '#/components/ui/button';
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '#/components/ui/sheet'
-import { cn } from 'cn'
+} from '#/components/ui/sheet';
+import { cn } from 'cn';
 
 const navItems = [
   { label: 'Dashboard', to: '/dashboard', icon: LayoutGrid },
@@ -32,28 +32,28 @@ const navItems = [
   { label: 'History', to: '/history/orders', icon: History },
   { label: 'Notifications', to: '/notifications', icon: Bell },
   { label: 'Settings', to: '/profile', icon: Settings },
-] as const
+] as const;
 
-const navGroups = [navItems.slice(0, 4), navItems.slice(4)]
+const navGroups = [navItems.slice(0, 4), navItems.slice(4)];
 
 interface SidebarUser {
-  name: string
-  property: string
-  zone: string
-  initials: string
+  name: string;
+  property: string;
+  zone: string;
+  initials: string;
 }
 
 interface SidebarProps {
-  user: SidebarUser
+  user: SidebarUser;
 }
 
 export function MobileNavButton({ user }: SidebarProps) {
-  const [open, setOpen] = useState(false)
-  const pathname = useRouterState({ select: (s) => s.location.pathname })
+  const [open, setOpen] = useState(false);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   useEffect(() => {
-    setOpen(false)
-  }, [pathname])
+    setOpen(false);
+  }, [pathname]);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -72,11 +72,11 @@ export function MobileNavButton({ user }: SidebarProps) {
         <SidebarPanel user={user} collapsed={false} />
       </SheetContent>
     </Sheet>
-  )
+  );
 }
 
 export default function Sidebar({ user }: SidebarProps) {
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
     <aside
@@ -91,7 +91,7 @@ export default function Sidebar({ user }: SidebarProps) {
         onToggleCollapse={() => setCollapsed((current) => !current)}
       />
     </aside>
-  )
+  );
 }
 
 function SidebarPanel({
@@ -99,10 +99,10 @@ function SidebarPanel({
   collapsed,
   onToggleCollapse,
 }: SidebarProps & {
-  collapsed: boolean
-  onToggleCollapse?: () => void
+  collapsed: boolean;
+  onToggleCollapse?: () => void;
 }) {
-  const pathname = useRouterState({ select: (s) => s.location.pathname })
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
     <>
@@ -156,24 +156,24 @@ function SidebarPanel({
             )}
           >
             {group.map((item) => {
-              const Icon = item.icon
+              const Icon = item.icon;
               const active =
                 item.to === '/history/orders'
                   ? pathname.startsWith('/history')
-                  : pathname === item.to
+                  : pathname === item.to;
               const className = cn(
                 'flex items-center gap-3 rounded-lg px-2.5 py-2 text-sm font-medium no-underline transition',
                 active
                   ? 'bg-sidebar-primary text-sidebar-primary-foreground'
                   : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground',
-              )
+              );
 
               return (
                 <Link key={item.to} to={item.to} className={className}>
                   <Icon className="size-4.5 shrink-0" />
                   {!collapsed && <span className="truncate">{item.label}</span>}
                 </Link>
-              )
+              );
             })}
           </div>
         ))}
@@ -196,5 +196,5 @@ function SidebarPanel({
         </button>
       )}
     </>
-  )
+  );
 }

@@ -2,8 +2,8 @@ export function BalanceOverview({
   available,
   creditNote,
 }: {
-  available: string
-  creditNote: string
+  available: string;
+  creditNote: string;
 }) {
   return (
     <div className="flex flex-col gap-2">
@@ -13,5 +13,5 @@ export function BalanceOverview({
 
       <p className="max-w-xl text-text-secondary">{creditNote}</p>
     </div>
-  )
+  );
 }

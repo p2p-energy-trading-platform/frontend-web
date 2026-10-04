@@ -1,19 +1,19 @@
-import { Card } from '#/components/ui/card'
-import { useEnergySeries } from '#/hooks/useEnergyAssets'
-import { cn } from 'cn'
+import { Card } from '#/components/ui/card';
+import { useEnergySeries } from '#/hooks/useEnergyAssets';
+import { cn } from 'cn';
 
 export interface EnergyTimeSeriesChartProps {
   /** 0-1 normalized values, one entry per series, left to right across the day */
-  generated?: Array<number>
-  consumed?: Array<number>
-  nowIndex?: number
+  generated?: Array<number>;
+  consumed?: Array<number>;
+  nowIndex?: number;
 }
 
 function toPath(values: Array<number>, width: number, height: number) {
-  const step = width / (values.length - 1)
+  const step = width / (values.length - 1);
   return values
     .map((v, i) => `${i === 0 ? 'M' : 'L'} ${i * step} ${height - v * height}`)
-    .join(' ')
+    .join(' ');
 }
 
 export function EnergyTimeSeriesChart({
@@ -21,18 +21,18 @@ export function EnergyTimeSeriesChart({
   consumed,
   nowIndex,
 }: EnergyTimeSeriesChartProps) {
-  const series = useEnergySeries()
-  const generatedPoints = generated ?? series.generated
-  const consumedPoints = consumed ?? series.consumed
-  const currentIndex = nowIndex ?? series.nowIndex
-  const width = 900
-  const height = 220
-  const genPath = toPath(generatedPoints, width, height)
-  const conPath = toPath(consumedPoints, width, height)
-  const nowX = (currentIndex / (generatedPoints.length - 1)) * width
+  const series = useEnergySeries();
+  const generatedPoints = generated ?? series.generated;
+  const consumedPoints = consumed ?? series.consumed;
+  const currentIndex = nowIndex ?? series.nowIndex;
+  const width = 900;
+  const height = 220;
+  const genPath = toPath(generatedPoints, width, height);
+  const conPath = toPath(consumedPoints, width, height);
+  const nowX = (currentIndex / (generatedPoints.length - 1)) * width;
 
-  const yLabels = series.yLabels
-  const xLabels = series.xLabels
+  const yLabels = series.yLabels;
+  const xLabels = series.xLabels;
 
   return (
     <Card className="gap-4 border-border-subtle bg-card p-5">
@@ -119,7 +119,7 @@ export function EnergyTimeSeriesChart({
         </div>
       </div>
     </Card>
-  )
+  );
 }
 
 function Legend({ colorClass, label }: { colorClass: string; label: string }) {
@@ -128,5 +128,5 @@ function Legend({ colorClass, label }: { colorClass: string; label: string }) {
       <span className={cn('size-2 rounded-full', colorClass)} />
       {label}
     </span>
-  )
+  );
 }

@@ -1,9 +1,9 @@
-import { CURRENCY_CODE, formatAed } from '#/data/currency'
+import { CURRENCY_CODE, formatAed } from '#/data/currency';
 import type {
   BankAccount,
   PaymentCard,
   WalletTransaction,
-} from '#/components/wallet/payment-types'
+} from '#/components/wallet/payment-types';
 
 export const walletBalance = {
   available: formatAed(284.5),
@@ -13,7 +13,7 @@ export const walletBalance = {
   lifetimeIn: formatAed(1284.5),
   verificationNote:
     'Bank accounts are verified via two micro-deposits (AED 0.01–0.99). Verification typically takes 1–2 business days.',
-}
+};
 
 export const paymentCards: Array<PaymentCard> = [
   {
@@ -32,7 +32,7 @@ export const paymentCards: Array<PaymentCard> = [
     verified: true,
     isDefault: false,
   },
-]
+];
 
 export const bankAccounts: Array<BankAccount> = [
   {
@@ -52,7 +52,7 @@ export const bankAccounts: Array<BankAccount> = [
     verified: false,
     isDefault: false,
   },
-]
+];
 
 export const walletTransactions: Array<WalletTransaction> = [
   {
@@ -67,4 +67,4 @@ export const walletTransactions: Array<WalletTransaction> = [
     amount: `+ ${formatAed(42.5)}`,
     type: 'sell',
   },
-]
+];

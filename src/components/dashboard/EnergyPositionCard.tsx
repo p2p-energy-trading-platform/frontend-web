@@ -1,15 +1,15 @@
-import { ArrowDownLeft, ArrowUpRight, Home, Sun } from 'lucide-react'
+import { ArrowDownLeft, ArrowUpRight, Home, Sun } from 'lucide-react';
 
-import { Badge } from '#/components/ui/badge'
-import { Card } from '#/components/ui/card'
-import { cn } from 'cn'
+import { Badge } from '#/components/ui/badge';
+import { Card } from '#/components/ui/card';
+import { cn } from 'cn';
 
 export interface EnergyPositionCardProps {
-  netKwh: number
-  generatedKwh: number
-  consumedKwh: number
-  exportedKwh: number
-  importedKwh: number
+  netKwh: number;
+  generatedKwh: number;
+  consumedKwh: number;
+  exportedKwh: number;
+  importedKwh: number;
 }
 
 export function EnergyPositionCard({
@@ -19,7 +19,7 @@ export function EnergyPositionCard({
   exportedKwh,
   importedKwh,
 }: EnergyPositionCardProps) {
-  const surplus = netKwh >= 0
+  const surplus = netKwh >= 0;
 
   return (
     <Card className="flex-row flex-wrap items-center justify-between gap-6 border-border-subtle bg-card p-5">
@@ -71,5 +71,5 @@ export function EnergyPositionCard({
         </div>
       </div>
     </Card>
-  )
+  );
 }

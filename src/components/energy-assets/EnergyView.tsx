@@ -1,26 +1,26 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
-import { cn } from 'cn'
-import { Tabs, TabsList, TabsTrigger } from '#/components/ui/tabs'
-import { EnergyDateBar } from '#/components/energy-assets/EnergyStatBar'
-import { EnergyKpiStrip } from '#/components/energy-assets/EnergyKPIStrip'
-import { EnergyTimeSeriesChart } from '#/components/energy-assets/EnergySeriesChart'
-import { ForecastCard } from '#/components/energy-assets/ForecastCard'
-import { UsageCategoryCard } from '#/components/energy-assets/UsageCategoryCard'
-import { PeakPeriodsCard } from '#/components/energy-assets/PeakPeriodCard'
-import { EnergyBalanceCard } from '#/components/energy-assets/EnergyBalanceCard'
-import { InsightsPanel } from '#/components/energy-assets/InsightsPanel'
-import { AssetFilterBar } from '#/components/energy-assets/AssetFilterBar'
+import { cn } from 'cn';
+import { Tabs, TabsList, TabsTrigger } from '#/components/ui/tabs';
+import { EnergyDateBar } from '#/components/energy-assets/EnergyStatBar';
+import { EnergyKpiStrip } from '#/components/energy-assets/EnergyKPIStrip';
+import { EnergyTimeSeriesChart } from '#/components/energy-assets/EnergySeriesChart';
+import { ForecastCard } from '#/components/energy-assets/ForecastCard';
+import { UsageCategoryCard } from '#/components/energy-assets/UsageCategoryCard';
+import { PeakPeriodsCard } from '#/components/energy-assets/PeakPeriodCard';
+import { EnergyBalanceCard } from '#/components/energy-assets/EnergyBalanceCard';
+import { InsightsPanel } from '#/components/energy-assets/InsightsPanel';
+import { AssetFilterBar } from '#/components/energy-assets/AssetFilterBar';
 import type {
   AssetCategory,
   AssetSort,
-} from '#/components/energy-assets/AssetFilterBar'
-import { AssetCard } from '#/components/energy-assets/AssetCard'
-import { useEnergyAssets } from '#/hooks/useEnergyAssets'
+} from '#/components/energy-assets/AssetFilterBar';
+import { AssetCard } from '#/components/energy-assets/AssetCard';
+import { useEnergyAssets } from '#/hooks/useEnergyAssets';
 
 export default function EnergyView() {
-  const energy = useEnergyAssets()
-  const [tab, setTab] = useState<'usage' | 'assets'>('usage')
+  const energy = useEnergyAssets();
+  const [tab, setTab] = useState<'usage' | 'assets'>('usage');
 
   return (
     <main
@@ -35,7 +35,7 @@ export default function EnergyView() {
       <Tabs
         value={tab}
         onValueChange={(value) => {
-          if (value === 'usage' || value === 'assets') setTab(value)
+          if (value === 'usage' || value === 'assets') setTab(value);
         }}
       >
         <TabsList aria-label="Energy views">
@@ -46,14 +46,14 @@ export default function EnergyView() {
 
       {tab === 'usage' ? <GenerationUsageView /> : <AssetsView />}
     </main>
-  )
+  );
 }
 
 function GenerationUsageView() {
-  const energy = useEnergyAssets()
+  const energy = useEnergyAssets();
   const [period, setPeriod] = useState<'Day' | 'Week' | 'Month' | 'Custom'>(
     'Day',
-  )
+  );
 
   return (
     <div className="flex flex-col gap-5">
@@ -84,33 +84,33 @@ function GenerationUsageView() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function AssetsView() {
-  const energy = useEnergyAssets()
-  const [subTab, setSubTab] = useState<'devices' | 'automation'>('devices')
-  const [category, setCategory] = useState<AssetCategory>('All assets')
-  const [view, setView] = useState<'grid' | 'list'>('grid')
-  const [sort, setSort] = useState<AssetSort>('name')
+  const energy = useEnergyAssets();
+  const [subTab, setSubTab] = useState<'devices' | 'automation'>('devices');
+  const [category, setCategory] = useState<AssetCategory>('All assets');
+  const [view, setView] = useState<'grid' | 'list'>('grid');
+  const [sort, setSort] = useState<AssetSort>('name');
   const visibleAssets = [...energy.assets]
     .filter((asset) => category === 'All assets' || asset.category === category)
     .sort((first, second) => {
       if (sort === 'output') {
         return (
           Math.abs(Number(second.statValue)) - Math.abs(Number(first.statValue))
-        )
+        );
       }
-      if (sort === 'status') return first.status.localeCompare(second.status)
-      return first.name.localeCompare(second.name)
-    })
+      if (sort === 'status') return first.status.localeCompare(second.status);
+      return first.name.localeCompare(second.name);
+    });
 
   return (
     <div className="flex flex-col gap-4">
       <Tabs
         value={subTab}
         onValueChange={(value) => {
-          if (value === 'devices' || value === 'automation') setSubTab(value)
+          if (value === 'devices' || value === 'automation') setSubTab(value);
         }}
       >
         <TabsList aria-label="Asset views">
@@ -156,5 +156,5 @@ function AssetsView() {
         </div>
       )}
     </div>
-  )
+  );
 }

@@ -11,16 +11,16 @@ import {
   Wallet,
   Wrench,
   Zap,
-} from 'lucide-react'
+} from 'lucide-react';
 
-import type { NotificationGroup } from '#/components/notification/NotificationFeed'
+import type { NotificationGroup } from '#/components/notification/NotificationFeed';
 
 export const notificationCounts = {
   All: 3,
   Trading: 1,
   Wallet: 1,
   'Meter & assets': 1,
-} as const
+} as const;
 
 export const notificationGroups: Array<NotificationGroup> = [
   {
@@ -187,4 +187,4 @@ export const notificationGroups: Array<NotificationGroup> = [
       },
     ],
   },
-]
+];

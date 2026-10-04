@@ -1,19 +1,19 @@
-import { Button } from '#/components/ui/button'
-import { Field, FieldGroup, FieldLabel } from '#/components/ui/field'
-import { Checkbox } from '#/components/ui/checkbox'
-import { Input } from '#/components/ui/input'
-import { PasswordInput } from '../ui/password-input'
-import { Link } from '@tanstack/react-router'
+import { Button } from '#/components/ui/button';
+import { Field, FieldGroup, FieldLabel } from '#/components/ui/field';
+import { Checkbox } from '#/components/ui/checkbox';
+import { Input } from '#/components/ui/input';
+import { PasswordInput } from '../ui/password-input';
+import { Link } from '@tanstack/react-router';
 
 interface CreateAccountFormProps {
-  onSuccess: () => Promise<void> | void
+  onSuccess: () => Promise<void> | void;
 }
 
 export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+    event.preventDefault();
 
-    await onSuccess()
+    await onSuccess();
   }
 
   return (
@@ -96,5 +96,5 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
         </FieldGroup>
       </form>
     </>
-  )
+  );
 }
