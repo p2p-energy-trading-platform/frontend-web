@@ -44,23 +44,23 @@ export function NotificationItem({
             {unread && (
               <span className="size-1.5 shrink-0 rounded-full bg-accent" />
             )}
-            <p className="text-sm font-semibold text-text-primary">{title}</p>
+            <p className=" font-semibold text-text-primary">{title}</p>
           </div>
-          <span className="shrink-0 whitespace-nowrap text-xs text-text-tertiary">
+          <span className="max-sm:hidden shrink-0 whitespace-nowrap text-xs text-text-tertiary">
             {time}
           </span>
         </div>
 
-        <p className="mt-0.5 text-xs leading-relaxed text-text-tertiary">
+        <p className="mt-0.5 text-sm leading-relaxed text-text-tertiary">
           {description}
         </p>
 
         {actionLabel && (
           <Button
-            size="xs"
+            size="sm"
             variant="link"
             onClick={onAction}
-            className="text-accent"
+            className="text-accent p-0"
           >
             {actionLabel}
           </Button>
