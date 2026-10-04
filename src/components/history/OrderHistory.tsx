@@ -7,14 +7,6 @@ import {
   DialogTitle,
 } from '#/components/ui/dialog'
 import { Input } from '#/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '#/components/ui/select'
 import { Skeleton } from '#/components/ui/skeleton'
 import {
   Table,
@@ -33,74 +25,44 @@ import {
   Eye,
   Filter,
   RefreshCw,
-  ArrowUpRight,
-  ArrowDownLeft,
 } from 'lucide-react'
+import { Badge as BadgePill } from '#/components/ui/badge'
 import { toast } from '#/components/ui/toast'
 import { useOrders } from '#/hooks/useHistory'
 import type {
   HistoryViewState,
   OrderRecord,
   OrderStatus,
-  TradeSide,
 } from '#/components/history/types'
+import { EmptyState } from '../ui/empty-state'
+import { FilterSelect, SidePill } from './HistoryComponents'
 
 const PAGE_SIZE = 8
 
 // ─── Status badges ────────────────────────────────────────────────────────────
 
-const ORDER_STATUS: Record<OrderStatus, { label: string; cls: string }> = {
+const ORDER_STATUS: Record<OrderStatus, { label: string; }> = {
   open: {
     label: 'Open',
-    cls: 'bg-feedback-info-background text-feedback-info-icon border-feedback-info-border',
   },
   pending: {
     label: 'Pending',
-    cls: 'bg-feedback-warning-background text-feedback-warning-icon border-feedback-warning-border',
   },
   partial: {
     label: 'Partial',
-    cls: 'bg-feedback-success-background text-feedback-success-icon border-feedback-success-border',
   },
   filled: {
     label: 'Filled',
-    cls: 'bg-feedback-success-background text-feedback-success-icon border-feedback-success-border',
   },
   cancelled: {
     label: 'Cancelled',
-    cls: 'bg-secondary text-text-secondary border-border',
   },
   expired: {
     label: 'Expired',
-    cls: 'bg-secondary text-text-secondary border-border',
   },
   rejected: {
     label: 'Rejected',
-    cls: 'bg-feedback-error-background text-feedback-error-icon border-feedback-error-border',
   },
-}
-
-function StatusPill({ label, cls }: { label: string; cls: string }) {
-  return (
-    <span
-      className={`inline-flex items-center px-2 py-0.5 rounded-full text-caption font-semibold border ${cls}`}
-    >
-      {label}
-    </span>
-  )
-}
-function SidePill({ side }: { side: TradeSide }) {
-  return side === 'sell' ? (
-    <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-caption font-bold bg-trade-sell-background text-trade-sell-text">
-      <ArrowUpRight size={9} />
-      Sell
-    </span>
-  ) : (
-    <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-caption font-bold bg-trade-buy-background text-trade-buy-text">
-      <ArrowDownLeft size={9} />
-      Buy
-    </span>
-  )
 }
 
 // ─── Order detail drawer ──────────────────────────────────────────────────────
@@ -130,7 +92,7 @@ function OrderDrawer({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 font-mono">
             {order.id}
-            <StatusPill {...st} />
+            <BadgePill variant={"default"}>{st.label}</BadgePill>
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
@@ -389,7 +351,7 @@ export function OrdersTab({ state }: { state: HistoryViewState }) {
                         {o.slot}
                       </TableCell>
                       <TableCell className="px-3 py-3">
-                        <StatusPill {...ORDER_STATUS[o.status]} />
+                        <BadgePill>{ORDER_STATUS[o.status].label}</BadgePill>
                       </TableCell>
                       <TableCell className="px-3 py-3">
                         <div className="flex items-center gap-1">
@@ -439,7 +401,7 @@ export function OrdersTab({ state }: { state: HistoryViewState }) {
                       {o.type}
                     </span>
                   </div>
-                  <StatusPill {...ORDER_STATUS[o.status]} />
+                  <BadgePill>{ORDER_STATUS[o.status].label}</BadgePill>
                 </div>
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-text-secondary">
@@ -514,69 +476,6 @@ export function OrdersTab({ state }: { state: HistoryViewState }) {
           onCancel={cancelOrder}
         />
       )}
-    </div>
-  )
-}
-
-function FilterSelect({
-  label,
-  value,
-  onValueChange,
-  options,
-}: {
-  label: string
-  value: string
-  onValueChange: (value: string) => void
-  options: Array<{ v: string; l: string }>
-}) {
-  const selected = options.find((option) => option.v === value)
-
-  return (
-    <Select
-      value={value}
-      onValueChange={(next) => {
-        if (next) onValueChange(next)
-      }}
-    >
-      <SelectTrigger aria-label={label}>
-        <SelectValue>{selected?.l}</SelectValue>
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          {options.map((option) => (
-            <SelectItem key={option.v} value={option.v}>
-              {option.l}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
-  )
-}
-
-// ─── EmptyState ───────────────────────────────────────────────────────────────
-
-function EmptyState({
-  icon: Icon,
-  title,
-  description,
-  action,
-}: {
-  icon: React.ElementType
-  title: string
-  description: string
-  action?: React.ReactNode
-}) {
-  return (
-    <div className="flex flex-col items-center justify-center py-12 px-8 text-center">
-      <div className="w-14 h-14 rounded-2xl bg-muted flex items-center justify-center mb-4">
-        <Icon size={22} className="text-text-tertiary" />
-      </div>
-      <h3 className="text-base font-semibold text-foreground mb-1.5">
-        {title}
-      </h3>
-      <p className="text-sm text-text-secondary max-w-xs mb-5">{description}</p>
-      {action}
     </div>
   )
 }

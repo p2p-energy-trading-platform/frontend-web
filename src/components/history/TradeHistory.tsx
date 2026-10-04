@@ -8,14 +8,6 @@ import {
   DialogTitle,
 } from '#/components/ui/dialog'
 import { Input } from '#/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '#/components/ui/select'
 import { Skeleton } from '#/components/ui/skeleton'
 import {
   Table,
@@ -30,7 +22,6 @@ import { useTrades } from '#/hooks/useHistory'
 import type {
   HistoryViewState,
   PresentedTrade,
-  TradeSide,
   TradeStatus,
 } from '#/components/history/types'
 import {
@@ -44,9 +35,10 @@ import {
   BarChart2,
   Filter,
   RefreshCw,
-  ArrowUpRight,
-  ArrowDownLeft,
 } from 'lucide-react'
+import { EmptyState } from '../ui/empty-state'
+import { Badge } from '../ui/badge'
+import { FilterSelect, SidePill } from './HistoryComponents'
 
 const PAGE_SIZE = 8
 
@@ -54,46 +46,18 @@ const PAGE_SIZE = 8
 
 const TRADE_STATUS: Record<
   TradeStatus,
-  { label: string; cls: string; dot: string }
+  { label: string; }
 > = {
   settled: {
     label: 'Settled',
-    cls: 'bg-feedback-success-background text-feedback-success-icon border-feedback-success-border',
-    dot: 'bg-feedback-success-icon',
   },
   pending: {
     label: 'Pending',
-    cls: 'bg-feedback-warning-background text-feedback-warning-icon border-feedback-warning-border',
-    dot: 'bg-feedback-warning-icon',
   },
   failed: {
     label: 'Failed',
-    cls: 'bg-feedback-error-background text-feedback-error-icon border-feedback-error-border',
-    dot: 'bg-feedback-error-icon',
-  },
-}
 
-function StatusPill({ label, cls }: { label: string; cls: string }) {
-  return (
-    <span
-      className={`inline-flex items-center px-2 py-0.5 rounded-full text-caption font-semibold border ${cls}`}
-    >
-      {label}
-    </span>
-  )
-}
-function SidePill({ side }: { side: TradeSide }) {
-  return side === 'sell' ? (
-    <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-caption font-bold bg-trade-sell-background text-trade-sell-text">
-      <ArrowUpRight size={9} />
-      Sell
-    </span>
-  ) : (
-    <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-caption font-bold bg-trade-buy-background text-trade-buy-text">
-      <ArrowDownLeft size={9} />
-      Buy
-    </span>
-  )
+  },
 }
 
 // ─── Trade detail drawer ──────────────────────────────────────────────────────
@@ -118,7 +82,7 @@ function TradeDrawer({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 font-mono">
             {trade.id}
-            <StatusPill {...st} />
+            <Badge>{st.label}</Badge>
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
@@ -367,7 +331,7 @@ export function TradesTab({ state }: { state: HistoryViewState }) {
                       {t.zone}
                     </TableCell>
                     <TableCell className="px-3 py-3">
-                      <StatusPill {...TRADE_STATUS[t.status]} />
+                      <Badge>{TRADE_STATUS[t.status].label}</Badge>
                     </TableCell>
                     <TableCell className="px-3 py-3">
                       <Button
@@ -401,7 +365,7 @@ export function TradesTab({ state }: { state: HistoryViewState }) {
                       {t.id}
                     </span>
                   </div>
-                  <StatusPill {...TRADE_STATUS[t.status]} />
+                    <Badge>{TRADE_STATUS[t.status].label}</Badge>
                 </div>
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-text-secondary">
@@ -457,69 +421,6 @@ export function TradesTab({ state }: { state: HistoryViewState }) {
       {selected && (
         <TradeDrawer trade={selected} onClose={() => setSelected(null)} />
       )}
-    </div>
-  )
-}
-
-function FilterSelect({
-  label,
-  value,
-  onValueChange,
-  options,
-}: {
-  label: string
-  value: string
-  onValueChange: (value: string) => void
-  options: Array<{ v: string; l: string }>
-}) {
-  const selected = options.find((option) => option.v === value)
-
-  return (
-    <Select
-      value={value}
-      onValueChange={(next) => {
-        if (next) onValueChange(next)
-      }}
-    >
-      <SelectTrigger aria-label={label}>
-        <SelectValue>{selected?.l}</SelectValue>
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          {options.map((option) => (
-            <SelectItem key={option.v} value={option.v}>
-              {option.l}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
-  )
-}
-
-// ─── EmptyState ───────────────────────────────────────────────────────────────
-
-function EmptyState({
-  icon: Icon,
-  title,
-  description,
-  action,
-}: {
-  icon: React.ElementType
-  title: string
-  description: string
-  action?: React.ReactNode
-}) {
-  return (
-    <div className="flex flex-col items-center justify-center py-12 px-8 text-center">
-      <div className="w-14 h-14 rounded-2xl bg-muted flex items-center justify-center mb-4">
-        <Icon size={22} className="text-text-tertiary" />
-      </div>
-      <h3 className="text-base font-semibold text-foreground mb-1.5">
-        {title}
-      </h3>
-      <p className="text-sm text-text-secondary max-w-xs mb-5">{description}</p>
-      {action}
     </div>
   )
 }
