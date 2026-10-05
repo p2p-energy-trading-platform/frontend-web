@@ -3,11 +3,10 @@ import { Link } from '@tanstack/react-router';
 import { Button } from '#/components/ui/button';
 import { Input } from '#/components/ui/input';
 import { Field, FieldGroup, FieldLabel } from '../ui/field';
-import AuthSplitLayout from './AuthSplitLayout';
 
 export default function ForgotPasswordView() {
   return (
-    <AuthSplitLayout>
+    <>
       <header>
         <h1 className="font-heading text-heading-1">Forgot password?</h1>
 
@@ -48,6 +47,6 @@ export default function ForgotPasswordView() {
           Sign in
         </Link>
       </p>
-    </AuthSplitLayout>
+    </>
   );
 }

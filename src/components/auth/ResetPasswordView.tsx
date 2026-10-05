@@ -3,11 +3,10 @@ import { Link } from '@tanstack/react-router';
 import { Button } from '#/components/ui/button';
 import { PasswordInput } from '../ui/password-input';
 import { Field, FieldGroup, FieldLabel } from '../ui/field';
-import AuthSplitLayout from './AuthSplitLayout';
 
 export default function ResetPasswordView() {
   return (
-    <AuthSplitLayout>
+    <>
       <header>
         <h1 className="font-heading text-heading-1">Reset password</h1>
 
@@ -61,6 +60,6 @@ export default function ResetPasswordView() {
           Sign in
         </Link>
       </p>
-    </AuthSplitLayout>
+    </>
   );
 }
