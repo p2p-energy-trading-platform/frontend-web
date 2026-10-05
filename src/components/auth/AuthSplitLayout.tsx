@@ -6,9 +6,7 @@ interface AuthSplitLayoutProps {
   children: ReactNode;
 }
 
-export default function AuthSplitLayout({
-  children,
-}: AuthSplitLayoutProps) {
+export default function AuthSplitLayout({ children }: AuthSplitLayoutProps) {
   return (
     <main className="min-h-screen overflow-y-auto bg-background text-foreground">
       <div className="grid min-h-screen lg:grid-cols-2">
