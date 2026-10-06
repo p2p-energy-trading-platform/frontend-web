@@ -38,13 +38,12 @@ export default function SignInForm() {
         <Field orientation="horizontal">
           <Checkbox id="rememberMe" />
           <FieldLabel htmlFor="rememberMe">Remember me for 30 days</FieldLabel>
-          <Button
-            type="button"
-            variant="link"
-            className="h-auto p-0 text-xs font-semibold text-accent"
+          <Link
+            to="/forgot-password"
+            className="text-xs font-semibold text-accent hover:underline"
           >
             Forgot password?
-          </Button>
+          </Link>
         </Field>
         <Field>
           <Button type="submit" className="h-12 w-full rounded-xl">
