@@ -1,18 +1,29 @@
-import { apiRequest } from '#/api/client';
+import { apiRequest } from '#/lib/api-client';
+
+export interface AuthUser {
+  userId: string;
+  email: string;
+  status: string;
+  role: string;
+}
 
 export interface LoginResponse {
   userId: string;
   email: string;
-  accessToken: string;
-  refreshToken: string;
-  expiresIn: number;
 }
 
 export interface RegisterResponse {
   userId: string;
   email: string;
-  status: string;
+  status: 'PENDING';
   createdAt: string;
+}
+
+export function register(email: string, password: string) {
+  return apiRequest<RegisterResponse>('/api/v1/auth/register', {
+    method: 'POST',
+    body: JSON.stringify({ email, password }),
+  });
 }
 
 export function login(email: string, password: string) {
@@ -22,9 +33,21 @@ export function login(email: string, password: string) {
   });
 }
 
-export function register(email: string, password: string) {
-  return apiRequest<RegisterResponse>('/api/v1/auth/register', {
-    method: 'POST',
-    body: JSON.stringify({ email, password }),
-  });
+export function logout() {
+  return apiRequest<void>('/api/v1/auth/logout', { method: 'POST' });
+}
+
+export async function fetchCurrentUser(): Promise<AuthUser | null> {
+  try {
+    return await apiRequest<AuthUser>('/api/v1/auth/me');
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      'status' in error &&
+      error.status === 401
+    ) {
+      return null;
+    }
+    throw error;
+  }
 }
