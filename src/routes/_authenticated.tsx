@@ -52,8 +52,10 @@ function AuthenticatedLayout() {
           meterOnline
           user={displayUser}
           onLogoutClick={() => {
-            void logoutMutation.mutateAsync().then(() => {
-              window.location.assign('/sign-in');
+            logoutMutation.mutate(undefined, {
+              onSettled: () => {
+                window.location.assign('/sign-in');
+              },
             });
           }}
         />
