@@ -50,8 +50,15 @@ export class NetworkError extends Error {
 const API_BASE_URL = env.VITE_API_BASE_URL;
 let refreshPromise: Promise<void> | undefined;
 
-function isAuthEndpoint(path: string): boolean {
-  return path.startsWith('/api/v1/auth/');
+const NO_REFRESH_PATHS = new Set([
+  '/api/v1/auth/login',
+  '/api/v1/auth/register',
+  '/api/v1/auth/refresh',
+  '/api/v1/auth/logout',
+]);
+
+function canRefresh(path: string): boolean {
+  return !NO_REFRESH_PATHS.has(path);
 }
 
 function parseRetryAfter(response: Response): number | undefined {
@@ -94,7 +101,9 @@ async function request<T>(
       ...options,
       credentials: 'include',
       headers: {
-        'Content-Type': 'application/json',
+        ...(options.body === undefined
+          ? {}
+          : { 'Content-Type': 'application/json' }),
         ...options.headers,
       },
     });
@@ -108,7 +117,7 @@ async function request<T>(
   }
 
   const error = await parseApiError(response);
-  if (error.status !== 401 || !allowRefresh || isAuthEndpoint(path)) {
+  if (error.status !== 401 || !allowRefresh || !canRefresh(path)) {
     throw error;
   }
 
