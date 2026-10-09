@@ -48,6 +48,9 @@ export function VerifyEmailStep({
       <p className="mt-0.5 break-all text-sm font-semibold text-foreground">
         {email}
       </p>
+      <p role="status" className="mt-3 text-sm text-accent">
+        Account created. We sent a verification code to your email.
+      </p>
 
       <form onSubmit={handleSubmit} className="mt-8">
         <FieldGroup>
