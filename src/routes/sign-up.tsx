@@ -5,9 +5,12 @@ import { authUserQueryOptions } from '#/features/auth/hooks';
 
 export const Route = createFileRoute('/sign-up')({
   beforeLoad: async ({ context }) => {
-    const user = await context.queryClient.ensureQueryData(
-      authUserQueryOptions,
-    );
+    let user = null;
+    try {
+      user = await context.queryClient.ensureQueryData(authUserQueryOptions);
+    } catch {
+      // Public auth pages remain usable while the gateway is unavailable.
+    }
     if (user) {
       throw redirect({ to: '/dashboard' });
     }

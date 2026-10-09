@@ -1,5 +1,3 @@
-import { getQueryClient } from './query-client';
-
 export interface ApiErrorDetail {
   location: string;
   path: string;
@@ -48,15 +46,6 @@ export class NetworkError extends Error {
 }
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-let refreshPromise: Promise<void> | undefined;
-
-function isRefreshExcluded(path: string): boolean {
-  return (
-    path === '/api/v1/auth/login' ||
-    path === '/api/v1/auth/register' ||
-    path === '/api/v1/auth/refresh'
-  );
-}
 
 function parseRetryAfter(response: Response): number | undefined {
   const value = response.headers.get('retry-after');
@@ -83,11 +72,7 @@ async function parseApiError(response: Response): Promise<ApiError> {
   );
 }
 
-async function request<T>(
-  path: string,
-  options: RequestInit,
-  allowRefresh: boolean,
-): Promise<T> {
+async function request<T>(path: string, options: RequestInit): Promise<T> {
   if (!API_BASE_URL) {
     throw new Error('VITE_API_BASE_URL is not configured');
   }
@@ -111,32 +96,12 @@ async function request<T>(
     return (await response.json()) as T;
   }
 
-  const error = await parseApiError(response);
-  if (error.status !== 401 || !allowRefresh || isRefreshExcluded(path)) {
-    throw error;
-  }
-
-  refreshPromise ??= request<void>(
-    '/api/v1/auth/refresh',
-    { method: 'POST' },
-    false,
-  ).finally(() => {
-    refreshPromise = undefined;
-  });
-
-  try {
-    await refreshPromise;
-  } catch (refreshError) {
-    getQueryClient().setQueryData(['authUser'], null);
-    throw refreshError;
-  }
-
-  return request<T>(path, options, false);
+  throw await parseApiError(response);
 }
 
 export function apiRequest<T>(
   path: string,
   options: RequestInit = {},
 ): Promise<T> {
-  return request<T>(path, options, true);
+  return request<T>(path, options);
 }

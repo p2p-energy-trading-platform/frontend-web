@@ -41,11 +41,7 @@ export async function fetchCurrentUser(): Promise<AuthUser | null> {
   try {
     return await apiRequest<AuthUser>('/api/v1/auth/me');
   } catch (error) {
-    if (
-      error instanceof Error &&
-      'status' in error &&
-      error.status === 401
-    ) {
+    if (error instanceof Error && 'status' in error && error.status === 401) {
       return null;
     }
     throw error;

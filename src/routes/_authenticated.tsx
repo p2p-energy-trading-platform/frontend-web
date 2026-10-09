@@ -8,9 +8,8 @@ import { useSession } from '#/hooks/useProfile';
 export const Route = createFileRoute('/_authenticated')({
   ssr: false,
   beforeLoad: async ({ context }) => {
-    const user = await context.queryClient.ensureQueryData(
-      authUserQueryOptions,
-    );
+    const user =
+      await context.queryClient.ensureQueryData(authUserQueryOptions);
     if (!user) {
       throw redirect({ to: '/sign-in' });
     }

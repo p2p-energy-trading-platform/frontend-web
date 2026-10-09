@@ -5,7 +5,7 @@ import {
   queryOptions,
 } from '@tanstack/react-query';
 
-import { fetchCurrentUser, login, logout, register } from './api';
+import { fetchCurrentUser, login, logout } from './api';
 
 export const authUserQueryOptions = queryOptions({
   queryKey: ['authUser'] as const,
@@ -17,25 +17,14 @@ export function useAuthUser() {
   return useQuery(authUserQueryOptions);
 }
 
-export function useRegister() {
-  return useMutation({
-    mutationFn: ({ email, password }: { email: string; password: string }) =>
-      register(email, password),
-  });
-}
-
 export function useLogin() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ email, password }: { email: string; password: string }) =>
       login(email, password),
-    onSuccess: (user) => {
-      queryClient.setQueryData(['authUser'], {
-        ...user,
-        status: 'ACTIVE',
-        role: 'USER',
-      });
+    onSuccess: async () => {
+      await queryClient.fetchQuery(authUserQueryOptions);
     },
   });
 }

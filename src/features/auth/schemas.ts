@@ -16,14 +16,10 @@ export const registerSchema = z
     confirmPassword: z.string(),
     termsAccepted: z.boolean(),
   })
-  .refine(
-    (value) =>
-      value.password === value.confirmPassword,
-    {
-      path: ['confirmPassword'],
-      message: 'Passwords do not match',
-    },
-  )
+  .refine((value) => value.password === value.confirmPassword, {
+    path: ['confirmPassword'],
+    message: 'Passwords do not match',
+  })
   .refine((value) => value.termsAccepted, {
     path: ['termsAccepted'],
     message: 'You must accept the terms to continue',

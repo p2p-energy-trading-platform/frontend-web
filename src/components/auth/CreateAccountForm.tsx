@@ -2,7 +2,7 @@ import { useForm } from '@tanstack/react-form';
 import { Link } from '@tanstack/react-router';
 
 import { ApiError } from '#/lib/api-client';
-import { useRegister } from '#/features/auth/hooks';
+import { useRegister } from '#/features/auth/useRegister';
 import { registerSchema } from '#/features/auth/schemas';
 import type { RegisterFormValues } from '#/features/auth/schemas';
 import { Button } from '#/components/ui/button';
@@ -15,6 +15,7 @@ import {
 } from '#/components/ui/field';
 import { Input } from '#/components/ui/input';
 import { PasswordInput } from '#/components/ui/password-input';
+import { toast } from '#/components/ui/toast';
 
 interface CreateAccountFormProps {
   onSuccess: (email: string) => Promise<void> | void;
@@ -45,14 +46,47 @@ function apiFieldErrors(
     .map((detail) => ({ message: detail.message }));
 }
 
+function formError(error: unknown): string | undefined {
+  if (!(error instanceof ApiError)) return undefined;
+  if (error.status === 400) {
+    const message = error.details
+      .filter(
+        (detail) =>
+          detail.path !== '/email' &&
+          detail.path !== '/password' &&
+          detail.path !== '/confirmPassword' &&
+          detail.path !== '/termsAccepted',
+      )
+      .map((detail) => detail.message)
+      .join(' ');
+
+    return message || undefined;
+  }
+  return undefined;
+}
+
+function requestIdError(error: unknown): string | undefined {
+  if (
+    error instanceof ApiError &&
+    (error.status === 500 ||
+      error.status === 502 ||
+      error.status === 503 ||
+      error.status === 504) &&
+    error.requestId
+  ) {
+    return `Request ID: ${error.requestId}`;
+  }
+  return undefined;
+}
+
 export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
   const registerMutation = useRegister();
   const defaultValues: RegisterFormValues = {
-      email: '',
-      password: '',
-      confirmPassword: '',
-      termsAccepted: false,
-    };
+    email: '',
+    password: '',
+    confirmPassword: '',
+    termsAccepted: false,
+  };
   const form = useForm({
     defaultValues,
     validators: { onSubmit: registerSchema },
@@ -60,6 +94,10 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
       await registerMutation.mutateAsync({
         email: value.email,
         password: value.password,
+      });
+      toast.add({
+        title: 'Account created. We sent a verification code to your email.',
+        type: 'success',
       });
       await onSuccess(value.email);
     },
@@ -100,7 +138,10 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
                   className="h-12 rounded-2xl px-4"
                   value={field.state.value}
                   onBlur={field.handleBlur}
-                  onChange={(event) => field.handleChange(event.target.value)}
+                  onChange={(event) => {
+                    registerMutation.reset();
+                    field.handleChange(event.target.value);
+                  }}
                   aria-invalid={
                     field.state.meta.errors.length > 0 ||
                     apiFieldErrors(registerMutation.error, 'email').length > 0
@@ -129,7 +170,10 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
                   innerClass="px-4"
                   value={field.state.value}
                   onBlur={field.handleBlur}
-                  onChange={(event) => field.handleChange(event.target.value)}
+                  onChange={(event) => {
+                    registerMutation.reset();
+                    field.handleChange(event.target.value);
+                  }}
                   aria-invalid={
                     field.state.meta.errors.length > 0 ||
                     apiFieldErrors(registerMutation.error, 'password').length >
@@ -159,7 +203,10 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
                   innerClass="px-4"
                   value={field.state.value}
                   onBlur={field.handleBlur}
-                  onChange={(event) => field.handleChange(event.target.value)}
+                  onChange={(event) => {
+                    registerMutation.reset();
+                    field.handleChange(event.target.value);
+                  }}
                   aria-invalid={field.state.meta.errors.length > 0}
                 />
                 <FieldError
@@ -176,9 +223,10 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
                 <Checkbox
                   id={field.name}
                   checked={field.state.value}
-                  onCheckedChange={(checked) =>
-                    field.handleChange(checked === true)
-                  }
+                  onCheckedChange={(checked) => {
+                    registerMutation.reset();
+                    field.handleChange(checked === true);
+                  }}
                 />
                 <FieldLabel htmlFor={field.name}>
                   I agree to the{' '}
@@ -204,6 +252,14 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
               </Field>
             )}
           </form.Field>
+          {formError(registerMutation.error) ? (
+            <FieldError>{formError(registerMutation.error)}</FieldError>
+          ) : null}
+          {requestIdError(registerMutation.error) ? (
+            <p className="text-xs text-text-disabled">
+              {requestIdError(registerMutation.error)}
+            </p>
+          ) : null}
           <Field>
             <Button
               type="submit"
