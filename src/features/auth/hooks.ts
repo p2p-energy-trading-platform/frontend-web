@@ -5,7 +5,7 @@ import {
   queryOptions,
 } from '@tanstack/react-query';
 
-import { fetchCurrentUser, login, logout } from './api';
+import { fetchCurrentUser, login, logout, register } from './api';
 
 export const authUserQueryOptions = queryOptions({
   queryKey: ['authUser'] as const,
@@ -15,6 +15,13 @@ export const authUserQueryOptions = queryOptions({
 
 export function useAuthUser() {
   return useQuery(authUserQueryOptions);
+}
+
+export function useRegister() {
+  return useMutation({
+    mutationFn: ({ email, password }: { email: string; password: string }) =>
+      register(email, password),
+  });
 }
 
 export function useLogin() {

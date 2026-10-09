@@ -1,8 +1,8 @@
-import { getQueryClient } from '#/lib/query-client';
+import { createQueryClient } from '#/lib/query-client';
 
 export function getContext() {
   return {
-    queryClient: getQueryClient(),
+    queryClient: createQueryClient(),
   };
 }
 export default function TanstackQueryProvider() {}

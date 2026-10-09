@@ -1,35 +1,15 @@
 import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
 
 import { toast } from '#/components/ui/toast';
-
-interface GlobalApiError {
-  status: number;
-  code: string;
-  requestId?: string;
-  retryAfterSeconds?: number;
-}
-
-function isNetworkError(error: unknown): boolean {
-  return error instanceof Error && error.name === 'NetworkError';
-}
-
-function isApiError(error: unknown): error is GlobalApiError {
-  return (
-    error instanceof Error &&
-    'status' in error &&
-    typeof error.status === 'number' &&
-    'code' in error &&
-    typeof error.code === 'string'
-  );
-}
+import { ApiError, NetworkError } from './api-client';
 
 function showGlobalError(error: unknown): void {
-  if (isNetworkError(error)) {
+  if (error instanceof NetworkError) {
     toast.add({ title: 'Cannot reach the server', type: 'error' });
     return;
   }
 
-  if (!isApiError(error)) {
+  if (!(error instanceof ApiError)) {
     return;
   }
 
@@ -54,16 +34,14 @@ function showGlobalError(error: unknown): void {
   }
 }
 
-export const queryClient = new QueryClient({
-  queryCache: new QueryCache({ onError: showGlobalError }),
-  mutationCache: new MutationCache({ onError: showGlobalError }),
-  defaultOptions: {
-    queries: {
-      retry: false,
+export function createQueryClient(): QueryClient {
+  return new QueryClient({
+    queryCache: new QueryCache({ onError: showGlobalError }),
+    mutationCache: new MutationCache({ onError: showGlobalError }),
+    defaultOptions: {
+      queries: {
+        retry: false,
+      },
     },
-  },
-});
-
-export function getQueryClient(): QueryClient {
-  return queryClient;
+  });
 }

@@ -1,3 +1,5 @@
+import { env } from '#/env';
+
 export interface ApiErrorDetail {
   location: string;
   path: string;
@@ -45,7 +47,12 @@ export class NetworkError extends Error {
   }
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = env.VITE_API_BASE_URL;
+let refreshPromise: Promise<void> | undefined;
+
+function isAuthEndpoint(path: string): boolean {
+  return path.startsWith('/api/v1/auth/');
+}
 
 function parseRetryAfter(response: Response): number | undefined {
   const value = response.headers.get('retry-after');
@@ -72,7 +79,11 @@ async function parseApiError(response: Response): Promise<ApiError> {
   );
 }
 
-async function request<T>(path: string, options: RequestInit): Promise<T> {
+async function request<T>(
+  path: string,
+  options: RequestInit,
+  allowRefresh = true,
+): Promise<T> {
   if (!API_BASE_URL) {
     throw new Error('VITE_API_BASE_URL is not configured');
   }
@@ -96,7 +107,21 @@ async function request<T>(path: string, options: RequestInit): Promise<T> {
     return (await response.json()) as T;
   }
 
-  throw await parseApiError(response);
+  const error = await parseApiError(response);
+  if (error.status !== 401 || !allowRefresh || isAuthEndpoint(path)) {
+    throw error;
+  }
+
+  refreshPromise ??= request<void>(
+    '/api/v1/auth/refresh',
+    { method: 'POST' },
+    false,
+  ).finally(() => {
+    refreshPromise = undefined;
+  });
+
+  await refreshPromise;
+  return request<T>(path, options, false);
 }
 
 export function apiRequest<T>(

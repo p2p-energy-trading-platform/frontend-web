@@ -1,6 +1,6 @@
 import { Link, useNavigate } from '@tanstack/react-router';
 import type { ReactNode } from 'react';
-import { Bell, ChevronDown, Home, HelpCircle } from 'lucide-react';
+import { Bell, ChevronDown, Home, HelpCircle, LogOut } from 'lucide-react';
 
 import { Avatar, AvatarFallback } from '#/components/ui/avatar';
 import { Badge } from '#/components/ui/badge';
@@ -32,6 +32,7 @@ interface PageHeaderProps {
   onHelpClick?: () => void;
   onNotificationsClick?: () => void;
   onUserMenuClick?: () => void;
+  onLogoutClick?: () => void;
 }
 
 export default function PageHeader({
@@ -44,6 +45,7 @@ export default function PageHeader({
   onHelpClick,
   onNotificationsClick,
   onUserMenuClick,
+  onLogoutClick,
 }: PageHeaderProps) {
   const navigate = useNavigate();
 
@@ -133,6 +135,15 @@ export default function PageHeader({
             </span>
             <ChevronDown className="size-3.5 text-text-tertiary" />
           </Link>
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={onLogoutClick}
+            className="gap-1.5 text-text-secondary"
+          >
+            <LogOut className="size-4" />
+            <span className="hidden sm:inline">Sign out</span>
+          </Button>
         </div>
       </div>
     </header>

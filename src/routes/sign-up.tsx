@@ -4,6 +4,7 @@ import SignupView from '#/components/auth/SignupView';
 import { authUserQueryOptions } from '#/features/auth/hooks';
 
 export const Route = createFileRoute('/sign-up')({
+  ssr: false,
   beforeLoad: async ({ context }) => {
     let user = null;
     try {

@@ -4,6 +4,7 @@ import SignInVisualPanel from '#/components/auth/SignInVisualPanel';
 import { authUserQueryOptions } from '#/features/auth/hooks';
 
 export const Route = createFileRoute('/_auth')({
+  ssr: false,
   beforeLoad: async ({ context }) => {
     let user = null;
     try {

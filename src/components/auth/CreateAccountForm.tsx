@@ -2,7 +2,7 @@ import { useForm } from '@tanstack/react-form';
 import { Link } from '@tanstack/react-router';
 
 import { ApiError } from '#/lib/api-client';
-import { useRegister } from '#/features/auth/useRegister';
+import { useRegister } from '#/features/auth/hooks';
 import { registerSchema } from '#/features/auth/schemas';
 import type { RegisterFormValues } from '#/features/auth/schemas';
 import { Button } from '#/components/ui/button';

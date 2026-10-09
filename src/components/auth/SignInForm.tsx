@@ -6,7 +6,6 @@ import { useLogin } from '#/features/auth/hooks';
 import { loginSchema } from '#/features/auth/schemas';
 import type { LoginFormValues } from '#/features/auth/schemas';
 import { Button } from '#/components/ui/button';
-import { Checkbox } from '#/components/ui/checkbox';
 import {
   Field,
   FieldError,
@@ -128,16 +127,14 @@ export default function SignInForm() {
           )}
         </form.Field>
 
-        <Field orientation="horizontal">
-          <Checkbox id="rememberMe" />
-          <FieldLabel htmlFor="rememberMe">Remember me for 30 days</FieldLabel>
+        <div className="flex justify-end">
           <Link
             to="/forgot-password"
             className="text-xs font-semibold text-accent hover:underline"
           >
             Forgot password?
           </Link>
-        </Field>
+        </div>
 
         {formError(loginMutation.error) ? (
           <FieldError>{formError(loginMutation.error)}</FieldError>
