@@ -1,8 +1,21 @@
-import { Outlet, createFileRoute } from '@tanstack/react-router';
+import { Outlet, createFileRoute, redirect } from '@tanstack/react-router';
 
 import SignInVisualPanel from '#/components/auth/SignInVisualPanel';
+import { authUserQueryOptions } from '#/features/auth/hooks';
 
 export const Route = createFileRoute('/_auth')({
+  ssr: false,
+  beforeLoad: async ({ context }) => {
+    let user = null;
+    try {
+      user = await context.queryClient.ensureQueryData(authUserQueryOptions);
+    } catch {
+      // Public auth pages remain usable while the gateway is unavailable.
+    }
+    if (user) {
+      throw redirect({ to: '/dashboard' });
+    }
+  },
   component: AuthLayout,
 });
 
