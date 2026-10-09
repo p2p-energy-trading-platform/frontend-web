@@ -1,14 +1,120 @@
-import { Link } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from '@tanstack/react-router';
 
+import { ApiError, NetworkError } from '#/api/client';
 import { Button } from '#/components/ui/button';
 import { Checkbox } from '#/components/ui/checkbox';
+import { FieldError } from '#/components/ui/field';
 import { Input } from '#/components/ui/input';
+import { storeSession } from '#/features/auth/tokenStorage';
+import { useLogin } from '#/features/auth/useLogin';
 import { PasswordInput } from '../ui/password-input';
 import { Field, FieldGroup, FieldLabel } from '../ui/field';
 
 export default function SignInForm() {
+  const navigate = useNavigate();
+  const loginMutation = useLogin();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<
+    Partial<Record<string, string[]>>
+  >({});
+  const [formError, setFormError] = useState<string>();
+  const [errorRequestId, setErrorRequestId] = useState<string>();
+  const [retryAfterSeconds, setRetryAfterSeconds] = useState<number>();
+
+  useEffect(() => {
+    if (retryAfterSeconds === undefined) {
+      return;
+    }
+
+    if (retryAfterSeconds <= 0) {
+      setRetryAfterSeconds(undefined);
+      return;
+    }
+
+    const timer = window.setTimeout(
+      () => setRetryAfterSeconds((seconds) => (seconds ?? 1) - 1),
+      1000,
+    );
+    return () => window.clearTimeout(timer);
+  }, [retryAfterSeconds]);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const trimmedEmail = email.trim();
+    const nextFieldErrors: Partial<Record<string, string[]>> = {};
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      nextFieldErrors.email = ['Enter a valid email address'];
+    }
+    if (!password) {
+      nextFieldErrors.password = ['Password is required'];
+    }
+
+    setFieldErrors(nextFieldErrors);
+    setFormError(undefined);
+    setErrorRequestId(undefined);
+    if (
+      Object.keys(nextFieldErrors).length > 0 ||
+      retryAfterSeconds !== undefined
+    ) {
+      return;
+    }
+
+    try {
+      const response = await loginMutation.mutateAsync({
+        email: trimmedEmail,
+        password,
+      });
+      storeSession(response);
+      await navigate({ to: '/dashboard' });
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('Login request failed', {
+          status: error.status,
+          code: error.code,
+          requestId: error.requestId,
+        });
+        if (error.status === 400 && error.code === 'VALIDATION_ERROR') {
+          const errors: Record<string, string[]> = {};
+          for (const detail of error.details) {
+            errors[detail.path] = [
+              ...(errors[detail.path] ?? []),
+              detail.message,
+            ];
+          }
+          setFieldErrors(errors);
+        } else if (error.status === 401 && error.code === 'UNAUTHENTICATED') {
+          setFormError(
+            error.message === 'Account is not active'
+              ? `${error.message}. Please verify your email.`
+              : error.message,
+          );
+        } else if (error.status === 429 && error.code === 'RATE_LIMITED') {
+          setRetryAfterSeconds(error.retryAfterSeconds ?? 60);
+          setFormError(
+            `Too many attempts, try again in ${error.retryAfterSeconds ?? 60} seconds`,
+          );
+        } else if (error.status === 503 || error.status === 504) {
+          setFormError('Service temporarily unavailable, please try again');
+          setErrorRequestId(error.requestId);
+        } else {
+          setFormError('Unexpected error');
+          if (error.status >= 500) {
+            setErrorRequestId(error.requestId);
+          }
+        }
+      } else if (error instanceof NetworkError) {
+        setFormError(error.message);
+      } else {
+        setFormError('Unexpected error');
+      }
+    }
+  }
+
   return (
-    <form className="mt-7">
+    <form className="mt-7" onSubmit={handleSubmit} noValidate>
       <FieldGroup>
         <Field>
           <FieldLabel htmlFor="email">Email address</FieldLabel>
@@ -18,8 +124,13 @@ export default function SignInForm() {
             autoComplete="email"
             placeholder="you@example.com"
             className="h-12 rounded-2xl px-4"
-
-            required
+            name="email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            aria-invalid={fieldErrors.email ? true : undefined}
+          />
+          <FieldError
+            errors={fieldErrors.email?.map((message) => ({ message }))}
           />
         </Field>
         <Field>
@@ -31,7 +142,13 @@ export default function SignInForm() {
             placeholder="Enter your password"
             className="h-12 rounded-2xl"
             innerClass="px-4"
-            required
+            name="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            aria-invalid={fieldErrors.password ? true : undefined}
+          />
+          <FieldError
+            errors={fieldErrors.password?.map((message) => ({ message }))}
           />
         </Field>
 
@@ -45,9 +162,25 @@ export default function SignInForm() {
             Forgot password?
           </Link>
         </Field>
+        {formError && <FieldError>{formError}</FieldError>}
+        {errorRequestId && (
+          <p className="text-xs text-text-tertiary">
+            Request ID: {errorRequestId}
+          </p>
+        )}
         <Field>
-          <Button type="submit" className="h-12 w-full rounded-xl">
-            Sign in
+          <Button
+            type="submit"
+            className="h-12 w-full rounded-xl"
+            disabled={
+              loginMutation.isPending || retryAfterSeconds !== undefined
+            }
+          >
+            {loginMutation.isPending
+              ? 'Signing in...'
+              : retryAfterSeconds !== undefined
+                ? `Try again in ${retryAfterSeconds}s`
+                : 'Sign in'}
           </Button>
         </Field>
       </FieldGroup>
