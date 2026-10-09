@@ -1,8 +1,17 @@
-import { Outlet, createFileRoute } from '@tanstack/react-router';
+import { Outlet, createFileRoute, redirect } from '@tanstack/react-router';
 
 import SignInVisualPanel from '#/components/auth/SignInVisualPanel';
+import { authUserQueryOptions } from '#/features/auth/hooks';
 
 export const Route = createFileRoute('/_auth')({
+  beforeLoad: async ({ context }) => {
+    const user = await context.queryClient.ensureQueryData(
+      authUserQueryOptions,
+    );
+    if (user) {
+      throw redirect({ to: '/dashboard' });
+    }
+  },
   component: AuthLayout,
 });
 

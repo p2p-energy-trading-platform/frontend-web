@@ -1,11 +1,20 @@
-import { Outlet, createFileRoute } from '@tanstack/react-router';
+import { Outlet, createFileRoute, redirect } from '@tanstack/react-router';
 
 import PageHeader from '#/components/page-components/Header';
 import Sidebar, { MobileNavButton } from '#/components/page-components/Sidebar';
+import { authUserQueryOptions } from '#/features/auth/hooks';
 import { useSession } from '#/hooks/useProfile';
 
 export const Route = createFileRoute('/_authenticated')({
   ssr: false,
+  beforeLoad: async ({ context }) => {
+    const user = await context.queryClient.ensureQueryData(
+      authUserQueryOptions,
+    );
+    if (!user) {
+      throw redirect({ to: '/sign-in' });
+    }
+  },
   component: AuthenticatedLayout,
 });
 
