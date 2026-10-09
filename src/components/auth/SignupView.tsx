@@ -13,6 +13,7 @@ import { useState } from 'react';
 export default function SignupView() {
   const registration = useRegistration();
   const [view, setView] = useState<SIGN_UP_STATES>('account');
+  const [registeredEmail, setRegisteredEmail] = useState('');
   const [kycStatus, setKycStatus] = useState<KycStatus>('not-submitted');
   const [meterStatus, setMeterStatus] = useState<SmartMeterStatus>('skipped');
 
@@ -33,7 +34,8 @@ export default function SignupView() {
 
   const currentStep = getCurrentStep(view);
 
-  async function handleCreateAccount() {
+  async function handleCreateAccount(email: string) {
+    setRegisteredEmail(email);
     setView('verify-email');
   }
 
@@ -77,7 +79,7 @@ export default function SignupView() {
 
             {view === 'verify-email' ? (
               <VerifyEmailStep
-                email="test@example.com"
+                email={registeredEmail}
                 onBack={() => setView('account')}
                 onVerified={handleEmailVerified}
               />
