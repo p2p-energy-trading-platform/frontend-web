@@ -21,8 +21,15 @@ export function useRegister() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ email, password }: { email: string; password: string }) =>
-      register(email, password),
+    mutationFn: ({
+      name,
+      email,
+      password,
+    }: {
+      name: string;
+      email: string;
+      password: string;
+    }) => register(name, email, password),
     onSuccess: async () => {
       await queryClient.fetchQuery(authUserQueryOptions);
     },
