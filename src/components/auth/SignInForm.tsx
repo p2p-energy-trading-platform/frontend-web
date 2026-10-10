@@ -105,7 +105,7 @@ export default function SignInForm() {
                 id={field.name}
                 autoComplete="current-password"
                 placeholder="Enter your password"
-                className="h-12 rounded-2xl"
+                className="h-12 rounded-2xl "
                 innerClass="px-4"
                 value={field.state.value}
                 onBlur={field.handleBlur}
@@ -157,28 +157,7 @@ export default function SignInForm() {
         <span className="h-px flex-1 bg-muted/50" />
       </div>
 
-      <Button
-        type="button"
-        variant="outline"
-        className="h-12 w-full justify-start gap-3 rounded-2xl bg-card px-4.25 text-sm font-semibold"
-      >
-        <img
-          src="/auth/uae-pass.svg"
-          alt=""
-          aria-hidden="true"
-          className="h-4.5 w-7 shrink-0"
-        />
-        <span className="flex-1 text-left">UAE PASS</span>
-        <span className="shrink-0 rounded-full bg-background-well px-1.5 py-0.5 font-mono text-caption font-medium leading-3.75 text-text-tertiary dark:bg-white/10 dark:text-text-secondary">
-          UAE Digital ID
-        </span>
-        <img
-          src="/auth/chevron-right.svg"
-          alt=""
-          aria-hidden="true"
-          className="size-3.5 shrink-0"
-        />
-      </Button>
+      
 
       <div className="mt-2.5 grid grid-cols-2 gap-2.5">
         {[
