@@ -201,31 +201,33 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
           </form.Field>
           <form.Field name="termsAccepted">
             {(field) => (
-              <Field orientation="horizontal">
-                <Checkbox
-                  id={field.name}
-                  checked={field.state.value}
-                  onCheckedChange={(checked) => {
-                    registerMutation.reset();
-                    field.handleChange(checked === true);
-                  }}
-                />
-                <FieldLabel htmlFor={field.name}>
-                  I agree to the{' '}
-                  <a
-                    href="/terms"
-                    className="font-semibold text-accent hover:underline"
-                  >
-                    GridX Terms
-                  </a>{' '}
-                  and{' '}
-                  <a
-                    href="/privacy"
-                    className="font-semibold text-accent hover:underline"
-                  >
-                    Privacy Policy
-                  </a>
-                </FieldLabel>
+              <Field data-invalid={field.state.meta.errors.length > 0}>
+                <Field orientation="horizontal">
+                  <Checkbox
+                    id={field.name}
+                    checked={field.state.value}
+                    onCheckedChange={(checked) => {
+                      registerMutation.reset();
+                      field.handleChange(checked === true);
+                    }}
+                  />
+                  <FieldLabel htmlFor={field.name}>
+                    I agree to the{' '}
+                    <a
+                      href="/terms"
+                      className="font-semibold text-accent hover:underline"
+                    >
+                      GridX Terms
+                    </a>{' '}
+                    and{' '}
+                    <a
+                      href="/privacy"
+                      className="font-semibold text-accent hover:underline"
+                    >
+                      Privacy Policy
+                    </a>
+                  </FieldLabel>
+                </Field>
                 <FieldError
                   errors={field.state.meta.errors.map((error) =>
                     formatFieldError(error),
