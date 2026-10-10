@@ -159,21 +159,17 @@ export default function SignInForm() {
 
       
 
-      <div className="mt-2.5 grid grid-cols-2 gap-2.5">
-        {[
-          ['/auth/google.svg', 'Google', 'size-4.5'],
-          ['/auth/microsoft.svg', 'Microsoft', 'size-4.25'],
-        ].map(([src, label, imageClass]) => (
+      <div className="mt-2.5 grid grid-cols-1 gap-2.5">
+        
           <Button
-            key={label}
             type="button"
             variant="outline"
             className="h-12 gap-2.5 rounded-2xl bg-card text-sm font-semibold"
           >
-            <img src={src} alt="" aria-hidden="true" className={imageClass} />
-            {label}
+            <img src='/auth/google.svg' alt="" aria-hidden="true" className='size-4.5' />
+            Google
           </Button>
-        ))}
+      
       </div>
 
       <p className="mt-2.5 text-center text-caption text-text-disabled">
