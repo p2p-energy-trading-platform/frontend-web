@@ -75,7 +75,11 @@ export default function SignupView() {
 
   if (isAuthLoading) {
     return (
-      <EmptyState title='Loading' description='Loading Create Account' icon={Loader} />
+      <EmptyState
+        title="Loading"
+        description="Loading Create Account"
+        icon={Loader}
+      />
     );
   }
 
