@@ -18,9 +18,14 @@ export function useAuthUser() {
 }
 
 export function useRegister() {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: ({ email, password }: { email: string; password: string }) =>
       register(email, password),
+    onSuccess: async () => {
+      await queryClient.fetchQuery(authUserQueryOptions);
+    },
   });
 }
 
