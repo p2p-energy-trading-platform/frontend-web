@@ -13,6 +13,8 @@ import { useAuthUser } from '#/features/auth/hooks';
 import { EmptyState } from '../ui/empty-state';
 import { Loader } from 'lucide-react';
 
+const PENDING_VERIFICATION_EMAIL_KEY = 'gridx.pendingVerificationEmail';
+
 export default function SignupView() {
   const registration = useRegistration();
   const { data: authUser, isLoading: isAuthLoading } = useAuthUser();
@@ -31,6 +33,15 @@ export default function SignupView() {
         // TODO: Add optional conditions based on kyc checks (not implemented yet)
         setView('kyc');
       }
+    }
+
+    const pendingEmail = window.sessionStorage.getItem(
+      PENDING_VERIFICATION_EMAIL_KEY,
+    );
+
+    if (pendingEmail && !authUser) {
+      setRegisteredEmail(pendingEmail);
+      setView('verify-email');
     }
   }, [authUser]);
 
@@ -52,12 +63,18 @@ export default function SignupView() {
   const currentStep = getCurrentStep(view);
 
   async function handleCreateAccount(email: string) {
-    setRegisteredEmail(email);
+    const normalizedEmail = email.trim();
+    window.sessionStorage.setItem(
+      PENDING_VERIFICATION_EMAIL_KEY,
+      normalizedEmail,
+    );
+    setRegisteredEmail(normalizedEmail);
     setView('verify-email');
   }
 
   async function handleEmailVerified() {
     await registration.advanceStep();
+    window.sessionStorage.removeItem(PENDING_VERIFICATION_EMAIL_KEY);
     setView('kyc');
   }
 
@@ -107,7 +124,13 @@ export default function SignupView() {
             {view === 'verify-email' ? (
               <VerifyEmailStep
                 email={registeredEmail}
-                onBack={() => setView('account')}
+                onBack={() => {
+                  window.sessionStorage.removeItem(
+                    PENDING_VERIFICATION_EMAIL_KEY,
+                  );
+                  setRegisteredEmail('');
+                  setView('account');
+                }}
                 onVerified={handleEmailVerified}
               />
             ) : null}

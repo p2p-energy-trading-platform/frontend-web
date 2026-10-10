@@ -33,6 +33,23 @@ export function login(email: string, password: string) {
   });
 }
 
+export function verifyEmail(email: string, otp: string) {
+  return apiRequest<{ success: boolean; message: string }>(
+    '/api/v1/auth/verify-email',
+    {
+      method: 'POST',
+      body: JSON.stringify({ email, otp }),
+    },
+  );
+}
+
+export function resendOtp(email: string) {
+  return apiRequest<{ success: boolean }>('/api/v1/auth/resend-otp', {
+    method: 'POST',
+    body: JSON.stringify({ email }),
+  });
+}
+
 export function logout() {
   return apiRequest<void>('/api/v1/auth/logout', { method: 'POST' });
 }
@@ -46,4 +63,61 @@ export async function fetchCurrentUser(): Promise<AuthUser | null> {
     }
     throw error;
   }
+}
+
+export function requestPasswordReset(email: string) {
+  return apiRequest<{ success: boolean }>('/api/v1/auth/password-reset', {
+    method: 'POST',
+    body: JSON.stringify({ email }),
+  });
+}
+
+export function resetPassword(token: string, newPassword: string) {
+  return apiRequest<{ success: boolean }>(
+    '/api/v1/auth/password-reset/confirm',
+    {
+      method: 'POST',
+      body: JSON.stringify({ token, newPassword }),
+    },
+  );
+}
+
+export interface UserProfile {
+  userId: string;
+  email: string;
+  name: string;
+  status: string;
+  createdAt: string;
+}
+
+export function fetchProfile() {
+  return apiRequest<UserProfile>('/api/v1/auth/profile');
+}
+
+export function updateProfile(name: string) {
+  return apiRequest<UserProfile>('/api/v1/auth/profile', {
+    method: 'PATCH',
+    body: JSON.stringify({ name }),
+  });
+}
+
+export function changePassword(currentPassword: string, newPassword: string) {
+  return apiRequest<{ success: boolean }>('/api/v1/auth/change-password', {
+    method: 'POST',
+    body: JSON.stringify({ currentPassword, newPassword }),
+  });
+}
+
+export function requestEmailChange(newEmail: string) {
+  return apiRequest<{ success: boolean }>('/api/v1/auth/email-change', {
+    method: 'POST',
+    body: JSON.stringify({ newEmail }),
+  });
+}
+
+export function verifyEmailChange(token: string) {
+  return apiRequest<UserProfile>('/api/v1/auth/email-change/verify', {
+    method: 'POST',
+    body: JSON.stringify({ token }),
+  });
 }

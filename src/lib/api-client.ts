@@ -53,8 +53,12 @@ let refreshPromise: Promise<void> | undefined;
 const NO_REFRESH_PATHS = new Set([
   '/api/v1/auth/login',
   '/api/v1/auth/register',
+  '/api/v1/auth/verify-email',
+  '/api/v1/auth/resend-otp',
   '/api/v1/auth/refresh',
   '/api/v1/auth/logout',
+  '/api/v1/auth/password-reset',
+  '/api/v1/auth/password-reset/confirm',
 ]);
 
 function canRefresh(path: string): boolean {

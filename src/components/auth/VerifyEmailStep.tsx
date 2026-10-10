@@ -8,6 +8,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from '#/components/ui/input-otp';
+import { useResendOtp, useVerifyEmail } from '#/features/auth/hooks';
 
 const OTP_LENGTH = 6;
 
@@ -22,11 +23,67 @@ export function VerifyEmailStep({
   onBack,
   onVerified,
 }: VerifyEmailStepProps) {
+  const [otp, setOtp] = React.useState('');
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+  const [statusMessage, setStatusMessage] = React.useState<string | null>(
+    'Account created. We sent a verification code to your email.',
+  );
+
+  const verifyMutation = useVerifyEmail();
+  const resendMutation = useResendOtp();
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setErrorMessage(null);
+    setStatusMessage(null);
 
-    await onVerified();
+    if (!/^\d{6}$/.test(otp)) {
+      setErrorMessage('Enter the complete 6-digit verification code.');
+      return;
+    }
+
+    try {
+      const result = await verifyMutation.mutateAsync({ email, otp });
+
+      if (!result.success) {
+        setErrorMessage(result.message || 'Email verification failed.');
+        return;
+      }
+
+      await onVerified();
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : 'Could not verify your email. Please try again.',
+      );
+    }
   }
+
+  async function handleResend() {
+    setErrorMessage(null);
+    setStatusMessage(null);
+
+    try {
+      const result = await resendMutation.mutateAsync({ email });
+
+      if (!result.success) {
+        setErrorMessage('Could not resend the code. Please try again later.');
+        return;
+      }
+
+      setOtp('');
+      setStatusMessage('A new verification code has been requested.');
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : 'Could not resend the code. Please try again later.',
+      );
+    }
+  }
+
+  const isBusy = verifyMutation.isPending || resendMutation.isPending;
 
   return (
     <>
@@ -48,9 +105,18 @@ export function VerifyEmailStep({
       <p className="mt-0.5 break-all text-sm font-semibold text-foreground">
         {email}
       </p>
-      <p role="status" className="mt-3 text-sm text-accent">
-        Account created. We sent a verification code to your email.
-      </p>
+
+      {statusMessage && (
+        <p role="status" className="mt-3 text-sm text-accent">
+          {statusMessage}
+        </p>
+      )}
+
+      {errorMessage && (
+        <p role="alert" className="mt-3 text-sm text-destructive">
+          {errorMessage}
+        </p>
+      )}
 
       <form onSubmit={handleSubmit} className="mt-8">
         <FieldGroup>
@@ -60,8 +126,15 @@ export function VerifyEmailStep({
             </FieldLabel>
             <InputOTP
               maxLength={OTP_LENGTH}
+              value={otp}
+              onChange={(value) => {
+                setOtp(value.replace(/\D/g, '').slice(0, OTP_LENGTH));
+                setErrorMessage(null);
+              }}
               containerClassName="mt-2 justify-center"
               aria-label="6-digit verification code"
+              disabled={isBusy}
+              required
             >
               <InputOTPGroup>
                 {Array.from({ length: OTP_LENGTH }, (_, index) => (
@@ -74,13 +147,19 @@ export function VerifyEmailStep({
               </InputOTPGroup>
             </InputOTP>
           </Field>
+
           <div className="flex items-center gap-2 text-xs text-text-tertiary">
             <Clock3 className="size-3.5 text-accent" />
             Code expires in 10 minutes
           </div>
+
           <Field>
-            <Button type="submit" className="h-12 rounded-xl">
-              Verify Email
+            <Button
+              type="submit"
+              className="h-12 rounded-xl"
+              disabled={isBusy || otp.length !== OTP_LENGTH}
+            >
+              {verifyMutation.isPending ? 'Verifying...' : 'Verify Email'}
               <ArrowRight className="size-4" />
             </Button>
           </Field>
@@ -93,12 +172,20 @@ export function VerifyEmailStep({
           type="button"
           variant="link"
           className="h-auto p-0 font-semibold text-accent"
+          onClick={() => void handleResend()}
+          disabled={isBusy}
         >
-          Resend
+          {resendMutation.isPending ? 'Sending...' : 'Resend'}
         </Button>
       </p>
 
-      <Button type="button" variant="link" onClick={onBack} className="mt-6">
+      <Button
+        type="button"
+        variant="link"
+        onClick={onBack}
+        className="mt-6"
+        disabled={isBusy}
+      >
         <ArrowLeft className="size-4" />
         Back to account details
       </Button>

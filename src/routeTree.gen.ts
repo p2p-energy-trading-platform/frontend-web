@@ -9,11 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VerifyEmailChangeRouteImport } from './routes/verify-email-change'
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as MarketingRouteImport } from './routes/_marketing'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as MarketingIndexRouteImport } from './routes/_marketing/index'
+import { Route as MarketingTermsRouteImport } from './routes/_marketing/terms'
+import { Route as MarketingPrivacyRouteImport } from './routes/_marketing/privacy'
 import { Route as MarketingAboutRouteImport } from './routes/_marketing/about'
 import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
 import { Route as AuthenticatedTradeRouteImport } from './routes/_authenticated/trade'
@@ -29,6 +32,11 @@ import { Route as AuthenticatedHistoryIndexRouteImport } from './routes/_authent
 import { Route as AuthenticatedHistoryTradesRouteImport } from './routes/_authenticated/history/trades'
 import { Route as AuthenticatedHistoryOrdersRouteImport } from './routes/_authenticated/history/orders'
 
+const VerifyEmailChangeRoute = VerifyEmailChangeRouteImport.update({
+  id: '/verify-email-change',
+  path: '/verify-email-change',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignUpRoute = SignUpRouteImport.update({
   id: '/sign-up',
   path: '/sign-up',
@@ -49,6 +57,16 @@ const AuthRouteRoute = AuthRouteRouteImport.update({
 const MarketingIndexRoute = MarketingIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => MarketingRoute,
+} as any)
+const MarketingTermsRoute = MarketingTermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => MarketingRoute,
+} as any)
+const MarketingPrivacyRoute = MarketingPrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => MarketingRoute,
 } as any)
 const MarketingAboutRoute = MarketingAboutRouteImport.update({
@@ -131,6 +149,7 @@ const AuthenticatedHistoryOrdersRoute =
 export interface FileRoutesByFullPath {
   '/': typeof MarketingIndexRoute
   '/sign-up': typeof SignUpRoute
+  '/verify-email-change': typeof VerifyEmailChangeRoute
   '/history': typeof AuthenticatedHistoryRouteRouteWithChildren
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/reset-password': typeof AuthResetPasswordRoute
@@ -142,6 +161,8 @@ export interface FileRoutesByFullPath {
   '/trade': typeof AuthenticatedTradeRoute
   '/wallet': typeof AuthenticatedWalletRoute
   '/about': typeof MarketingAboutRoute
+  '/privacy': typeof MarketingPrivacyRoute
+  '/terms': typeof MarketingTermsRoute
   '/history/orders': typeof AuthenticatedHistoryOrdersRoute
   '/history/trades': typeof AuthenticatedHistoryTradesRoute
   '/history/': typeof AuthenticatedHistoryIndexRoute
@@ -149,6 +170,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof MarketingIndexRoute
   '/sign-up': typeof SignUpRoute
+  '/verify-email-change': typeof VerifyEmailChangeRoute
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/reset-password': typeof AuthResetPasswordRoute
   '/sign-in': typeof AuthSignInRoute
@@ -159,6 +181,8 @@ export interface FileRoutesByTo {
   '/trade': typeof AuthenticatedTradeRoute
   '/wallet': typeof AuthenticatedWalletRoute
   '/about': typeof MarketingAboutRoute
+  '/privacy': typeof MarketingPrivacyRoute
+  '/terms': typeof MarketingTermsRoute
   '/history/orders': typeof AuthenticatedHistoryOrdersRoute
   '/history/trades': typeof AuthenticatedHistoryTradesRoute
   '/history': typeof AuthenticatedHistoryIndexRoute
@@ -169,6 +193,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_marketing': typeof MarketingRouteWithChildren
   '/sign-up': typeof SignUpRoute
+  '/verify-email-change': typeof VerifyEmailChangeRoute
   '/_authenticated/history': typeof AuthenticatedHistoryRouteRouteWithChildren
   '/_auth/forgot-password': typeof AuthForgotPasswordRoute
   '/_auth/reset-password': typeof AuthResetPasswordRoute
@@ -180,6 +205,8 @@ export interface FileRoutesById {
   '/_authenticated/trade': typeof AuthenticatedTradeRoute
   '/_authenticated/wallet': typeof AuthenticatedWalletRoute
   '/_marketing/about': typeof MarketingAboutRoute
+  '/_marketing/privacy': typeof MarketingPrivacyRoute
+  '/_marketing/terms': typeof MarketingTermsRoute
   '/_marketing/': typeof MarketingIndexRoute
   '/_authenticated/history/orders': typeof AuthenticatedHistoryOrdersRoute
   '/_authenticated/history/trades': typeof AuthenticatedHistoryTradesRoute
@@ -190,6 +217,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/sign-up'
+    | '/verify-email-change'
     | '/history'
     | '/forgot-password'
     | '/reset-password'
@@ -201,6 +229,8 @@ export interface FileRouteTypes {
     | '/trade'
     | '/wallet'
     | '/about'
+    | '/privacy'
+    | '/terms'
     | '/history/orders'
     | '/history/trades'
     | '/history/'
@@ -208,6 +238,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/sign-up'
+    | '/verify-email-change'
     | '/forgot-password'
     | '/reset-password'
     | '/sign-in'
@@ -218,6 +249,8 @@ export interface FileRouteTypes {
     | '/trade'
     | '/wallet'
     | '/about'
+    | '/privacy'
+    | '/terms'
     | '/history/orders'
     | '/history/trades'
     | '/history'
@@ -227,6 +260,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/_marketing'
     | '/sign-up'
+    | '/verify-email-change'
     | '/_authenticated/history'
     | '/_auth/forgot-password'
     | '/_auth/reset-password'
@@ -238,6 +272,8 @@ export interface FileRouteTypes {
     | '/_authenticated/trade'
     | '/_authenticated/wallet'
     | '/_marketing/about'
+    | '/_marketing/privacy'
+    | '/_marketing/terms'
     | '/_marketing/'
     | '/_authenticated/history/orders'
     | '/_authenticated/history/trades'
@@ -249,10 +285,18 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   MarketingRoute: typeof MarketingRouteWithChildren
   SignUpRoute: typeof SignUpRoute
+  VerifyEmailChangeRoute: typeof VerifyEmailChangeRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/verify-email-change': {
+      id: '/verify-email-change'
+      path: '/verify-email-change'
+      fullPath: '/verify-email-change'
+      preLoaderRoute: typeof VerifyEmailChangeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sign-up': {
       id: '/sign-up'
       path: '/sign-up'
@@ -286,6 +330,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof MarketingIndexRouteImport
+      parentRoute: typeof MarketingRoute
+    }
+    '/_marketing/terms': {
+      id: '/_marketing/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof MarketingTermsRouteImport
+      parentRoute: typeof MarketingRoute
+    }
+    '/_marketing/privacy': {
+      id: '/_marketing/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof MarketingPrivacyRouteImport
       parentRoute: typeof MarketingRoute
     }
     '/_marketing/about': {
@@ -449,11 +507,15 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 
 interface MarketingRouteChildren {
   MarketingAboutRoute: typeof MarketingAboutRoute
+  MarketingPrivacyRoute: typeof MarketingPrivacyRoute
+  MarketingTermsRoute: typeof MarketingTermsRoute
   MarketingIndexRoute: typeof MarketingIndexRoute
 }
 
 const MarketingRouteChildren: MarketingRouteChildren = {
   MarketingAboutRoute: MarketingAboutRoute,
+  MarketingPrivacyRoute: MarketingPrivacyRoute,
+  MarketingTermsRoute: MarketingTermsRoute,
   MarketingIndexRoute: MarketingIndexRoute,
 }
 
@@ -466,6 +528,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   MarketingRoute: MarketingRouteWithChildren,
   SignUpRoute: SignUpRoute,
+  VerifyEmailChangeRoute: VerifyEmailChangeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

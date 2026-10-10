@@ -1,10 +1,76 @@
-import { Link } from '@tanstack/react-router';
+import { useForm } from '@tanstack/react-form';
+import { Link, useNavigate } from '@tanstack/react-router';
 
+import { useResetPassword } from '#/features/auth/hooks';
+import { resetPasswordSchema } from '#/features/auth/schemas';
+import type { ResetPasswordFormValues } from '#/features/auth/schemas';
+import { ApiError } from '#/lib/api-client';
 import { Button } from '#/components/ui/button';
-import { PasswordInput } from '../ui/password-input';
-import { Field, FieldGroup, FieldLabel } from '../ui/field';
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '#/components/ui/field';
+import { PasswordInput } from '#/components/ui/password-input';
+import { toast } from '#/components/ui/toast';
+
+function formatFieldError(error: unknown): { message: string } {
+  return {
+    message:
+      typeof error === 'string'
+        ? error
+        : error instanceof Error
+          ? error.message
+          : '',
+  };
+}
 
 export default function ResetPasswordView() {
+  const resetMutation = useResetPassword();
+  const navigate = useNavigate();
+
+  const form = useForm({
+    defaultValues: {
+      password: '',
+      confirmPassword: '',
+    } satisfies ResetPasswordFormValues,
+    validators: { onSubmit: resetPasswordSchema },
+    onSubmit: async ({ value }) => {
+      const token = new URLSearchParams(window.location.search).get('token');
+
+      if (!token) {
+        toast.add({
+          title: 'This password-reset link is invalid or missing its token.',
+          type: 'error',
+        });
+        return;
+      }
+
+      try {
+        await resetMutation.mutateAsync({
+          token,
+          newPassword: value.password,
+        });
+
+        toast.add({
+          title: 'Your password has been reset. You can now sign in.',
+          type: 'success',
+        });
+
+        await navigate({ to: '/sign-in' });
+      } catch (error) {
+        toast.add({
+          title:
+            error instanceof ApiError
+              ? error.message
+              : 'Unable to reset your password. Please try again.',
+          type: 'error',
+        });
+      }
+    },
+  });
+
   return (
     <>
       <header>
@@ -15,37 +81,74 @@ export default function ResetPasswordView() {
         </p>
       </header>
 
-      <form className="mt-7">
+      <form
+        className="mt-7"
+        noValidate
+        onSubmit={(event) => {
+          event.preventDefault();
+          void form.handleSubmit();
+        }}
+      >
         <FieldGroup>
-          <Field>
-            <FieldLabel htmlFor="password">New password</FieldLabel>
-            <PasswordInput
-              id="password"
-              autoComplete="new-password"
-              placeholder="Enter your new password"
-              className="h-12 rounded-2xl"
-              innerClass="px-4"
-              required
-            />
-          </Field>
+          <form.Field name="password">
+            {(field) => (
+              <Field data-invalid={field.state.meta.errors.length > 0}>
+                <FieldLabel htmlFor={field.name}>New password</FieldLabel>
+                <PasswordInput
+                  id={field.name}
+                  autoComplete="new-password"
+                  placeholder="Enter your new password"
+                  className="h-12 rounded-2xl"
+                  innerClass="px-4"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => {
+                    resetMutation.reset();
+                    field.handleChange(event.target.value);
+                  }}
+                  aria-invalid={field.state.meta.errors.length > 0}
+                />
+                <FieldError
+                  errors={field.state.meta.errors.map(formatFieldError)}
+                />
+              </Field>
+            )}
+          </form.Field>
+
+          <form.Field name="confirmPassword">
+            {(field) => (
+              <Field data-invalid={field.state.meta.errors.length > 0}>
+                <FieldLabel htmlFor={field.name}>
+                  Confirm new password
+                </FieldLabel>
+                <PasswordInput
+                  id={field.name}
+                  autoComplete="new-password"
+                  placeholder="Re-enter your new password"
+                  className="h-12 rounded-2xl"
+                  innerClass="px-4"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => {
+                    resetMutation.reset();
+                    field.handleChange(event.target.value);
+                  }}
+                  aria-invalid={field.state.meta.errors.length > 0}
+                />
+                <FieldError
+                  errors={field.state.meta.errors.map(formatFieldError)}
+                />
+              </Field>
+            )}
+          </form.Field>
 
           <Field>
-            <FieldLabel htmlFor="confirmPassword">
-              Confirm new password
-            </FieldLabel>
-            <PasswordInput
-              id="confirmPassword"
-              autoComplete="new-password"
-              placeholder="Re-enter your new password"
-              className="h-12 rounded-2xl"
-              innerClass="px-4"
-              required
-            />
-          </Field>
-
-          <Field>
-            <Button type="submit" className="h-12 w-full rounded-xl">
-              Reset password
+            <Button
+              type="submit"
+              className="h-12 w-full rounded-xl"
+              disabled={resetMutation.isPending}
+            >
+              {resetMutation.isPending ? 'Resetting...' : 'Reset password'}
             </Button>
           </Field>
         </FieldGroup>
