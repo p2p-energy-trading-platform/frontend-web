@@ -1,7 +1,6 @@
 import { useForm } from '@tanstack/react-form';
 import { Link } from '@tanstack/react-router';
 
-import { ApiError } from '#/lib/api-client';
 import { useRegister } from '#/features/auth/hooks';
 import { registerSchema } from '#/features/auth/schemas';
 import type { RegisterFormValues } from '#/features/auth/schemas';
@@ -16,67 +15,15 @@ import {
 import { Input } from '#/components/ui/input';
 import { PasswordInput } from '#/components/ui/password-input';
 import { toast } from '#/components/ui/toast';
+import {
+  formatFieldError,
+  getApiFieldErrors,
+  getGeneralFormError,
+  getRequestIdError,
+} from '#/utils/errors';
 
 interface CreateAccountFormProps {
   onSuccess: (email: string) => Promise<void> | void;
-}
-
-function formatFieldError(error: unknown): { message: string } {
-  return {
-    message:
-      typeof error === 'string'
-        ? error
-        : error instanceof Error
-          ? error.message
-          : '',
-  };
-}
-
-function apiFieldErrors(
-  error: unknown,
-  field: keyof RegisterFormValues,
-): Array<{ message: string }> {
-  if (!(error instanceof ApiError)) return [];
-  if (error.status === 409 && field === 'email') {
-    return [{ message: error.message }];
-  }
-  if (error.status !== 400) return [];
-  return error.details
-    .filter((detail) => detail.path === `/${field}`)
-    .map((detail) => ({ message: detail.message }));
-}
-
-function formError(error: unknown): string | undefined {
-  if (!(error instanceof ApiError)) return undefined;
-  if (error.status === 400) {
-    const message = error.details
-      .filter(
-        (detail) =>
-          detail.path !== '/email' &&
-          detail.path !== '/password' &&
-          detail.path !== '/confirmPassword' &&
-          detail.path !== '/termsAccepted',
-      )
-      .map((detail) => detail.message)
-      .join(' ');
-
-    return message || undefined;
-  }
-  return undefined;
-}
-
-function requestIdError(error: unknown): string | undefined {
-  if (
-    error instanceof ApiError &&
-    (error.status === 500 ||
-      error.status === 502 ||
-      error.status === 503 ||
-      error.status === 504) &&
-    error.requestId
-  ) {
-    return `Request ID: ${error.requestId}`;
-  }
-  return undefined;
 }
 
 export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
@@ -144,7 +91,8 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
                   }}
                   aria-invalid={
                     field.state.meta.errors.length > 0 ||
-                    apiFieldErrors(registerMutation.error, 'email').length > 0
+                    getApiFieldErrors(registerMutation.error, 'email').length >
+                      0
                   }
                 />
                 <FieldError
@@ -152,7 +100,7 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
                     ...field.state.meta.errors.map((error) => ({
                       ...formatFieldError(error),
                     })),
-                    ...apiFieldErrors(registerMutation.error, 'email'),
+                    ...getApiFieldErrors(registerMutation.error, 'email'),
                   ]}
                 />
               </Field>
@@ -176,8 +124,8 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
                   }}
                   aria-invalid={
                     field.state.meta.errors.length > 0 ||
-                    apiFieldErrors(registerMutation.error, 'password').length >
-                      0
+                    getApiFieldErrors(registerMutation.error, 'password')
+                      .length > 0
                   }
                 />
                 <FieldError
@@ -185,7 +133,7 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
                     ...field.state.meta.errors.map((error) => ({
                       ...formatFieldError(error),
                     })),
-                    ...apiFieldErrors(registerMutation.error, 'password'),
+                    ...getApiFieldErrors(registerMutation.error, 'password'),
                   ]}
                 />
               </Field>
@@ -252,12 +200,14 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
               </Field>
             )}
           </form.Field>
-          {formError(registerMutation.error) ? (
-            <FieldError>{formError(registerMutation.error)}</FieldError>
+          {getGeneralFormError(registerMutation.error) ? (
+            <FieldError>
+              {getGeneralFormError(registerMutation.error)}
+            </FieldError>
           ) : null}
-          {requestIdError(registerMutation.error) ? (
+          {getRequestIdError(registerMutation.error) ? (
             <p className="text-xs text-text-disabled">
-              {requestIdError(registerMutation.error)}
+              {getRequestIdError(registerMutation.error)}
             </p>
           ) : null}
           <Field>
