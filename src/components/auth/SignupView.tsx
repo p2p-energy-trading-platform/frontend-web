@@ -8,14 +8,31 @@ import type { KycStatus, SIGN_UP_STATES, SmartMeterStatus } from './types';
 import { registrationSteps } from '#/data/auth';
 import SignupSidebar from './SignupSidebar';
 import RegistrationComplete from './RegistrationComplete';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useAuthUser } from '#/features/auth/hooks';
+import { EmptyState } from '../ui/empty-state';
+import { Loader } from 'lucide-react';
 
 export default function SignupView() {
   const registration = useRegistration();
+  const { data: authUser, isLoading: isAuthLoading } = useAuthUser();
   const [view, setView] = useState<SIGN_UP_STATES>('account');
   const [registeredEmail, setRegisteredEmail] = useState('');
   const [kycStatus, setKycStatus] = useState<KycStatus>('not-submitted');
   const [meterStatus, setMeterStatus] = useState<SmartMeterStatus>('skipped');
+
+  useEffect(() => {
+    if (authUser) {
+      setRegisteredEmail(authUser.email);
+
+      if (authUser.status === 'PENDING') {
+        setView('verify-email');
+      } else if (authUser.status === 'ACTIVE') {
+        // TODO: Add optional conditions based on kyc checks (not implemented yet)
+        setView('kyc');
+      }
+    }
+  }, [authUser]);
 
   function getCurrentStep(stepView: SIGN_UP_STATES) {
     switch (stepView) {
@@ -54,6 +71,12 @@ export default function SignupView() {
     await registration.completeSmartMeter();
     setMeterStatus(status);
     setView('complete');
+  }
+
+  if (isAuthLoading) {
+    return (
+      <EmptyState title='Loading' description='Loading Create Account' icon={Loader} />
+    );
   }
 
   return (
