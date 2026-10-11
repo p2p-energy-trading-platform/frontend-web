@@ -157,19 +157,20 @@ export default function SignInForm() {
         <span className="h-px flex-1 bg-muted/50" />
       </div>
 
-      
-
       <div className="mt-2.5 grid grid-cols-1 gap-2.5">
-        
-          <Button
-            type="button"
-            variant="outline"
-            className="h-12 gap-2.5 rounded-2xl bg-card text-sm font-semibold"
-          >
-            <img src='/auth/google.svg' alt="" aria-hidden="true" className='size-4.5' />
-            Google
-          </Button>
-      
+        <Button
+          type="button"
+          variant="outline"
+          className="h-12 gap-2.5 rounded-2xl bg-card text-sm font-semibold"
+        >
+          <img
+            src="/auth/google.svg"
+            alt=""
+            aria-hidden="true"
+            className="size-4.5"
+          />
+          Google
+        </Button>
       </div>
 
       <p className="mt-2.5 text-center text-caption text-text-disabled">
