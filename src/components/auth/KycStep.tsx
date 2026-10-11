@@ -67,6 +67,7 @@ export function KycStep({ onComplete }: KycStepProps) {
               type="button"
               variant="outline"
               className="h-12 flex-1 rounded-xl"
+              onClick={() => void onComplete('not-submitted')}
             >
               Skip for Now
             </Button>

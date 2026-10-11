@@ -1,10 +1,7 @@
 import { env } from '#/env';
 
-export interface ApiErrorDetail {
-  location: string;
-  path: string;
-  message: string;
-}
+import { ApiError, NetworkError } from './api-error';
+import type { ApiErrorDetail } from './api-error';
 
 interface GatewayErrorResponse {
   error?: {
@@ -15,46 +12,18 @@ interface GatewayErrorResponse {
   };
 }
 
-export class ApiError extends Error {
-  readonly status: number;
-  readonly code: string;
-  readonly requestId?: string;
-  readonly details: ApiErrorDetail[];
-  readonly retryAfterSeconds?: number;
-
-  constructor(
-    status: number,
-    code: string,
-    message: string,
-    requestId: string | undefined,
-    details: ApiErrorDetail[],
-    retryAfterSeconds: number | undefined,
-  ) {
-    super(message);
-    this.name = 'ApiError';
-    this.status = status;
-    this.code = code;
-    this.requestId = requestId;
-    this.details = details;
-    this.retryAfterSeconds = retryAfterSeconds;
-  }
-}
-
-export class NetworkError extends Error {
-  constructor() {
-    super('Cannot reach the server');
-    this.name = 'NetworkError';
-  }
-}
-
 const API_BASE_URL = env.VITE_API_BASE_URL;
 let refreshPromise: Promise<void> | undefined;
 
 const NO_REFRESH_PATHS = new Set([
   '/api/v1/auth/login',
   '/api/v1/auth/register',
+  '/api/v1/auth/verify-email',
+  '/api/v1/auth/resend-otp',
   '/api/v1/auth/refresh',
   '/api/v1/auth/logout',
+  '/api/v1/auth/password-reset',
+  '/api/v1/auth/password-reset/confirm',
 ]);
 
 function canRefresh(path: string): boolean {

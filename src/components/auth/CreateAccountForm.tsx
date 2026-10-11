@@ -1,4 +1,5 @@
-import { useForm } from '@tanstack/react-form';
+import { useState } from 'react';
+import { revalidateLogic, useForm } from '@tanstack/react-form';
 import { Link } from '@tanstack/react-router';
 
 import { useRegister } from '#/features/auth/hooks';
@@ -16,11 +17,23 @@ import { Input } from '#/components/ui/input';
 import { PasswordInput } from '#/components/ui/password-input';
 import { toast } from '#/components/ui/toast';
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '#/components/ui/dialog';
+import { LegalDocument } from '#/components/legal/LegalDocument';
+import {
   formatFieldError,
   getApiFieldErrors,
   getGeneralFormError,
   getRequestIdError,
-} from '#/utils/errors';
+} from '#/lib/form-errors';
+import {
+  REGISTER_ERROR_FIELDS,
+  REGISTER_ERROR_OPTIONS,
+} from '#/features/auth/errors';
 
 interface CreateAccountFormProps {
   onSuccess: (email: string) => Promise<void> | void;
@@ -28,6 +41,9 @@ interface CreateAccountFormProps {
 
 export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
   const registerMutation = useRegister();
+  const [activeLegal, setActiveLegal] = useState<'terms' | 'privacy' | null>(
+    null,
+  );
   const defaultValues: RegisterFormValues = {
     fullName: '',
     email: '',
@@ -37,7 +53,8 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
   };
   const form = useForm({
     defaultValues,
-    validators: { onSubmit: registerSchema },
+    validationLogic: revalidateLogic(),
+    validators: { onDynamic: registerSchema },
     onSubmit: async ({ value }) => {
       await registerMutation.mutateAsync({
         name: value.fullName.trim(),
@@ -125,8 +142,11 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
                   }}
                   aria-invalid={
                     field.state.meta.errors.length > 0 ||
-                    getApiFieldErrors(registerMutation.error, 'email').length >
-                      0
+                    getApiFieldErrors(
+                      registerMutation.error,
+                      'email',
+                      REGISTER_ERROR_OPTIONS,
+                    ).length > 0
                   }
                 />
                 <FieldError
@@ -134,7 +154,11 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
                     ...field.state.meta.errors.map((error) => ({
                       ...formatFieldError(error),
                     })),
-                    ...getApiFieldErrors(registerMutation.error, 'email'),
+                    ...getApiFieldErrors(
+                      registerMutation.error,
+                      'email',
+                      REGISTER_ERROR_OPTIONS,
+                    ),
                   ]}
                 />
               </Field>
@@ -201,44 +225,82 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
           </form.Field>
           <form.Field name="termsAccepted">
             {(field) => (
-              <Field data-invalid={field.state.meta.errors.length > 0}>
-                <Field orientation="horizontal">
+              <>
+                <Field orientation={'horizontal'}>
                   <Checkbox
                     id={field.name}
                     checked={field.state.value}
+                    aria-label="I agree to the GridX Terms and Privacy Policy"
+                    aria-invalid={field.state.meta.errors.length > 0}
                     onCheckedChange={(checked) => {
                       registerMutation.reset();
                       field.handleChange(checked === true);
                     }}
                   />
                   <FieldLabel htmlFor={field.name}>
-                    I agree to the{' '}
-                    <a
-                      href="/terms"
-                      className="font-semibold text-accent hover:underline"
+                    <div className="text-sm leading-6 text-text-secondary">
+                      <span>I agree to the </span>
+                      <button
+                        type="button"
+                        className="font-semibold text-accent hover:underline"
+                        onClick={() => setActiveLegal('terms')}
+                      >
+                        GridX Terms
+                      </button>
+                      <span> and </span>
+                      <button
+                        type="button"
+                        className="font-semibold text-accent hover:underline"
+                        onClick={() => setActiveLegal('privacy')}
+                      >
+                        Privacy Policy
+                      </button>
+                    </div>
+                    <Dialog
+                      open={activeLegal !== null}
+                      onOpenChange={(open) => {
+                        if (!open) setActiveLegal(null);
+                      }}
                     >
-                      GridX Terms
-                    </a>{' '}
-                    and{' '}
-                    <a
-                      href="/privacy"
-                      className="font-semibold text-accent hover:underline"
-                    >
-                      Privacy Policy
-                    </a>
+                      <DialogContent className="flex h-[85vh] w-[95vw] max-h-[85vh] max-w-6xl flex-col gap-4 overflow-hidden p-6 sm:p-8">
+                        <DialogHeader className="shrink-0 pr-8">
+                          <DialogTitle>
+                            {activeLegal === 'terms'
+                              ? 'GridX Terms of Service'
+                              : 'GridX Privacy Policy'}
+                          </DialogTitle>
+                          <DialogDescription>
+                            Review the document below. Close this dialog to
+                            return to your account registration.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-3">
+                          {activeLegal && <LegalDocument type={activeLegal} />}
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                   </FieldLabel>
                 </Field>
                 <FieldError
+                  className="ml-6"
                   errors={field.state.meta.errors.map((error) =>
                     formatFieldError(error),
                   )}
                 />
-              </Field>
+              </>
             )}
           </form.Field>
-          {getGeneralFormError(registerMutation.error) ? (
+          {getGeneralFormError(
+            registerMutation.error,
+            REGISTER_ERROR_FIELDS,
+            REGISTER_ERROR_OPTIONS,
+          ) ? (
             <FieldError>
-              {getGeneralFormError(registerMutation.error)}
+              {getGeneralFormError(
+                registerMutation.error,
+                REGISTER_ERROR_FIELDS,
+                REGISTER_ERROR_OPTIONS,
+              )}
             </FieldError>
           ) : null}
           {getRequestIdError(registerMutation.error) ? (

@@ -10,13 +10,17 @@
     "generate-routes": "tsr generate",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest run",
+    "test": "vitest run --config vitest.config.ts",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --fix --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",
     "check": "prettier --check \"src/**/*.{ts,tsx,css}\"",
     "check:fix": "prettier --write \"src/**/*.{ts,tsx,css}\"",
     "prepare": "husky"
+  },
+  "overrides": {
+    "braces": "^3.0.3",
+    "postcss-selector-parser": "^7.1.6"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

@@ -1,13 +1,29 @@
-import * as React from 'react';
+import { revalidateLogic, useForm } from '@tanstack/react-form';
 import { ArrowLeft, ArrowRight, Clock3, MailCheck } from 'lucide-react';
 
 import { Button } from '#/components/ui/button';
-import { Field, FieldGroup, FieldLabel } from '#/components/ui/field';
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '#/components/ui/field';
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from '#/components/ui/input-otp';
+import { toast } from '#/components/ui/toast';
+import { useResendOtp, useVerifyEmail } from '#/features/auth/hooks';
+import { verifyEmailSchema } from '#/features/auth/schemas';
+import type { VerifyEmailFormValues } from '#/features/auth/schemas';
+import {
+  formatFieldError,
+  getApiFieldErrors,
+  getGeneralFormError,
+  getRequestIdError,
+} from '#/lib/form-errors';
+import { VERIFY_EMAIL_ERROR_FIELDS } from '#/features/auth/errors';
 
 const OTP_LENGTH = 6;
 
@@ -22,11 +38,39 @@ export function VerifyEmailStep({
   onBack,
   onVerified,
 }: VerifyEmailStepProps) {
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  const verifyMutation = useVerifyEmail();
+  const resendMutation = useResendOtp();
 
-    await onVerified();
+  const form = useForm({
+    defaultValues: { otp: '' } satisfies VerifyEmailFormValues,
+    validationLogic: revalidateLogic(),
+    validators: { onDynamic: verifyEmailSchema },
+    onSubmit: async ({ value }) => {
+      resendMutation.reset();
+      await verifyMutation.mutateAsync({ email, otp: value.otp });
+      await onVerified();
+    },
+  });
+
+  async function handleResend() {
+    verifyMutation.reset();
+
+    try {
+      await resendMutation.mutateAsync({ email });
+    } catch {
+      // Shown below the code field from the mutation state.
+      return;
+    }
+
+    form.reset();
+    toast.add({
+      title: 'A new verification code has been sent.',
+      type: 'success',
+    });
   }
+
+  const submitError = verifyMutation.error ?? resendMutation.error;
+  const isBusy = verifyMutation.isPending || resendMutation.isPending;
 
   return (
     <>
@@ -52,37 +96,95 @@ export function VerifyEmailStep({
         Account created. We sent a verification code to your email.
       </p>
 
-      <form onSubmit={handleSubmit} className="mt-8">
+      <form
+        noValidate
+        onSubmit={(event) => {
+          event.preventDefault();
+          void form.handleSubmit();
+        }}
+        className="mt-8"
+      >
         <FieldGroup>
-          <Field>
-            <FieldLabel className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-              6-digit verification code
-            </FieldLabel>
-            <InputOTP
-              maxLength={OTP_LENGTH}
-              containerClassName="mt-2 justify-center"
-              aria-label="6-digit verification code"
-            >
-              <InputOTPGroup>
-                {Array.from({ length: OTP_LENGTH }, (_, index) => (
-                  <InputOTPSlot
-                    key={index}
-                    index={index}
-                    className="size-14 text-xl"
-                  />
-                ))}
-              </InputOTPGroup>
-            </InputOTP>
-          </Field>
+          <form.Field name="otp">
+            {(field) => (
+              <Field data-invalid={field.state.meta.errors.length > 0}>
+                <FieldLabel
+                  htmlFor={field.name}
+                  className="text-xs font-semibold tracking-wide text-muted-foreground uppercase"
+                >
+                  6-digit verification code
+                </FieldLabel>
+                <InputOTP
+                  id={field.name}
+                  maxLength={OTP_LENGTH}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(value) => {
+                    verifyMutation.reset();
+                    resendMutation.reset();
+                    field.handleChange(value.replace(/\D/g, ''));
+                  }}
+                  containerClassName="mt-2 justify-center"
+                  aria-label="6-digit verification code"
+                  aria-invalid={
+                    field.state.meta.errors.length > 0 ||
+                    getApiFieldErrors(verifyMutation.error, 'otp').length > 0
+                  }
+                  disabled={isBusy}
+                >
+                  <InputOTPGroup>
+                    {Array.from({ length: OTP_LENGTH }, (_, index) => (
+                      <InputOTPSlot
+                        key={index}
+                        index={index}
+                        className="size-14 text-xl"
+                      />
+                    ))}
+                  </InputOTPGroup>
+                </InputOTP>
+                <FieldError
+                  errors={[
+                    ...field.state.meta.errors.map(formatFieldError),
+                    ...getApiFieldErrors(verifyMutation.error, 'otp'),
+                  ]}
+                />
+              </Field>
+            )}
+          </form.Field>
+
+          {getGeneralFormError(submitError, VERIFY_EMAIL_ERROR_FIELDS) ? (
+            <FieldError>
+              {getGeneralFormError(submitError, VERIFY_EMAIL_ERROR_FIELDS)}
+            </FieldError>
+          ) : null}
+          {getRequestIdError(submitError) ? (
+            <p className="text-xs text-text-disabled">
+              {getRequestIdError(submitError)}
+            </p>
+          ) : null}
+
           <div className="flex items-center gap-2 text-xs text-text-tertiary">
             <Clock3 className="size-3.5 text-accent" />
             Code expires in 10 minutes
           </div>
+
           <Field>
-            <Button type="submit" className="h-12 rounded-xl">
-              Verify Email
-              <ArrowRight className="size-4" />
-            </Button>
+            <form.Subscribe
+              selector={(state) =>
+                [state.isSubmitting, state.values.otp] as const
+              }
+            >
+              {([isSubmitting, otp]) => (
+                <Button
+                  type="submit"
+                  className="h-12 rounded-xl"
+                  disabled={isBusy || isSubmitting || otp.length !== OTP_LENGTH}
+                >
+                  {isSubmitting ? 'Verifying...' : 'Verify Email'}
+                  <ArrowRight className="size-4" />
+                </Button>
+              )}
+            </form.Subscribe>
           </Field>
         </FieldGroup>
       </form>
@@ -93,12 +195,20 @@ export function VerifyEmailStep({
           type="button"
           variant="link"
           className="h-auto p-0 font-semibold text-accent"
+          onClick={() => void handleResend()}
+          disabled={isBusy}
         >
-          Resend
+          {resendMutation.isPending ? 'Sending...' : 'Resend'}
         </Button>
       </p>
 
-      <Button type="button" variant="link" onClick={onBack} className="mt-6">
+      <Button
+        type="button"
+        variant="link"
+        onClick={onBack}
+        className="mt-6"
+        disabled={isBusy}
+      >
         <ArrowLeft className="size-4" />
         Back to account details
       </Button>

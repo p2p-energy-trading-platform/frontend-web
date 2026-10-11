@@ -1,7 +1,6 @@
-import { useForm } from '@tanstack/react-form';
+import { revalidateLogic, useForm } from '@tanstack/react-form';
 import { Link, useNavigate } from '@tanstack/react-router';
 
-import { ApiError } from '#/lib/api-client';
 import { useLogin } from '#/features/auth/hooks';
 import { loginSchema } from '#/features/auth/schemas';
 import type { LoginFormValues } from '#/features/auth/schemas';
@@ -14,40 +13,21 @@ import {
 } from '#/components/ui/field';
 import { Input } from '#/components/ui/input';
 import { PasswordInput } from '#/components/ui/password-input';
-
-function apiFieldErrors(
-  error: unknown,
-  field: keyof LoginFormValues,
-): Array<{ message: string }> {
-  if (!(error instanceof ApiError) || error.status !== 400) return [];
-  return error.details
-    .filter((detail) => detail.path === `/${field}`)
-    .map((detail) => ({ message: detail.message }));
-}
-
-function formError(error: unknown): string | undefined {
-  return error instanceof ApiError && error.status === 401
-    ? error.message
-    : undefined;
-}
-
-function formatFieldError(error: unknown): { message: string } {
-  return {
-    message:
-      typeof error === 'string'
-        ? error
-        : error instanceof Error
-          ? error.message
-          : '',
-  };
-}
+import {
+  getApiFieldErrors,
+  formatFieldError,
+  getGeneralFormError,
+  getRequestIdError,
+} from '#/lib/form-errors';
+import { LOGIN_ERROR_FIELDS } from '#/features/auth/errors';
 
 export default function SignInForm() {
   const navigate = useNavigate();
   const loginMutation = useLogin();
   const form = useForm({
     defaultValues: { email: '', password: '' } satisfies LoginFormValues,
-    validators: { onSubmit: loginSchema },
+    validationLogic: revalidateLogic(),
+    validators: { onDynamic: loginSchema },
     onSubmit: async ({ value }) => {
       await loginMutation.mutateAsync({
         email: value.email,
@@ -82,7 +62,7 @@ export default function SignInForm() {
                 onChange={(event) => field.handleChange(event.target.value)}
                 aria-invalid={
                   field.state.meta.errors.length > 0 ||
-                  apiFieldErrors(loginMutation.error, 'email').length > 0
+                  getApiFieldErrors(loginMutation.error, 'email').length > 0
                 }
               />
               <FieldError
@@ -90,7 +70,7 @@ export default function SignInForm() {
                   ...field.state.meta.errors.map((error) => ({
                     ...formatFieldError(error),
                   })),
-                  ...apiFieldErrors(loginMutation.error, 'email'),
+                  ...getApiFieldErrors(loginMutation.error, 'email'),
                 ]}
               />
             </Field>
@@ -112,7 +92,7 @@ export default function SignInForm() {
                 onChange={(event) => field.handleChange(event.target.value)}
                 aria-invalid={
                   field.state.meta.errors.length > 0 ||
-                  apiFieldErrors(loginMutation.error, 'password').length > 0
+                  getApiFieldErrors(loginMutation.error, 'password').length > 0
                 }
               />
               <FieldError
@@ -120,7 +100,7 @@ export default function SignInForm() {
                   ...field.state.meta.errors.map((error) => ({
                     ...formatFieldError(error),
                   })),
-                  ...apiFieldErrors(loginMutation.error, 'password'),
+                  ...getApiFieldErrors(loginMutation.error, 'password'),
                 ]}
               />
             </Field>
@@ -136,8 +116,15 @@ export default function SignInForm() {
           </Link>
         </div>
 
-        {formError(loginMutation.error) ? (
-          <FieldError>{formError(loginMutation.error)}</FieldError>
+        {getGeneralFormError(loginMutation.error, LOGIN_ERROR_FIELDS) ? (
+          <FieldError>
+            {getGeneralFormError(loginMutation.error, LOGIN_ERROR_FIELDS)}
+          </FieldError>
+        ) : null}
+        {getRequestIdError(loginMutation.error) ? (
+          <p className="text-xs text-text-disabled">
+            {getRequestIdError(loginMutation.error)}
+          </p>
         ) : null}
 
         <Field>
@@ -161,7 +148,7 @@ export default function SignInForm() {
         <Button
           type="button"
           variant="outline"
-          className="h-12 gap-2.5 rounded-2xl bg-card text-sm font-semibold"
+          className="h-12 gap-2.5 rounded-2xl bg-card text-sm font-semibold cursor-pointer hover:bg-card/80 "
         >
           <img
             src="/auth/google.svg"
