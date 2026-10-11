@@ -52,14 +52,25 @@ export function useRegister() {
 
 export function useVerifyEmail() {
   return useMutation({
-    mutationFn: ({ email, otp }: { email: string; otp: string }) =>
-      verifyEmail(email, otp),
+    mutationFn: async ({ email, otp }: { email: string; otp: string }) => {
+      const result = await verifyEmail(email, otp);
+      if (!result.success) {
+        throw new Error(result.message || 'Email verification failed.');
+      }
+      return result;
+    },
   });
 }
 
 export function useResendOtp() {
   return useMutation({
-    mutationFn: ({ email }: { email: string }) => resendOtp(email),
+    mutationFn: async ({ email }: { email: string }) => {
+      const result = await resendOtp(email);
+      if (!result.success) {
+        throw new Error('Could not resend the code. Please try again later.');
+      }
+      return result;
+    },
   });
 }
 
