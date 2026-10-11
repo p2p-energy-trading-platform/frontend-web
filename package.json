@@ -18,6 +18,10 @@
     "check:fix": "prettier --write \"src/**/*.{ts,tsx,css}\"",
     "prepare": "husky"
   },
+  "overrides": {
+    "braces": "^3.0.3",
+    "postcss-selector-parser": "^7.1.6"
+  },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
     "@faker-js/faker": "^10.3.0",
