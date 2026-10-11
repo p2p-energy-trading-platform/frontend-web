@@ -9,6 +9,7 @@ import {
   InputOTPSlot,
 } from '#/components/ui/input-otp';
 import { useResendOtp, useVerifyEmail } from '#/features/auth/hooks';
+import { getErrorMessage } from '#/utils/errors';
 
 const OTP_LENGTH = 6;
 
@@ -53,9 +54,10 @@ export function VerifyEmailStep({
       await onVerified();
     } catch (error) {
       setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : 'Could not verify your email. Please try again.',
+        getErrorMessage(
+          error,
+          'Could not verify your email. Please try again.',
+        ),
       );
     }
   }
@@ -76,9 +78,10 @@ export function VerifyEmailStep({
       setStatusMessage('A new verification code has been requested.');
     } catch (error) {
       setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : 'Could not resend the code. Please try again later.',
+        getErrorMessage(
+          error,
+          'Could not resend the code. Please try again later.',
+        ),
       );
     }
   }

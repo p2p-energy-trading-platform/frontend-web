@@ -4,7 +4,6 @@ import { Link } from '@tanstack/react-router';
 import { useRequestPasswordReset } from '#/features/auth/hooks';
 import { forgotPasswordSchema } from '#/features/auth/schemas';
 import type { ForgotPasswordFormValues } from '#/features/auth/schemas';
-import { ApiError } from '#/lib/api-client';
 import { Button } from '#/components/ui/button';
 import {
   Field,
@@ -14,7 +13,7 @@ import {
 } from '#/components/ui/field';
 import { Input } from '#/components/ui/input';
 import { toast } from '#/components/ui/toast';
-import { formatFieldError } from '#/utils/errors';
+import { formatFieldError, getErrorMessage } from '#/utils/errors';
 
 export default function ForgotPasswordView() {
   const resetMutation = useRequestPasswordReset();
@@ -33,10 +32,10 @@ export default function ForgotPasswordView() {
         });
       } catch (error) {
         toast.add({
-          title:
-            error instanceof ApiError
-              ? error.message
-              : 'Unable to request a password-reset link. Please try again.',
+          title: getErrorMessage(
+            error,
+            'Unable to request a password-reset link. Please try again.',
+          ),
           type: 'error',
         });
       }

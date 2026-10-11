@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';
 
 import { useVerifyEmailChange } from '#/features/auth/hooks';
-import { ApiError } from '#/lib/api-client';
 import { Button } from '#/components/ui/button';
 import { toast } from '#/components/ui/toast';
+import { getErrorMessage } from '#/utils/errors';
 
 export default function VerifyEmailChangeView() {
   const mutation = useVerifyEmailChange();
@@ -31,10 +31,10 @@ export default function VerifyEmailChangeView() {
       });
     } catch (error) {
       toast.add({
-        title:
-          error instanceof ApiError || error instanceof Error
-            ? error.message
-            : 'Unable to verify this email address. The link may have expired.',
+        title: getErrorMessage(
+          error,
+          'Unable to verify this email address. The link may have expired.',
+        ),
         type: 'error',
       });
     }

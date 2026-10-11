@@ -4,7 +4,6 @@ import { Link, useNavigate } from '@tanstack/react-router';
 import { useResetPassword } from '#/features/auth/hooks';
 import { resetPasswordSchema } from '#/features/auth/schemas';
 import type { ResetPasswordFormValues } from '#/features/auth/schemas';
-import { ApiError } from '#/lib/api-client';
 import { Button } from '#/components/ui/button';
 import {
   Field,
@@ -14,7 +13,7 @@ import {
 } from '#/components/ui/field';
 import { PasswordInput } from '#/components/ui/password-input';
 import { toast } from '#/components/ui/toast';
-import { formatFieldError } from '#/utils/errors';
+import { formatFieldError, getErrorMessage } from '#/utils/errors';
 
 export default function ResetPasswordView() {
   const resetMutation = useResetPassword();
@@ -51,10 +50,10 @@ export default function ResetPasswordView() {
         await navigate({ to: '/sign-in' });
       } catch (error) {
         toast.add({
-          title:
-            error instanceof ApiError
-              ? error.message
-              : 'Unable to reset your password. Please try again.',
+          title: getErrorMessage(
+            error,
+            'Unable to reset your password. Please try again.',
+          ),
           type: 'error',
         });
       }
