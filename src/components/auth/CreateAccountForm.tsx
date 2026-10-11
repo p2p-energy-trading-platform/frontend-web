@@ -152,9 +152,7 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
               </Field>
             )}
           </form.Field>
-          <form.Field
-            name="password"
-          >
+          <form.Field name="password">
             {(field) => (
               <Field data-invalid={field.state.meta.errors.length > 0}>
                 <FieldLabel htmlFor={field.name}>Password</FieldLabel>
@@ -213,9 +211,7 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
               </Field>
             )}
           </form.Field>
-          <form.Field
-            name="termsAccepted"
-          >
+          <form.Field name="termsAccepted">
             {(field) => (
               <>
                 <Field orientation={'horizontal'}>
