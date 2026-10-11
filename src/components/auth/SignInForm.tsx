@@ -1,7 +1,6 @@
 import { useForm } from '@tanstack/react-form';
 import { Link, useNavigate } from '@tanstack/react-router';
 
-import { ApiError } from '#/lib/api-client';
 import { useLogin } from '#/features/auth/hooks';
 import { loginSchema } from '#/features/auth/schemas';
 import type { LoginFormValues } from '#/features/auth/schemas';
@@ -14,17 +13,11 @@ import {
 } from '#/components/ui/field';
 import { Input } from '#/components/ui/input';
 import { PasswordInput } from '#/components/ui/password-input';
-import { getApiFieldErrors, formatFieldError } from '#/utils/errors';
-
-
-
-function formError(error: unknown): string | undefined {
-  return error instanceof ApiError && error.status === 401
-    ? error.message
-    : undefined;
-}
-
-
+import {
+  getApiFieldErrors,
+  formatFieldError,
+  getAuthFormError,
+} from '#/utils/errors';
 
 export default function SignInForm() {
   const navigate = useNavigate();
@@ -120,8 +113,8 @@ export default function SignInForm() {
           </Link>
         </div>
 
-        {formError(loginMutation.error) ? (
-          <FieldError>{formError(loginMutation.error)}</FieldError>
+        {getAuthFormError(loginMutation.error) ? (
+          <FieldError>{getAuthFormError(loginMutation.error)}</FieldError>
         ) : null}
 
         <Field>
