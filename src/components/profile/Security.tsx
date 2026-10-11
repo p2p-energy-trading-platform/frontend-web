@@ -1,4 +1,4 @@
-import { useForm } from '@tanstack/react-form';
+import { revalidateLogic, useForm } from '@tanstack/react-form';
 import { LockKeyhole, Save } from 'lucide-react';
 
 import { useChangePassword, useLogout } from '#/features/auth/hooks';
@@ -32,7 +32,8 @@ export default function Security() {
       newPassword: '',
       confirmPassword: '',
     } satisfies ChangePasswordFormValues,
-    validators: { onSubmit: changePasswordSchema },
+    validationLogic: revalidateLogic(),
+    validators: { onDynamic: changePasswordSchema },
     onSubmit: async ({ value }) => {
       await changeMutation.mutateAsync({
         currentPassword: value.currentPassword,

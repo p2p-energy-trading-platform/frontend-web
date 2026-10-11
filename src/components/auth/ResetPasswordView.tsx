@@ -1,4 +1,4 @@
-import { useForm } from '@tanstack/react-form';
+import { revalidateLogic, useForm } from '@tanstack/react-form';
 import { Link, useNavigate } from '@tanstack/react-router';
 
 import { useResetPassword } from '#/features/auth/hooks';
@@ -34,7 +34,8 @@ export default function ResetPasswordView() {
       password: '',
       confirmPassword: '',
     } satisfies ResetPasswordFormValues,
-    validators: { onSubmit: resetPasswordSchema },
+    validationLogic: revalidateLogic(),
+    validators: { onDynamic: resetPasswordSchema },
     onSubmit: async ({ value }) => {
       if (!token) return;
 

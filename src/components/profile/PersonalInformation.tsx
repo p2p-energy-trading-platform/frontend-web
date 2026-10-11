@@ -1,4 +1,4 @@
-import { useForm } from '@tanstack/react-form';
+import { revalidateLogic, useForm } from '@tanstack/react-form';
 import { Save, UserRound } from 'lucide-react';
 
 import {
@@ -132,7 +132,8 @@ function ProfileNameForm({ profile }: { profile: UserProfile }) {
 
   const form = useForm({
     defaultValues: { name: profile.name } satisfies UpdateProfileFormValues,
-    validators: { onSubmit: updateProfileSchema },
+    validationLogic: revalidateLogic(),
+    validators: { onDynamic: updateProfileSchema },
     onSubmit: async ({ value, formApi }) => {
       const name = value.name.trim();
 
@@ -235,7 +236,8 @@ function EmailChangeForm({ currentEmail }: { currentEmail: string }) {
 
   const form = useForm({
     defaultValues: { newEmail: '' } satisfies EmailChangeFormValues,
-    validators: { onSubmit: createEmailChangeSchema(currentEmail) },
+    validationLogic: revalidateLogic(),
+    validators: { onDynamic: createEmailChangeSchema(currentEmail) },
     onSubmit: async ({ value, formApi }) => {
       await emailMutation.mutateAsync({
         newEmail: value.newEmail.trim().toLowerCase(),

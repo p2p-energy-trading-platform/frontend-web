@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useForm } from '@tanstack/react-form';
+import { revalidateLogic, useForm } from '@tanstack/react-form';
 import { Link } from '@tanstack/react-router';
 
 import { useRegister } from '#/features/auth/hooks';
@@ -53,7 +53,8 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
   };
   const form = useForm({
     defaultValues,
-    validators: { onSubmit: registerSchema },
+    validationLogic: revalidateLogic(),
+    validators: { onDynamic: registerSchema },
     onSubmit: async ({ value }) => {
       await registerMutation.mutateAsync({
         name: value.fullName.trim(),

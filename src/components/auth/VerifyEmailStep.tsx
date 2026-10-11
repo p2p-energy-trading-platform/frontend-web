@@ -1,4 +1,4 @@
-import { useForm } from '@tanstack/react-form';
+import { revalidateLogic, useForm } from '@tanstack/react-form';
 import { ArrowLeft, ArrowRight, Clock3, MailCheck } from 'lucide-react';
 
 import { Button } from '#/components/ui/button';
@@ -43,7 +43,8 @@ export function VerifyEmailStep({
 
   const form = useForm({
     defaultValues: { otp: '' } satisfies VerifyEmailFormValues,
-    validators: { onSubmit: verifyEmailSchema },
+    validationLogic: revalidateLogic(),
+    validators: { onDynamic: verifyEmailSchema },
     onSubmit: async ({ value }) => {
       resendMutation.reset();
       await verifyMutation.mutateAsync({ email, otp: value.otp });

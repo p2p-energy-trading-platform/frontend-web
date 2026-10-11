@@ -1,4 +1,4 @@
-import { useForm } from '@tanstack/react-form';
+import { revalidateLogic, useForm } from '@tanstack/react-form';
 import { Link, useNavigate } from '@tanstack/react-router';
 
 import { useLogin } from '#/features/auth/hooks';
@@ -26,7 +26,8 @@ export default function SignInForm() {
   const loginMutation = useLogin();
   const form = useForm({
     defaultValues: { email: '', password: '' } satisfies LoginFormValues,
-    validators: { onSubmit: loginSchema },
+    validationLogic: revalidateLogic(),
+    validators: { onDynamic: loginSchema },
     onSubmit: async ({ value }) => {
       await loginMutation.mutateAsync({
         email: value.email,

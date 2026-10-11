@@ -1,4 +1,4 @@
-import { useForm } from '@tanstack/react-form';
+import { revalidateLogic, useForm } from '@tanstack/react-form';
 import { Link } from '@tanstack/react-router';
 
 import { useRequestPasswordReset } from '#/features/auth/hooks';
@@ -26,7 +26,8 @@ export default function ForgotPasswordView() {
 
   const form = useForm({
     defaultValues: { email: '' } satisfies ForgotPasswordFormValues,
-    validators: { onSubmit: forgotPasswordSchema },
+    validationLogic: revalidateLogic(),
+    validators: { onDynamic: forgotPasswordSchema },
     onSubmit: async ({ value }) => {
       await resetMutation.mutateAsync({ email: value.email });
 
