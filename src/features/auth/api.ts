@@ -19,10 +19,10 @@ export interface RegisterResponse {
   createdAt: string;
 }
 
-export function register(email: string, password: string) {
+export function register(name: string, email: string, password: string) {
   return apiRequest<RegisterResponse>('/api/v1/auth/register', {
     method: 'POST',
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ name, email, password }),
   });
 }
 

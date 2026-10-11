@@ -105,7 +105,7 @@ export default function SignInForm() {
                 id={field.name}
                 autoComplete="current-password"
                 placeholder="Enter your password"
-                className="h-12 rounded-2xl"
+                className="h-12 rounded-2xl "
                 innerClass="px-4"
                 value={field.state.value}
                 onBlur={field.handleBlur}
@@ -157,21 +157,20 @@ export default function SignInForm() {
         <span className="h-px flex-1 bg-muted/50" />
       </div>
 
-      <div className="mt-2.5 grid grid-cols-2 gap-2.5">
-        {[
-          ['/auth/google.svg', 'Google', 'size-4.5'],
-          ['/auth/microsoft.svg', 'Microsoft', 'size-4.25'],
-        ].map(([src, label, imageClass]) => (
-          <Button
-            key={label}
-            type="button"
-            variant="outline"
-            className="h-12 gap-2.5 rounded-2xl bg-card text-sm font-semibold"
-          >
-            <img src={src} alt="" aria-hidden="true" className={imageClass} />
-            {label}
-          </Button>
-        ))}
+      <div className="mt-2.5 grid grid-cols-1 gap-2.5">
+        <Button
+          type="button"
+          variant="outline"
+          className="h-12 gap-2.5 rounded-2xl bg-card text-sm font-semibold"
+        >
+          <img
+            src="/auth/google.svg"
+            alt=""
+            aria-hidden="true"
+            className="size-4.5"
+          />
+          Google
+        </Button>
       </div>
 
       <p className="mt-2.5 text-center text-caption text-text-disabled">

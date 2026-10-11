@@ -8,6 +8,11 @@ const email = z
 
 export const registerSchema = z
   .object({
+    fullName: z
+      .string()
+      .trim()
+      .min(1, 'Full name is required')
+      .max(100, 'Full name must be 100 characters or fewer'),
     email,
     password: z
       .string()
