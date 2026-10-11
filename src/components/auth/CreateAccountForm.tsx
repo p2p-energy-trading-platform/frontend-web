@@ -104,7 +104,7 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
                   aria-invalid={
                     field.state.meta.errors.length > 0 ||
                     getApiFieldErrors(registerMutation.error, 'email').length >
-                    0
+                      0
                   }
                 />
                 <FieldError
@@ -194,62 +194,62 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
           >
             {(field) => (
               <>
-              <Field orientation={"horizontal"}>
-                <Checkbox
-                  id={field.name}
-                  checked={field.state.value}
-                  aria-label="I agree to the GridX Terms and Privacy Policy"
-                  aria-invalid={field.state.meta.errors.length > 0}
-                  onCheckedChange={(checked) => {
-                    registerMutation.reset();
-                    field.handleChange(checked === true);
-                  }}
-                />
-                <FieldLabel htmlFor={field.name}>
-                  <div className="text-sm leading-6 text-text-secondary">
-                    <span>I agree to the </span>
-                    <button
-                      type="button"
-                      className="font-semibold text-accent hover:underline"
-                      onClick={() => setActiveLegal('terms')}
-                    >
-                      GridX Terms
-                    </button>
-                    <span> and </span>
-                    <button
-                      type="button"
-                      className="font-semibold text-accent hover:underline"
-                      onClick={() => setActiveLegal('privacy')}
-                    >
-                      Privacy Policy
-                    </button>
-                  </div>
-                  <Dialog
-                    open={activeLegal !== null}
-                    onOpenChange={(open) => {
-                      if (!open) setActiveLegal(null);
+                <Field orientation={'horizontal'}>
+                  <Checkbox
+                    id={field.name}
+                    checked={field.state.value}
+                    aria-label="I agree to the GridX Terms and Privacy Policy"
+                    aria-invalid={field.state.meta.errors.length > 0}
+                    onCheckedChange={(checked) => {
+                      registerMutation.reset();
+                      field.handleChange(checked === true);
                     }}
-                  >
-                    <DialogContent className="flex h-[85vh] w-[95vw] max-h-[85vh] max-w-6xl flex-col gap-4 overflow-hidden p-6 sm:p-8">
-                      <DialogHeader className="shrink-0 pr-8">
-                        <DialogTitle>
-                          {activeLegal === 'terms'
-                            ? 'GridX Terms of Service'
-                            : 'GridX Privacy Policy'}
-                        </DialogTitle>
-                        <DialogDescription>
-                          Review the document below. Close this dialog to return
-                          to your account registration.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-3">
-                        {activeLegal && <LegalDocument type={activeLegal} />}
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-                </FieldLabel>
-              </Field>
-              <FieldError
+                  />
+                  <FieldLabel htmlFor={field.name}>
+                    <div className="text-sm leading-6 text-text-secondary">
+                      <span>I agree to the </span>
+                      <button
+                        type="button"
+                        className="font-semibold text-accent hover:underline"
+                        onClick={() => setActiveLegal('terms')}
+                      >
+                        GridX Terms
+                      </button>
+                      <span> and </span>
+                      <button
+                        type="button"
+                        className="font-semibold text-accent hover:underline"
+                        onClick={() => setActiveLegal('privacy')}
+                      >
+                        Privacy Policy
+                      </button>
+                    </div>
+                    <Dialog
+                      open={activeLegal !== null}
+                      onOpenChange={(open) => {
+                        if (!open) setActiveLegal(null);
+                      }}
+                    >
+                      <DialogContent className="flex h-[85vh] w-[95vw] max-h-[85vh] max-w-6xl flex-col gap-4 overflow-hidden p-6 sm:p-8">
+                        <DialogHeader className="shrink-0 pr-8">
+                          <DialogTitle>
+                            {activeLegal === 'terms'
+                              ? 'GridX Terms of Service'
+                              : 'GridX Privacy Policy'}
+                          </DialogTitle>
+                          <DialogDescription>
+                            Review the document below. Close this dialog to
+                            return to your account registration.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-3">
+                          {activeLegal && <LegalDocument type={activeLegal} />}
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                  </FieldLabel>
+                </Field>
+                <FieldError
                   className="ml-6"
                   errors={field.state.meta.errors.map((error) =>
                     formatFieldError(error),
