@@ -138,7 +138,7 @@ export default function SignInForm() {
         <Button
           type="button"
           variant="outline"
-          className="h-12 gap-2.5 rounded-2xl bg-card text-sm font-semibold"
+          className="h-12 gap-2.5 rounded-2xl bg-card text-sm font-semibold cursor-pointer hover:bg-card/80 "
         >
           <img
             src="/auth/google.svg"
