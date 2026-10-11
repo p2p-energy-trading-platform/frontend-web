@@ -3,6 +3,7 @@ import { ApiError, apiRequest } from '#/lib/api-client';
 export interface AuthUser {
   userId: string;
   email: string;
+  name: string;
   status: string;
   role: string;
 }
