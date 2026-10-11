@@ -6,18 +6,22 @@ const email = z
   .max(254, 'Email must be 254 characters or fewer')
   .email('Enter a valid email address');
 
+const fullName = z
+  .string()
+  .trim()
+  .min(1, 'Full name is required')
+  .max(100, 'Full name must be 100 characters or fewer');
+
+const password = z
+  .string()
+  .min(8, 'Password must be 8 to 128 characters')
+  .max(128, 'Password must be 8 to 128 characters');
+
 export const registerSchema = z
   .object({
-    fullName: z
-      .string()
-      .trim()
-      .min(1, 'Full name is required')
-      .max(100, 'Full name must be 100 characters or fewer'),
+    fullName,
     email,
-    password: z
-      .string()
-      .min(8, 'Password must be 8 to 128 characters')
-      .max(128, 'Password must be 8 to 128 characters'),
+    password,
     confirmPassword: z.string(),
     termsAccepted: z.boolean(),
   })
@@ -46,10 +50,7 @@ export type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 
 export const resetPasswordSchema = z
   .object({
-    password: z
-      .string()
-      .min(8, 'Password must be 8 to 128 characters')
-      .max(128, 'Password must be 8 to 128 characters'),
+    password,
     confirmPassword: z.string(),
   })
   .refine((value) => value.password === value.confirmPassword, {
@@ -58,3 +59,47 @@ export const resetPasswordSchema = z
   });
 
 export type ResetPasswordFormValues = z.infer<typeof resetPasswordSchema>;
+
+export const verifyEmailSchema = z.object({
+  otp: z
+    .string()
+    .regex(/^\d{6}$/, 'Enter the complete 6-digit verification code'),
+});
+
+export type VerifyEmailFormValues = z.infer<typeof verifyEmailSchema>;
+
+export const updateProfileSchema = z.object({
+  name: fullName,
+});
+
+export type UpdateProfileFormValues = z.infer<typeof updateProfileSchema>;
+
+export function createEmailChangeSchema(currentEmail: string) {
+  return z.object({
+    newEmail: email.refine(
+      (value) => value.toLowerCase() !== currentEmail.toLowerCase(),
+      'Enter an email address different from your current one',
+    ),
+  });
+}
+
+export type EmailChangeFormValues = z.infer<
+  ReturnType<typeof createEmailChangeSchema>
+>;
+
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, 'Current password is required').max(128),
+    newPassword: password,
+    confirmPassword: z.string(),
+  })
+  .refine((value) => value.newPassword !== value.currentPassword, {
+    path: ['newPassword'],
+    message: 'Choose a password different from your current password',
+  })
+  .refine((value) => value.newPassword === value.confirmPassword, {
+    path: ['confirmPassword'],
+    message: 'Passwords do not match',
+  });
+
+export type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>;
