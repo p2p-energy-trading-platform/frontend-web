@@ -154,12 +154,6 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
           </form.Field>
           <form.Field
             name="password"
-            validators={{
-              onSubmit: ({ value }) =>
-                value.length < 8 || value.length > 128
-                  ? 'Password must be 8 to 128 characters'
-                  : undefined,
-            }}
           >
             {(field) => (
               <Field data-invalid={field.state.meta.errors.length > 0}>
@@ -221,10 +215,6 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
           </form.Field>
           <form.Field
             name="termsAccepted"
-            validators={{
-              onSubmit: ({ value }) =>
-                value ? undefined : 'You must accept the terms to continue',
-            }}
           >
             {(field) => (
               <>
