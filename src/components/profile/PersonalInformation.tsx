@@ -7,7 +7,6 @@ import {
   useUpdateProfile,
   useRequestEmailChange,
 } from '#/features/auth/hooks';
-import { ApiError } from '#/lib/api-client';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import { Button } from '../ui/button';
 import {
@@ -20,12 +19,7 @@ import {
 import { Field, FieldGroup, FieldLabel } from '../ui/field';
 import { Input } from '../ui/input';
 import { toast } from '../ui/toast';
-
-function errorMessage(error: unknown, fallback: string) {
-  return error instanceof ApiError || error instanceof Error
-    ? error.message
-    : fallback;
-}
+import { getErrorMessage } from '#/utils/errors';
 
 export default function PersonalInformation() {
   const profileQuery = useUserProfile();
@@ -55,7 +49,7 @@ export default function PersonalInformation() {
       toast.add({ title: 'Profile name updated.', type: 'success' });
     } catch (error) {
       toast.add({
-        title: errorMessage(error, 'Unable to update your profile.'),
+        title: getErrorMessage(error, 'Unable to update your profile.'),
         type: 'error',
       });
     }
@@ -85,7 +79,7 @@ export default function PersonalInformation() {
       });
     } catch (error) {
       toast.add({
-        title: errorMessage(error, 'Unable to request an email change.'),
+        title: getErrorMessage(error, 'Unable to request an email change.'),
         type: 'error',
       });
     }

@@ -3,7 +3,6 @@ import type { FormEvent } from 'react';
 import { LockKeyhole, Save } from 'lucide-react';
 
 import { useChangePassword, useLogout } from '#/features/auth/hooks';
-import { ApiError } from '#/lib/api-client';
 import { Button } from '../ui/button';
 import {
   Card,
@@ -15,6 +14,7 @@ import {
 import { Field, FieldGroup, FieldLabel } from '../ui/field';
 import { PasswordInput } from '../ui/password-input';
 import { toast } from '../ui/toast';
+import { getErrorMessage } from '#/utils/errors';
 
 export default function Security() {
   const changeMutation = useChangePassword();
@@ -62,10 +62,10 @@ export default function Security() {
       window.location.assign('/sign-in');
     } catch (error) {
       toast.add({
-        title:
-          error instanceof ApiError || error instanceof Error
-            ? error.message
-            : 'Unable to change your password. Please try again.',
+        title: getErrorMessage(
+          error,
+          'Unable to change your password. Please try again.',
+        ),
         type: 'error',
       });
     }
