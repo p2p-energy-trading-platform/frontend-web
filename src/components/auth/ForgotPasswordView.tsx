@@ -14,17 +14,7 @@ import {
 } from '#/components/ui/field';
 import { Input } from '#/components/ui/input';
 import { toast } from '#/components/ui/toast';
-
-function formatFieldError(error: unknown): { message: string } {
-  return {
-    message:
-      typeof error === 'string'
-        ? error
-        : error instanceof Error
-          ? error.message
-          : '',
-  };
-}
+import { formatFieldError } from '#/utils/errors';
 
 export default function ForgotPasswordView() {
   const resetMutation = useRequestPasswordReset();
