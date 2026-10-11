@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import type { FormEvent } from 'react';
+import { useForm } from '@tanstack/react-form';
 import { Save, UserRound } from 'lucide-react';
 
 import {
@@ -7,6 +6,15 @@ import {
   useUpdateProfile,
   useRequestEmailChange,
 } from '#/features/auth/hooks';
+import type { UserProfile } from '#/features/auth/api';
+import {
+  createEmailChangeSchema,
+  updateProfileSchema,
+} from '#/features/auth/schemas';
+import type {
+  EmailChangeFormValues,
+  UpdateProfileFormValues,
+} from '#/features/auth/schemas';
 import { Avatar, AvatarFallback } from '../ui/avatar';
 import { Button } from '../ui/button';
 import {
@@ -16,74 +24,24 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card';
-import { Field, FieldGroup, FieldLabel } from '../ui/field';
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '../ui/field';
 import { Input } from '../ui/input';
 import { toast } from '../ui/toast';
-import { getErrorMessage } from '#/utils/errors';
+import {
+  formatFieldError,
+  getApiFieldErrors,
+  getErrorMessage,
+} from '#/utils/errors';
 
 export default function PersonalInformation() {
   const profileQuery = useUserProfile();
-  const updateMutation = useUpdateProfile();
-  const emailMutation = useRequestEmailChange();
-
   const profile = profileQuery.data;
-  const [name, setName] = useState('');
-  const [newEmail, setNewEmail] = useState('');
-
-  useEffect(() => {
-    if (profile) setName(profile.name);
-  }, [profile?.name]);
-
-  async function saveName(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    const normalizedName = name.trim();
-    if (!normalizedName) {
-      toast.add({ title: 'Name is required.', type: 'error' });
-      return;
-    }
-
-    try {
-      await updateMutation.mutateAsync({ name: normalizedName });
-      setName(normalizedName);
-      toast.add({ title: 'Profile name updated.', type: 'success' });
-    } catch (error) {
-      toast.add({
-        title: getErrorMessage(error, 'Unable to update your profile.'),
-        type: 'error',
-      });
-    }
-  }
-
-  async function requestEmailUpdate(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    const normalizedEmail = newEmail.trim().toLowerCase();
-    if (!normalizedEmail) return;
-
-    if (normalizedEmail === profile?.email.toLowerCase()) {
-      toast.add({
-        title: 'Enter an email address different from your current one.',
-        type: 'error',
-      });
-      return;
-    }
-
-    try {
-      await emailMutation.mutateAsync({ newEmail: normalizedEmail });
-      setNewEmail('');
-      toast.add({
-        title:
-          'Verification link sent. Check the new email address to confirm the change.',
-        type: 'success',
-      });
-    } catch (error) {
-      toast.add({
-        title: getErrorMessage(error, 'Unable to request an email change.'),
-        type: 'error',
-      });
-    }
-  }
 
   const initials = (profile?.name || profile?.email || 'U')
     .slice(0, 2)
@@ -138,54 +96,7 @@ export default function PersonalInformation() {
               </div>
             </div>
 
-            <form className="space-y-4" onSubmit={saveName}>
-              <FieldGroup>
-                <Field>
-                  <FieldLabel htmlFor="fullName">Full name</FieldLabel>
-                  <Input
-                    id="fullName"
-                    name="fullName"
-                    autoComplete="name"
-                    value={name}
-                    maxLength={100}
-                    required
-                    onChange={(event) => setName(event.target.value)}
-                  />
-                </Field>
-
-                <Field>
-                  <FieldLabel htmlFor="currentEmail">Current email</FieldLabel>
-                  <Input
-                    id="currentEmail"
-                    type="email"
-                    value={profile.email}
-                    readOnly
-                    aria-describedby="email-change-help"
-                  />
-                  <p
-                    id="email-change-help"
-                    className="text-xs text-text-tertiary"
-                  >
-                    Your email stays unchanged until you verify the new address.
-                  </p>
-                </Field>
-
-                <Field orientation="horizontal">
-                  <Button
-                    type="submit"
-                    className="px-4"
-                    disabled={
-                      updateMutation.isPending ||
-                      !name.trim() ||
-                      name.trim() === profile.name
-                    }
-                  >
-                    <Save className="size-4" />
-                    {updateMutation.isPending ? 'Saving...' : 'Save name'}
-                  </Button>
-                </Field>
-              </FieldGroup>
-            </form>
+            <ProfileNameForm profile={profile} />
 
             <div className="border-t border-border pt-5">
               <h3 className="font-semibold">Change email address</h3>
@@ -193,30 +104,7 @@ export default function PersonalInformation() {
                 We will send a verification link to your new address.
               </p>
 
-              <form className="mt-4 space-y-4" onSubmit={requestEmailUpdate}>
-                <Field>
-                  <FieldLabel htmlFor="newEmail">New email address</FieldLabel>
-                  <Input
-                    id="newEmail"
-                    type="email"
-                    name="newEmail"
-                    autoComplete="email"
-                    placeholder="you@example.com"
-                    value={newEmail}
-                    required
-                    onChange={(event) => setNewEmail(event.target.value)}
-                  />
-                </Field>
-                <Button
-                  type="submit"
-                  variant="outline"
-                  disabled={emailMutation.isPending || !newEmail.trim()}
-                >
-                  {emailMutation.isPending
-                    ? 'Sending...'
-                    : 'Send verification link'}
-                </Button>
-              </form>
+              <EmailChangeForm currentEmail={profile.email} />
             </div>
 
             <div className="border-t border-border pt-5">
@@ -230,5 +118,178 @@ export default function PersonalInformation() {
         )}
       </CardContent>
     </Card>
+  );
+}
+
+function ProfileNameForm({ profile }: { profile: UserProfile }) {
+  const updateMutation = useUpdateProfile();
+
+  const form = useForm({
+    defaultValues: { name: profile.name } satisfies UpdateProfileFormValues,
+    validators: { onSubmit: updateProfileSchema },
+    onSubmit: async ({ value, formApi }) => {
+      const name = value.name.trim();
+
+      try {
+        await updateMutation.mutateAsync({ name });
+        formApi.reset({ name });
+        toast.add({ title: 'Profile name updated.', type: 'success' });
+      } catch (error) {
+        toast.add({
+          title: getErrorMessage(error, 'Unable to update your profile.'),
+          type: 'error',
+        });
+      }
+    },
+  });
+
+  return (
+    <form
+      noValidate
+      onSubmit={(event) => {
+        event.preventDefault();
+        void form.handleSubmit();
+      }}
+    >
+      <FieldGroup>
+        <form.Field name="name">
+          {(field) => {
+            const errors = [
+              ...field.state.meta.errors.map(formatFieldError),
+              ...getApiFieldErrors(updateMutation.error, field.name),
+            ];
+
+            return (
+              <Field data-invalid={errors.length > 0}>
+                <FieldLabel htmlFor={field.name}>Full name</FieldLabel>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  autoComplete="name"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => {
+                    updateMutation.reset();
+                    field.handleChange(event.target.value);
+                  }}
+                  aria-invalid={errors.length > 0}
+                />
+                <FieldError errors={errors} />
+              </Field>
+            );
+          }}
+        </form.Field>
+
+        <Field>
+          <FieldLabel htmlFor="currentEmail">Current email</FieldLabel>
+          <Input
+            id="currentEmail"
+            type="email"
+            value={profile.email}
+            readOnly
+          />
+          <FieldDescription>
+            Your email stays unchanged until you verify the new address.
+          </FieldDescription>
+        </Field>
+
+        <Field orientation="horizontal">
+          <form.Subscribe
+            selector={(state) => [state.isSubmitting, state.isDefaultValue]}
+          >
+            {([isSubmitting, isDefaultValue]) => (
+              <Button
+                type="submit"
+                className="px-4"
+                disabled={isSubmitting || isDefaultValue}
+              >
+                <Save className="size-4" />
+                {isSubmitting ? 'Saving...' : 'Save name'}
+              </Button>
+            )}
+          </form.Subscribe>
+        </Field>
+      </FieldGroup>
+    </form>
+  );
+}
+
+function EmailChangeForm({ currentEmail }: { currentEmail: string }) {
+  const emailMutation = useRequestEmailChange();
+
+  const form = useForm({
+    defaultValues: { newEmail: '' } satisfies EmailChangeFormValues,
+    validators: { onSubmit: createEmailChangeSchema(currentEmail) },
+    onSubmit: async ({ value, formApi }) => {
+      try {
+        await emailMutation.mutateAsync({
+          newEmail: value.newEmail.trim().toLowerCase(),
+        });
+        formApi.reset();
+        toast.add({
+          title:
+            'Verification link sent. Check the new email address to confirm the change.',
+          type: 'success',
+        });
+      } catch (error) {
+        toast.add({
+          title: getErrorMessage(error, 'Unable to request an email change.'),
+          type: 'error',
+        });
+      }
+    },
+  });
+
+  return (
+    <form
+      className="mt-4"
+      noValidate
+      onSubmit={(event) => {
+        event.preventDefault();
+        void form.handleSubmit();
+      }}
+    >
+      <FieldGroup>
+        <form.Field name="newEmail">
+          {(field) => {
+            const errors = [
+              ...field.state.meta.errors.map(formatFieldError),
+              ...getApiFieldErrors(emailMutation.error, field.name),
+            ];
+
+            return (
+              <Field data-invalid={errors.length > 0}>
+                <FieldLabel htmlFor={field.name}>New email address</FieldLabel>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  type="email"
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => {
+                    emailMutation.reset();
+                    field.handleChange(event.target.value);
+                  }}
+                  aria-invalid={errors.length > 0}
+                />
+                <FieldError errors={errors} />
+              </Field>
+            );
+          }}
+        </form.Field>
+
+        <Field orientation="horizontal">
+          <form.Subscribe selector={(state) => state.isSubmitting}>
+            {(isSubmitting) => (
+              <Button type="submit" variant="outline" disabled={isSubmitting}>
+                {isSubmitting ? 'Sending...' : 'Send verification link'}
+              </Button>
+            )}
+          </form.Subscribe>
+        </Field>
+      </FieldGroup>
+    </form>
   );
 }

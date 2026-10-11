@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import type { FormEvent } from 'react';
+import { useForm } from '@tanstack/react-form';
 import { LockKeyhole, Save } from 'lucide-react';
 
 import { useChangePassword, useLogout } from '#/features/auth/hooks';
+import { changePasswordSchema } from '#/features/auth/schemas';
+import type { ChangePasswordFormValues } from '#/features/auth/schemas';
 import { Button } from '../ui/button';
 import {
   Card,
@@ -11,65 +12,49 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card';
-import { Field, FieldGroup, FieldLabel } from '../ui/field';
+import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field';
 import { PasswordInput } from '../ui/password-input';
 import { toast } from '../ui/toast';
-import { getErrorMessage } from '#/utils/errors';
+import {
+  formatFieldError,
+  getApiFieldErrors,
+  getErrorMessage,
+} from '#/utils/errors';
 
 export default function Security() {
   const changeMutation = useChangePassword();
   const logoutMutation = useLogout();
 
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const form = useForm({
+    defaultValues: {
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+    } satisfies ChangePasswordFormValues,
+    validators: { onSubmit: changePasswordSchema },
+    onSubmit: async ({ value }) => {
+      try {
+        await changeMutation.mutateAsync({
+          currentPassword: value.currentPassword,
+          newPassword: value.newPassword,
+        });
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+        // Clear the session cookies and frontend authentication cache.
+        await logoutMutation.mutateAsync();
 
-    if (newPassword.length < 8) {
-      toast.add({
-        title: 'Your new password must contain at least 8 characters.',
-        type: 'error',
-      });
-      return;
-    }
-
-    if (newPassword === currentPassword) {
-      toast.add({
-        title: 'Choose a new password different from your current password.',
-        type: 'error',
-      });
-      return;
-    }
-
-    if (newPassword !== confirmPassword) {
-      toast.add({ title: 'The new passwords do not match.', type: 'error' });
-      return;
-    }
-
-    try {
-      await changeMutation.mutateAsync({ currentPassword, newPassword });
-
-      // Clear the session cookies and frontend authentication cache.
-      await logoutMutation.mutateAsync();
-
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-
-      // Navigate to sign-in with a full page load.
-      window.location.assign('/sign-in');
-    } catch (error) {
-      toast.add({
-        title: getErrorMessage(
-          error,
-          'Unable to change your password. Please try again.',
-        ),
-        type: 'error',
-      });
-    }
-  }
+        // Navigate to sign-in with a full page load.
+        window.location.assign('/sign-in');
+      } catch (error) {
+        toast.add({
+          title: getErrorMessage(
+            error,
+            'Unable to change your password. Please try again.',
+          ),
+          type: 'error',
+        });
+      }
+    },
+  });
 
   return (
     <Card>
@@ -84,61 +69,111 @@ export default function Security() {
       </CardHeader>
 
       <CardContent>
-        <form className="space-y-5" onSubmit={submit}>
+        <form
+          noValidate
+          onSubmit={(event) => {
+            event.preventDefault();
+            void form.handleSubmit();
+          }}
+        >
           <FieldGroup>
-            <Field>
-              <FieldLabel htmlFor="currentPassword">
-                Current password
-              </FieldLabel>
-              <PasswordInput
-                id="currentPassword"
-                name="currentPassword"
-                autoComplete="current-password"
-                required
-                value={currentPassword}
-                onChange={(event) => setCurrentPassword(event.target.value)}
-              />
-            </Field>
+            <form.Field name="currentPassword">
+              {(field) => {
+                const errors = [
+                  ...field.state.meta.errors.map(formatFieldError),
+                  ...getApiFieldErrors(changeMutation.error, field.name),
+                ];
+
+                return (
+                  <Field data-invalid={errors.length > 0}>
+                    <FieldLabel htmlFor={field.name}>
+                      Current password
+                    </FieldLabel>
+                    <PasswordInput
+                      id={field.name}
+                      name={field.name}
+                      autoComplete="current-password"
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(event) => {
+                        changeMutation.reset();
+                        field.handleChange(event.target.value);
+                      }}
+                      aria-invalid={errors.length > 0}
+                    />
+                    <FieldError errors={errors} />
+                  </Field>
+                );
+              }}
+            </form.Field>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field>
-                <FieldLabel htmlFor="newPassword">New password</FieldLabel>
-                <PasswordInput
-                  id="newPassword"
-                  name="newPassword"
-                  autoComplete="new-password"
-                  required
-                  minLength={8}
-                  value={newPassword}
-                  onChange={(event) => setNewPassword(event.target.value)}
-                />
-              </Field>
+              <form.Field name="newPassword">
+                {(field) => {
+                  const errors = [
+                    ...field.state.meta.errors.map(formatFieldError),
+                    ...getApiFieldErrors(changeMutation.error, field.name),
+                  ];
 
-              <Field>
-                <FieldLabel htmlFor="confirmPassword">
-                  Confirm new password
-                </FieldLabel>
-                <PasswordInput
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  autoComplete="new-password"
-                  required
-                  minLength={8}
-                  value={confirmPassword}
-                  onChange={(event) => setConfirmPassword(event.target.value)}
-                />
-              </Field>
+                  return (
+                    <Field data-invalid={errors.length > 0}>
+                      <FieldLabel htmlFor={field.name}>New password</FieldLabel>
+                      <PasswordInput
+                        id={field.name}
+                        name={field.name}
+                        autoComplete="new-password"
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(event) => {
+                          changeMutation.reset();
+                          field.handleChange(event.target.value);
+                        }}
+                        aria-invalid={errors.length > 0}
+                      />
+                      <FieldError errors={errors} />
+                    </Field>
+                  );
+                }}
+              </form.Field>
+
+              <form.Field name="confirmPassword">
+                {(field) => (
+                  <Field data-invalid={field.state.meta.errors.length > 0}>
+                    <FieldLabel htmlFor={field.name}>
+                      Confirm new password
+                    </FieldLabel>
+                    <PasswordInput
+                      id={field.name}
+                      name={field.name}
+                      autoComplete="new-password"
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(event) =>
+                        field.handleChange(event.target.value)
+                      }
+                      aria-invalid={field.state.meta.errors.length > 0}
+                    />
+                    <FieldError
+                      errors={field.state.meta.errors.map(formatFieldError)}
+                    />
+                  </Field>
+                )}
+              </form.Field>
             </div>
 
             <Field orientation="horizontal">
-              <Button
-                type="submit"
-                className="px-4"
-                disabled={changeMutation.isPending}
-              >
-                <Save className="size-4" />
-                {changeMutation.isPending ? 'Changing...' : 'Change password'}
-              </Button>
+              <form.Subscribe selector={(state) => state.isSubmitting}>
+                {(isSubmitting) => (
+                  <Button
+                    type="submit"
+                    className="px-4"
+                    disabled={isSubmitting}
+                  >
+                    <Save className="size-4" />
+                    {isSubmitting ? 'Changing...' : 'Change password'}
+                  </Button>
+                )}
+              </form.Subscribe>
             </Field>
           </FieldGroup>
         </form>
