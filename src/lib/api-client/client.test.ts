@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { ApiError, apiRequest } from './api-client';
+import { ApiError, apiRequest } from '.';
 
 vi.mock('#/env', () => ({
   env: { VITE_API_BASE_URL: 'http://api.test' },
