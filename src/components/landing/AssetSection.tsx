@@ -51,10 +51,10 @@ export default function AssetsSection() {
               <Card className="group flex h-full flex-col items-start overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5">
                 <div className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-primary/10 transition-colors duration-300 group-hover:bg-primary/15">
                   <img
-                  src={asset.image}
-                  alt={asset.alt}
-                  loading="lazy"
-                  className="h-12 w-12 object-contain transition-transform duration-300 group-hover:scale-110"
+                    src={asset.image}
+                    alt={asset.alt}
+                    loading="lazy"
+                    className="h-12 w-12 object-contain transition-transform duration-300 group-hover:scale-110"
                   />
                 </div>
                 <span className="mt-5 inline-flex w-fit rounded-full bg-secondary px-3 py-1 text-xs font-medium text-text-secondary">

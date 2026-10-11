@@ -62,9 +62,7 @@ export default function HowItWorksSection() {
     ).matches;
 
     const context = gsap.context(() => {
-      const storySteps = gsap.utils.toArray<HTMLElement>(
-        '[data-story-step]',
-      );
+      const storySteps = gsap.utils.toArray<HTMLElement>('[data-story-step]');
 
       if (storySteps.length === 0) return;
 
@@ -78,9 +76,7 @@ export default function HowItWorksSection() {
         });
       });
 
-      const visual = section.querySelector<HTMLElement>(
-        '[data-story-visual]',
-      );
+      const visual = section.querySelector<HTMLElement>('[data-story-visual]');
       const lastStep = storySteps.at(-1);
 
       if (
@@ -136,9 +132,8 @@ export default function HowItWorksSection() {
           </h2>
 
           <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-text-secondary sm:text-lg">
-            From connecting your meter to matching energy orders,
-            discover how GridX brings energy marketplace participants
-            together.
+            From connecting your meter to matching energy orders, discover how
+            GridX brings energy marketplace participants together.
           </p>
         </div>
 
