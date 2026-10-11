@@ -29,6 +29,7 @@ interface CreateAccountFormProps {
 export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
   const registerMutation = useRegister();
   const defaultValues: RegisterFormValues = {
+    fullName: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -39,6 +40,7 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
     validators: { onSubmit: registerSchema },
     onSubmit: async ({ value }) => {
       await registerMutation.mutateAsync({
+        name: value.fullName.trim(),
         email: value.email,
         password: value.password,
       });
@@ -73,6 +75,38 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
         className="my-6"
       >
         <FieldGroup>
+          <form.Field name="fullName">
+            {(field) => (
+              <Field data-invalid={field.state.meta.errors.length > 0}>
+                <FieldLabel htmlFor={field.name}>Full Name</FieldLabel>
+                <Input
+                  id={field.name}
+                  type="text"
+                  autoComplete="name"
+                  placeholder="Enter your full name"
+                  className="h-12 rounded-2xl px-4"
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => {
+                    registerMutation.reset();
+                    field.handleChange(event.target.value);
+                  }}
+                  aria-invalid={
+                    field.state.meta.errors.length > 0 ||
+                    getApiFieldErrors(registerMutation.error, 'name').length > 0
+                  }
+                />
+                <FieldError
+                  errors={[
+                    ...field.state.meta.errors.map((error) => ({
+                      ...formatFieldError(error),
+                    })),
+                    ...getApiFieldErrors(registerMutation.error, 'name'),
+                  ]}
+                />
+              </Field>
+            )}
+          </form.Field>
           <form.Field name="email">
             {(field) => (
               <Field data-invalid={field.state.meta.errors.length > 0}>
@@ -167,31 +201,33 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
           </form.Field>
           <form.Field name="termsAccepted">
             {(field) => (
-              <Field orientation="horizontal">
-                <Checkbox
-                  id={field.name}
-                  checked={field.state.value}
-                  onCheckedChange={(checked) => {
-                    registerMutation.reset();
-                    field.handleChange(checked === true);
-                  }}
-                />
-                <FieldLabel htmlFor={field.name}>
-                  I agree to the{' '}
-                  <a
-                    href="/terms"
-                    className="font-semibold text-accent hover:underline"
-                  >
-                    GridX Terms
-                  </a>{' '}
-                  and{' '}
-                  <a
-                    href="/privacy"
-                    className="font-semibold text-accent hover:underline"
-                  >
-                    Privacy Policy
-                  </a>
-                </FieldLabel>
+              <Field data-invalid={field.state.meta.errors.length > 0}>
+                <Field orientation="horizontal">
+                  <Checkbox
+                    id={field.name}
+                    checked={field.state.value}
+                    onCheckedChange={(checked) => {
+                      registerMutation.reset();
+                      field.handleChange(checked === true);
+                    }}
+                  />
+                  <FieldLabel htmlFor={field.name}>
+                    I agree to the{' '}
+                    <a
+                      href="/terms"
+                      className="font-semibold text-accent hover:underline"
+                    >
+                      GridX Terms
+                    </a>{' '}
+                    and{' '}
+                    <a
+                      href="/privacy"
+                      className="font-semibold text-accent hover:underline"
+                    >
+                      Privacy Policy
+                    </a>
+                  </FieldLabel>
+                </Field>
                 <FieldError
                   errors={field.state.meta.errors.map((error) =>
                     formatFieldError(error),
