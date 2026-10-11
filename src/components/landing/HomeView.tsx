@@ -7,17 +7,12 @@ import CTASection from '#/components/landing/CTASection';
 
 export default function HomeView() {
   return (
-    <main>
+    <main className="relative overflow-x-clip">
       <HeroSection />
-
       <HowItWorksSection />
-
       <BenefitsSection />
-
       <AssetsSection />
-
       <FAQSection />
-
       <CTASection />
     </main>
   );

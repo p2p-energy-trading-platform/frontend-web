@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Badge } from '../ui/badge';
 import {
   TrendingDown,
@@ -15,21 +16,22 @@ import {
 } from 'lucide-react';
 import { Card } from '../ui/card';
 import { useMarketing } from '#/hooks/useMarketing';
+import Reveal from '#/components/landing/Reveal';
 
 function BenefitsHeader() {
   return (
-    <div className="py-6 flex flex-col gap-5 items-center text-center">
-      <Badge variant="link">who it's for</Badge>
+    <Reveal className="flex flex-col items-center gap-4 text-center">
+      <Badge variant="secondary">Who it's for</Badge>
 
       <h2 className="text-section-title text-foreground">
         Benefits for every household
       </h2>
 
-      <p className="text-label-lg text-text-secondary">
-        Ehether you generate more than you use or simply want greener, <br />
-        cheaper electricity - GrideX is for you.
+      <p className="max-w-2xl text-base leading-7 text-text-secondary">
+        Whether you generate more than you use or simply want greener, cheaper
+        electricity, GridX is designed for you.
       </p>
-    </div>
+    </Reveal>
   );
 }
 
@@ -48,29 +50,28 @@ interface ParticipantCardProps {
   title: string;
   benefits: {
     text: string;
-    icon: React.ReactNode;
+    icon: ReactNode;
   }[];
 }
 
 function ParticipantCard({ label, title, benefits }: ParticipantCardProps) {
   return (
-    <Card className="w-full max-w-lg p-6">
-      <div className="flex flex-col gap-3">
-        <Badge variant="secondary" className="px-6">
+    <Card className="h-full rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5 sm:p-8">
+      <div className="flex flex-col gap-5">
+        <Badge variant="secondary" className="w-fit px-4">
           {label}
         </Badge>
 
-        <h3 className="text-label-lg text-foreground">{title}</h3>
+        <h3 className="text-label-lg font-semibold text-foreground">{title}</h3>
 
         <ul className="flex flex-col gap-5">
           {benefits.map((benefit) => (
             <li
               key={benefit.text}
-              className="flex items-center gap-2 text-sm text-text-secondary"
+              className="flex items-start gap-3 text-sm leading-6 text-text-secondary"
             >
-              {benefit.icon}
-
-              <span className="text-caption">{benefit.text}</span>
+              <span className="mt-0.5 shrink-0">{benefit.icon}</span>
+              <span>{benefit.text}</span>
             </li>
           ))}
         </ul>
@@ -81,15 +82,19 @@ function ParticipantCard({ label, title, benefits }: ParticipantCardProps) {
 
 function ParticipantSection() {
   const marketing = useMarketing();
+
   const buyerBenefits = marketing.buyerBenefits.map((text, index) => {
-    const Icon = buyerIcons[index];
+    const Icon = buyerIcons[index % buyerIcons.length];
+
     return {
       text,
       icon: <Icon className="size-4 text-brand-accent" />,
     };
   });
+
   const prosumerBenefits = marketing.prosumerBenefits.map((text, index) => {
-    const Icon = prosumerIcons[index];
+    const Icon = prosumerIcons[index % prosumerIcons.length];
+
     return {
       text,
       icon: <Icon className="size-4 text-brand-accent" />,
@@ -97,28 +102,33 @@ function ParticipantSection() {
   });
 
   return (
-    <div className="w-full py-6 flex flex-row justify-center gap-6">
-      <ParticipantCard
-        label="For buyers"
-        title="Access clean local energy"
-        benefits={buyerBenefits}
-      />
+    <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:mt-14">
+      <Reveal>
+        <ParticipantCard
+          label="For buyers"
+          title="Access clean local energy"
+          benefits={buyerBenefits}
+        />
+      </Reveal>
 
-      <ParticipantCard
-        label="For prosumers"
-        title="Monetise your energy assets"
-        benefits={prosumerBenefits}
-      />
+      <Reveal delay={140}>
+        <ParticipantCard
+          label="For prosumers"
+          title="Monetise your energy assets"
+          benefits={prosumerBenefits}
+        />
+      </Reveal>
     </div>
   );
 }
 
 export default function BenefitsSection() {
   return (
-    <section className="bg-background flex flex-col items-center justify-center">
-      <BenefitsHeader />
-
-      <ParticipantSection />
+    <section className="bg-card/40 px-5 py-16 sm:px-8 sm:py-20 lg:py-24">
+      <div className="mx-auto max-w-6xl">
+        <BenefitsHeader />
+        <ParticipantSection />
+      </div>
     </section>
   );
 }
