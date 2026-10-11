@@ -55,6 +55,22 @@ export function getGeneralFormError(
   return messages.length > 0 ? messages.join(' ') : undefined;
 }
 
+/**
+ * Returns the message of an API or JS error, or the fallback for anything else.
+ */
+export function getErrorMessage(error: unknown, fallback: string): string {
+  return error instanceof Error && error.message ? error.message : fallback;
+}
+
+/**
+ * Returns the message of a 401 Unauthorized API error, such as invalid credentials.
+ */
+export function getAuthFormError(error: unknown): string | undefined {
+  return error instanceof ApiError && error.status === 401
+    ? error.message
+    : undefined;
+}
+
 export function getRequestIdError(error: unknown): string | undefined {
   if (
     error instanceof ApiError &&
