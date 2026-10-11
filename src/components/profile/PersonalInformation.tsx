@@ -36,8 +36,14 @@ import { toast } from '../ui/toast';
 import {
   formatFieldError,
   getApiFieldErrors,
-  getErrorMessage,
-} from '#/utils/errors';
+  getGeneralFormError,
+  getRequestIdError,
+} from '#/lib/form-errors';
+import {
+  EMAIL_CHANGE_ERROR_FIELDS,
+  EMAIL_CHANGE_ERROR_OPTIONS,
+  UPDATE_PROFILE_ERROR_FIELDS,
+} from '#/features/auth/errors';
 
 export default function PersonalInformation() {
   const profileQuery = useUserProfile();
@@ -130,16 +136,9 @@ function ProfileNameForm({ profile }: { profile: UserProfile }) {
     onSubmit: async ({ value, formApi }) => {
       const name = value.name.trim();
 
-      try {
-        await updateMutation.mutateAsync({ name });
-        formApi.reset({ name });
-        toast.add({ title: 'Profile name updated.', type: 'success' });
-      } catch (error) {
-        toast.add({
-          title: getErrorMessage(error, 'Unable to update your profile.'),
-          type: 'error',
-        });
-      }
+      await updateMutation.mutateAsync({ name });
+      formApi.reset({ name });
+      toast.add({ title: 'Profile name updated.', type: 'success' });
     },
   });
 
@@ -153,31 +152,31 @@ function ProfileNameForm({ profile }: { profile: UserProfile }) {
     >
       <FieldGroup>
         <form.Field name="name">
-          {(field) => {
-            const errors = [
-              ...field.state.meta.errors.map(formatFieldError),
-              ...getApiFieldErrors(updateMutation.error, field.name),
-            ];
-
-            return (
-              <Field data-invalid={errors.length > 0}>
-                <FieldLabel htmlFor={field.name}>Full name</FieldLabel>
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  autoComplete="name"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(event) => {
-                    updateMutation.reset();
-                    field.handleChange(event.target.value);
-                  }}
-                  aria-invalid={errors.length > 0}
-                />
-                <FieldError errors={errors} />
-              </Field>
-            );
-          }}
+          {(field) => (
+            <Field data-invalid={field.state.meta.errors.length > 0}>
+              <FieldLabel htmlFor={field.name}>Full name</FieldLabel>
+              <Input
+                id={field.name}
+                autoComplete="name"
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(event) => {
+                  updateMutation.reset();
+                  field.handleChange(event.target.value);
+                }}
+                aria-invalid={
+                  field.state.meta.errors.length > 0 ||
+                  getApiFieldErrors(updateMutation.error, 'name').length > 0
+                }
+              />
+              <FieldError
+                errors={[
+                  ...field.state.meta.errors.map(formatFieldError),
+                  ...getApiFieldErrors(updateMutation.error, 'name'),
+                ]}
+              />
+            </Field>
+          )}
         </form.Field>
 
         <Field>
@@ -192,6 +191,23 @@ function ProfileNameForm({ profile }: { profile: UserProfile }) {
             Your email stays unchanged until you verify the new address.
           </FieldDescription>
         </Field>
+
+        {getGeneralFormError(
+          updateMutation.error,
+          UPDATE_PROFILE_ERROR_FIELDS,
+        ) ? (
+          <FieldError>
+            {getGeneralFormError(
+              updateMutation.error,
+              UPDATE_PROFILE_ERROR_FIELDS,
+            )}
+          </FieldError>
+        ) : null}
+        {getRequestIdError(updateMutation.error) ? (
+          <p className="text-xs text-text-disabled">
+            {getRequestIdError(updateMutation.error)}
+          </p>
+        ) : null}
 
         <Field orientation="horizontal">
           <form.Subscribe
@@ -221,22 +237,15 @@ function EmailChangeForm({ currentEmail }: { currentEmail: string }) {
     defaultValues: { newEmail: '' } satisfies EmailChangeFormValues,
     validators: { onSubmit: createEmailChangeSchema(currentEmail) },
     onSubmit: async ({ value, formApi }) => {
-      try {
-        await emailMutation.mutateAsync({
-          newEmail: value.newEmail.trim().toLowerCase(),
-        });
-        formApi.reset();
-        toast.add({
-          title:
-            'Verification link sent. Check the new email address to confirm the change.',
-          type: 'success',
-        });
-      } catch (error) {
-        toast.add({
-          title: getErrorMessage(error, 'Unable to request an email change.'),
-          type: 'error',
-        });
-      }
+      await emailMutation.mutateAsync({
+        newEmail: value.newEmail.trim().toLowerCase(),
+      });
+      formApi.reset();
+      toast.add({
+        title:
+          'Verification link sent. Check the new email address to confirm the change.',
+        type: 'success',
+      });
     },
   });
 
@@ -251,34 +260,61 @@ function EmailChangeForm({ currentEmail }: { currentEmail: string }) {
     >
       <FieldGroup>
         <form.Field name="newEmail">
-          {(field) => {
-            const errors = [
-              ...field.state.meta.errors.map(formatFieldError),
-              ...getApiFieldErrors(emailMutation.error, field.name),
-            ];
-
-            return (
-              <Field data-invalid={errors.length > 0}>
-                <FieldLabel htmlFor={field.name}>New email address</FieldLabel>
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  type="email"
-                  autoComplete="email"
-                  placeholder="you@example.com"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(event) => {
-                    emailMutation.reset();
-                    field.handleChange(event.target.value);
-                  }}
-                  aria-invalid={errors.length > 0}
-                />
-                <FieldError errors={errors} />
-              </Field>
-            );
-          }}
+          {(field) => (
+            <Field data-invalid={field.state.meta.errors.length > 0}>
+              <FieldLabel htmlFor={field.name}>New email address</FieldLabel>
+              <Input
+                id={field.name}
+                type="email"
+                autoComplete="email"
+                placeholder="you@example.com"
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(event) => {
+                  emailMutation.reset();
+                  field.handleChange(event.target.value);
+                }}
+                aria-invalid={
+                  field.state.meta.errors.length > 0 ||
+                  getApiFieldErrors(
+                    emailMutation.error,
+                    'newEmail',
+                    EMAIL_CHANGE_ERROR_OPTIONS,
+                  ).length > 0
+                }
+              />
+              <FieldError
+                errors={[
+                  ...field.state.meta.errors.map(formatFieldError),
+                  ...getApiFieldErrors(
+                    emailMutation.error,
+                    'newEmail',
+                    EMAIL_CHANGE_ERROR_OPTIONS,
+                  ),
+                ]}
+              />
+            </Field>
+          )}
         </form.Field>
+
+        {getGeneralFormError(
+          emailMutation.error,
+          EMAIL_CHANGE_ERROR_FIELDS,
+          EMAIL_CHANGE_ERROR_OPTIONS,
+        ) ? (
+          <FieldError>
+            {getGeneralFormError(
+              emailMutation.error,
+              EMAIL_CHANGE_ERROR_FIELDS,
+              EMAIL_CHANGE_ERROR_OPTIONS,
+            )}
+          </FieldError>
+        ) : null}
+        {getRequestIdError(emailMutation.error) ? (
+          <p className="text-xs text-text-disabled">
+            {getRequestIdError(emailMutation.error)}
+          </p>
+        ) : null}
 
         <Field orientation="horizontal">
           <form.Subscribe selector={(state) => state.isSubmitting}>

@@ -16,8 +16,10 @@ import { PasswordInput } from '#/components/ui/password-input';
 import {
   getApiFieldErrors,
   formatFieldError,
-  getAuthFormError,
-} from '#/utils/errors';
+  getGeneralFormError,
+  getRequestIdError,
+} from '#/lib/form-errors';
+import { LOGIN_ERROR_FIELDS } from '#/features/auth/errors';
 
 export default function SignInForm() {
   const navigate = useNavigate();
@@ -113,8 +115,15 @@ export default function SignInForm() {
           </Link>
         </div>
 
-        {getAuthFormError(loginMutation.error) ? (
-          <FieldError>{getAuthFormError(loginMutation.error)}</FieldError>
+        {getGeneralFormError(loginMutation.error, LOGIN_ERROR_FIELDS) ? (
+          <FieldError>
+            {getGeneralFormError(loginMutation.error, LOGIN_ERROR_FIELDS)}
+          </FieldError>
+        ) : null}
+        {getRequestIdError(loginMutation.error) ? (
+          <p className="text-xs text-text-disabled">
+            {getRequestIdError(loginMutation.error)}
+          </p>
         ) : null}
 
         <Field>

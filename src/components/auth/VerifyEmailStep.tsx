@@ -17,7 +17,13 @@ import { toast } from '#/components/ui/toast';
 import { useResendOtp, useVerifyEmail } from '#/features/auth/hooks';
 import { verifyEmailSchema } from '#/features/auth/schemas';
 import type { VerifyEmailFormValues } from '#/features/auth/schemas';
-import { formatFieldError, getErrorMessage } from '#/utils/errors';
+import {
+  formatFieldError,
+  getApiFieldErrors,
+  getGeneralFormError,
+  getRequestIdError,
+} from '#/lib/form-errors';
+import { VERIFY_EMAIL_ERROR_FIELDS } from '#/features/auth/errors';
 
 const OTP_LENGTH = 6;
 
@@ -40,14 +46,7 @@ export function VerifyEmailStep({
     validators: { onSubmit: verifyEmailSchema },
     onSubmit: async ({ value }) => {
       resendMutation.reset();
-
-      try {
-        await verifyMutation.mutateAsync({ email, otp: value.otp });
-      } catch {
-        // The error is shown under the code field from the mutation state.
-        return;
-      }
-
+      await verifyMutation.mutateAsync({ email, otp: value.otp });
       await onVerified();
     },
   });
@@ -58,6 +57,7 @@ export function VerifyEmailStep({
     try {
       await resendMutation.mutateAsync({ email });
     } catch {
+      // Shown below the code field from the mutation state.
       return;
     }
 
@@ -68,7 +68,7 @@ export function VerifyEmailStep({
     });
   }
 
-  const serverError = verifyMutation.error ?? resendMutation.error;
+  const submitError = verifyMutation.error ?? resendMutation.error;
   const isBusy = verifyMutation.isPending || resendMutation.isPending;
 
   return (
@@ -105,60 +105,62 @@ export function VerifyEmailStep({
       >
         <FieldGroup>
           <form.Field name="otp">
-            {(field) => {
-              const errors = [
-                ...field.state.meta.errors.map(formatFieldError),
-                ...(serverError
-                  ? [
-                      {
-                        message: getErrorMessage(
-                          serverError,
-                          'Could not verify your email. Please try again.',
-                        ),
-                      },
-                    ]
-                  : []),
-              ];
-
-              return (
-                <Field data-invalid={errors.length > 0}>
-                  <FieldLabel
-                    htmlFor={field.name}
-                    className="text-xs font-semibold tracking-wide text-muted-foreground uppercase"
-                  >
-                    6-digit verification code
-                  </FieldLabel>
-                  <InputOTP
-                    id={field.name}
-                    name={field.name}
-                    maxLength={OTP_LENGTH}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(value) => {
-                      verifyMutation.reset();
-                      resendMutation.reset();
-                      field.handleChange(value.replace(/\D/g, ''));
-                    }}
-                    containerClassName="mt-2 justify-center"
-                    aria-label="6-digit verification code"
-                    aria-invalid={errors.length > 0}
-                    disabled={isBusy}
-                  >
-                    <InputOTPGroup>
-                      {Array.from({ length: OTP_LENGTH }, (_, index) => (
-                        <InputOTPSlot
-                          key={index}
-                          index={index}
-                          className="size-14 text-xl"
-                        />
-                      ))}
-                    </InputOTPGroup>
-                  </InputOTP>
-                  <FieldError errors={errors} />
-                </Field>
-              );
-            }}
+            {(field) => (
+              <Field data-invalid={field.state.meta.errors.length > 0}>
+                <FieldLabel
+                  htmlFor={field.name}
+                  className="text-xs font-semibold tracking-wide text-muted-foreground uppercase"
+                >
+                  6-digit verification code
+                </FieldLabel>
+                <InputOTP
+                  id={field.name}
+                  maxLength={OTP_LENGTH}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(value) => {
+                    verifyMutation.reset();
+                    resendMutation.reset();
+                    field.handleChange(value.replace(/\D/g, ''));
+                  }}
+                  containerClassName="mt-2 justify-center"
+                  aria-label="6-digit verification code"
+                  aria-invalid={
+                    field.state.meta.errors.length > 0 ||
+                    getApiFieldErrors(verifyMutation.error, 'otp').length > 0
+                  }
+                  disabled={isBusy}
+                >
+                  <InputOTPGroup>
+                    {Array.from({ length: OTP_LENGTH }, (_, index) => (
+                      <InputOTPSlot
+                        key={index}
+                        index={index}
+                        className="size-14 text-xl"
+                      />
+                    ))}
+                  </InputOTPGroup>
+                </InputOTP>
+                <FieldError
+                  errors={[
+                    ...field.state.meta.errors.map(formatFieldError),
+                    ...getApiFieldErrors(verifyMutation.error, 'otp'),
+                  ]}
+                />
+              </Field>
+            )}
           </form.Field>
+
+          {getGeneralFormError(submitError, VERIFY_EMAIL_ERROR_FIELDS) ? (
+            <FieldError>
+              {getGeneralFormError(submitError, VERIFY_EMAIL_ERROR_FIELDS)}
+            </FieldError>
+          ) : null}
+          {getRequestIdError(submitError) ? (
+            <p className="text-xs text-text-disabled">
+              {getRequestIdError(submitError)}
+            </p>
+          ) : null}
 
           <div className="flex items-center gap-2 text-xs text-text-tertiary">
             <Clock3 className="size-3.5 text-accent" />

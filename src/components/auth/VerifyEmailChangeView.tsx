@@ -1,43 +1,32 @@
-import { useState } from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';
 
 import { useVerifyEmailChange } from '#/features/auth/hooks';
 import { Button } from '#/components/ui/button';
+import { FieldError } from '#/components/ui/field';
 import { toast } from '#/components/ui/toast';
-import { getErrorMessage } from '#/utils/errors';
+import { getGeneralFormError, getRequestIdError } from '#/lib/form-errors';
+
+const MISSING_TOKEN_ERROR = 'This verification link is missing its token.';
 
 export default function VerifyEmailChangeView() {
   const mutation = useVerifyEmailChange();
   const navigate = useNavigate();
-  const [completed, setCompleted] = useState(false);
+  const token = new URLSearchParams(window.location.search).get('token');
 
-  async function verify() {
-    const token = new URLSearchParams(window.location.search).get('token');
+  function verify() {
+    if (!token) return;
 
-    if (!token) {
-      toast.add({
-        title: 'This verification link is missing its token.',
-        type: 'error',
-      });
-      return;
-    }
-
-    try {
-      const profile = await mutation.mutateAsync({ token });
-      setCompleted(true);
-      toast.add({
-        title: `Email address updated to ${profile.email}.`,
-        type: 'success',
-      });
-    } catch (error) {
-      toast.add({
-        title: getErrorMessage(
-          error,
-          'Unable to verify this email address. The link may have expired.',
-        ),
-        type: 'error',
-      });
-    }
+    mutation.mutate(
+      { token },
+      {
+        onSuccess: (profile) => {
+          toast.add({
+            title: `Email address updated to ${profile.email}.`,
+            type: 'success',
+          });
+        },
+      },
+    );
   }
 
   return (
@@ -49,7 +38,7 @@ export default function VerifyEmailChangeView() {
           account.
         </p>
 
-        {completed ? (
+        {mutation.isSuccess ? (
           <>
             <p className="mt-5 text-sm">
               Your email address has been verified and updated successfully.
@@ -64,11 +53,24 @@ export default function VerifyEmailChangeView() {
           </>
         ) : (
           <>
+            {!token ? (
+              <FieldError className="mt-5">{MISSING_TOKEN_ERROR}</FieldError>
+            ) : null}
+            {getGeneralFormError(mutation.error) ? (
+              <FieldError className="mt-5">
+                {getGeneralFormError(mutation.error)}
+              </FieldError>
+            ) : null}
+            {getRequestIdError(mutation.error) ? (
+              <p className="mt-2 text-xs text-text-disabled">
+                {getRequestIdError(mutation.error)}
+              </p>
+            ) : null}
             <Button
               type="button"
               className="mt-6 w-full"
-              disabled={mutation.isPending}
-              onClick={() => void verify()}
+              disabled={!token || mutation.isPending}
+              onClick={verify}
             >
               {mutation.isPending ? 'Verifying...' : 'Verify new email'}
             </Button>

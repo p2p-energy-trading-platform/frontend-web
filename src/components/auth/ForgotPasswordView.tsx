@@ -13,7 +13,13 @@ import {
 } from '#/components/ui/field';
 import { Input } from '#/components/ui/input';
 import { toast } from '#/components/ui/toast';
-import { formatFieldError, getErrorMessage } from '#/utils/errors';
+import {
+  formatFieldError,
+  getApiFieldErrors,
+  getGeneralFormError,
+  getRequestIdError,
+} from '#/lib/form-errors';
+import { FORGOT_PASSWORD_ERROR_FIELDS } from '#/features/auth/errors';
 
 export default function ForgotPasswordView() {
   const resetMutation = useRequestPasswordReset();
@@ -22,23 +28,13 @@ export default function ForgotPasswordView() {
     defaultValues: { email: '' } satisfies ForgotPasswordFormValues,
     validators: { onSubmit: forgotPasswordSchema },
     onSubmit: async ({ value }) => {
-      try {
-        await resetMutation.mutateAsync({ email: value.email });
+      await resetMutation.mutateAsync({ email: value.email });
 
-        toast.add({
-          title:
-            'If an account exists for that email, a password-reset link will be sent.',
-          type: 'success',
-        });
-      } catch (error) {
-        toast.add({
-          title: getErrorMessage(
-            error,
-            'Unable to request a password-reset link. Please try again.',
-          ),
-          type: 'error',
-        });
-      }
+      toast.add({
+        title:
+          'If an account exists for that email, a password-reset link will be sent.',
+        type: 'success',
+      });
     },
   });
 
@@ -78,14 +74,37 @@ export default function ForgotPasswordView() {
                     resetMutation.reset();
                     field.handleChange(event.target.value);
                   }}
-                  aria-invalid={field.state.meta.errors.length > 0}
+                  aria-invalid={
+                    field.state.meta.errors.length > 0 ||
+                    getApiFieldErrors(resetMutation.error, 'email').length > 0
+                  }
                 />
                 <FieldError
-                  errors={field.state.meta.errors.map(formatFieldError)}
+                  errors={[
+                    ...field.state.meta.errors.map(formatFieldError),
+                    ...getApiFieldErrors(resetMutation.error, 'email'),
+                  ]}
                 />
               </Field>
             )}
           </form.Field>
+
+          {getGeneralFormError(
+            resetMutation.error,
+            FORGOT_PASSWORD_ERROR_FIELDS,
+          ) ? (
+            <FieldError>
+              {getGeneralFormError(
+                resetMutation.error,
+                FORGOT_PASSWORD_ERROR_FIELDS,
+              )}
+            </FieldError>
+          ) : null}
+          {getRequestIdError(resetMutation.error) ? (
+            <p className="text-xs text-text-disabled">
+              {getRequestIdError(resetMutation.error)}
+            </p>
+          ) : null}
 
           <Field>
             <Button

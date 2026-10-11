@@ -13,11 +13,21 @@ import {
 } from '#/components/ui/field';
 import { PasswordInput } from '#/components/ui/password-input';
 import { toast } from '#/components/ui/toast';
-import { formatFieldError, getErrorMessage } from '#/utils/errors';
+import {
+  formatFieldError,
+  getApiFieldErrors,
+  getGeneralFormError,
+  getRequestIdError,
+} from '#/lib/form-errors';
+import { RESET_PASSWORD_ERROR_FIELDS } from '#/features/auth/errors';
+
+const MISSING_TOKEN_ERROR =
+  'This password-reset link is invalid or missing its token.';
 
 export default function ResetPasswordView() {
   const resetMutation = useResetPassword();
   const navigate = useNavigate();
+  const token = new URLSearchParams(window.location.search).get('token');
 
   const form = useForm({
     defaultValues: {
@@ -26,37 +36,19 @@ export default function ResetPasswordView() {
     } satisfies ResetPasswordFormValues,
     validators: { onSubmit: resetPasswordSchema },
     onSubmit: async ({ value }) => {
-      const token = new URLSearchParams(window.location.search).get('token');
+      if (!token) return;
 
-      if (!token) {
-        toast.add({
-          title: 'This password-reset link is invalid or missing its token.',
-          type: 'error',
-        });
-        return;
-      }
+      await resetMutation.mutateAsync({
+        token,
+        newPassword: value.password,
+      });
 
-      try {
-        await resetMutation.mutateAsync({
-          token,
-          newPassword: value.password,
-        });
+      toast.add({
+        title: 'Your password has been reset. You can now sign in.',
+        type: 'success',
+      });
 
-        toast.add({
-          title: 'Your password has been reset. You can now sign in.',
-          type: 'success',
-        });
-
-        await navigate({ to: '/sign-in' });
-      } catch (error) {
-        toast.add({
-          title: getErrorMessage(
-            error,
-            'Unable to reset your password. Please try again.',
-          ),
-          type: 'error',
-        });
-      }
+      await navigate({ to: '/sign-in' });
     },
   });
 
@@ -95,10 +87,17 @@ export default function ResetPasswordView() {
                     resetMutation.reset();
                     field.handleChange(event.target.value);
                   }}
-                  aria-invalid={field.state.meta.errors.length > 0}
+                  aria-invalid={
+                    field.state.meta.errors.length > 0 ||
+                    getApiFieldErrors(resetMutation.error, 'newPassword')
+                      .length > 0
+                  }
                 />
                 <FieldError
-                  errors={field.state.meta.errors.map(formatFieldError)}
+                  errors={[
+                    ...field.state.meta.errors.map(formatFieldError),
+                    ...getApiFieldErrors(resetMutation.error, 'newPassword'),
+                  ]}
                 />
               </Field>
             )}
@@ -131,11 +130,29 @@ export default function ResetPasswordView() {
             )}
           </form.Field>
 
+          {!token ? <FieldError>{MISSING_TOKEN_ERROR}</FieldError> : null}
+          {getGeneralFormError(
+            resetMutation.error,
+            RESET_PASSWORD_ERROR_FIELDS,
+          ) ? (
+            <FieldError>
+              {getGeneralFormError(
+                resetMutation.error,
+                RESET_PASSWORD_ERROR_FIELDS,
+              )}
+            </FieldError>
+          ) : null}
+          {getRequestIdError(resetMutation.error) ? (
+            <p className="text-xs text-text-disabled">
+              {getRequestIdError(resetMutation.error)}
+            </p>
+          ) : null}
+
           <Field>
             <Button
               type="submit"
               className="h-12 w-full rounded-xl"
-              disabled={resetMutation.isPending}
+              disabled={!token || resetMutation.isPending}
             >
               {resetMutation.isPending ? 'Resetting...' : 'Reset password'}
             </Button>

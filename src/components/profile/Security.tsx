@@ -14,12 +14,13 @@ import {
 } from '../ui/card';
 import { Field, FieldError, FieldGroup, FieldLabel } from '../ui/field';
 import { PasswordInput } from '../ui/password-input';
-import { toast } from '../ui/toast';
 import {
   formatFieldError,
   getApiFieldErrors,
-  getErrorMessage,
-} from '#/utils/errors';
+  getGeneralFormError,
+  getRequestIdError,
+} from '#/lib/form-errors';
+import { CHANGE_PASSWORD_ERROR_FIELDS } from '#/features/auth/errors';
 
 export default function Security() {
   const changeMutation = useChangePassword();
@@ -33,28 +34,20 @@ export default function Security() {
     } satisfies ChangePasswordFormValues,
     validators: { onSubmit: changePasswordSchema },
     onSubmit: async ({ value }) => {
-      try {
-        await changeMutation.mutateAsync({
-          currentPassword: value.currentPassword,
-          newPassword: value.newPassword,
-        });
+      await changeMutation.mutateAsync({
+        currentPassword: value.currentPassword,
+        newPassword: value.newPassword,
+      });
 
-        // Clear the session cookies and frontend authentication cache.
-        await logoutMutation.mutateAsync();
+      // Clear the session cookies and frontend authentication cache.
+      await logoutMutation.mutateAsync();
 
-        // Navigate to sign-in with a full page load.
-        window.location.assign('/sign-in');
-      } catch (error) {
-        toast.add({
-          title: getErrorMessage(
-            error,
-            'Unable to change your password. Please try again.',
-          ),
-          type: 'error',
-        });
-      }
+      // Navigate to sign-in with a full page load.
+      window.location.assign('/sign-in');
     },
   });
+
+  const submitError = changeMutation.error ?? logoutMutation.error;
 
   return (
     <Card>
@@ -78,62 +71,68 @@ export default function Security() {
         >
           <FieldGroup>
             <form.Field name="currentPassword">
-              {(field) => {
-                const errors = [
-                  ...field.state.meta.errors.map(formatFieldError),
-                  ...getApiFieldErrors(changeMutation.error, field.name),
-                ];
+              {(field) => (
+                <Field data-invalid={field.state.meta.errors.length > 0}>
+                  <FieldLabel htmlFor={field.name}>Current password</FieldLabel>
+                  <PasswordInput
+                    id={field.name}
+                    autoComplete="current-password"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(event) => {
+                      changeMutation.reset();
+                      field.handleChange(event.target.value);
+                    }}
+                    aria-invalid={
+                      field.state.meta.errors.length > 0 ||
+                      getApiFieldErrors(changeMutation.error, 'currentPassword')
+                        .length > 0
+                    }
+                  />
+                  <FieldError
+                    errors={[
+                      ...field.state.meta.errors.map(formatFieldError),
+                      ...getApiFieldErrors(
+                        changeMutation.error,
+                        'currentPassword',
+                      ),
+                    ]}
+                  />
+                </Field>
+              )}
+            </form.Field>
 
-                return (
-                  <Field data-invalid={errors.length > 0}>
-                    <FieldLabel htmlFor={field.name}>
-                      Current password
-                    </FieldLabel>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <form.Field name="newPassword">
+                {(field) => (
+                  <Field data-invalid={field.state.meta.errors.length > 0}>
+                    <FieldLabel htmlFor={field.name}>New password</FieldLabel>
                     <PasswordInput
                       id={field.name}
-                      name={field.name}
-                      autoComplete="current-password"
+                      autoComplete="new-password"
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={(event) => {
                         changeMutation.reset();
                         field.handleChange(event.target.value);
                       }}
-                      aria-invalid={errors.length > 0}
+                      aria-invalid={
+                        field.state.meta.errors.length > 0 ||
+                        getApiFieldErrors(changeMutation.error, 'newPassword')
+                          .length > 0
+                      }
                     />
-                    <FieldError errors={errors} />
+                    <FieldError
+                      errors={[
+                        ...field.state.meta.errors.map(formatFieldError),
+                        ...getApiFieldErrors(
+                          changeMutation.error,
+                          'newPassword',
+                        ),
+                      ]}
+                    />
                   </Field>
-                );
-              }}
-            </form.Field>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <form.Field name="newPassword">
-                {(field) => {
-                  const errors = [
-                    ...field.state.meta.errors.map(formatFieldError),
-                    ...getApiFieldErrors(changeMutation.error, field.name),
-                  ];
-
-                  return (
-                    <Field data-invalid={errors.length > 0}>
-                      <FieldLabel htmlFor={field.name}>New password</FieldLabel>
-                      <PasswordInput
-                        id={field.name}
-                        name={field.name}
-                        autoComplete="new-password"
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(event) => {
-                          changeMutation.reset();
-                          field.handleChange(event.target.value);
-                        }}
-                        aria-invalid={errors.length > 0}
-                      />
-                      <FieldError errors={errors} />
-                    </Field>
-                  );
-                }}
+                )}
               </form.Field>
 
               <form.Field name="confirmPassword">
@@ -144,13 +143,13 @@ export default function Security() {
                     </FieldLabel>
                     <PasswordInput
                       id={field.name}
-                      name={field.name}
                       autoComplete="new-password"
                       value={field.state.value}
                       onBlur={field.handleBlur}
-                      onChange={(event) =>
-                        field.handleChange(event.target.value)
-                      }
+                      onChange={(event) => {
+                        changeMutation.reset();
+                        field.handleChange(event.target.value);
+                      }}
                       aria-invalid={field.state.meta.errors.length > 0}
                     />
                     <FieldError
@@ -160,6 +159,17 @@ export default function Security() {
                 )}
               </form.Field>
             </div>
+
+            {getGeneralFormError(submitError, CHANGE_PASSWORD_ERROR_FIELDS) ? (
+              <FieldError>
+                {getGeneralFormError(submitError, CHANGE_PASSWORD_ERROR_FIELDS)}
+              </FieldError>
+            ) : null}
+            {getRequestIdError(submitError) ? (
+              <p className="text-xs text-text-disabled">
+                {getRequestIdError(submitError)}
+              </p>
+            ) : null}
 
             <Field orientation="horizontal">
               <form.Subscribe selector={(state) => state.isSubmitting}>

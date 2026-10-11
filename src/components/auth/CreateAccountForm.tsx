@@ -29,7 +29,11 @@ import {
   getApiFieldErrors,
   getGeneralFormError,
   getRequestIdError,
-} from '#/utils/errors';
+} from '#/lib/form-errors';
+import {
+  REGISTER_ERROR_FIELDS,
+  REGISTER_ERROR_OPTIONS,
+} from '#/features/auth/errors';
 
 interface CreateAccountFormProps {
   onSuccess: (email: string) => Promise<void> | void;
@@ -137,8 +141,11 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
                   }}
                   aria-invalid={
                     field.state.meta.errors.length > 0 ||
-                    getApiFieldErrors(registerMutation.error, 'email').length >
-                      0
+                    getApiFieldErrors(
+                      registerMutation.error,
+                      'email',
+                      REGISTER_ERROR_OPTIONS,
+                    ).length > 0
                   }
                 />
                 <FieldError
@@ -146,7 +153,11 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
                     ...field.state.meta.errors.map((error) => ({
                       ...formatFieldError(error),
                     })),
-                    ...getApiFieldErrors(registerMutation.error, 'email'),
+                    ...getApiFieldErrors(
+                      registerMutation.error,
+                      'email',
+                      REGISTER_ERROR_OPTIONS,
+                    ),
                   ]}
                 />
               </Field>
@@ -278,9 +289,17 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
               </>
             )}
           </form.Field>
-          {getGeneralFormError(registerMutation.error) ? (
+          {getGeneralFormError(
+            registerMutation.error,
+            REGISTER_ERROR_FIELDS,
+            REGISTER_ERROR_OPTIONS,
+          ) ? (
             <FieldError>
-              {getGeneralFormError(registerMutation.error)}
+              {getGeneralFormError(
+                registerMutation.error,
+                REGISTER_ERROR_FIELDS,
+                REGISTER_ERROR_OPTIONS,
+              )}
             </FieldError>
           ) : null}
           {getRequestIdError(registerMutation.error) ? (
