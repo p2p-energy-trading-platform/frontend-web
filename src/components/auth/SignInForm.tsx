@@ -14,16 +14,9 @@ import {
 } from '#/components/ui/field';
 import { Input } from '#/components/ui/input';
 import { PasswordInput } from '#/components/ui/password-input';
+import { getApiFieldErrors, formatFieldError } from '#/utils/errors';
 
-function apiFieldErrors(
-  error: unknown,
-  field: keyof LoginFormValues,
-): Array<{ message: string }> {
-  if (!(error instanceof ApiError) || error.status !== 400) return [];
-  return error.details
-    .filter((detail) => detail.path === `/${field}`)
-    .map((detail) => ({ message: detail.message }));
-}
+
 
 function formError(error: unknown): string | undefined {
   return error instanceof ApiError && error.status === 401
@@ -31,16 +24,7 @@ function formError(error: unknown): string | undefined {
     : undefined;
 }
 
-function formatFieldError(error: unknown): { message: string } {
-  return {
-    message:
-      typeof error === 'string'
-        ? error
-        : error instanceof Error
-          ? error.message
-          : '',
-  };
-}
+
 
 export default function SignInForm() {
   const navigate = useNavigate();
@@ -82,7 +66,7 @@ export default function SignInForm() {
                 onChange={(event) => field.handleChange(event.target.value)}
                 aria-invalid={
                   field.state.meta.errors.length > 0 ||
-                  apiFieldErrors(loginMutation.error, 'email').length > 0
+                  getApiFieldErrors(loginMutation.error, 'email').length > 0
                 }
               />
               <FieldError
@@ -90,7 +74,7 @@ export default function SignInForm() {
                   ...field.state.meta.errors.map((error) => ({
                     ...formatFieldError(error),
                   })),
-                  ...apiFieldErrors(loginMutation.error, 'email'),
+                  ...getApiFieldErrors(loginMutation.error, 'email'),
                 ]}
               />
             </Field>
@@ -112,7 +96,7 @@ export default function SignInForm() {
                 onChange={(event) => field.handleChange(event.target.value)}
                 aria-invalid={
                   field.state.meta.errors.length > 0 ||
-                  apiFieldErrors(loginMutation.error, 'password').length > 0
+                  getApiFieldErrors(loginMutation.error, 'password').length > 0
                 }
               />
               <FieldError
@@ -120,7 +104,7 @@ export default function SignInForm() {
                   ...field.state.meta.errors.map((error) => ({
                     ...formatFieldError(error),
                   })),
-                  ...apiFieldErrors(loginMutation.error, 'password'),
+                  ...getApiFieldErrors(loginMutation.error, 'password'),
                 ]}
               />
             </Field>
