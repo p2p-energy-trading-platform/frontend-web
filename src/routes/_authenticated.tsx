@@ -32,9 +32,11 @@ function AuthenticatedLayout() {
     return null;
   }
 
-  const initials = user.email.slice(0, 2).toUpperCase();
+  const displayName = user.name.trim() || user.email;
+  const firstName = getFirstName(displayName);
+  const initials = getInitials(displayName);
   const displayUser = {
-    name: user.email,
+    name: firstName,
     property: 'GridX',
     zone: '',
     initials,
@@ -63,4 +65,17 @@ function AuthenticatedLayout() {
       </div>
     </div>
   );
+}
+
+function getInitials(displayName: string): string {
+  const words = displayName.split(/\s+/).filter(Boolean);
+  const initials =
+    words.length > 1
+      ? `${words[0][0]}${words[words.length - 1][0]}`
+      : displayName.slice(0, 2);
+  return initials.toUpperCase();
+}
+
+function getFirstName(fullName: string): string {
+  return fullName.trim().split(/\s+/)[0] ?? '';
 }
