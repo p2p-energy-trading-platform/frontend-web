@@ -3,7 +3,6 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Check, Sparkles } from 'lucide-react';
 import { useMarketing } from '#/hooks/useMarketing';
-import Reveal from '#/components/landing/Reveal';
 
 function HeroContent() {
   const marketing = useMarketing();
@@ -19,29 +18,29 @@ function HeroContent() {
 
   return (
     <div className="w-full max-w-2xl">
-      <Reveal>
+      <div>
         <Badge variant="secondary" className="mb-2 mt-4 gap-2 px-3 py-1.5">
           <Sparkles className="size-3.5 text-primary" />
           Live Energy Marketplace
         </Badge>
-      </Reveal>
+      </div>
 
-      <Reveal delay={100}>
+      <div>
         <h1 className="mt-5 text-display-xl leading-[1.08] tracking-tight text-foreground">
           <span className="block">Turn Your Energy</span>
           <span className="mt-1 block text-accent">into Shared Value</span>
         </h1>
-      </Reveal>
+      </div>
 
-      <Reveal delay={180}>
+      <div>
         <p className="mt-6 max-w-xl text-base leading-7 text-text-secondary sm:text-lg">
           Buy surplus solar, battery, or EV energy directly from households in
           your Dubai grid zone — or sell what you generate at a fair price to
           neighbours who need it.
         </p>
-      </Reveal>
+      </div>
 
-      <Reveal delay={260}>
+      <div>
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <Link
             to="/sign-in"
@@ -65,9 +64,9 @@ function HeroContent() {
             <ArrowRight className="ml-1 size-4 transition-transform duration-300 group-hover:translate-x-1" />
           </Button>
         </div>
-      </Reveal>
+      </div>
 
-      <Reveal delay={340}>
+      <div>
         <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
           {marketing.heroChecks.map((label) => (
             <div key={label} className="flex items-center gap-2">
@@ -80,14 +79,14 @@ function HeroContent() {
             </div>
           ))}
         </div>
-      </Reveal>
+      </div>
     </div>
   );
 }
 
 function HeroVisual() {
   return (
-    <Reveal delay={180} className="w-full max-w-xl">
+    <div className="w-full max-w-xl">
       <div className="relative isolate mx-auto w-full">
         <div
           aria-hidden="true"
@@ -103,7 +102,7 @@ function HeroVisual() {
           />
         </div>
       </div>
-    </Reveal>
+    </div>
   );
 }
 
