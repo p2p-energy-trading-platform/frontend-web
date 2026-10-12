@@ -294,9 +294,3 @@
     transform: translateY(0) scale(1);
   }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .motion-safe\:animate-\[story-enter_500ms_ease-out_both\] {
-    animation: none !important;
-  }
-}
