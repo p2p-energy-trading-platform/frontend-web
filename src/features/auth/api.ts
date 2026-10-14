@@ -124,7 +124,6 @@ export function verifyEmailChange(token: string) {
   });
 }
 
-
 export function getGoogleSignInUrl(returnTo = '/dashboard'): string {
   const url = new URL(
     '/api/v1/auth/google/start',
