@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { revalidateLogic, useForm } from '@tanstack/react-form';
 import { Link } from '@tanstack/react-router';
 
+import { GoogleSignInButton } from '#/components/auth/GoogleSignInButton';
+
 import { useRegister } from '#/features/auth/hooks';
 import { registerSchema } from '#/features/auth/schemas';
 import type { RegisterFormValues } from '#/features/auth/schemas';
@@ -324,6 +326,16 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
           </Field>
         </FieldGroup>
       </form>
+
+      <div className="mb-6 flex items-center gap-3 text-xs font-medium text-text-disabled">
+        <span className="h-px flex-1 bg-muted/50" />
+        <span>or continue with</span>
+        <span className="h-px flex-1 bg-muted/50" />
+      </div>
+
+      <div className="grid grid-cols-1 gap-2.5">
+        <GoogleSignInButton />
+      </div>
     </>
   );
 }
