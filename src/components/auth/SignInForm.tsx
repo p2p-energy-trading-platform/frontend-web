@@ -1,5 +1,5 @@
 import { revalidateLogic, useForm } from '@tanstack/react-form';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { getRouteApi, Link, useNavigate } from '@tanstack/react-router';
 
 import { useLogin } from '#/features/auth/hooks';
 import { loginSchema } from '#/features/auth/schemas';
@@ -20,9 +20,13 @@ import {
   getRequestIdError,
 } from '#/lib/form-errors';
 import { LOGIN_ERROR_FIELDS } from '#/features/auth/errors';
+import { GoogleSignInButton } from '#/components/auth/GoogleSignInButton';
+
+const signInRoute = getRouteApi('/_auth/sign-in');
 
 export default function SignInForm() {
   const navigate = useNavigate();
+  const { error: redirectError } = signInRoute.useSearch();
   const loginMutation = useLogin();
   const form = useForm({
     defaultValues: { email: '', password: '' } satisfies LoginFormValues,
@@ -145,19 +149,10 @@ export default function SignInForm() {
       </div>
 
       <div className="mt-2.5 grid grid-cols-1 gap-2.5">
-        <Button
-          type="button"
-          variant="outline"
-          className="h-12 gap-2.5 rounded-2xl bg-card text-sm font-semibold cursor-pointer hover:bg-card/80 "
-        >
-          <img
-            src="/auth/google.svg"
-            alt=""
-            aria-hidden="true"
-            className="size-4.5"
-          />
-          Google
-        </Button>
+        <GoogleSignInButton />
+        {redirectError === 'google' ? (
+          <FieldError>Google sign-in failed. Please try again.</FieldError>
+        ) : null}
       </div>
 
       <p className="mt-2.5 text-center text-caption text-text-disabled">
