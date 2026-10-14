@@ -10,7 +10,6 @@ export interface SubmitKycInput {
   document: File;
 }
 
-
 export function useSubmitKyc() {
   const queryClient = useQueryClient();
 
