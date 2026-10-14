@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { requestPasswordReset, resetPassword } from './api';
+import { getGoogleSignInUrl, requestPasswordReset, resetPassword } from './api';
 
 vi.mock('#/env', () => ({
   env: { VITE_API_BASE_URL: 'http://api.test' },
@@ -87,5 +87,25 @@ describe('password-reset API', () => {
     expect(String(fetchMock.mock.calls[0]?.[0])).toContain(
       '/api/v1/auth/password-reset/confirm',
     );
+  });
+});
+
+describe('getGoogleSignInUrl', () => {
+  it('points at the gateway Google start route with the default return page', () => {
+    const url = new URL(getGoogleSignInUrl());
+
+    expect(url.origin + url.pathname).toBe(
+      'http://api.test/api/v1/auth/google/start',
+    );
+    expect(url.searchParams.get('returnTo')).toBe('/dashboard');
+  });
+
+  it('encodes the return page safely', () => {
+    const url = new URL(getGoogleSignInUrl('/history/trades?page=2&sort=desc'));
+
+    expect(url.searchParams.get('returnTo')).toBe(
+      '/history/trades?page=2&sort=desc',
+    );
+    expect(url.searchParams.getAll('returnTo')).toHaveLength(1);
   });
 });
