@@ -1,3 +1,4 @@
+import { env } from '#/env';
 import { ApiError, apiRequest } from '#/lib/api-client';
 
 export interface AuthUser {
@@ -121,4 +122,14 @@ export function verifyEmailChange(token: string) {
     method: 'POST',
     body: JSON.stringify({ token }),
   });
+}
+
+export function getGoogleSignInUrl(returnTo = '/dashboard'): string {
+  const url = new URL(
+    '/api/v1/auth/google/start',
+    env.VITE_API_BASE_URL.replace(/\/$/, ''),
+  );
+  url.searchParams.set('returnTo', returnTo);
+
+  return url.toString();
 }
