@@ -78,8 +78,7 @@ export default function SignupView() {
     setView('kyc');
   }
 
-  async function handleKycComplete(status: KycStatus) {
-    await registration.completeKyc();
+  function handleKycComplete(status: KycStatus) {
     setKycStatus(status);
     setView('smart-meter');
   }

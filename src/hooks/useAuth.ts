@@ -15,9 +15,6 @@ export function useRegistration() {
     advanceStep() {
       return wait(registrationDelayMs.step);
     },
-    async completeKyc() {
-      await wait(registrationDelayMs.step);
-    },
     async completeSmartMeter() {
       await wait(registrationDelayMs.step);
     },
