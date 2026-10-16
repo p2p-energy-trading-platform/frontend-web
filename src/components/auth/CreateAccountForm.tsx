@@ -333,7 +333,7 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
         <span className="h-px flex-1 bg-muted/50" />
       </div>
 
-      <div className="grid grid-cols-1 gap-2.5">
+      <div className="grid grid-cols-1 gap-2.5 pb-12">
         <GoogleSignInButton />
       </div>
     </>
