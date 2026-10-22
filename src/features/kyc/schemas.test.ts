@@ -8,7 +8,7 @@ function file(type: string, size: number, name = 'id.jpg'): File {
 
 const validValues = {
   fullName: 'Jane Doe',
-  dubaiId: '784-1998-1234567-1',
+  nicNumber: '199810212345',
   dateOfBirth: '1998-04-12',
   document: file('image/jpeg', 2048),
 };
@@ -35,17 +35,36 @@ describe('kycSchema', () => {
     ).toEqual([]);
   });
 
+  it.each([
+    ['old-format NIC', '901234567V'],
+    ['old-format NIC with lowercase suffix', '901234567x'],
+  ])('accepts a valid %s', (_case, nicNumber) => {
+    expect(errorsFor({ ...validValues, nicNumber })).toEqual([]);
+  });
+
+  it.each([
+    ['a foreign ID format', '784-1998-1234567-1'],
+    ['an invalid encoded day', '199000012345'],
+    ['an invalid old-format suffix', '901234567Z'],
+    ['an incomplete number', '12345'],
+  ])('rejects %s', (_case, nicNumber) => {
+    expect(errorsFor({ ...validValues, nicNumber })).toContainEqual({
+      path: 'nicNumber',
+      message: 'Enter a valid Sri Lankan NIC number',
+    });
+  });
+
   it('requires every field', () => {
     expect(
       errorsFor({
         fullName: ' ',
-        dubaiId: '',
+        nicNumber: '',
         dateOfBirth: '',
         document: null,
       }),
     ).toEqual([
       { path: 'fullName', message: 'Legal full name is required' },
-      { path: 'dubaiId', message: 'Dubai ID number is required' },
+      { path: 'nicNumber', message: 'NIC number is required' },
       { path: 'dateOfBirth', message: 'Date of birth is required' },
       { path: 'document', message: 'Upload a photo or scan of your ID' },
     ]);
@@ -91,7 +110,7 @@ describe('kycSchema', () => {
       errorsFor({
         ...validValues,
         fullName: 'x'.repeat(256),
-        dubaiId: 'x'.repeat(101),
+        nicNumber: 'x'.repeat(21),
       }),
     ).toEqual([
       {
@@ -99,8 +118,8 @@ describe('kycSchema', () => {
         message: 'Legal full name must be 255 characters or fewer',
       },
       {
-        path: 'dubaiId',
-        message: 'Dubai ID number must be 100 characters or fewer',
+        path: 'nicNumber',
+        message: 'Enter a valid Sri Lankan NIC number',
       },
     ]);
   });

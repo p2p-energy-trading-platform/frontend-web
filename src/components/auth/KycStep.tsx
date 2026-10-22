@@ -1,5 +1,6 @@
 import { revalidateLogic, useForm } from '@tanstack/react-form';
-import { Check, FileCheck2 } from 'lucide-react';
+import { useState } from 'react';
+import { Check, FileCheck2, ScanText } from 'lucide-react';
 
 import { Button } from '#/components/ui/button';
 import {
@@ -15,6 +16,11 @@ import {
   KYC_DOCUMENT_ERROR_FIELDS,
   KYC_ERROR_FIELDS,
 } from '#/features/kyc/errors';
+import {
+  createKycUploadUrl,
+  extractKycNicOcr,
+  uploadKycDocument,
+} from '#/features/kyc/api';
 import { useSubmitKyc } from '#/features/kyc/hooks';
 import { kycSchema } from '#/features/kyc/schemas';
 import type { KycFormValues } from '#/features/kyc/schemas';
@@ -38,10 +44,69 @@ function formatFileSize(bytes: number): string {
 
 export function KycStep({ onComplete }: KycStepProps) {
   const kycMutation = useSubmitKyc();
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [preparedDocument, setPreparedDocument] = useState<{
+    file: File;
+    objectKey: string;
+  } | null>(null);
+  const [isExtracting, setIsExtracting] = useState(false);
+  const [ocrMessage, setOcrMessage] = useState('');
+
+  const handleExtractDetails = async () => {
+    if (!selectedFile || isExtracting) return;
+
+    setIsExtracting(true);
+    setOcrMessage('');
+
+    try {
+      let objectKey =
+        preparedDocument?.file === selectedFile
+          ? preparedDocument.objectKey
+          : undefined;
+
+      if (!objectKey) {
+        const { uploadUrl, objectKey: uploadedObjectKey } =
+          await createKycUploadUrl(selectedFile.type, selectedFile.size);
+
+        await uploadKycDocument(uploadUrl, selectedFile);
+        objectKey = uploadedObjectKey;
+        setPreparedDocument({ file: selectedFile, objectKey });
+      }
+
+      const result = await extractKycNicOcr(objectKey);
+
+      const fullName = result.fullName.trim();
+      const dateOfBirth = result.dateOfBirth.trim();
+      const nicNumber = result.nicNumber.trim();
+
+      if (!fullName && !dateOfBirth && !nicNumber) {
+        setOcrMessage(
+          'Could not read any details from this image. Enter them manually or try a clearer, well-lit image.',
+        );
+        return;
+      }
+
+      form.setFieldValue('fullName', fullName);
+      form.setFieldValue('dateOfBirth', dateOfBirth);
+      form.setFieldValue('nicNumber', nicNumber);
+
+      setOcrMessage(
+        fullName && dateOfBirth && nicNumber
+          ? 'Details extracted. Review and correct them before submitting.'
+          : 'Some details were extracted. Review them and enter any missing details before submitting.',
+      );
+    } catch {
+      setOcrMessage(
+        'Could not extract the details. Enter them manually and continue.',
+      );
+    } finally {
+      setIsExtracting(false);
+    }
+  };
 
   const defaultValues: KycFormValues = {
     fullName: '',
-    dubaiId: '',
+    nicNumber: '',
     dateOfBirth: '',
     document: null,
   };
@@ -56,9 +121,12 @@ export function KycStep({ onComplete }: KycStepProps) {
 
       await kycMutation.mutateAsync({
         fullName: value.fullName.trim(),
-        dubaiId: value.dubaiId.trim(),
+        nicNumber: value.nicNumber.trim(),
         dateOfBirth: value.dateOfBirth,
         document: value.document,
+        ...(preparedDocument?.file === value.document
+          ? { documentPath: preparedDocument.objectKey }
+          : {}),
       });
 
       toast.add({
@@ -120,14 +188,16 @@ export function KycStep({ onComplete }: KycStepProps) {
               </Field>
             )}
           </form.Field>
-          <form.Field name="dubaiId">
+          <form.Field name="nicNumber">
             {(field) => (
               <Field data-invalid={field.state.meta.errors.length > 0}>
-                <FieldLabel htmlFor={field.name}>Dubai ID Number</FieldLabel>
+                <FieldLabel htmlFor={field.name}>
+                  Sri Lankan NIC Number
+                </FieldLabel>
                 <Input
                   id={field.name}
                   autoComplete="off"
-                  placeholder="Enter your ID number"
+                  placeholder="Enter your NIC number"
                   className="h-12 rounded-2xl px-4"
                   value={field.state.value}
                   onBlur={field.handleBlur}
@@ -137,13 +207,13 @@ export function KycStep({ onComplete }: KycStepProps) {
                   }}
                   aria-invalid={
                     field.state.meta.errors.length > 0 ||
-                    getApiFieldErrors(kycMutation.error, 'dubaiId').length > 0
+                    getApiFieldErrors(kycMutation.error, 'nicNumber').length > 0
                   }
                 />
                 <FieldError
                   errors={[
                     ...field.state.meta.errors.map(formatFieldError),
-                    ...getApiFieldErrors(kycMutation.error, 'dubaiId'),
+                    ...getApiFieldErrors(kycMutation.error, 'nicNumber'),
                   ]}
                 />
               </Field>
@@ -191,6 +261,9 @@ export function KycStep({ onComplete }: KycStepProps) {
                     id={field.name}
                     onFileSelect={(selected) => {
                       kycMutation.reset();
+                      setSelectedFile(selected);
+                      setPreparedDocument(null);
+                      setOcrMessage('');
                       field.handleChange(selected);
                       field.handleBlur();
                     }}
@@ -210,6 +283,27 @@ export function KycStep({ onComplete }: KycStepProps) {
                       documentApiErrors.length > 0
                     }
                   />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="mt-3 h-10 w-full rounded-xl"
+                    disabled={!selectedFile || isExtracting}
+                    onClick={() => void handleExtractDetails()}
+                  >
+                    <ScanText className="size-4" />
+                    {isExtracting
+                      ? 'Extracting details...'
+                      : 'Extract details from NIC'}
+                  </Button>
+                  {ocrMessage ? (
+                    <p
+                      className="mt-2 text-sm text-text-tertiary"
+                      role="status"
+                      aria-live="polite"
+                    >
+                      {ocrMessage}
+                    </p>
+                  ) : null}
                   <FieldError
                     errors={[
                       ...field.state.meta.errors.map(formatFieldError),

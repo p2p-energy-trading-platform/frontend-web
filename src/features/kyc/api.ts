@@ -8,10 +8,16 @@ export interface KycUploadUrl {
   expiresIn: number;
 }
 
+export interface KycNicOcrResult {
+  fullName: string;
+  dateOfBirth: string;
+  nicNumber: string;
+}
+
 export interface KycSubmitRequest {
   fullName: string;
   dateOfBirth: string;
-  dubaiId: string;
+  nicNumber: string;
   /** Object key returned by createKycUploadUrl. */
   documentPath: string;
 }
@@ -60,6 +66,13 @@ export async function uploadKycDocument(uploadUrl: string, file: File) {
   if (!response.ok) {
     throw new KycUploadError();
   }
+}
+
+export function extractKycNicOcr(objectKey: string) {
+  return apiRequest<KycNicOcrResult>('/api/v1/kyc/extract-nic-ocr', {
+    method: 'POST',
+    body: JSON.stringify({ objectKey }),
+  });
 }
 
 export function submitKyc(request: KycSubmitRequest) {

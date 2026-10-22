@@ -6,23 +6,36 @@ import { createKycUploadUrl, submitKyc, uploadKycDocument } from './api';
 export interface SubmitKycInput {
   fullName: string;
   dateOfBirth: string;
-  dubaiId: string;
+  nicNumber: string;
   document: File;
+  documentPath?: string;
 }
 
 export function useSubmitKyc() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ document, ...details }: SubmitKycInput) => {
-      const { uploadUrl, objectKey } = await createKycUploadUrl(
-        document.type,
-        document.size,
-      );
+    mutationFn: async ({
+      document,
+      documentPath,
+      ...details
+    }: SubmitKycInput) => {
+      let storedDocumentPath = documentPath;
 
-      await uploadKycDocument(uploadUrl, document);
+      if (!storedDocumentPath) {
+        const { uploadUrl, objectKey } = await createKycUploadUrl(
+          document.type,
+          document.size,
+        );
 
-      return submitKyc({ ...details, documentPath: objectKey });
+        await uploadKycDocument(uploadUrl, document);
+        storedDocumentPath = objectKey;
+      }
+
+      return submitKyc({
+        ...details,
+        documentPath: storedDocumentPath,
+      });
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
