@@ -7,6 +7,6 @@ export const KYC_DOCUMENT_ERROR_FIELDS = [
 export const KYC_ERROR_FIELDS = [
   'fullName',
   'dateOfBirth',
-  'dubaiId',
+  'nicNumber',
   ...KYC_DOCUMENT_ERROR_FIELDS,
 ];

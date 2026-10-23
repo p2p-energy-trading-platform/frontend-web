@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   createKycUploadUrl,
+  extractKycNicOcr,
   KycUploadError,
   submitKyc,
   uploadKycDocument,
@@ -89,6 +90,31 @@ describe('KYC API', () => {
     ).rejects.toThrow("We couldn't upload your document. Please try again.");
   });
 
+  it('requests NIC OCR using the uploaded document object key', async () => {
+    fetchMock.mockResolvedValue(
+      json({
+        fullName: 'Jane Doe',
+        dateOfBirth: '1998-04-12',
+        nicNumber: '987654321V',
+      }),
+    );
+
+    await expect(extractKycNicOcr('kyc/user-1/nic.jpg')).resolves.toEqual({
+      fullName: 'Jane Doe',
+      dateOfBirth: '1998-04-12',
+      nicNumber: '987654321V',
+    });
+
+    const [url, options] = fetchMock.mock.calls[0];
+
+    expect(url).toBe('http://api.test/api/v1/kyc/extract-nic-ocr');
+    expect(options?.method).toBe('POST');
+    expect(options?.credentials).toBe('include');
+    expect(JSON.parse(String(options?.body))).toEqual({
+      objectKey: 'kyc/user-1/nic.jpg',
+    });
+  });
+
   it('submits the KYC details with the stored object key', async () => {
     fetchMock.mockResolvedValue(
       json(
@@ -105,7 +131,7 @@ describe('KYC API', () => {
     const request = {
       fullName: 'Jane Doe',
       dateOfBirth: '1998-04-12',
-      dubaiId: '784-1998-1234567-1',
+      nicNumber: '784-1998-1234567-1',
       documentPath: 'kyc/user-1/doc.jpg',
     };
 
