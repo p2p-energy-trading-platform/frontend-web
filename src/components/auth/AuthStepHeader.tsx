@@ -16,7 +16,7 @@ export function AuthStepHeader({
   currentStep,
   onBack,
 }: {
-  currentStep: 1 | 2;
+  currentStep: 1 | 2 | 3 | 4;
   onBack: () => void;
 }) {
   return (
@@ -42,3 +42,5 @@ export function AuthStepHeader({
     </header>
   );
 }
+
+export const StepHeader = AuthStepHeader;

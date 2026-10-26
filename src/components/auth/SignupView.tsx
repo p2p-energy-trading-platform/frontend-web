@@ -1,15 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 
-import { AuthStepHeader } from '#/components/auth/AuthStepHeader';
 import { CreateAccountForm } from '#/components/auth/CreateAccountForm';
-import RegistrationComplete from '#/components/auth/RegistrationComplete';
 import { KycStep } from '#/components/auth/KycStep';
-import { RegistrationStepper } from '#/components/auth/RegistrationStepper';
-import SignupSidebar from '#/components/auth/SignupSidebar';
+import RegistrationComplete from '#/components/auth/RegistrationComplete';
 import { SmartMeterStep } from '#/components/auth/SmartMeterStep';
+import { StepHeader } from '#/components/auth/AuthStepHeader';
 import { VerifyEmailStep } from '#/components/auth/VerifyEmailStep';
-import { registrationSteps } from '#/data/auth';
 import { useRegistration } from '#/hooks/useAuth';
 import type { KycStatus, SIGN_UP_STATES, SmartMeterStatus } from './types';
 
@@ -21,7 +18,6 @@ export default function SignupView() {
   const [kycStatus, setKycStatus] = useState<KycStatus>('not-submitted');
   const [meterStatus, setMeterStatus] = useState<SmartMeterStatus>('skipped');
 
-  const isInitialStep = view === 'account' || view === 'verify-email';
   const currentStep = getCurrentStep(view);
 
   function handleCreateAccount(email: string) {
@@ -42,58 +38,44 @@ export default function SignupView() {
   async function handleSmartMeterComplete(status: SmartMeterStatus) {
     await registration.completeSmartMeter();
     setMeterStatus(status);
+    if (status === 'skipped') {
+      void navigate({ to: '/profile' });
+      return;
+    }
     setView('complete');
+  }
+
+  function handleBack() {
+    switch (view) {
+      case 'account':
+        void navigate({ to: '/sign-in' });
+        break;
+      case 'verify-email':
+        setView('account');
+        break;
+      case 'kyc':
+        setView('verify-email');
+        break;
+      case 'smart-meter':
+        setView('kyc');
+        break;
+    }
   }
 
   return (
     <main
-      className="flex min-h-[100dvh] flex-col bg-bg-canvas text-text-primary"
+      className="min-h-[100dvh] bg-bg-canvas text-text-primary"
       data-source={registration.source}
     >
-      {isInitialStep ? (
-        <div className="grid lg:grid-cols-2">
-          <div className="flex justify-center px-6 lg:px-12">
-            <div className="w-full max-w-[393px]">
-              <AuthStepHeader
-                currentStep={view === 'account' ? 1 : 2}
-                onBack={() => {
-                  if (view === 'verify-email') {
-                    setView('account');
-                  } else {
-                    void navigate({ to: '/sign-in' });
-                  }
-                }}
-              />
-            </div>
+      <div className="mx-auto flex min-h-[100dvh] w-full max-w-[393px] flex-col">
+        {view !== 'complete' ? (
+          <div className="shrink-0 px-6">
+            <StepHeader currentStep={currentStep} onBack={handleBack} />
           </div>
-          <div className="hidden lg:block" />
-        </div>
-      ) : (
-        <section className="shrink-0 overflow-hidden bg-card px-5 py-4 sm:px-10">
-          <div className="mx-auto">
-            <RegistrationStepper
-              steps={registrationSteps}
-              currentStep={currentStep}
-            />
-          </div>
-        </section>
-      )}
+        ) : null}
 
-      <div className="grid flex-1 lg:grid-cols-2">
-        <section
-          className={
-            isInitialStep
-              ? `flex justify-center overflow-y-auto scroll-pb-10 bg-bg-canvas px-6 pb-8 ${view === 'verify-email' ? 'pt-8' : 'pt-6'} lg:px-12`
-              : 'flex justify-center overflow-y-auto bg-background px-5 py-10 sm:px-10 lg:px-16'
-          }
-        >
-          <div
-            className={
-              isInitialStep
-                ? 'flex w-full max-w-[393px] flex-col'
-                : 'w-full max-w-lg'
-            }
-          >
+        <section className="flex flex-1 justify-center overflow-y-auto scroll-pb-10 px-6 pt-6 pb-6">
+          <div className="flex min-h-[calc(100dvh-104px)] w-full flex-col">
             {view === 'account' ? (
               <CreateAccountForm
                 initialEmail={registeredEmail}
@@ -123,21 +105,12 @@ export default function SignupView() {
             ) : null}
           </div>
         </section>
-
-        <aside className="relative hidden overflow-y-auto bg-sidebar px-8 py-10 lg:block">
-          <SignupSidebar
-            view={view}
-            step={currentStep}
-            kycStatus={kycStatus}
-            meterStatus={meterStatus}
-          />
-        </aside>
       </div>
     </main>
   );
 }
 
-function getCurrentStep(stepView: SIGN_UP_STATES) {
+function getCurrentStep(stepView: SIGN_UP_STATES): 1 | 2 | 3 | 4 {
   switch (stepView) {
     case 'account':
       return 1;

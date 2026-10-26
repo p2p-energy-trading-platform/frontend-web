@@ -1,5 +1,6 @@
 import type { InputHTMLAttributes, ReactNode } from 'react';
 
+import { cn } from 'cn';
 import { Input } from '#/components/ui/input';
 import { PasswordInput } from '#/components/ui/password-input';
 
@@ -83,7 +84,10 @@ export function TextField({
         id={id}
         aria-invalid={error ? true : props['aria-invalid']}
         aria-describedby={helperId}
-        className={`h-[52px] rounded-2xl border-border-input bg-bg-surface px-4 text-base text-text-primary shadow-none placeholder:text-text-disabled focus-visible:border-accent focus-visible:ring-2 focus-visible:ring-accent/20 ${className ?? ''}`}
+        className={cn(
+          'h-[52px] rounded-2xl border-border-input bg-bg-surface px-4 text-base text-text-primary shadow-none placeholder:text-text-disabled focus-visible:border-accent focus-visible:ring-2 focus-visible:ring-accent/20',
+          className,
+        )}
       />
     </AuthFieldFrame>
   );
@@ -115,7 +119,10 @@ export function PasswordField({
         id={id}
         aria-describedby={helperId}
         aria-invalid={error ? true : props['aria-invalid']}
-        className={`h-[52px] rounded-2xl border-border-input bg-bg-surface text-base text-text-primary shadow-none placeholder:text-text-disabled ${className ?? ''}`}
+        className={cn(
+          'h-[52px] rounded-2xl border-border-input bg-bg-surface text-base text-text-primary shadow-none placeholder:text-text-disabled',
+          className,
+        )}
         innerClass="px-4"
       />
     </AuthFieldFrame>
