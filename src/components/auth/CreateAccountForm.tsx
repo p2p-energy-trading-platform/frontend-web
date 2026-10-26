@@ -1,54 +1,34 @@
-import { useState } from 'react';
 import { revalidateLogic, useForm } from '@tanstack/react-form';
 import { Link } from '@tanstack/react-router';
 
-import { GoogleSignInButton } from '#/components/auth/GoogleSignInButton';
-
-import { useRegister } from '#/features/auth/hooks';
-import { registerSchema } from '#/features/auth/schemas';
-import type { RegisterFormValues } from '#/features/auth/schemas';
+import { AuthDivider } from '#/components/auth/AuthDivider';
+import { GoogleButton } from '#/components/auth/GoogleButton';
+import { PasswordField, TextField } from '#/components/auth/AuthFields';
+import { TermsCheckbox } from '#/components/auth/TermsCheckbox';
 import { Button } from '#/components/ui/button';
-import { Checkbox } from '#/components/ui/checkbox';
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from '#/components/ui/field';
-import { Input } from '#/components/ui/input';
-import { PasswordInput } from '#/components/ui/password-input';
+import { FieldGroup } from '#/components/ui/field';
 import { toast } from '#/components/ui/toast';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '#/components/ui/dialog';
-import { LegalDocument } from '#/components/legal/LegalDocument';
-import {
-  formatFieldError,
-  getApiFieldErrors,
-  getGeneralFormError,
-  getRequestIdError,
-} from '#/lib/form-errors';
-import {
-  REGISTER_ERROR_FIELDS,
-  REGISTER_ERROR_OPTIONS,
-} from '#/features/auth/errors';
+import { createAccountSchema } from '#/features/auth/schemas';
+import type { CreateAccountValues } from '#/features/auth/schemas';
+import { formatFieldError } from '#/lib/form-errors';
 
 interface CreateAccountFormProps {
+  initialEmail?: string;
   onSuccess: (email: string) => Promise<void> | void;
 }
 
-export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
-  const registerMutation = useRegister();
-  const [activeLegal, setActiveLegal] = useState<'terms' | 'privacy' | null>(
-    null,
-  );
-  const defaultValues: RegisterFormValues = {
-    fullName: '',
-    email: '',
+function firstError(errors: unknown[]) {
+  return errors.length > 0
+    ? formatFieldError(errors[0]).message || undefined
+    : undefined;
+}
+
+export function CreateAccountForm({
+  initialEmail = '',
+  onSuccess,
+}: CreateAccountFormProps) {
+  const defaultValues: CreateAccountValues = {
+    email: initialEmail,
     password: '',
     confirmPassword: '',
     termsAccepted: false,
@@ -56,27 +36,121 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
   const form = useForm({
     defaultValues,
     validationLogic: revalidateLogic(),
-    validators: { onDynamic: registerSchema },
+    validators: { onDynamic: createAccountSchema },
     onSubmit: async ({ value }) => {
-      await registerMutation.mutateAsync({
-        name: value.fullName.trim(),
-        email: value.email,
-        password: value.password,
-      });
-      toast.add({
-        title: 'Account created. We sent a verification code to your email.',
-        type: 'success',
-      });
-      await onSuccess(value.email);
+      await onSuccess(value.email.trim());
     },
   });
 
   return (
-    <>
-      <h1 className="font-heading text-heading-1 font-bold leading-8">
-        Create your account
-      </h1>
-      <p className="mt-1 flex gap-1 text-sm leading-5 text-text-tertiary">
+    <div className="flex flex-1 flex-col">
+      <header>
+        <h1 className="font-heading text-[28px] leading-9 font-bold text-text-primary">
+          Create your account
+        </h1>
+        <p className="mt-2 text-[15px] leading-[22px] text-text-secondary">
+          Enter your email and choose a password.
+        </p>
+      </header>
+
+      <form
+        noValidate
+        className="mt-5"
+        onSubmit={(event) => {
+          event.preventDefault();
+          void form.handleSubmit();
+        }}
+      >
+        <FieldGroup className="gap-5">
+          <form.Field name="email">
+            {(field) => (
+              <TextField
+                id={field.name}
+                label="Email address"
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                placeholder="you@example.com"
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(event) => field.handleChange(event.target.value)}
+                error={firstError(field.state.meta.errors)}
+              />
+            )}
+          </form.Field>
+
+          <form.Field name="password">
+            {(field) => (
+              <PasswordField
+                id={field.name}
+                label="Password"
+                autoComplete="new-password"
+                placeholder="Create a strong password"
+                hint="At least 8 characters, with a letter and a number."
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(event) => field.handleChange(event.target.value)}
+                error={firstError(field.state.meta.errors)}
+              />
+            )}
+          </form.Field>
+
+          <form.Field name="confirmPassword">
+            {(field) => (
+              <PasswordField
+                id={field.name}
+                label="Confirm password"
+                autoComplete="new-password"
+                placeholder="Re-enter your password"
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(event) => field.handleChange(event.target.value)}
+                error={firstError(field.state.meta.errors)}
+              />
+            )}
+          </form.Field>
+
+          <form.Field name="termsAccepted">
+            {(field) => (
+              <TermsCheckbox
+                id={field.name}
+                checked={field.state.value}
+                onCheckedChange={field.handleChange}
+                error={firstError(field.state.meta.errors)}
+              />
+            )}
+          </form.Field>
+
+          <form.Subscribe
+            selector={(state) => [state.isValid, state.isSubmitting] as const}
+          >
+            {([isValid, isSubmitting]) => (
+              <Button
+                type="submit"
+                className="h-[52px] w-full rounded-xl bg-accent text-sm font-semibold text-accent-foreground hover:bg-accent/90"
+                disabled={!isValid || isSubmitting}
+              >
+                Create account
+              </Button>
+            )}
+          </form.Subscribe>
+        </FieldGroup>
+      </form>
+
+      <div className="my-6">
+        <AuthDivider />
+      </div>
+
+      <GoogleButton
+        onClick={() =>
+          toast.add({
+            title: 'Google sign-in is not connected in this preview.',
+            type: 'info',
+          })
+        }
+      />
+
+      <p className="mt-6 text-center text-sm text-text-secondary">
         Already have an account?{' '}
         <Link
           to="/sign-in"
@@ -85,257 +159,6 @@ export function CreateAccountForm({ onSuccess }: CreateAccountFormProps) {
           Sign in
         </Link>
       </p>
-      <form
-        onSubmit={(event) => {
-          event.preventDefault();
-          void form.handleSubmit();
-        }}
-        noValidate
-        className="my-6"
-      >
-        <FieldGroup>
-          <form.Field name="fullName">
-            {(field) => (
-              <Field data-invalid={field.state.meta.errors.length > 0}>
-                <FieldLabel htmlFor={field.name}>Full Name</FieldLabel>
-                <Input
-                  id={field.name}
-                  type="text"
-                  autoComplete="name"
-                  placeholder="Enter your full name"
-                  className="h-12 rounded-2xl px-4"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(event) => {
-                    registerMutation.reset();
-                    field.handleChange(event.target.value);
-                  }}
-                  aria-invalid={
-                    field.state.meta.errors.length > 0 ||
-                    getApiFieldErrors(registerMutation.error, 'name').length > 0
-                  }
-                />
-                <FieldError
-                  errors={[
-                    ...field.state.meta.errors.map((error) => ({
-                      ...formatFieldError(error),
-                    })),
-                    ...getApiFieldErrors(registerMutation.error, 'name'),
-                  ]}
-                />
-              </Field>
-            )}
-          </form.Field>
-          <form.Field name="email">
-            {(field) => (
-              <Field data-invalid={field.state.meta.errors.length > 0}>
-                <FieldLabel htmlFor={field.name}>Email Address</FieldLabel>
-                <Input
-                  id={field.name}
-                  type="email"
-                  autoComplete="email"
-                  placeholder="you@example.com"
-                  className="h-12 rounded-2xl px-4"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(event) => {
-                    registerMutation.reset();
-                    field.handleChange(event.target.value);
-                  }}
-                  aria-invalid={
-                    field.state.meta.errors.length > 0 ||
-                    getApiFieldErrors(
-                      registerMutation.error,
-                      'email',
-                      REGISTER_ERROR_OPTIONS,
-                    ).length > 0
-                  }
-                />
-                <FieldError
-                  errors={[
-                    ...field.state.meta.errors.map((error) => ({
-                      ...formatFieldError(error),
-                    })),
-                    ...getApiFieldErrors(
-                      registerMutation.error,
-                      'email',
-                      REGISTER_ERROR_OPTIONS,
-                    ),
-                  ]}
-                />
-              </Field>
-            )}
-          </form.Field>
-          <form.Field name="password">
-            {(field) => (
-              <Field data-invalid={field.state.meta.errors.length > 0}>
-                <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                <PasswordInput
-                  id={field.name}
-                  autoComplete="new-password"
-                  placeholder="Create a strong password"
-                  className="h-12 rounded-2xl"
-                  innerClass="px-4"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(event) => {
-                    registerMutation.reset();
-                    field.handleChange(event.target.value);
-                  }}
-                  aria-invalid={
-                    field.state.meta.errors.length > 0 ||
-                    getApiFieldErrors(registerMutation.error, 'password')
-                      .length > 0
-                  }
-                />
-                <FieldError
-                  errors={[
-                    ...field.state.meta.errors.map((error) => ({
-                      ...formatFieldError(error),
-                    })),
-                    ...getApiFieldErrors(registerMutation.error, 'password'),
-                  ]}
-                />
-              </Field>
-            )}
-          </form.Field>
-          <form.Field name="confirmPassword">
-            {(field) => (
-              <Field data-invalid={field.state.meta.errors.length > 0}>
-                <FieldLabel htmlFor={field.name}>Confirm Password</FieldLabel>
-                <PasswordInput
-                  id={field.name}
-                  autoComplete="new-password"
-                  placeholder="Re-enter your password"
-                  className="h-12 rounded-2xl"
-                  innerClass="px-4"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(event) => {
-                    registerMutation.reset();
-                    field.handleChange(event.target.value);
-                  }}
-                  aria-invalid={field.state.meta.errors.length > 0}
-                />
-                <FieldError
-                  errors={field.state.meta.errors.map((error) => ({
-                    ...formatFieldError(error),
-                  }))}
-                />
-              </Field>
-            )}
-          </form.Field>
-          <form.Field name="termsAccepted">
-            {(field) => (
-              <>
-                <Field orientation={'horizontal'}>
-                  <Checkbox
-                    id={field.name}
-                    checked={field.state.value}
-                    aria-label="I agree to the GridX Terms and Privacy Policy"
-                    aria-invalid={field.state.meta.errors.length > 0}
-                    onCheckedChange={(checked) => {
-                      registerMutation.reset();
-                      field.handleChange(checked === true);
-                    }}
-                  />
-                  <FieldLabel htmlFor={field.name}>
-                    <div className="text-sm leading-6 text-text-secondary">
-                      <span>I agree to the </span>
-                      <button
-                        type="button"
-                        className="font-semibold text-accent hover:underline"
-                        onClick={() => setActiveLegal('terms')}
-                      >
-                        GridX Terms
-                      </button>
-                      <span> and </span>
-                      <button
-                        type="button"
-                        className="font-semibold text-accent hover:underline"
-                        onClick={() => setActiveLegal('privacy')}
-                      >
-                        Privacy Policy
-                      </button>
-                    </div>
-                    <Dialog
-                      open={activeLegal !== null}
-                      onOpenChange={(open) => {
-                        if (!open) setActiveLegal(null);
-                      }}
-                    >
-                      <DialogContent className="flex h-[85vh] w-[95vw] max-h-[85vh] max-w-6xl flex-col gap-4 overflow-hidden p-6 sm:p-8">
-                        <DialogHeader className="shrink-0 pr-8">
-                          <DialogTitle>
-                            {activeLegal === 'terms'
-                              ? 'GridX Terms of Service'
-                              : 'GridX Privacy Policy'}
-                          </DialogTitle>
-                          <DialogDescription>
-                            Review the document below. Close this dialog to
-                            return to your account registration.
-                          </DialogDescription>
-                        </DialogHeader>
-                        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-3">
-                          {activeLegal && <LegalDocument type={activeLegal} />}
-                        </div>
-                      </DialogContent>
-                    </Dialog>
-                  </FieldLabel>
-                </Field>
-                <FieldError
-                  className="ml-6"
-                  errors={field.state.meta.errors.map((error) =>
-                    formatFieldError(error),
-                  )}
-                />
-              </>
-            )}
-          </form.Field>
-          {getGeneralFormError(
-            registerMutation.error,
-            REGISTER_ERROR_FIELDS,
-            REGISTER_ERROR_OPTIONS,
-          ) ? (
-            <FieldError>
-              {getGeneralFormError(
-                registerMutation.error,
-                REGISTER_ERROR_FIELDS,
-                REGISTER_ERROR_OPTIONS,
-              )}
-            </FieldError>
-          ) : null}
-          {getRequestIdError(registerMutation.error) ? (
-            <p className="text-xs text-text-disabled">
-              {getRequestIdError(registerMutation.error)}
-            </p>
-          ) : null}
-          <Field>
-            <Button
-              type="submit"
-              className="h-12 w-full rounded-xl"
-              disabled={registerMutation.isPending}
-            >
-              {registerMutation.isPending
-                ? 'Creating Account...'
-                : 'Create Account'}
-            </Button>
-            <p className="mt-3.5 text-center text-caption leading-4 text-text-disabled">
-              Complete all fields and accept the terms to continue.
-            </p>
-          </Field>
-        </FieldGroup>
-      </form>
-
-      <div className="mb-6 flex items-center gap-3 text-xs font-medium text-text-disabled">
-        <span className="h-px flex-1 bg-muted/50" />
-        <span>or continue with</span>
-        <span className="h-px flex-1 bg-muted/50" />
-      </div>
-
-      <div className="grid grid-cols-1 gap-2.5 pb-12">
-        <GoogleSignInButton />
-      </div>
-    </>
+    </div>
   );
 }

@@ -1,14 +1,19 @@
 import { useEffect, useState } from 'react';
+import { cn } from 'cn';
 
 import { Button } from '#/components/ui/button';
 import { getGoogleSignInUrl } from '#/features/auth/api';
 
 interface GoogleSignInButtonProps {
   returnTo?: string;
+  className?: string;
+  onClick?: () => void;
 }
 
 export function GoogleSignInButton({
   returnTo = '/dashboard',
+  className,
+  onClick,
 }: GoogleSignInButtonProps) {
   const [isRedirecting, setIsRedirecting] = useState(false);
 
@@ -27,9 +32,16 @@ export function GoogleSignInButton({
     <Button
       type="button"
       variant="outline"
-      className="h-12 cursor-pointer gap-2.5 rounded-2xl bg-card text-sm font-semibold hover:bg-card/80"
+      className={cn(
+        'h-[52px] cursor-pointer gap-2.5 rounded-2xl border-border-input bg-bg-surface text-sm font-semibold text-text-primary hover:bg-background-well',
+        className,
+      )}
       disabled={isRedirecting}
       onClick={() => {
+        if (onClick) {
+          onClick();
+          return;
+        }
         setIsRedirecting(true);
         window.location.assign(getGoogleSignInUrl(returnTo));
       }}

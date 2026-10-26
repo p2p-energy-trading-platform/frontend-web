@@ -1,31 +1,9 @@
-import { revalidateLogic, useForm } from '@tanstack/react-form';
-import { ArrowLeft, ArrowRight, Clock3, MailCheck } from 'lucide-react';
+import { Mail } from 'lucide-react';
+import { useState } from 'react';
 
+import { OtpInput } from '#/components/auth/OtpInput';
 import { Button } from '#/components/ui/button';
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from '#/components/ui/field';
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSlot,
-} from '#/components/ui/input-otp';
 import { toast } from '#/components/ui/toast';
-import { useResendOtp, useVerifyEmail } from '#/features/auth/hooks';
-import { verifyEmailSchema } from '#/features/auth/schemas';
-import type { VerifyEmailFormValues } from '#/features/auth/schemas';
-import {
-  formatFieldError,
-  getApiFieldErrors,
-  getGeneralFormError,
-  getRequestIdError,
-} from '#/lib/form-errors';
-import { VERIFY_EMAIL_ERROR_FIELDS } from '#/features/auth/errors';
-
-const OTP_LENGTH = 6;
 
 interface VerifyEmailStepProps {
   email: string;
@@ -33,185 +11,86 @@ interface VerifyEmailStepProps {
   onVerified: () => Promise<void> | void;
 }
 
+function maskEmail(email: string) {
+  const [localPart, domain] = email.split('@');
+  if (!localPart || !domain) return email;
+
+  return `${localPart.slice(0, 2)}•••••••••••@${domain}`;
+}
+
 export function VerifyEmailStep({
   email,
   onBack,
   onVerified,
 }: VerifyEmailStepProps) {
-  const verifyMutation = useVerifyEmail();
-  const resendMutation = useResendOtp();
-
-  const form = useForm({
-    defaultValues: { otp: '' } satisfies VerifyEmailFormValues,
-    validationLogic: revalidateLogic(),
-    validators: { onDynamic: verifyEmailSchema },
-    onSubmit: async ({ value }) => {
-      resendMutation.reset();
-      await verifyMutation.mutateAsync({ email, otp: value.otp });
-      await onVerified();
-    },
-  });
-
-  async function handleResend() {
-    verifyMutation.reset();
-
-    try {
-      await resendMutation.mutateAsync({ email });
-    } catch {
-      // Shown below the code field from the mutation state.
-      return;
-    }
-
-    form.reset();
-    toast.add({
-      title: 'A new verification code has been sent.',
-      type: 'success',
-    });
-  }
-
-  const submitError = verifyMutation.error ?? resendMutation.error;
-  const isBusy = verifyMutation.isPending || resendMutation.isPending;
+  const [otp, setOtp] = useState('');
 
   return (
-    <>
-      <div className="flex size-12 items-center justify-center rounded-2xl border border-accent/25 bg-accent/15 text-accent">
-        <MailCheck className="size-6" />
-      </div>
-
-      <p className="mt-4 text-caption font-bold uppercase tracking-widest text-accent">
-        Email verification
-      </p>
-
-      <h1 className="mt-1 font-heading text-heading-1 font-bold leading-[34px]">
-        Verify your email
-      </h1>
-
-      <p className="mt-2 text-sm leading-[22px] text-text-tertiary">
-        Enter the verification code sent to
-      </p>
-      <p className="mt-0.5 break-all text-sm font-semibold text-foreground">
-        {email}
-      </p>
-      <p role="status" className="mt-3 text-sm text-accent">
-        Account created. We sent a verification code to your email.
-      </p>
+    <div className="flex min-h-full flex-col">
+      <header>
+        <div className="flex size-11 items-center justify-center rounded-2xl border border-feedback-info-border bg-feedback-info-background text-feedback-info-icon">
+          <Mail className="size-5" aria-hidden="true" />
+        </div>
+        <h1 className="mt-4 font-heading text-[28px] leading-9 font-bold text-text-primary">
+          Verify your email
+        </h1>
+        <p className="mt-1 text-[15px] leading-[22px] text-text-secondary">
+          We sent a 6-digit code to
+          <br />
+          <span className="font-semibold text-text-primary">
+            {maskEmail(email)}
+          </span>
+          .
+        </p>
+      </header>
 
       <form
-        noValidate
+        className="mt-6"
         onSubmit={(event) => {
           event.preventDefault();
-          void form.handleSubmit();
+          if (otp.length === 6) void onVerified();
         }}
-        className="mt-8"
       >
-        <FieldGroup>
-          <form.Field name="otp">
-            {(field) => (
-              <Field data-invalid={field.state.meta.errors.length > 0}>
-                <FieldLabel
-                  htmlFor={field.name}
-                  className="text-xs font-semibold tracking-wide text-muted-foreground uppercase"
-                >
-                  6-digit verification code
-                </FieldLabel>
-                <InputOTP
-                  id={field.name}
-                  maxLength={OTP_LENGTH}
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(value) => {
-                    verifyMutation.reset();
-                    resendMutation.reset();
-                    field.handleChange(value.replace(/\D/g, ''));
-                  }}
-                  containerClassName="mt-2 justify-center"
-                  aria-label="6-digit verification code"
-                  aria-invalid={
-                    field.state.meta.errors.length > 0 ||
-                    getApiFieldErrors(verifyMutation.error, 'otp').length > 0
-                  }
-                  disabled={isBusy}
-                >
-                  <InputOTPGroup>
-                    {Array.from({ length: OTP_LENGTH }, (_, index) => (
-                      <InputOTPSlot
-                        key={index}
-                        index={index}
-                        className="size-14 text-xl"
-                      />
-                    ))}
-                  </InputOTPGroup>
-                </InputOTP>
-                <FieldError
-                  errors={[
-                    ...field.state.meta.errors.map(formatFieldError),
-                    ...getApiFieldErrors(verifyMutation.error, 'otp'),
-                  ]}
-                />
-              </Field>
-            )}
-          </form.Field>
-
-          {getGeneralFormError(submitError, VERIFY_EMAIL_ERROR_FIELDS) ? (
-            <FieldError>
-              {getGeneralFormError(submitError, VERIFY_EMAIL_ERROR_FIELDS)}
-            </FieldError>
-          ) : null}
-          {getRequestIdError(submitError) ? (
-            <p className="text-xs text-text-disabled">
-              {getRequestIdError(submitError)}
-            </p>
-          ) : null}
-
-          <div className="flex items-center gap-2 text-xs text-text-tertiary">
-            <Clock3 className="size-3.5 text-accent" />
-            Code expires in 10 minutes
-          </div>
-
-          <Field>
-            <form.Subscribe
-              selector={(state) =>
-                [state.isSubmitting, state.values.otp] as const
-              }
-            >
-              {([isSubmitting, otp]) => (
-                <Button
-                  type="submit"
-                  className="h-12 rounded-xl"
-                  disabled={isBusy || isSubmitting || otp.length !== OTP_LENGTH}
-                >
-                  {isSubmitting ? 'Verifying...' : 'Verify Email'}
-                  <ArrowRight className="size-4" />
-                </Button>
-              )}
-            </form.Subscribe>
-          </Field>
-        </FieldGroup>
+        <OtpInput value={otp} onChange={setOtp} />
+        <p className="mt-3 text-sm leading-[20px] text-text-disabled">
+          The code expires in 10 minutes. Check your spam folder if you
+          don&apos;t see it.
+        </p>
+        <Button
+          type="submit"
+          className="mt-6 h-[52px] w-full rounded-xl bg-accent text-sm font-semibold text-accent-foreground hover:bg-accent/90"
+          disabled={otp.length !== 6}
+        >
+          Verify email
+        </Button>
       </form>
 
-      <p className="mt-5 text-center text-sm text-text-tertiary">
-        Didn&apos;t receive the verification code?{' '}
-        <Button
+      <p className="mt-5 text-center text-sm text-text-secondary">
+        Didn&apos;t get a code?{' '}
+        <button
           type="button"
-          variant="link"
-          className="h-auto p-0 font-semibold text-accent"
-          onClick={() => void handleResend()}
-          disabled={isBusy}
+          className="font-semibold text-accent hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          onClick={() =>
+            toast.add({
+              title: 'Email delivery is not connected in this preview.',
+              type: 'info',
+            })
+          }
         >
-          {resendMutation.isPending ? 'Sending...' : 'Resend'}
-        </Button>
+          Resend code
+        </button>
       </p>
 
-      <Button
-        type="button"
-        variant="link"
-        onClick={onBack}
-        className="mt-6"
-        disabled={isBusy}
-      >
-        <ArrowLeft className="size-4" />
-        Back to account details
-      </Button>
-    </>
+      <p className="mt-auto pt-8 text-center text-sm text-text-secondary">
+        Wrong email?{' '}
+        <button
+          type="button"
+          className="font-semibold text-accent hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          onClick={onBack}
+        >
+          Change email address
+        </button>
+      </p>
+    </div>
   );
 }

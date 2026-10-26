@@ -17,6 +17,31 @@ const password = z
   .min(8, 'Password must be 8 to 128 characters')
   .max(128, 'Password must be 8 to 128 characters');
 
+const registrationPassword = z
+  .string()
+  .min(8, 'Use at least 8 characters')
+  .max(128, 'Password must be 128 characters or fewer')
+  .regex(/[A-Za-z]/, 'Add at least one letter')
+  .regex(/[0-9]/, 'Add at least one number');
+
+export const createAccountSchema = z
+  .object({
+    email,
+    password: registrationPassword,
+    confirmPassword: z.string(),
+    termsAccepted: z.boolean(),
+  })
+  .refine((value) => value.password === value.confirmPassword, {
+    path: ['confirmPassword'],
+    message: 'Passwords do not match',
+  })
+  .refine((value) => value.termsAccepted, {
+    path: ['termsAccepted'],
+    message: 'You must accept the terms to continue',
+  });
+
+export type CreateAccountValues = z.infer<typeof createAccountSchema>;
+
 export const registerSchema = z
   .object({
     fullName,

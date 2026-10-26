@@ -1,172 +1,142 @@
+import { useState } from 'react';
 import { revalidateLogic, useForm } from '@tanstack/react-form';
-import { getRouteApi, Link, useNavigate } from '@tanstack/react-router';
+import { Link, getRouteApi } from '@tanstack/react-router';
 
-import { useLogin } from '#/features/auth/hooks';
-import { loginSchema } from '#/features/auth/schemas';
-import type { LoginFormValues } from '#/features/auth/schemas';
+import { AuthDivider } from '#/components/auth/AuthDivider';
+import { GoogleButton } from '#/components/auth/GoogleButton';
+import { PasswordField, TextField } from '#/components/auth/AuthFields';
 import { Button } from '#/components/ui/button';
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from '#/components/ui/field';
-import { Input } from '#/components/ui/input';
-import { PasswordInput } from '#/components/ui/password-input';
-import {
-  getApiFieldErrors,
-  formatFieldError,
-  getGeneralFormError,
-  getRequestIdError,
-} from '#/lib/form-errors';
-import { LOGIN_ERROR_FIELDS } from '#/features/auth/errors';
-import { GoogleSignInButton } from '#/components/auth/GoogleSignInButton';
+import { Checkbox } from '#/components/ui/checkbox';
+import { FieldGroup } from '#/components/ui/field';
+import { toast } from '#/components/ui/toast';
+import type { LoginFormValues } from '#/features/auth/schemas';
+import { loginSchema } from '#/features/auth/schemas';
+import { formatFieldError } from '#/lib/form-errors';
 
 const signInRoute = getRouteApi('/_auth/sign-in');
 
+function firstError(errors: unknown[]) {
+  return errors.length > 0
+    ? formatFieldError(errors[0]).message || undefined
+    : undefined;
+}
+
 export default function SignInForm() {
-  const navigate = useNavigate();
   const { error: redirectError } = signInRoute.useSearch();
-  const loginMutation = useLogin();
+  const [rememberMe, setRememberMe] = useState(false);
   const form = useForm({
     defaultValues: { email: '', password: '' } satisfies LoginFormValues,
     validationLogic: revalidateLogic(),
     validators: { onDynamic: loginSchema },
-    onSubmit: async ({ value }) => {
-      await loginMutation.mutateAsync({
-        email: value.email,
-        password: value.password,
+    onSubmit: () => {
+      toast.add({
+        title: 'Authentication is not connected in this preview.',
+        type: 'info',
       });
-      await navigate({ to: '/dashboard' });
     },
   });
 
   return (
-    <form
-      className="mt-7"
-      noValidate
-      onSubmit={(event) => {
-        event.preventDefault();
-        void form.handleSubmit();
-      }}
-    >
-      <FieldGroup>
-        <form.Field name="email">
-          {(field) => (
-            <Field data-invalid={field.state.meta.errors.length > 0}>
-              <FieldLabel htmlFor={field.name}>Email address</FieldLabel>
-              <Input
+    <div className="flex min-h-0 flex-1 flex-col">
+      <form
+        noValidate
+        className="mt-8"
+        onSubmit={(event) => {
+          event.preventDefault();
+          void form.handleSubmit();
+        }}
+      >
+        <FieldGroup className="gap-5">
+          <form.Field name="email">
+            {(field) => (
+              <TextField
                 id={field.name}
+                label="Email address"
                 type="email"
+                inputMode="email"
                 autoComplete="email"
                 placeholder="you@example.com"
-                className="h-12 rounded-2xl px-4"
                 value={field.state.value}
                 onBlur={field.handleBlur}
                 onChange={(event) => field.handleChange(event.target.value)}
-                aria-invalid={
-                  field.state.meta.errors.length > 0 ||
-                  getApiFieldErrors(loginMutation.error, 'email').length > 0
-                }
+                error={firstError(field.state.meta.errors)}
               />
-              <FieldError
-                errors={[
-                  ...field.state.meta.errors.map((error) => ({
-                    ...formatFieldError(error),
-                  })),
-                  ...getApiFieldErrors(loginMutation.error, 'email'),
-                ]}
-              />
-            </Field>
-          )}
-        </form.Field>
+            )}
+          </form.Field>
 
-        <form.Field name="password">
-          {(field) => (
-            <Field data-invalid={field.state.meta.errors.length > 0}>
-              <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-              <PasswordInput
+          <form.Field name="password">
+            {(field) => (
+              <PasswordField
                 id={field.name}
+                label="Password"
                 autoComplete="current-password"
                 placeholder="Enter your password"
-                className="h-12 rounded-2xl "
-                innerClass="px-4"
+                trailing={
+                  <Link
+                    to="/forgot-password"
+                    className="text-[13px] leading-[18px] font-semibold text-accent hover:underline"
+                  >
+                    Forgot password?
+                  </Link>
+                }
                 value={field.state.value}
                 onBlur={field.handleBlur}
                 onChange={(event) => field.handleChange(event.target.value)}
-                aria-invalid={
-                  field.state.meta.errors.length > 0 ||
-                  getApiFieldErrors(loginMutation.error, 'password').length > 0
-                }
+                error={firstError(field.state.meta.errors)}
               />
-              <FieldError
-                errors={[
-                  ...field.state.meta.errors.map((error) => ({
-                    ...formatFieldError(error),
-                  })),
-                  ...getApiFieldErrors(loginMutation.error, 'password'),
-                ]}
-              />
-            </Field>
-          )}
-        </form.Field>
+            )}
+          </form.Field>
+        </FieldGroup>
 
-        <div className="flex justify-end">
-          <Link
-            to="/forgot-password"
-            className="text-xs font-semibold text-accent hover:underline"
-          >
-            Forgot password?
-          </Link>
-        </div>
+        <label
+          htmlFor="remember-me"
+          className="mt-7 flex cursor-pointer items-center gap-3 text-sm leading-5 text-text-secondary"
+        >
+          <Checkbox
+            id="remember-me"
+            checked={rememberMe}
+            onCheckedChange={(checked) => setRememberMe(checked === true)}
+            className="size-5 rounded-md border-border-input bg-bg-surface"
+          />
+          Remember me for 30 days
+        </label>
 
-        {getGeneralFormError(loginMutation.error, LOGIN_ERROR_FIELDS) ? (
-          <FieldError>
-            {getGeneralFormError(loginMutation.error, LOGIN_ERROR_FIELDS)}
-          </FieldError>
-        ) : null}
-        {getRequestIdError(loginMutation.error) ? (
-          <p className="text-xs text-text-disabled">
-            {getRequestIdError(loginMutation.error)}
+        <Button
+          type="submit"
+          className="mt-8 h-[52px] w-full rounded-xl bg-accent text-sm font-semibold text-accent-foreground hover:bg-accent/90"
+        >
+          Sign in
+        </Button>
+
+        {redirectError === 'google' ? (
+          <p role="alert" className="mt-3 text-sm text-feedback-error-text">
+            Google sign-in failed. Please try again.
           </p>
         ) : null}
+      </form>
 
-        <Field>
-          <Button
-            type="submit"
-            className="h-12 w-full rounded-xl"
-            disabled={loginMutation.isPending}
-          >
-            {loginMutation.isPending ? 'Signing in...' : 'Sign in'}
-          </Button>
-        </Field>
-      </FieldGroup>
-
-      <div className="my-6 flex items-center gap-3 text-xs font-medium text-text-disabled">
-        <span className="h-px flex-1 bg-muted/50" />
-        <span>or continue with</span>
-        <span className="h-px flex-1 bg-muted/50" />
+      <div className="my-6">
+        <AuthDivider />
       </div>
 
-      <div className="mt-2.5 grid grid-cols-1 gap-2.5">
-        <GoogleSignInButton />
-        {redirectError === 'google' ? (
-          <FieldError>Google sign-in failed. Please try again.</FieldError>
-        ) : null}
-      </div>
+      <GoogleButton
+        onClick={() =>
+          toast.add({
+            title: 'Google sign-in is not connected in this preview.',
+            type: 'info',
+          })
+        }
+      />
 
-      <p className="mt-2.5 text-center text-caption text-text-disabled">
-        These options may not yet be available in all regions.
-      </p>
-      <p className="mt-6 text-center text-sm text-text-tertiary">
-        New to GridX?{' '}
+      <p className="mt-auto pt-8 pb-8 text-center text-sm text-text-secondary">
+        Don&apos;t have an account?{' '}
         <Link
           to="/sign-up"
           className="font-semibold text-accent hover:underline"
         >
-          Create Account
+          Create account
         </Link>
       </p>
-    </form>
+    </div>
   );
 }
