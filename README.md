@@ -25,6 +25,33 @@ This project uses [Vitest](https://vitest.dev/) for testing. You can run the tes
 npm run test
 ```
 
+### Running E2E tests
+
+End-to-end tests use [Playwright](https://playwright.dev/) and live in `e2e/`. Playwright starts the dev server itself, and every API call to the gateway is mocked in the browser (see `e2e/fixtures.ts`), so no backend services need to run.
+
+```bash
+npx playwright install chromium  # first time only
+npm run test:e2e                 # run headless
+npm run test:e2e:ui              # open the Playwright UI
+npx playwright show-report       # open the last HTML report
+```
+
+To mock an endpoint in a test, use the `api` fixture:
+
+```ts
+test('signs in', async ({ page, api }) => {
+  api.on('POST', '/api/v1/auth/login', () => {
+    api.signIn();
+    return { body: { userId: '...', email: 'aisha@example.com' } };
+  });
+  // ...
+});
+```
+
+`api.signIn()` makes `/api/v1/auth/me` return a user, so protected pages load. Endpoints without a mock return `404`.
+
+> If a dev server is already running on port 3000, Playwright reuses it. It must use `VITE_API_BASE_URL=http://localhost:8000`, or the mocks will not match.
+
 ## Styling
 
 This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
