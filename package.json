@@ -11,9 +11,11 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run --config vitest.config.ts",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --fix --ext .ts,.tsx",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p e2e",
     "check": "prettier --check \"src/**/*.{ts,tsx,css}\"",
     "check:fix": "prettier --write \"src/**/*.{ts,tsx,css}\"",
     "prepare": "husky"
@@ -61,6 +63,7 @@
   "devDependencies": {
     "@commitlint/cli": "^21.2.0",
     "@commitlint/config-conventional": "^21.2.0",
+    "@playwright/test": "^1.64.1",
     "@rolldown/plugin-babel": "^0.2.3",
     "@tailwindcss/typography": "^0.5.16",
     "@tanstack/devtools-vite": "latest",
