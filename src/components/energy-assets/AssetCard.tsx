@@ -1,6 +1,7 @@
 import { MoreHorizontal } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
+import { SampleBadge } from '#/components/page-components/SampleBadge';
 import { Button } from '#/components/ui/button';
 import { Card, CardContent, CardHeader } from '../ui/card';
 import { cn } from 'cn';
@@ -21,10 +22,13 @@ export interface AssetCardProps {
   statUnit: string;
   statLabel: string;
   socPercent?: number;
-  health: AssetHealth;
-  healthPercent: number;
+  /** Omitted when the device does not report its health. */
+  health?: AssetHealth;
+  healthPercent?: number;
   lastUpdated: string;
-  controlMode: AssetControlMode;
+  controlMode?: AssetControlMode;
+  /** Demo asset without backend data yet. */
+  sample?: boolean;
   onClick?: () => void;
   onMenuClick?: () => void;
 }
@@ -54,6 +58,8 @@ export function AssetCard({
   socPercent,
   health,
   healthPercent,
+  lastUpdated,
+  sample,
   onMenuClick,
 }: AssetCardProps) {
   return (
@@ -72,6 +78,7 @@ export function AssetCard({
             <div>
               <p className="text-sm font-semibold text-text-primary">{name}</p>
               <p className="text-xs text-text-tertiary">{brandModel}</p>
+              {sample && <SampleBadge className="mt-1" />}
             </div>
           </div>
 
@@ -125,17 +132,23 @@ export function AssetCard({
         )}
 
         <div className="relative mt-3 flex items-center gap-2 border-t border-border-subtle pt-2.5">
-          <div className="flex flex-1 items-center gap-2">
-            <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
-              <div
-                className={cn('h-full rounded-full', healthBarClass[health])}
-                style={{ width: `${healthPercent}%` }}
-              />
+          {health ? (
+            <div className="flex flex-1 items-center gap-2">
+              <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
+                <div
+                  className={cn('h-full rounded-full', healthBarClass[health])}
+                  style={{ width: `${healthPercent ?? 0}%` }}
+                />
+              </div>
+              <span className="w-10 text-xs font-semibold text-text-tertiary">
+                {health}
+              </span>
             </div>
-            <span className="w-10 text-xs font-semibold text-text-tertiary">
-              {health}
+          ) : (
+            <span className="text-xs text-text-tertiary">
+              Updated {lastUpdated}
             </span>
-          </div>
+          )}
         </div>
       </CardContent>
     </Card>
