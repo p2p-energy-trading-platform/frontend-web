@@ -1,42 +1,24 @@
+import { useMemo, useState } from 'react';
+
+import { EChart } from '#/components/charts/EChart';
+import { useChartColors } from '#/components/charts/theme';
+import { IotDataState } from '#/components/page-components/IotDataState';
 import { Card } from '#/components/ui/card';
+import { generationChartOption } from '#/features/iot/chart-options';
 import { useGenerationSeries } from '#/hooks/useDashboard';
+import type { GenerationPeriod } from '#/hooks/useDashboard';
 import { cn } from 'cn';
 
-// Replace with proper charts
+const PERIODS: Array<GenerationPeriod> = ['Day', 'Week', 'Month'];
 
-export interface GenerationChartProps {
-  /** 0-1 normalized points across the day, left to right */
-  points?: Array<number>;
-  range?: 'Day' | 'Week' | 'Month';
-  onRangeChange?: (range: 'Day' | 'Week' | 'Month') => void;
-}
-
-export function GenerationChart({
-  points,
-  range = 'Day',
-  onRangeChange,
-}: GenerationChartProps) {
-  const series = useGenerationSeries();
-  const chartPoints = points ?? series.points;
-  const width = 900;
-  const height = 260;
-  const paddingBottom = 24;
-  const chartHeight = height - paddingBottom;
-
-  const step = width / (chartPoints.length - 1);
-  const coords = chartPoints.map((p, i) => [
-    i * step,
-    chartHeight - p * chartHeight,
-  ]);
-
-  const linePath = coords
-    .map(([x, y], i) => `${i === 0 ? 'M' : 'L'} ${x} ${y}`)
-    .join(' ');
-
-  const areaPath = `${linePath} L ${width} ${chartHeight} L 0 ${chartHeight} Z`;
-
-  const yLabels = series.yLabels;
-  const xLabels = series.xLabels;
+export function GenerationChart() {
+  const [period, setPeriod] = useState<GenerationPeriod>('Day');
+  const series = useGenerationSeries(period);
+  const colors = useChartColors();
+  const option = useMemo(
+    () => generationChartOption(series.buckets, colors, series.range),
+    [series.buckets, colors, series.range],
+  );
 
   return (
     <Card className="gap-4 border-border-subtle bg-card p-5">
@@ -51,83 +33,37 @@ export function GenerationChart({
         </div>
 
         <div className="inline-flex rounded-lg border border-border-subtle bg-secondary p-0.5 text-xs font-medium">
-          {(['Day', 'Week', 'Month'] as const).map((r) => (
+          {PERIODS.map((p) => (
             <button
-              key={r}
+              key={p}
               type="button"
-              onClick={() => onRangeChange?.(r)}
+              aria-pressed={p === period}
+              onClick={() => setPeriod(p)}
               className={cn(
                 'rounded-md px-3 py-1 transition',
-                r === range
+                p === period
                   ? 'bg-card text-text-primary shadow-sm'
                   : 'text-text-tertiary hover:text-text-secondary',
               )}
             >
-              {r}
+              {p}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="flex gap-2">
-        <div className="flex flex-col justify-between py-1 text-xs text-text-tertiary">
-          {yLabels.map((l) => (
-            <span key={l}>{l}</span>
-          ))}
-        </div>
-
-        <div className="min-w-0 flex-1">
-          <svg
-            viewBox={`0 0 ${width} ${height}`}
-            className="h-56 w-full"
-            preserveAspectRatio="none"
-          >
-            <defs>
-              <linearGradient id="genFill" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="0%"
-                  stopColor="var(--action-accent)"
-                  stopOpacity="0.35"
-                />
-                <stop
-                  offset="100%"
-                  stopColor="var(--action-accent)"
-                  stopOpacity="0"
-                />
-              </linearGradient>
-            </defs>
-
-            {yLabels.map((_, i) => (
-              <line
-                key={i}
-                x1={0}
-                x2={width}
-                y1={(chartHeight / (yLabels.length - 1)) * i}
-                y2={(chartHeight / (yLabels.length - 1)) * i}
-                className="stroke-border-subtle"
-                strokeWidth={1}
-                strokeDasharray="4 4"
-              />
-            ))}
-
-            <path d={areaPath} fill="url(#genFill)" />
-            <path
-              d={linePath}
-              fill="none"
-              stroke="var(--action-accent)"
-              strokeWidth={2.5}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-
-          <div className="mt-1 flex justify-between text-xs text-text-tertiary">
-            {xLabels.map((l) => (
-              <span key={l}>{l}</span>
-            ))}
-          </div>
-        </div>
-      </div>
+      {series.status === 'ready' ? (
+        <EChart
+          option={option}
+          ariaLabel="Generation and consumption over time"
+        />
+      ) : (
+        <IotDataState
+          status={series.status}
+          onRetry={() => void series.retry()}
+          skeletonClassName="h-56"
+        />
+      )}
     </Card>
   );
 }
