@@ -1,5 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
 
+import { SampleBadge } from '#/components/page-components/SampleBadge';
 import { Card } from '#/components/ui/card';
 import { cn } from 'cn';
 
@@ -11,6 +12,8 @@ export interface EnergyKpi {
   label: string;
   trend: string;
   trendClassName?: string;
+  /** Shown with sample data until the backend provides it. */
+  sample?: boolean;
 }
 
 export function EnergyKpiStrip({ kpis }: { kpis: Array<EnergyKpi> }) {
@@ -23,14 +26,17 @@ export function EnergyKpiStrip({ kpis }: { kpis: Array<EnergyKpi> }) {
             key={kpi.label}
             className="gap-2.5 border-border-subtle bg-card p-4"
           >
-            <span
-              className={cn(
-                'flex size-7 items-center justify-center rounded-md bg-secondary text-text-secondary',
-                kpi.iconClassName,
-              )}
-            >
-              <Icon className="size-4" />
-            </span>
+            <div className="flex items-center justify-between gap-2">
+              <span
+                className={cn(
+                  'flex size-7 items-center justify-center rounded-md bg-secondary text-text-secondary',
+                  kpi.iconClassName,
+                )}
+              >
+                <Icon className="size-4" />
+              </span>
+              {kpi.sample && <SampleBadge />}
+            </div>
             <p className="font-mono text-lg font-semibold text-text-primary">
               {kpi.value}
               <span className="ml-1 text-xs font-normal text-text-tertiary">
