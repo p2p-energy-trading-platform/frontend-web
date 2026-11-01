@@ -124,7 +124,10 @@ function ParticipantSection() {
 
 export default function BenefitsSection() {
   return (
-    <section className="bg-card/40 px-5 py-16 sm:px-8 sm:py-20 lg:py-24">
+    <section
+      id="benefits"
+      className="scroll-mt-24 bg-card/40 px-5 py-16 sm:px-8 sm:py-20 lg:py-24"
+    >
       <div className="mx-auto max-w-6xl">
         <BenefitsHeader />
         <ParticipantSection />

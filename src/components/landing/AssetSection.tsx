@@ -31,7 +31,10 @@ const assets = [
 
 export default function AssetsSection() {
   return (
-    <section className="bg-background px-5 py-16 sm:px-8 sm:py-20 lg:py-24">
+    <section
+      id="assets"
+      className="scroll-mt-24 bg-background px-5 py-16 sm:px-8 sm:py-20 lg:py-24"
+    >
       <div className="mx-auto max-w-7xl">
         <Reveal className="flex flex-col items-center gap-4 text-center">
           <Badge variant="secondary">Supported assets</Badge>

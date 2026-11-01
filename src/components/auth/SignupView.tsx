@@ -101,7 +101,7 @@ export default function SignupView() {
 
   return (
     <main
-      className="flex h-screen flex-col overflow-hidden bg-background text-foreground"
+      className="flex min-h-screen flex-col bg-background text-foreground lg:h-screen lg:overflow-hidden"
       data-source={registration.source}
     >
       <section className="shrink-0 overflow-hidden bg-card px-5 py-4 sm:px-10">
@@ -113,8 +113,8 @@ export default function SignupView() {
         </div>
       </section>
 
-      <div className="grid flex-1 min-h-0 lg:grid-cols-2">
-        <section className="flex justify-center overflow-y-auto bg-background px-5 py-10 sm:px-10 lg:px-16">
+      <div className="grid lg:min-h-0 lg:flex-1 lg:grid-cols-2">
+        <section className="flex justify-center bg-background px-5 py-10 sm:px-10 lg:h-full lg:min-h-0 lg:overflow-x-hidden lg:overflow-y-auto lg:overscroll-contain lg:px-16">
           <div className="w-full max-w-lg">
             {view === 'account' ? (
               <CreateAccountForm onSuccess={handleCreateAccount} />
@@ -149,7 +149,7 @@ export default function SignupView() {
           </div>
         </section>
 
-        <aside className="relative max-lg:hidden overflow-y-auto bg-sidebar px-8 py-10">
+        <aside className="relative hidden min-h-0 overflow-hidden bg-sidebar px-10 py-10 lg:block lg:h-full">
           <SignupSidebar
             view={view}
             step={currentStep}

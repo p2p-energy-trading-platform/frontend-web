@@ -11,7 +11,7 @@ export default function NotificationView() {
 
   return (
     <main
-      className="mx-auto flex w-full max-w-225 flex-col gap-4 p-6"
+      className="flex w-full flex-col gap-4 px-4 py-6 sm:px-6 lg:px-8"
       data-source={notifications.source}
     >
       <div className="flex items-center gap-2">
