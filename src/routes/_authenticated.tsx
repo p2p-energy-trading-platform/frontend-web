@@ -7,6 +7,9 @@ import {
   useAuthUser,
   useLogout,
 } from '#/features/auth/hooks';
+import { useSelectedHouse } from '#/features/iot/hooks';
+import { gridLabel } from '#/features/iot/view-model';
+import { getFirstName } from '#/lib/user-name';
 
 export const Route = createFileRoute('/_authenticated')({
   ssr: false,
@@ -27,6 +30,7 @@ export const Route = createFileRoute('/_authenticated')({
 function AuthenticatedLayout() {
   const { data: user } = useAuthUser();
   const logoutMutation = useLogout();
+  const { house } = useSelectedHouse();
 
   if (!user) {
     return null;
@@ -37,8 +41,8 @@ function AuthenticatedLayout() {
   const initials = getInitials(displayName);
   const displayUser = {
     name: firstName,
-    property: 'GridX',
-    zone: '',
+    property: house?.houseId ?? 'GridX',
+    zone: house ? gridLabel(house) : '',
     initials,
     role: user.role,
   };
@@ -51,7 +55,7 @@ function AuthenticatedLayout() {
           leading={<MobileNavButton user={displayUser} />}
           propertyName={displayUser.property}
           zoneLabel={displayUser.zone}
-          meterOnline
+          meterOnline={house?.meterStatus === 'online'}
           user={displayUser}
           onLogoutClick={() => {
             logoutMutation.mutate(undefined, {
@@ -74,8 +78,4 @@ function getInitials(displayName: string): string {
       ? `${words[0][0]}${words[words.length - 1][0]}`
       : displayName.slice(0, 2);
   return initials.toUpperCase();
-}
-
-function getFirstName(fullName: string): string {
-  return fullName.trim().split(/\s+/)[0] ?? '';
 }
