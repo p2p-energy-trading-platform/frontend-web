@@ -15,6 +15,10 @@ import {
 } from './hooks';
 import { useSelectedHouseStore } from './selected-house-store';
 
+vi.mock('#/env', () => ({
+  env: { VITE_API_BASE_URL: 'http://api.test' },
+}));
+
 vi.mock('./api', () => ({
   listHouses: vi.fn(),
   getHouse: vi.fn(),
