@@ -1,5 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
 
+import { SampleBadge } from '#/components/page-components/SampleBadge';
 import { Badge } from '#/components/ui/badge';
 import { Card } from '#/components/ui/card';
 import { cn } from 'cn';
@@ -14,14 +15,17 @@ export interface Insight {
 export function InsightsPanel({
   insights,
   newCount,
+  sample,
 }: {
   insights: Array<Insight>;
   newCount?: number;
+  sample?: boolean;
 }) {
   return (
     <Card className="gap-0 divide-y divide-border-subtle border-border-subtle bg-card p-0">
       <div className="flex items-center justify-between px-5 py-4">
         <h3 className="text-heading-4 text-text-primary">Insights</h3>
+        {sample && <SampleBadge />}
         {typeof newCount === 'number' && newCount > 0 && (
           <Badge className="bg-accent/12 text-accent">{newCount} new</Badge>
         )}
