@@ -16,6 +16,8 @@ export interface EnergyDateBarProps {
   dateLabel: string;
   onPrevDate?: () => void;
   onNextDate?: () => void;
+  /** True when the next period would be in the future. */
+  nextDisabled?: boolean;
   zoneLabel: string;
   onExportCsv?: () => void;
 }
@@ -28,6 +30,7 @@ export function EnergyDateBar({
   dateLabel,
   onPrevDate,
   onNextDate,
+  nextDisabled,
   zoneLabel,
   onExportCsv,
 }: EnergyDateBarProps) {
@@ -70,8 +73,9 @@ export function EnergyDateBar({
           <button
             type="button"
             onClick={onNextDate}
+            disabled={nextDisabled}
             aria-label="Next"
-            className="flex size-7 items-center justify-center rounded-md text-text-tertiary transition hover:bg-secondary hover:text-text-primary"
+            className="flex size-7 items-center justify-center rounded-md text-text-tertiary transition hover:bg-secondary hover:text-text-primary disabled:pointer-events-none disabled:opacity-40"
           >
             <ChevronRight className="size-3.5" />
           </button>
