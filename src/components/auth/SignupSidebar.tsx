@@ -1,19 +1,25 @@
 import {
+  Activity,
   BarChart3,
+  BadgeCheck,
   Check,
+  Clock,
   FileCheck2,
   FileWarningIcon,
   Gauge,
+  Globe2,
   IdCard,
+  Leaf,
+  LockKeyhole,
   MailCheck,
   RadioTower,
   ShieldCheck,
+  Sun,
   UserRoundPlus,
   WalletCards,
   Zap,
 } from 'lucide-react';
 import type { KycStatus, SIGN_UP_STATES, SmartMeterStatus } from './types';
-import { signInBenefits } from '#/data/auth';
 
 interface SigupSidebarProps {
   view: SIGN_UP_STATES;
@@ -104,22 +110,20 @@ export default function SignupSidebar({
       <div className="absolute -top-32 right-0 size-100 rounded-full bg-accent/10 blur-[80px]" />
       {/* <div className="absolute -bottom-16 -left-16 size-64 rounded-full bg-chart-4/6 blur-[80px]" /> */}
 
-      <div className="relative mx-auto flex h-full max-w-xl flex-col gap-5">
+      <div className="relative mr-auto ml-0 flex min-h-full max-w-xl flex-col gap-3">
         <GridXBrand />
 
         <div className="flex size-12 items-center justify-center rounded-2xl border border-accent/25 bg-accent/15 text-accent">
           {getIcon(view)}
         </div>
 
-        <p className="mt-4 text-caption font-bold uppercase tracking-widest text-accent">
+        <p className="text-caption font-bold uppercase tracking-widest text-accent">
           Step {Math.min(step, 4)} of 4
         </p>
 
-        <h2 className="mt-1 font-heading text-xl font-bold">
-          {getHeading(view)}
-        </h2>
+        <h2 className="font-heading text-xl font-bold">{getHeading(view)}</h2>
 
-        <p className="mt-2 text-sm leading-5.5 text-sidebar-foreground/70">
+        <p className="text-sm leading-5.5 text-sidebar-foreground/70">
           {getDescription(view)}
         </p>
 
@@ -169,21 +173,52 @@ function CustomSidebarContent({
 }
 
 function CreateAccountContent() {
-  return (
-    <ul className="mt-6 space-y-3.5">
-      {signInBenefits.map(({ icon: Icon, label }) => (
-        <li
-          key={label}
-          className="flex items-center gap-3 text-sm text-sidebar-foreground/80"
-        >
-          <span className="flex size-7 shrink-0 items-center justify-center rounded-xl border text-accent">
-            <Icon className="size-3.5" />
-          </span>
+  const benefits = [
+    { icon: Globe2, label: 'Trade energy across grid zones' },
+    { icon: WalletCards, label: 'AED wallet with instant settlement' },
+    { icon: BadgeCheck, label: 'Verified prosumer network you can trust' },
+    { icon: Leaf, label: 'Measurable sustainability impact' },
+    { icon: BarChart3, label: 'Real-time pricing and trade analytics' },
+  ];
 
-          {label}
-        </li>
-      ))}
-    </ul>
+  return (
+    <div className="mt-6">
+      <ul className="space-y-3.5">
+        {benefits.map(({ icon: Icon, label }) => (
+          <li
+            key={label}
+            className="flex items-center gap-3 text-sm text-sidebar-foreground/80"
+          >
+            <span className="flex size-7 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.08] text-accent">
+              <Icon className="size-3.5" />
+            </span>
+            {label}
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-6 border-t border-white/10 pt-5">
+        <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-sidebar-foreground">
+          <ShieldCheck className="size-4 text-accent" />
+          Privacy &amp; Security
+        </div>
+
+        <ul className="space-y-2.5 text-xs text-sidebar-foreground/70">
+          <li className="flex items-center gap-2.5">
+            <LockKeyhole className="size-3.5 shrink-0 text-accent" />
+            Your data is encrypted end-to-end
+          </li>
+          <li className="flex items-center gap-2.5">
+            <ShieldCheck className="size-3.5 shrink-0 text-accent" />
+            Never sold to third parties
+          </li>
+          <li className="flex items-center gap-2.5">
+            <BadgeCheck className="size-3.5 shrink-0 text-accent" />
+            ISO 27001-aligned security practices
+          </li>
+        </ul>
+      </div>
+    </div>
   );
 }
 
@@ -214,7 +249,7 @@ function VerifyEmailContent() {
 
 function IdentityContent() {
   return (
-    <ul className="mt-7 space-y-3.5">
+    <ul className="mt-5 space-y-2.5 pb-3">
       <li className="flex items-center gap-3 text-sm text-sidebar-foreground/80">
         <span className="flex size-7 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.08] text-accent">
           <Gauge className="size-3.5" />
@@ -233,6 +268,18 @@ function IdentityContent() {
         </span>
         Documents are encrypted and reviewed securely
       </li>
+      <li className="flex items-center gap-3 text-sm text-sidebar-foreground/80">
+        <span className="flex size-7 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.08] text-accent">
+          <ShieldCheck className="size-3.5" />
+        </span>
+        Prevents fraud and protects all GridX users
+      </li>
+      <li className="flex items-center gap-3 text-sm text-sidebar-foreground/80">
+        <span className="flex size-7 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.08] text-accent">
+          <Clock className="size-3.5" />
+        </span>
+        Automated review typically takes under 2 minutes
+      </li>
     </ul>
   );
 }
@@ -245,6 +292,18 @@ function SmartMeterContent() {
           <RadioTower className="size-3.5" />
         </span>
         Receive live consumption and generation readings
+      </li>
+      <li className="flex items-center gap-3 text-sm text-sidebar-foreground/80">
+        <span className="flex size-7 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.08] text-accent">
+          <Sun className="size-3.5" />
+        </span>
+        Live kWh generation from your solar panels
+      </li>
+      <li className="flex items-center gap-3 text-sm text-sidebar-foreground/80">
+        <span className="flex size-7 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.08] text-accent">
+          <Activity className="size-3.5" />
+        </span>
+        Real-time household consumption tracking
       </li>
       <li className="flex items-center gap-3 text-sm text-sidebar-foreground/80">
         <span className="flex size-7 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.08] text-accent">

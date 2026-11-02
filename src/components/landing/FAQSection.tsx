@@ -53,7 +53,7 @@ function FAQHeader() {
           to="/about"
           className="font-medium text-primary underline-offset-4 transition-colors hover:underline"
         >
-          Contact the GridX team
+          Contact us
         </Link>
       </p>
     </Reveal>
@@ -71,7 +71,7 @@ function FAQList() {
 
         return (
           <Reveal key={faq.question} delay={Math.min(index * 50, 250)}>
-            <Card className="overflow-hidden rounded-xl transition-colors duration-200 hover:border-primary/30">
+            <Card className="gap-0 overflow-hidden rounded-xl py-0 transition-colors duration-200 hover:border-primary/30">
               <button
                 type="button"
                 aria-expanded={isOpen}
@@ -118,7 +118,10 @@ function FAQList() {
 
 export default function FAQSection() {
   return (
-    <section className="bg-background px-5 py-16 sm:px-8 sm:py-20 lg:py-24">
+    <section
+      id="faq"
+      className="scroll-mt-24 bg-background px-5 py-16 sm:px-8 sm:py-20 lg:py-24"
+    >
       <div className="mx-auto max-w-5xl">
         <FAQHeader />
         <FAQList />

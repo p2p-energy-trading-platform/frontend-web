@@ -76,7 +76,7 @@ export default function HowItWorksSection() {
         });
       });
 
-      const visual = section.querySelector<HTMLElement>('[data-story-visual]');
+      const visual = section.querySelector<HTMLElement>('[data-story-pin]');
       const lastStep = storySteps.at(-1);
 
       if (
@@ -89,7 +89,7 @@ export default function HowItWorksSection() {
           trigger: visual,
           start: 'top top+=112',
           endTrigger: lastStep,
-          end: 'bottom bottom-=80',
+          end: () => `bottom ${112 + visual.offsetHeight}px`,
           pin: true,
           pinSpacing: false,
           anticipatePin: 1,
@@ -137,9 +137,12 @@ export default function HowItWorksSection() {
           </p>
         </div>
 
-        <div className="grid items-start gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20">
-          <div data-story-visual className="self-start">
-            <div className="relative overflow-hidden rounded-3xl border border-border/70 bg-card">
+        <div className="grid items-stretch gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20">
+          <div data-story-visual className="self-stretch">
+            <div
+              data-story-pin
+              className="relative overflow-hidden rounded-3xl border border-border/70 bg-card"
+            >
               <div
                 aria-hidden="true"
                 className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${currentStep.accent} transition-colors duration-700`}
