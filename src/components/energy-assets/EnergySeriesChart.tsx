@@ -1,38 +1,29 @@
+import { EChart } from '#/components/charts/EChart';
+import { useChartColors } from '#/components/charts/theme';
+import { IotDataState } from '#/components/page-components/IotDataState';
 import { Card } from '#/components/ui/card';
-import { useEnergySeries } from '#/hooks/useEnergyAssets';
+import type { EnergyBucketSize, EnergySeriesRange } from '#/features/iot/api';
+import { energySeriesChartOption } from '#/features/iot/chart-options';
+import { useEnergySeriesData } from '#/hooks/useEnergyAssets';
 import { cn } from 'cn';
 
-export interface EnergyTimeSeriesChartProps {
-  /** 0-1 normalized values, one entry per series, left to right across the day */
-  generated?: Array<number>;
-  consumed?: Array<number>;
-  nowIndex?: number;
-}
+const RESOLUTION: Record<EnergyBucketSize, string> = {
+  '5m': '5-min',
+  '15m': '15-min',
+  '30m': '30-min',
+  '1h': 'Hourly',
+  '1d': 'Daily',
+};
 
-function toPath(values: Array<number>, width: number, height: number) {
-  const step = width / (values.length - 1);
-  return values
-    .map((v, i) => `${i === 0 ? 'M' : 'L'} ${i * step} ${height - v * height}`)
-    .join(' ');
-}
-
-export function EnergyTimeSeriesChart({
-  generated,
-  consumed,
-  nowIndex,
-}: EnergyTimeSeriesChartProps) {
-  const series = useEnergySeries();
-  const generatedPoints = generated ?? series.generated;
-  const consumedPoints = consumed ?? series.consumed;
-  const currentIndex = nowIndex ?? series.nowIndex;
-  const width = 900;
-  const height = 220;
-  const genPath = toPath(generatedPoints, width, height);
-  const conPath = toPath(consumedPoints, width, height);
-  const nowX = (currentIndex / (generatedPoints.length - 1)) * width;
-
-  const yLabels = series.yLabels;
-  const xLabels = series.xLabels;
+export function EnergyTimeSeriesChart({ range }: { range: EnergySeriesRange }) {
+  const series = useEnergySeriesData(range);
+  const colors = useChartColors();
+  const option = energySeriesChartOption(
+    series.buckets,
+    colors,
+    series.fetchedAt,
+    range,
+  );
 
   return (
     <Card className="gap-4 border-border-subtle bg-card p-5">
@@ -41,7 +32,9 @@ export function EnergyTimeSeriesChart({
           <h3 className="text-heading-4 text-text-primary">
             Energy time series
           </h3>
-          <p className="text-xs text-text-tertiary">30-min resolution · GST</p>
+          <p className="text-xs text-text-tertiary">
+            {RESOLUTION[range.bucket]} resolution · GST
+          </p>
         </div>
 
         <div className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1 text-xs text-text-tertiary">
@@ -52,72 +45,18 @@ export function EnergyTimeSeriesChart({
         </div>
       </div>
 
-      <div className="flex gap-2">
-        <div className="flex flex-col justify-between py-1 text-xs text-text-tertiary">
-          {yLabels.map((l) => (
-            <span key={l}>{l}</span>
-          ))}
-        </div>
-
-        <div className="min-w-0 flex-1">
-          <svg
-            viewBox={`0 0 ${width} ${height}`}
-            className="h-48 w-full"
-            preserveAspectRatio="none"
-          >
-            {yLabels.map((_, i) => (
-              <line
-                key={i}
-                x1={0}
-                x2={width}
-                y1={(height / (yLabels.length - 1)) * i}
-                y2={(height / (yLabels.length - 1)) * i}
-                className="stroke-border-subtle"
-                strokeWidth={1}
-                strokeDasharray="4 4"
-              />
-            ))}
-
-            {/* "Now" marker */}
-            <line
-              x1={nowX}
-              x2={nowX}
-              y1={0}
-              y2={height}
-              className="stroke-text-tertiary"
-              strokeWidth={1}
-              strokeDasharray="3 3"
-            />
-            <text x={nowX + 4} y={12} className="fill-text-tertiary text-xs">
-              Now
-            </text>
-
-            <path
-              d={conPath}
-              fill="none"
-              stroke="var(--text-tertiary)"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              opacity={0.7}
-            />
-            <path
-              d={genPath}
-              fill="none"
-              stroke="var(--action-accent)"
-              strokeWidth={2.5}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-
-          <div className="mt-1 flex justify-between text-xs text-text-tertiary">
-            {xLabels.map((l) => (
-              <span key={l}>{l}</span>
-            ))}
-          </div>
-        </div>
-      </div>
+      {series.status === 'ready' ? (
+        <EChart
+          option={option}
+          ariaLabel="Energy generated, consumed, exported and imported over time"
+        />
+      ) : (
+        <IotDataState
+          status={series.status}
+          onRetry={() => void series.retry()}
+          skeletonClassName="h-56"
+        />
+      )}
     </Card>
   );
 }

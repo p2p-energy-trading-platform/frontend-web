@@ -15,29 +15,6 @@ import {
 import { formatAed, formatAedPerKwh } from '#/data/currency';
 import { sessionUser } from '#/data/profile';
 
-export const generationPoints = [
-  0, 0, 0, 0.02, 0.05, 0.15, 0.35, 0.6, 0.82, 0.94, 1, 0.97, 0.88, 0.7, 0.45,
-  0.22, 0.08, 0.02, 0, 0, 0, 0, 0, 0,
-];
-
-export const generationAxis = {
-  yLabels: ['8 kW', '6 kW', '4 kW', '2 kW', '0 kW'],
-  xLabels: [
-    '00:00',
-    '02:00',
-    '04:00',
-    '06:00',
-    '08:00',
-    '10:00',
-    '12:00',
-    '14:00',
-    '16:00',
-    '18:00',
-    '20:00',
-    '22:00',
-  ],
-};
-
 export const dashboardView = {
   greetingName: sessionUser.givenName,
   subtitle: 'Thursday, 17 Jul 2025 · 14:38 GST · JLT Zone 4',

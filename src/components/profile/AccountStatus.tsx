@@ -7,8 +7,13 @@ import {
   CardTitle,
 } from '../ui/card';
 import { cn } from 'cn';
+import { useSelectedHouse } from '#/features/iot/hooks';
+import { toAccountStatus } from '#/features/iot/view-model';
 
 export default function AccountStatus() {
+  const selected = useSelectedHouse();
+  const status = toAccountStatus(selected.house);
+
   return (
     <>
       <Card>
@@ -22,9 +27,7 @@ export default function AccountStatus() {
           <StatusRow
             icon={UserRound}
             label="Trading Mode"
-            value="Prosumer"
-            description="Can buy and sell verified energy"
-            tone="success"
+            {...status.tradingMode}
           />
           <StatusRow
             icon={BadgeCheck}
@@ -36,9 +39,7 @@ export default function AccountStatus() {
           <StatusRow
             icon={Building2}
             label="Smart meter"
-            value="Connected"
-            description="Smart meter is connected and reporting"
-            tone="success"
+            {...status.smartMeter}
           />
         </CardContent>
       </Card>
