@@ -8,7 +8,8 @@ import type { KycStatus, SIGN_UP_STATES, SmartMeterStatus } from './types';
 import { registrationSteps } from '#/data/auth';
 import SignupSidebar from './SignupSidebar';
 import RegistrationComplete from './RegistrationComplete';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getRouteApi } from '@tanstack/react-router';
 import { useAuthUser } from '#/features/auth/hooks';
 import { EmptyState } from '../ui/empty-state';
 import { Loader } from 'lucide-react';
@@ -17,11 +18,20 @@ const PENDING_VERIFICATION_EMAIL_KEY = 'gridx.pendingVerificationEmail';
 
 export default function SignupView() {
   const registration = useRegistration();
-  const { isLoading: isAuthLoading } = useAuthUser();
+  const { data: authUser, isLoading: isAuthLoading } = useAuthUser();
+  const { step } = getRouteApi('/sign-up').useSearch();
   const [view, setView] = useState<SIGN_UP_STATES>('account');
   const [registeredEmail, setRegisteredEmail] = useState('');
   const [kycStatus, setKycStatus] = useState<KycStatus>('not-submitted');
   const [meterStatus, setMeterStatus] = useState<SmartMeterStatus>('skipped');
+
+  // Google SSO users arrive authenticated and continue at the shared KYC step.
+  useEffect(() => {
+    if (!authUser || step !== 'kyc') return;
+
+    setRegisteredEmail(authUser.email);
+    setView('kyc');
+  }, [authUser, step]);
 
   // useEffect(() => {
   //   if (authUser) {
