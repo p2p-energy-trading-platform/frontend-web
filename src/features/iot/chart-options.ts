@@ -64,7 +64,8 @@ function line(
     name,
     type: 'line',
     data,
-    showSymbol: false,
+    // One point draws no line, so it needs a marker to be visible.
+    showSymbol: data.length === 1,
     smooth: true,
     lineStyle: { color, width: 2 },
     itemStyle: { color },

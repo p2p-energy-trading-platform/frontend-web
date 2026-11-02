@@ -1,8 +1,5 @@
-import { useMemo } from 'react';
-
 import { EChart } from '#/components/charts/EChart';
 import { resolveCssColor, useChartColors } from '#/components/charts/theme';
-import { SampleBadge } from '#/components/page-components/SampleBadge';
 import { Badge } from '#/components/ui/badge';
 import { Card } from '#/components/ui/card';
 import { usageDonutOption } from '#/features/iot/chart-options';
@@ -17,33 +14,24 @@ export interface UsageCategory {
 
 export function UsageCategoryCard({
   categories,
-  sample,
 }: {
   categories: Array<UsageCategory>;
-  sample?: boolean;
 }) {
   const maxValue = Math.max(...categories.map((c) => c.valueKwh));
   const colors = useChartColors();
-  const option = useMemo(
-    () =>
-      usageDonutOption(
-        categories.map((c) => ({
-          label: c.label,
-          valueKwh: c.valueKwh,
-          color: resolveCssColor(c.strokeColor),
-        })),
-        colors,
-      ),
-    [categories, colors],
+  const option = usageDonutOption(
+    categories.map((c) => ({
+      label: c.label,
+      valueKwh: c.valueKwh,
+      color: resolveCssColor(c.strokeColor),
+    })),
+    colors,
   );
 
   return (
     <Card className="gap-4 border-border-subtle bg-card p-5">
       <div className="flex items-center justify-between">
-        <h3 className="flex items-center gap-2 text-heading-4 text-text-primary">
-          Usage by category
-          {sample && <SampleBadge />}
-        </h3>
+        <h3 className="text-heading-4 text-text-primary">Usage by category</h3>
         <Badge
           variant="outline"
           className="border-border-subtle text-text-tertiary"

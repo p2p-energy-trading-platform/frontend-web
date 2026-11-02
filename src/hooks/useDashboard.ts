@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { MARKET_TIME_ZONE } from '#/data/currency';
 import { dashboardView } from '#/data/dashboard';
 import { useAuthUser } from '#/features/auth/hooks';
@@ -22,7 +20,7 @@ import {
   toFlowTiles,
 } from '#/features/iot/view-model';
 import { formatKw } from '#/lib/energy-format';
-import { getFirstName } from '#/lib/user-name';
+import { getFirstName } from '#/lib/user';
 
 /**
  * Dashboard data: live IoT data for the selected house, plus the demo data
@@ -32,8 +30,8 @@ export function useDashboard() {
   const { data: user } = useAuthUser();
   const selected = useSelectedHouse();
   const houseId = selected.house?.houseId;
-  const now = useMemo(() => new Date(), []);
-  const today = useMemo(() => todayRange(now, MARKET_TIME_ZONE), [now]);
+  const now = new Date();
+  const today = todayRange(now, MARKET_TIME_ZONE);
 
   const details = useHouseDetails(houseId);
   const latest = useLatestReading(houseId);
@@ -106,10 +104,8 @@ export type GenerationPeriod = Exclude<EnergyPeriod, 'Custom'>;
 
 export function useGenerationSeries(period: GenerationPeriod) {
   const selected = useSelectedHouse();
-  const range = useMemo(() => {
-    const { from, to, bucket } = rangeFor(period, new Date(), MARKET_TIME_ZONE);
-    return { from, to, bucket, timeZone: MARKET_TIME_ZONE };
-  }, [period]);
+  const { from, to, bucket } = rangeFor(period, new Date(), MARKET_TIME_ZONE);
+  const range = { from, to, bucket, timeZone: MARKET_TIME_ZONE };
   const series = useEnergySeries(selected.house?.houseId, range);
 
   return {

@@ -9,7 +9,7 @@ import {
 } from '#/features/auth/hooks';
 import { useSelectedHouse } from '#/features/iot/hooks';
 import { gridLabel } from '#/features/iot/view-model';
-import { getFirstName } from '#/lib/user-name';
+import { getFirstName } from '#/lib/user';
 
 export const Route = createFileRoute('/_authenticated')({
   ssr: false,

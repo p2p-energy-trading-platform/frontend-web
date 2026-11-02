@@ -456,8 +456,6 @@ export function seriesToCsv(buckets: Array<EnergyBucket>) {
 
 export type AssetView = AssetCardProps & {
   category: Exclude<AssetCategory, 'All assets'>;
-  /** True for demo assets that have no backend data yet. */
-  sample: boolean;
 };
 
 export function toAssetViews(
@@ -471,7 +469,6 @@ export function toAssetViews(
 
   const solar: AssetView = {
     category: 'Solar',
-    sample: false,
     icon: Sun,
     iconWrapClassName: 'bg-chart-3/12 text-chart-3',
     name: 'Rooftop Solar',
@@ -493,7 +490,6 @@ export function toAssetViews(
     const capacity = `${round1(registered?.capacityKwh ?? asset.capacityKwh)} kWh`;
     return {
       category: ev ? 'EV' : 'Battery',
-      sample: false,
       icon: ev ? Car : BatteryCharging,
       iconWrapClassName: ev
         ? 'bg-chart-4/12 text-chart-4'

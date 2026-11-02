@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { EChart } from '#/components/charts/EChart';
 import { useChartColors } from '#/components/charts/theme';
 import { IotDataState } from '#/components/page-components/IotDataState';
@@ -20,15 +18,11 @@ const RESOLUTION: Record<EnergyBucketSize, string> = {
 export function EnergyTimeSeriesChart({ range }: { range: EnergySeriesRange }) {
   const series = useEnergySeriesData(range);
   const colors = useChartColors();
-  const option = useMemo(
-    () =>
-      energySeriesChartOption(
-        series.buckets,
-        colors,
-        new Date().toISOString(),
-        range,
-      ),
-    [series.buckets, colors, range],
+  const option = energySeriesChartOption(
+    series.buckets,
+    colors,
+    series.fetchedAt,
+    range,
   );
 
   return (

@@ -64,7 +64,7 @@ export function GenerationUsageView() {
         <div className="flex flex-col gap-5">
           <EnergyTimeSeriesChart range={period.range} />
           <ForecastCard />
-          <UsageCategoryCard categories={samples.categories} sample />
+          <UsageCategoryCard categories={samples.categories} />
           <PeakPeriodsCard />
         </div>
 
@@ -87,7 +87,6 @@ export function GenerationUsageView() {
           <InsightsPanel
             newCount={samples.insights.length}
             insights={samples.insights}
-            sample
           />
         </div>
       </div>

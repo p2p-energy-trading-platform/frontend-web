@@ -344,7 +344,6 @@ describe('asset views', () => {
         a.statLabel,
         a.socPercent,
         a.lastUpdated,
-        a.sample,
       ]),
     ).toEqual([
       [
@@ -355,7 +354,6 @@ describe('asset views', () => {
         'Generating',
         undefined,
         '2 min ago',
-        false,
       ],
       [
         'Battery',
@@ -365,7 +363,6 @@ describe('asset views', () => {
         'Charging',
         94,
         '2 min ago',
-        false,
       ],
       [
         'EV',
@@ -375,7 +372,6 @@ describe('asset views', () => {
         'Discharging',
         67,
         '2 min ago',
-        false,
       ],
     ]);
     expect(assets[0]).not.toHaveProperty('health');

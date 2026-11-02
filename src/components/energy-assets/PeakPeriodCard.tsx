@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { EChart } from '#/components/charts/EChart';
 import { useChartColors } from '#/components/charts/theme';
 import { IotDataState } from '#/components/page-components/IotDataState';
@@ -10,10 +8,7 @@ import { usePeakPeriods } from '#/hooks/useEnergyAssets';
 export function PeakPeriodsCard() {
   const peak = usePeakPeriods();
   const colors = useChartColors();
-  const option = useMemo(
-    () => peakHeatmapOption(peak.matrix, colors),
-    [peak.matrix, colors],
-  );
+  const option = peakHeatmapOption(peak.matrix, colors);
 
   return (
     <Card className="gap-4 border-border-subtle bg-card p-5">

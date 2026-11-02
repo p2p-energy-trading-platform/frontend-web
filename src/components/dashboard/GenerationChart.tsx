@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { EChart } from '#/components/charts/EChart';
 import { useChartColors } from '#/components/charts/theme';
@@ -15,10 +15,7 @@ export function GenerationChart() {
   const [period, setPeriod] = useState<GenerationPeriod>('Day');
   const series = useGenerationSeries(period);
   const colors = useChartColors();
-  const option = useMemo(
-    () => generationChartOption(series.buckets, colors, series.range),
-    [series.buckets, colors, series.range],
-  );
+  const option = generationChartOption(series.buckets, colors, series.range);
 
   return (
     <Card className="gap-4 border-border-subtle bg-card p-5">

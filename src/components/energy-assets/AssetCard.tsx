@@ -1,7 +1,6 @@
 import { MoreHorizontal } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
-import { SampleBadge } from '#/components/page-components/SampleBadge';
 import { Button } from '#/components/ui/button';
 import { Card, CardContent, CardHeader } from '../ui/card';
 import { cn } from 'cn';
@@ -27,8 +26,6 @@ export interface AssetCardProps {
   healthPercent?: number;
   lastUpdated: string;
   controlMode?: AssetControlMode;
-  /** Demo asset without backend data yet. */
-  sample?: boolean;
   onClick?: () => void;
   onMenuClick?: () => void;
 }
@@ -59,7 +56,6 @@ export function AssetCard({
   health,
   healthPercent,
   lastUpdated,
-  sample,
   onMenuClick,
 }: AssetCardProps) {
   return (
@@ -78,7 +74,6 @@ export function AssetCard({
             <div>
               <p className="text-sm font-semibold text-text-primary">{name}</p>
               <p className="text-xs text-text-tertiary">{brandModel}</p>
-              {sample && <SampleBadge className="mt-1" />}
             </div>
           </div>
 

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { MARKET_TIME_ZONE } from '#/data/currency';
 import type { EnergySeriesRange } from '#/features/iot/api';
@@ -15,19 +15,13 @@ export function useEnergyPeriod() {
   const [anchor, setAnchor] = useState(() => new Date());
   const [custom, setCustom] = useState<CustomDates>();
 
-  const resolved = useMemo(
-    () => rangeFor(period, anchor, MARKET_TIME_ZONE, custom),
-    [period, anchor, custom],
-  );
-  const range = useMemo(
-    (): EnergySeriesRange => ({
-      from: resolved.from,
-      to: resolved.to,
-      bucket: resolved.bucket,
-      timeZone: MARKET_TIME_ZONE,
-    }),
-    [resolved],
-  );
+  const resolved = rangeFor(period, anchor, MARKET_TIME_ZONE, custom);
+  const range: EnergySeriesRange = {
+    from: resolved.from,
+    to: resolved.to,
+    bucket: resolved.bucket,
+    timeZone: MARKET_TIME_ZONE,
+  };
 
   return {
     period,

@@ -166,3 +166,46 @@ describe('time axis extent', () => {
     expect(markLines('2026-11-02T10:00:00.000Z')).toBe(0);
   });
 });
+
+describe('line visibility', () => {
+  const pointAt = (startsAt: string): EnergyBucket => ({
+    startsAt,
+    energy: {
+      generatedKwh: 0.4,
+      consumedKwh: 0.4,
+      exportedKwh: 0,
+      importedKwh: 0,
+      storageChargedKwh: 0,
+      storageDischargedKwh: 0,
+    },
+    averagePower: {
+      solarKw: 0.8,
+      consumptionKw: 0.8,
+      exportKw: 0,
+      importKw: 0,
+    },
+  });
+  const symbols = (data: Array<EnergyBucket>) =>
+    (
+      generationChartOption(data, colors).series as Array<{
+        showSymbol: boolean;
+      }>
+    ).map((series) => series.showSymbol);
+
+  it('shows a marker when there is only one point, which draws no line', () => {
+    expect(symbols([pointAt('2026-11-02T09:00:00Z')])).toEqual([
+      true,
+      true,
+      true,
+    ]);
+  });
+
+  it('hides markers once there is a line to draw', () => {
+    expect(
+      symbols([
+        pointAt('2026-11-02T09:00:00Z'),
+        pointAt('2026-11-02T09:30:00Z'),
+      ]),
+    ).toEqual([false, false, false]);
+  });
+});

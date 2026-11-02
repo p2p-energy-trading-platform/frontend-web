@@ -1,7 +1,6 @@
 import { ArrowDownLeft, Battery, Sun, Zap } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
-import { SampleBadge } from '#/components/page-components/SampleBadge';
 import { Badge } from '#/components/ui/badge';
 import { Card } from '#/components/ui/card';
 import { cn } from 'cn';
@@ -30,8 +29,6 @@ export interface EnergyBalanceCardProps {
   }>;
   sources: Array<EnergySourceRow>;
   exportEarnings: string;
-  /** Earnings need tariff data, so they may be sample values. */
-  exportEarningsSample?: boolean;
   /** Badge naming the period the totals cover. */
   periodLabel?: string;
 }
@@ -40,7 +37,6 @@ export function EnergyBalanceCard({
   summary,
   sources,
   exportEarnings,
-  exportEarningsSample,
   periodLabel = 'Today',
 }: EnergyBalanceCardProps) {
   return (
@@ -137,10 +133,7 @@ export function EnergyBalanceCard({
       </div>
 
       <div className="flex items-center justify-between border-t border-border-subtle pt-4">
-        <span className="flex flex-col items-start gap-1 text-sm text-text-secondary">
-          Grid export earned
-          {exportEarningsSample && <SampleBadge />}
-        </span>
+        <span className="text-sm text-text-secondary">Grid export earned</span>
         <span className="shrink-0 text-lg font-semibold whitespace-nowrap text-accent">
           {exportEarnings}
         </span>

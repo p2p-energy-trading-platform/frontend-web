@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { revalidateLogic, useForm } from '@tanstack/react-form';
 
 import { Button } from '#/components/ui/button';
@@ -16,14 +15,10 @@ export function CustomRangeForm({
   value?: CustomDates;
   onApply: (dates: CustomDates) => void;
 }) {
-  const schema = useMemo(
-    () => customRangeSchema(new Date(), MARKET_TIME_ZONE),
-    [],
-  );
   const form = useForm({
     defaultValues: value ?? { start: '', end: '' },
     validationLogic: revalidateLogic(),
-    validators: { onDynamic: schema },
+    validators: { onDynamic: customRangeSchema(new Date(), MARKET_TIME_ZONE) },
     onSubmit: ({ value: dates }) => onApply(dates),
   });
 

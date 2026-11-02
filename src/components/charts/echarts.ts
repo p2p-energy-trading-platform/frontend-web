@@ -9,7 +9,6 @@ import {
 import * as echarts from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
 
-// Only the pieces the IoT charts use, so the bundle stays small.
 echarts.use([
   LineChart,
   HeatmapChart,
