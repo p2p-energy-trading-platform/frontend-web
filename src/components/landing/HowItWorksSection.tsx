@@ -89,10 +89,9 @@ export default function HowItWorksSection() {
           trigger: visual,
           start: 'top top+=112',
           endTrigger: lastStep,
-          end: () =>
-            `bottom ${window.innerHeight - 112 - visual.offsetHeight}px`,
+          end: () => `bottom ${112 + visual.offsetHeight}px`,
           pin: true,
-          pinSpacing: true,
+          pinSpacing: false,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         });

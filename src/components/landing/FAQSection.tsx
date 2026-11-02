@@ -71,7 +71,7 @@ function FAQList() {
 
         return (
           <Reveal key={faq.question} delay={Math.min(index * 50, 250)}>
-            <Card className="overflow-hidden rounded-xl transition-colors duration-200 hover:border-primary/30">
+            <Card className="gap-0 overflow-hidden rounded-xl py-0 transition-colors duration-200 hover:border-primary/30">
               <button
                 type="button"
                 aria-expanded={isOpen}
