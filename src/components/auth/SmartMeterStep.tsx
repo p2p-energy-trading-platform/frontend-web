@@ -6,6 +6,7 @@ import { Input } from '#/components/ui/input';
 import type { SmartMeterStatus } from './types';
 import { Field, FieldDescription, FieldGroup, FieldLabel } from '../ui/field';
 import { Card, CardDescription } from '../ui/card';
+import { useInitiateMeterClaim } from '#/features/registration/hooks';
 
 interface SmartMeterStepProps {
   onComplete: (status: SmartMeterStatus) => Promise<void> | void;
@@ -15,6 +16,8 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
   
   const [meterId, setMeterId] = React.useState('');
   const [error, setError] = React.useState('');
+
+  const initiateMeterClaimMutation = useInitiateMeterClaim();
 
   async function complete(status: SmartMeterStatus) {
     await onComplete(status);
