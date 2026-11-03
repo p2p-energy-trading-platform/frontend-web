@@ -12,6 +12,10 @@ interface SmartMeterStepProps {
 }
 
 export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
+  
+  const [meterId, setMeterId] = React.useState('');
+  const [error, setError] = React.useState('');
+
   async function complete(status: SmartMeterStatus) {
     await onComplete(status);
   }
@@ -19,6 +23,14 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
+    const normalizedMeterId = meterId.trim();
+    
+    if (!normalizedMeterId) {
+      setError('Please enter a valid Smart Meter ID');
+      return;
+    }
+
+    setError('');
     await onComplete('pending');
   }
 
@@ -39,6 +51,11 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
             <FieldLabel htmlFor="smartMeterId">Smart Meter ID</FieldLabel>
             <Input
               id="smartMeterId"
+              value={meterId}
+              onChange={(event) => {
+                setMeterId(event.target.value);
+                setError('');
+              }}
               autoComplete="off"
               placeholder="MTR-7829-XY"
               className="h-12 rounded-2xl px-4"
@@ -46,6 +63,10 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
             <FieldDescription className="text-xs">
               Find this ID below the barcode on the front of your meter.
             </FieldDescription>
+
+            {error ? (
+              <p className="text-sm text-destructive">{error}</p>
+            ) : null}
           </Field>
           <Card className="p-4">
             <CardDescription>
