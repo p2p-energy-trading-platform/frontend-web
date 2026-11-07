@@ -7,16 +7,15 @@ import type { SmartMeterStatus } from './types';
 import { Field, FieldDescription, FieldGroup, FieldLabel } from '../ui/field';
 import { Card, CardDescription } from '../ui/card';
 import { useInitiateMeterClaim } from '#/features/registration/hooks';
+import { smartMeterClaimSchema } from '#/features/registration/schemas';
 
 interface SmartMeterStepProps {
   onComplete: (status: SmartMeterStatus) => Promise<void> | void;
 }
 
 export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
-  
   const [meterId, setMeterId] = React.useState('');
   const [error, setError] = React.useState('');
-
   const initiateMeterClaimMutation = useInitiateMeterClaim();
 
   async function complete(status: SmartMeterStatus) {
@@ -26,15 +25,26 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const normalizedMeterId = meterId.trim();
-    
-    if (!normalizedMeterId) {
-      setError('Please enter a valid Smart Meter ID');
+    const result = smartMeterClaimSchema.safeParse({ meterId });
+
+    if (!result.success) {
+      setError(result.error.issues[0]?.message ?? 'Please enter a valid Smart Meter ID');
       return;
     }
 
     setError('');
-    await onComplete('pending');
+    try {
+      await initiateMeterClaimMutation.mutateAsync({
+        meter_id: result.data.meterId,
+      });
+      await onComplete('pending');
+    } catch (claimError) {
+      setError(
+        claimError instanceof Error
+          ? claimError.message
+          : 'Unable to send the connection request. Please try again.',
+      );
+    }
   }
 
   return (
@@ -58,7 +68,10 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
               onChange={(event) => {
                 setMeterId(event.target.value);
                 setError('');
+                initiateMeterClaimMutation.reset();
               }}
+              aria-invalid={Boolean(error)}
+              aria-describedby={error ? 'smartMeterError' : undefined}
               autoComplete="off"
               placeholder="MTR-7829-XY"
               className="h-12 rounded-2xl px-4"
@@ -68,7 +81,9 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
             </FieldDescription>
 
             {error ? (
-              <p className="text-sm text-destructive">{error}</p>
+              <p id="smartMeterError" role="alert" className="text-sm text-destructive">
+                {error}
+              </p>
             ) : null}
           </Field>
           <Card className="p-4">
@@ -93,13 +108,20 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
               type="button"
               variant="outline"
               onClick={() => complete('skipped')}
+              disabled={initiateMeterClaimMutation.isPending}
               className="h-12 flex-1 rounded-xl"
             >
               <ShieldCheck className="size-4" />
               Skip for Now
             </Button>
-            <Button type="submit" className="h-12 flex-1 rounded-xl">
-              Send Connection Request
+            <Button
+              type="submit"
+              disabled={initiateMeterClaimMutation.isPending}
+              className="h-12 flex-1 rounded-xl"
+            >
+              {initiateMeterClaimMutation.isPending
+                ? 'Sending Request...'
+                : 'Send Connection Request'}
               <Check className="size-4" />
             </Button>
           </Field>

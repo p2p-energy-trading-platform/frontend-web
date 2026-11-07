@@ -1,7 +1,6 @@
 import { apiRequest } from '#/lib/api-client';
 
 export interface InitiateMeterClaimRequest {
-  user_reference: string;
   meter_id: string;
 }
 
@@ -15,7 +14,7 @@ export function initiateMeterClaim(
   data: InitiateMeterClaimRequest,
 ) {
   return apiRequest<InitiateMeterClaimResponse>(
-    '/registration/claim',
+    '/api/v1/registration/claim',
     {
       method: 'POST',
       body: JSON.stringify(data),
