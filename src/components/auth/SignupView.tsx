@@ -17,7 +17,7 @@ const PENDING_VERIFICATION_EMAIL_KEY = 'gridx.pendingVerificationEmail';
 
 export default function SignupView() {
   const registration = useRegistration();
-  const { data: authUser, isLoading: isAuthLoading } = useAuthUser();
+  const { isLoading: isAuthLoading } = useAuthUser();
 
   const [view, setView] = useState<SIGN_UP_STATES>('account');
   const [registeredEmail, setRegisteredEmail] = useState('');

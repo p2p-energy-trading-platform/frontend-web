@@ -56,7 +56,7 @@ describe('SmartMeterStep', () => {
       screen.getByRole('button', { name: /send connection request/i }),
     );
 
-    expect(await screen.findByRole('alert')).toHaveTextContent(
+    expect((await screen.findByRole('alert')).textContent).toContain(
       'Meter not found',
     );
     expect(onComplete).not.toHaveBeenCalled();
@@ -70,7 +70,7 @@ describe('SmartMeterStep', () => {
       screen.getByRole('button', { name: /send connection request/i }),
     );
 
-    expect(await screen.findByRole('alert')).toHaveTextContent(
+    expect((await screen.findByRole('alert')).textContent).toContain(
       'Please enter a valid Smart Meter ID',
     );
     expect(mutateAsync).not.toHaveBeenCalled();
