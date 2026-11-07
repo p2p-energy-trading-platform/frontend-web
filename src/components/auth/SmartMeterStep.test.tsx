@@ -34,7 +34,9 @@ describe('SmartMeterStep', () => {
     fireEvent.change(screen.getByLabelText('Smart Meter ID'), {
       target: { value: ' MTR-7829-XY ' },
     });
-    fireEvent.click(screen.getByRole('button', { name: /send connection request/i }));
+    fireEvent.click(
+      screen.getByRole('button', { name: /send connection request/i }),
+    );
 
     await waitFor(() => {
       expect(mutateAsync).toHaveBeenCalledWith({ meter_id: 'MTR-7829-XY' });
@@ -50,9 +52,13 @@ describe('SmartMeterStep', () => {
     fireEvent.change(screen.getByLabelText('Smart Meter ID'), {
       target: { value: 'MTR-7829-XY' },
     });
-    fireEvent.click(screen.getByRole('button', { name: /send connection request/i }));
+    fireEvent.click(
+      screen.getByRole('button', { name: /send connection request/i }),
+    );
 
-    expect(await screen.findByRole('alert')).toHaveTextContent('Meter not found');
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Meter not found',
+    );
     expect(onComplete).not.toHaveBeenCalled();
   });
 
@@ -60,9 +66,13 @@ describe('SmartMeterStep', () => {
     const onComplete = vi.fn();
 
     render(<SmartMeterStep onComplete={onComplete} />);
-    fireEvent.click(screen.getByRole('button', { name: /send connection request/i }));
+    fireEvent.click(
+      screen.getByRole('button', { name: /send connection request/i }),
+    );
 
-    expect(await screen.findByRole('alert')).toHaveTextContent('Please enter a valid Smart Meter ID');
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'Please enter a valid Smart Meter ID',
+    );
     expect(mutateAsync).not.toHaveBeenCalled();
     expect(onComplete).not.toHaveBeenCalled();
   });

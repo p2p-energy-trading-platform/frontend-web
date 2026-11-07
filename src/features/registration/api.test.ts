@@ -26,7 +26,9 @@ describe('initiateMeterClaim', () => {
       ),
     );
 
-    await expect(initiateMeterClaim({ meter_id: 'MTR-7829-XY' })).resolves.toEqual({
+    await expect(
+      initiateMeterClaim({ meter_id: 'MTR-7829-XY' }),
+    ).resolves.toEqual({
       registration_id: 'registration-123',
       status: 'pending',
       message: 'Approval request sent',
@@ -36,6 +38,8 @@ describe('initiateMeterClaim', () => {
     const [url, options] = fetchMock.mock.calls[0];
     expect(String(url)).toContain('/api/v1/registration/claim');
     expect(options?.method).toBe('POST');
-    expect(JSON.parse(String(options?.body))).toEqual({ meter_id: 'MTR-7829-XY' });
+    expect(JSON.parse(String(options?.body))).toEqual({
+      meter_id: 'MTR-7829-XY',
+    });
   });
 });

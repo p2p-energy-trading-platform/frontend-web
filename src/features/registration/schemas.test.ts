@@ -10,6 +10,8 @@ describe('smartMeterClaimSchema', () => {
   });
 
   it('rejects an empty meter ID', () => {
-    expect(smartMeterClaimSchema.safeParse({ meterId: ' ' }).success).toBe(false);
+    expect(smartMeterClaimSchema.safeParse({ meterId: ' ' }).success).toBe(
+      false,
+    );
   });
 });

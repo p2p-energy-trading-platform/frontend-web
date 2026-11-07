@@ -28,7 +28,10 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
     const result = smartMeterClaimSchema.safeParse({ meterId });
 
     if (!result.success) {
-      setError(result.error.issues[0]?.message ?? 'Please enter a valid Smart Meter ID');
+      setError(
+        result.error.issues[0]?.message ??
+          'Please enter a valid Smart Meter ID',
+      );
       return;
     }
 
@@ -81,7 +84,11 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
             </FieldDescription>
 
             {error ? (
-              <p id="smartMeterError" role="alert" className="text-sm text-destructive">
+              <p
+                id="smartMeterError"
+                role="alert"
+                className="text-sm text-destructive"
+              >
                 {error}
               </p>
             ) : null}
