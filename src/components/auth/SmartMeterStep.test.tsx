@@ -21,9 +21,7 @@ vi.mock('#/features/registration/hooks', async () => {
           try {
             return await mutateAsync(...args);
           } catch (error) {
-            setError(
-              error instanceof Error ? error : new Error(String(error)),
-            );
+            setError(error instanceof Error ? error : new Error(String(error)));
             throw error;
           }
         },
