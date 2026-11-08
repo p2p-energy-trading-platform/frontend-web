@@ -89,4 +89,17 @@ test.describe('sign up', () => {
       page.getByText('An account with this email already exists.'),
     ).toBeVisible();
   });
+
+
+  test('completes the full sign-up flow', async ({ page, api }) => {
+    // Complete account creation
+
+    // Complete email verification
+
+    // Complete KYC submission
+
+    // Complete smart meter registration
+
+    // Verify registration completion
+  });
 });
