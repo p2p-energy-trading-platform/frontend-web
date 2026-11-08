@@ -20,9 +20,13 @@ vi.mock('#/features/registration/hooks', async () => {
         mutateAsync: async (...args: Parameters<typeof mutateAsync>) => {
           try {
             return await mutateAsync(...args);
-          } catch (error) {
-            setError(error instanceof Error ? error : new Error(String(error)));
-            throw error;
+          } catch (caughtError) {
+            setError(
+              caughtError instanceof Error
+                ? caughtError
+                : new Error(String(caughtError)),
+            );
+            throw caughtError;
           }
         },
         reset: () => {
