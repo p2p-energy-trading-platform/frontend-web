@@ -34,9 +34,13 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
     validators: { onDynamic: smartMeterClaimSchema },
     onSubmit: async ({ value }) => {
       const { meterId } = smartMeterClaimSchema.parse(value);
-      await initiateMeterClaimMutation.mutateAsync({
-        meter_id: meterId,
-      });
+      try {
+        await initiateMeterClaimMutation.mutateAsync({
+          meter_id: meterId,
+        });
+      } catch {
+        return;
+      }
       await onComplete('pending');
     },
   });

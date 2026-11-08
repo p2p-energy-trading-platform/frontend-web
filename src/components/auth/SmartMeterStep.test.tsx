@@ -9,13 +9,34 @@ const { mutateAsync, reset } = vi.hoisted(() => ({
   reset: vi.fn(),
 }));
 
-vi.mock('#/features/registration/hooks', () => ({
-  useInitiateMeterClaim: () => ({
-    mutateAsync,
-    reset,
-    isPending: false,
-  }),
-}));
+vi.mock('#/features/registration/hooks', async () => {
+  const { useState } = await import('react');
+
+  return {
+    useInitiateMeterClaim: () => {
+      const [error, setError] = useState<Error | null>(null);
+
+      return {
+        mutateAsync: async (...args: Parameters<typeof mutateAsync>) => {
+          try {
+            return await mutateAsync(...args);
+          } catch (error) {
+            setError(
+              error instanceof Error ? error : new Error(String(error)),
+            );
+            throw error;
+          }
+        },
+        reset: () => {
+          reset();
+          setError(null);
+        },
+        error,
+        isPending: false,
+      };
+    },
+  };
+});
 
 describe('SmartMeterStep', () => {
   beforeEach(() => {

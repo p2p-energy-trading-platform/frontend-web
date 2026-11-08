@@ -17,6 +17,7 @@ const localStorageMock = {
 };
 
 vi.stubGlobal('localStorage', localStorageMock);
+vi.stubEnv('VITE_API_BASE_URL', 'http://api.test');
 
 beforeEach(() => {
   storage.clear();
