@@ -1,26 +1,49 @@
-import * as React from 'react';
+import { revalidateLogic, useForm } from '@tanstack/react-form';
 import { Check, RadioTower, ShieldCheck } from 'lucide-react';
 
 import { Button } from '#/components/ui/button';
 import { Input } from '#/components/ui/input';
-import type { SmartMeterStatus } from './types';
-import { Field, FieldDescription, FieldGroup, FieldLabel } from '../ui/field';
 import { Card, CardDescription } from '../ui/card';
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '../ui/field';
+import { useInitiateMeterClaim } from '#/features/registration/hooks';
+import { smartMeterClaimSchema } from '#/features/registration/schemas';
+import type { SmartMeterClaimValues } from '#/features/registration/schemas';
+import type { SmartMeterStatus } from './types';
+import { formatFieldError } from '#/lib/form-errors';
 
 interface SmartMeterStepProps {
   onComplete: (status: SmartMeterStatus) => Promise<void> | void;
 }
 
 export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
+  const initiateMeterClaimMutation = useInitiateMeterClaim();
+
   async function complete(status: SmartMeterStatus) {
     await onComplete(status);
   }
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    await onComplete('pending');
-  }
+  const form = useForm({
+    defaultValues: { meterId: '' } satisfies SmartMeterClaimValues,
+    validationLogic: revalidateLogic(),
+    validators: { onDynamic: smartMeterClaimSchema },
+    onSubmit: async ({ value }) => {
+      const { meterId } = smartMeterClaimSchema.parse(value);
+      try {
+        await initiateMeterClaimMutation.mutateAsync({
+          meter_id: meterId,
+        });
+      } catch {
+        return;
+      }
+      await onComplete('pending');
+    },
+  });
 
   return (
     <>
@@ -33,20 +56,54 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
         connect a meter later from your Profile.
       </p>
 
-      <form onSubmit={handleSubmit} className="mt-7" noValidate>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          void form.handleSubmit();
+        }}
+        className="mt-7"
+        noValidate
+      >
         <FieldGroup>
-          <Field>
-            <FieldLabel htmlFor="smartMeterId">Smart Meter ID</FieldLabel>
-            <Input
-              id="smartMeterId"
-              autoComplete="off"
-              placeholder="MTR-7829-XY"
-              className="h-12 rounded-2xl px-4"
-            />
-            <FieldDescription className="text-xs">
-              Find this ID below the barcode on the front of your meter.
-            </FieldDescription>
-          </Field>
+          <form.Field name="meterId">
+            {(field) => (
+              <Field data-invalid={field.state.meta.errors.length > 0}>
+                <FieldLabel htmlFor={field.name}>Smart Meter ID</FieldLabel>
+                <Input
+                  id={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => {
+                    initiateMeterClaimMutation.reset();
+                    field.handleChange(event.target.value);
+                  }}
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  aria-describedby={
+                    field.state.meta.errors.length > 0
+                      ? 'smartMeterError'
+                      : undefined
+                  }
+                  autoComplete="off"
+                  placeholder="MTR-7829-XY"
+                  className="h-12 rounded-2xl px-4"
+                />
+                <FieldDescription className="text-xs">
+                  Find this ID below the barcode on the front of your meter.
+                </FieldDescription>
+                <FieldError
+                  id="smartMeterError"
+                  errors={field.state.meta.errors.map(formatFieldError)}
+                />
+              </Field>
+            )}
+          </form.Field>
+          {initiateMeterClaimMutation.error ? (
+            <FieldError>
+              {initiateMeterClaimMutation.error instanceof Error
+                ? initiateMeterClaimMutation.error.message
+                : 'Unable to send the connection request. Please try again.'}
+            </FieldError>
+          ) : null}
           <Card className="p-4">
             <CardDescription>
               <div className="flex gap-3">
@@ -69,13 +126,20 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
               type="button"
               variant="outline"
               onClick={() => complete('skipped')}
+              disabled={initiateMeterClaimMutation.isPending}
               className="h-12 flex-1 rounded-xl"
             >
               <ShieldCheck className="size-4" />
               Skip for Now
             </Button>
-            <Button type="submit" className="h-12 flex-1 rounded-xl">
-              Send Connection Request
+            <Button
+              type="submit"
+              disabled={initiateMeterClaimMutation.isPending}
+              className="h-12 flex-1 rounded-xl"
+            >
+              {initiateMeterClaimMutation.isPending
+                ? 'Sending Request...'
+                : 'Send Connection Request'}
               <Check className="size-4" />
             </Button>
           </Field>
