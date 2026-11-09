@@ -8,11 +8,11 @@ import type { LucideIcon } from 'lucide-react';
 
 export default function SignInVisualPanel() {
   return (
-    <aside className="relative hidden min-h-screen overflow-hidden bg-sidebar px-10 py-10 lg:block">
+    <aside className="relative hidden h-screen min-h-0 overflow-x-hidden overflow-y-auto overscroll-contain bg-sidebar px-8 py-6 lg:block">
       <div className="absolute -top-28 right-0 size-125 rounded-full bg-accent/10 blur-[90px]" />
       <div className="absolute -bottom-24 -left-24 size-80 rounded-full bg-chart-4/[0.07] blur-[90px]" />
 
-      <div className="relative mx-auto flex h-full max-w-147.5 flex-col">
+      <div className="relative mx-auto flex min-h-full max-w-none flex-col">
         <div className="flex items-center gap-2.5">
           <span className="flex size-9 items-center justify-center rounded-2xl bg-accent text-accent-foreground">
             <Zap className="size-4.5 fill-current" />
@@ -27,14 +27,14 @@ export default function SignInVisualPanel() {
           </span>
         </div>
 
-        <div className="mt-8">
+        <div className="mt-6">
           <span className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1.5 text-caption font-bold tracking-[0.12em] text-accent">
             <span className="size-1.5 rounded-full bg-accent shadow-[0_0_8px_currentColor]" />
             LIVE ENERGY MARKETPLACE
           </span>
         </div>
 
-        <div className="relative mx-auto mt-8 h-75 w-full max-w-130">
+        <div className="relative mx-auto mt-6 h-75 w-full max-w-130">
           <svg
             className="absolute inset-0 size-full text-accent"
             viewBox="0 0 520 300"
@@ -80,7 +80,7 @@ export default function SignInVisualPanel() {
           </p>
         </div>
 
-        <div className="mt-8">
+        <div className="mt-6">
           <h2 className="font-heading text-2xl font-bold leading-tight text-white">
             Power your future,
             <br />
@@ -93,7 +93,7 @@ export default function SignInVisualPanel() {
           </p>
         </div>
 
-        <div className="mt-7 space-y-3">
+        <div className="mt-5 space-y-3">
           {signInBenefits.map((benefit) => (
             <Benefit
               key={benefit.label}
@@ -103,7 +103,7 @@ export default function SignInVisualPanel() {
           ))}
         </div>
 
-        <div className="mt-auto border-t border-sidebar-border pt-5">
+        <div className="mt-auto pt-5">
           <p className="text-xs tracking-[0.18em] text-chart-3">★★★★★</p>
 
           <p className="mt-2 text-sm italic leading-6 text-sidebar-foreground/80">

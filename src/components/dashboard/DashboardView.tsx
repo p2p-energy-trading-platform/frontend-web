@@ -9,11 +9,14 @@ import { CurrentSlotCard } from '#/components/dashboard/CurrentSlotCard';
 import { LiveEnergyFlowCard } from '#/components/dashboard/LiveEnergyFlowCard';
 import { RecentActivityCard } from '#/components/dashboard/RecentActivityCard';
 import { MarketCard } from '#/components/dashboard/MarketCard';
+import { IotDataState } from '#/components/page-components/IotDataState';
 import { Button } from '#/components/ui/button';
+import { Card } from '#/components/ui/card';
 import { useDashboard } from '#/hooks/useDashboard';
 
 export default function DashboardView() {
   const dashboard = useDashboard();
+  const { position, devices, flow } = dashboard;
 
   return (
     <main
@@ -23,7 +26,8 @@ export default function DashboardView() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-heading-2 text-text-primary">
-            Good evening, {dashboard.greetingName} ☀️
+            Good evening
+            {dashboard.greetingName ? `, ${dashboard.greetingName}` : ''} ☀️
           </h1>
           <p className="text-sm text-text-tertiary">{dashboard.subtitle}</p>
         </div>
@@ -37,7 +41,17 @@ export default function DashboardView() {
         </div>
       </div>
 
-      <EnergyPositionCard {...dashboard.position} />
+      {position.status === 'ready' && position.value ? (
+        <EnergyPositionCard {...position.value} />
+      ) : (
+        <Card className="border-border-subtle bg-card p-5">
+          <IotDataState
+            status={position.status === 'ready' ? 'loading' : position.status}
+            onRetry={() => void position.retry()}
+            skeletonClassName="h-20"
+          />
+        </Card>
+      )}
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-7">
         {dashboard.stats.map((stat) => (
@@ -55,12 +69,30 @@ export default function DashboardView() {
       </div>
 
       <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1fr_320px]">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {dashboard.devices.map((device) => (
-            <DeviceCard key={device.title} {...device} />
-          ))}
-        </div>
-        <LiveEnergyFlowCard tiles={dashboard.flow} />
+        {devices.status === 'ready' ? (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            {devices.cards.map((device) => (
+              <DeviceCard key={device.title} {...device} />
+            ))}
+          </div>
+        ) : (
+          <Card className="border-border-subtle bg-card p-5">
+            <IotDataState
+              status={devices.status}
+              onRetry={() => void devices.retry()}
+            />
+          </Card>
+        )}
+        {flow.status === 'ready' ? (
+          <LiveEnergyFlowCard tiles={flow.tiles} />
+        ) : (
+          <Card className="border-border-subtle bg-card p-5">
+            <IotDataState
+              status={flow.status}
+              onRetry={() => void flow.retry()}
+            />
+          </Card>
+        )}
       </div>
 
       <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1fr_320px]">

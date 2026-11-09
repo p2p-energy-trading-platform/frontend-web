@@ -1,5 +1,8 @@
+import { EChart } from '#/components/charts/EChart';
+import { resolveCssColor, useChartColors } from '#/components/charts/theme';
 import { Badge } from '#/components/ui/badge';
 import { Card } from '#/components/ui/card';
+import { usageDonutOption } from '#/features/iot/chart-options';
 
 export interface UsageCategory {
   label: string;
@@ -14,24 +17,16 @@ export function UsageCategoryCard({
 }: {
   categories: Array<UsageCategory>;
 }) {
-  const total = categories.reduce((sum, c) => sum + c.valueKwh, 0);
   const maxValue = Math.max(...categories.map((c) => c.valueKwh));
-
-  // Build donut segments
-  const radius = 46;
-  const circumference = 2 * Math.PI * radius;
-  let offsetAcc = 0;
-  const segments = categories.map((c) => {
-    const fraction = c.valueKwh / total;
-    const dash = fraction * circumference;
-    const seg = {
-      ...c,
-      dasharray: `${dash} ${circumference - dash}`,
-      dashoffset: -offsetAcc,
-    };
-    offsetAcc += dash;
-    return seg;
-  });
+  const colors = useChartColors();
+  const option = usageDonutOption(
+    categories.map((c) => ({
+      label: c.label,
+      valueKwh: c.valueKwh,
+      color: resolveCssColor(c.strokeColor),
+    })),
+    colors,
+  );
 
   return (
     <Card className="gap-4 border-border-subtle bg-card p-5">
@@ -46,29 +41,11 @@ export function UsageCategoryCard({
       </div>
 
       <div className="flex flex-wrap items-center gap-8">
-        <svg viewBox="0 0 112 112" className="size-28 shrink-0 -rotate-90">
-          <circle
-            cx={56}
-            cy={56}
-            r={radius}
-            fill="none"
-            stroke="var(--border-subtle)"
-            strokeWidth={14}
-          />
-          {segments.map((s) => (
-            <circle
-              key={s.label}
-              cx={56}
-              cy={56}
-              r={radius}
-              fill="none"
-              stroke={s.strokeColor}
-              strokeWidth={14}
-              strokeDasharray={s.dasharray}
-              strokeDashoffset={s.dashoffset}
-            />
-          ))}
-        </svg>
+        <EChart
+          option={option}
+          ariaLabel="Energy use by category"
+          className="size-28 shrink-0"
+        />
 
         <div className="min-w-0 flex-1 space-y-3">
           {categories.map((c) => (

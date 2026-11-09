@@ -29,12 +29,15 @@ export interface EnergyBalanceCardProps {
   }>;
   sources: Array<EnergySourceRow>;
   exportEarnings: string;
+  /** Badge naming the period the totals cover. */
+  periodLabel?: string;
 }
 
 export function EnergyBalanceCard({
   summary,
   sources,
   exportEarnings,
+  periodLabel = 'Today',
 }: EnergyBalanceCardProps) {
   return (
     <Card className="gap-5 border-border-subtle bg-card p-5">
@@ -44,7 +47,7 @@ export function EnergyBalanceCard({
           variant="outline"
           className="border-border-subtle text-text-tertiary"
         >
-          Today
+          {periodLabel}
         </Badge>
       </div>
 
@@ -131,7 +134,7 @@ export function EnergyBalanceCard({
 
       <div className="flex items-center justify-between border-t border-border-subtle pt-4">
         <span className="text-sm text-text-secondary">Grid export earned</span>
-        <span className="text-lg font-semibold text-accent">
+        <span className="shrink-0 text-lg font-semibold whitespace-nowrap text-accent">
           {exportEarnings}
         </span>
       </div>

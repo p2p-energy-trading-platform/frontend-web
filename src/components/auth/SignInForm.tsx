@@ -155,9 +155,6 @@ export default function SignInForm() {
         ) : null}
       </div>
 
-      <p className="mt-2.5 text-center text-caption text-text-disabled">
-        These options may not yet be available in all regions.
-      </p>
       <p className="mt-6 text-center text-sm text-text-tertiary">
         New to GridX?{' '}
         <Link
