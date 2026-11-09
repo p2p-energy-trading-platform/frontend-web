@@ -7,6 +7,7 @@ export interface AuthUser {
   name: string;
   status: string;
   role: string;
+  kycStatus: 'none' | 'pending' | 'verified' | 'rejected';
 }
 
 export interface LoginResponse {

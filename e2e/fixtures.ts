@@ -10,6 +10,7 @@ export interface MockUser {
   name: string;
   status: string;
   role: string;
+  kycStatus: 'none' | 'pending' | 'verified' | 'rejected';
 }
 
 export const testUser: MockUser = {
@@ -18,6 +19,7 @@ export const testUser: MockUser = {
   name: 'Aisha Rahman',
   status: 'ACTIVE',
   role: 'USER',
+  kycStatus: 'none',
 };
 
 export interface MockResponse {
@@ -27,7 +29,6 @@ export interface MockResponse {
 
 type MockHandler = (route: Route) => MockResponse | Promise<MockResponse>;
 
-
 export function apiError(
   status: number,
   code: string,
@@ -35,7 +36,6 @@ export function apiError(
 ): MockResponse {
   return { status, body: { error: { code, message, details: [] } } };
 }
-
 
 export class MockApi {
   private user: MockUser | null = null;
@@ -59,7 +59,6 @@ export class MockApi {
     this.user = null;
   }
 
- 
   on(method: string, path: string, handler: MockHandler | MockResponse): void {
     this.handlers.set(
       `${method} ${path}`,
