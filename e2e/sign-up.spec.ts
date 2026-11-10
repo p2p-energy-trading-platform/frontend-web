@@ -147,6 +147,61 @@ test.describe('sign up', () => {
 
 
     // Complete KYC submission
+    api.on('POST', '/api/v1/kyc/upload-url', {
+
+      status: 200,
+      body: {
+        uploadUrl: 'https://storage.example.com/test-upload',
+        objectKey: 'kyc/test-user/identity.png',
+        expiresIn: 300,
+      },
+
+    });
+
+    api.on('POST', '/api/v1/kyc', {
+
+      status: 201,
+      body: {
+        id: '00000000-0000-4000-8000-000000000003',
+        state: 'PENDING',
+        createdAt: '2026-11-10T10:00:00.000Z',
+        updatedAt: '2026-11-10T10:00:00.000Z',
+      },
+
+    });
+
+
+    await page.getByLabel('Legal Full Name').fill('New User');
+
+    await page
+          .getByLabel('Sri Lankan NIC Number')
+          .fill('200012345678');
+
+    
+    await page.getByLabel('Date of birth').fill('2000-05-15');
+    
+    await page.locator('input[type="file"]').setInputFiles({
+      
+      name: 'identity.png',
+      mimeType: 'image/png',
+      buffer: Buffer.from('fake image content'),
+
+    });
+
+    await page.getByRole('button', { name: 'Submit KYC' }).click();
+
+    const kycRequest = api.requests.find(
+      (request) => request.path === '/api/v1/kyc',
+    );
+
+    expect(kycRequest?.body).toMatchObject({
+
+      fullName: 'New User',
+      nicNumber: '200012345678',
+      dateOfBirth: '2000-05-15',
+      documentPath: 'kyc/test-user/identity.png',
+
+    });
 
     // Complete smart meter registration
 
