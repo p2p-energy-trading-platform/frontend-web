@@ -92,7 +92,36 @@ test.describe('sign up', () => {
 
 
   test('completes the full sign-up flow', async ({ page, api }) => {
+    
     // Complete account creation
+
+    api.on('POST', '/api/v1/auth/register', {
+
+      status: 201,
+      body: {
+        userId: '00000000-0000-4000-8000-000000000002',
+        email: 'new.user@example.com',
+        status: 'PENDING',
+        createdAt: '2026-10-27T08:00:00.000z',
+      },
+
+    });
+
+    await page.getByLabel('Full Name').fill('New User');
+    await page.getByLabel('Email Address').fill('new.user@example.com');
+    await page.getByLabel('Password', { exact: true }).fill('Str0ngPassw0rd!');
+    await page.getByLabel('Confirm Password').fill('Str0ngPassw0rd!');
+
+    await page.getByRole('checkbox').click();
+
+    await page.getByRole('button', { name: 'Create Account' }).click();
+
+    await expect(
+      page.getByRole('heading', {
+        level: 1,
+        name: 'verify your email', 
+      }),
+    ).toBeVisible();
 
     // Complete email verification
 
