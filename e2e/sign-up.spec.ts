@@ -94,7 +94,6 @@ test.describe('sign up', () => {
   test('completes the full sign-up flow', async ({ page, api }) => {
     
     // Complete account creation
-
     api.on('POST', '/api/v1/auth/register', {
 
       status: 201,
@@ -119,10 +118,11 @@ test.describe('sign up', () => {
     await expect(
       page.getByRole('heading', {
         level: 1,
-        name: 'verify your email', 
+        name: 'Verify your email',
       }),
     ).toBeVisible();
 
+    
     // Complete email verification
 
     // Complete KYC submission
