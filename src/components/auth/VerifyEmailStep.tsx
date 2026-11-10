@@ -1,171 +1,217 @@
+import { revalidateLogic, useForm } from '@tanstack/react-form';
+import { ArrowLeft, ArrowRight, Clock3, MailCheck } from 'lucide-react';
 
-import { apiError, expect, test } from './fixtures';
+import { Button } from '#/components/ui/button';
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '#/components/ui/field';
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from '#/components/ui/input-otp';
+import { toast } from '#/components/ui/toast';
+import { useResendOtp, useVerifyEmail } from '#/features/auth/hooks';
+import { verifyEmailSchema } from '#/features/auth/schemas';
+import type { VerifyEmailFormValues } from '#/features/auth/schemas';
+import {
+  formatFieldError,
+  getApiFieldErrors,
+  getGeneralFormError,
+  getRequestIdError,
+} from '#/lib/form-errors';
+import { VERIFY_EMAIL_ERROR_FIELDS } from '#/features/auth/errors';
 
-test.describe('sign up', () => {
-  // 1. Open the sign-up page before every test.
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/sign-up');
+const OTP_LENGTH = 6;
 
-    await expect(
-      page.getByRole('heading', { name: 'Create your account' }),
-    ).toBeVisible();
+interface VerifyEmailStepProps {
+  email: string;
+  onBack: () => void;
+  onVerified: () => Promise<void> | void;
+}
+
+export function VerifyEmailStep({
+  email,
+  onBack,
+  onVerified,
+}: VerifyEmailStepProps) {
+  const verifyMutation = useVerifyEmail();
+  const resendMutation = useResendOtp();
+
+  const form = useForm({
+    defaultValues: { otp: '' } satisfies VerifyEmailFormValues,
+    validationLogic: revalidateLogic(),
+    validators: { onDynamic: verifyEmailSchema },
+    onSubmit: async ({ value }) => {
+      resendMutation.reset();
+      await verifyMutation.mutateAsync({ email, otp: value.otp });
+      await onVerified();
+    },
   });
 
-  // 2. Test validation errors for an empty form.
-  test('shows validation errors for an empty form', async ({ page, api }) => {
-    await page.getByRole('button', { name: 'Create Account' }).click();
+  async function handleResend() {
+    verifyMutation.reset();
 
-    await expect(page.getByText('Full name is required')).toBeVisible();
-    await expect(page.getByText('Enter a valid email address')).toBeVisible();
+    try {
+      await resendMutation.mutateAsync({ email });
+    } catch {
+      // Shown below the code field from the mutation state.
+      return;
+    }
 
-    await expect(
-      page.getByText('Password must be 8 to 128 characters'),
-    ).toBeVisible();
-
-    await expect(
-      page.getByText('You must accept the terms to continue'),
-    ).toBeVisible();
-
-    expect(
-      api.requests.some((request) => request.path === '/api/v1/auth/register'),
-    ).toBe(false);
-  });
-
-  // 3. Test password mismatch validation.
-  test('shows an error when the passwords do not match', async ({ page }) => {
-    await page.getByLabel('Password', { exact: true }).fill('Str0ngPassw0rd!');
-    await page.getByLabel('Confirm Password').fill('DifferentPass1!');
-
-    await page.getByRole('button', { name: 'Create Account' }).click();
-
-    await expect(page.getByText('Passwords do not match')).toBeVisible();
-  });
-
-  // 4. Test successful account creation.
-  test('creates an account and moves to email verification', async ({
-    page,
-    api,
-  }) => {
-    api.on('POST', '/api/v1/auth/register', {
-      status: 201,
-      body: {
-        userId: '00000000-0000-4000-8000-000000000002',
-        email: 'new.user@example.com',
-        status: 'PENDING',
-        createdAt: '2026-10-27T08:00:00.000Z',
-      },
+    form.reset();
+    toast.add({
+      title: 'A new verification code has been sent.',
+      type: 'success',
     });
+  }
 
-    await page.getByLabel('Full Name').fill('New User');
-    await page.getByLabel('Email Address').fill('new.user@example.com');
-    await page.getByLabel('Password', { exact: true }).fill('Str0ngPassw0rd!');
-    await page.getByLabel('Confirm Password').fill('Str0ngPassw0rd!');
-    await page.getByRole('checkbox').click();
+  const submitError = verifyMutation.error ?? resendMutation.error;
+  const isBusy = verifyMutation.isPending || resendMutation.isPending;
 
-    await page.getByRole('button', { name: 'Create Account' }).click();
+  return (
+    <>
+      <div className="flex size-12 items-center justify-center rounded-2xl border border-accent/25 bg-accent/15 text-accent">
+        <MailCheck className="size-6" />
+      </div>
 
-    await expect(
-      page.getByRole('heading', { level: 1, name: 'Verify your email' }),
-    ).toBeVisible();
+      <p className="mt-4 text-caption font-bold uppercase tracking-widest text-accent">
+        Email verification
+      </p>
 
-    await expect(page.getByText('new.user@example.com')).toBeVisible();
+      <h1 className="mt-1 font-heading text-heading-1 font-bold leading-[34px]">
+        Verify your email
+      </h1>
 
-    const registerRequest = api.requests.find(
-      (request) => request.path === '/api/v1/auth/register',
-    );
+      <p className="mt-2 text-sm leading-[22px] text-text-tertiary">
+        Enter the verification code sent to
+      </p>
+      <p className="mt-0.5 break-all text-sm font-semibold text-foreground">
+        {email}
+      </p>
+      <p role="status" className="mt-3 text-sm text-accent">
+        Account created. We sent a verification code to your email.
+      </p>
 
-    expect(registerRequest?.body).toEqual({
-      name: 'New User',
-      email: 'new.user@example.com',
-      password: 'Str0ngPassw0rd!',
-    });
-  });
+      <form
+        noValidate
+        onSubmit={(event) => {
+          event.preventDefault();
+          void form.handleSubmit();
+        }}
+        className="mt-8"
+      >
+        <FieldGroup>
+          <form.Field name="otp">
+            {(field) => (
+              <Field data-invalid={field.state.meta.errors.length > 0}>
+                <FieldLabel
+                  htmlFor={field.name}
+                  className="text-xs font-semibold tracking-wide text-muted-foreground uppercase"
+                >
+                  6-digit verification code
+                </FieldLabel>
+                <InputOTP
+                  id={field.name}
+                  maxLength={OTP_LENGTH}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(value) => {
+                    verifyMutation.reset();
+                    resendMutation.reset();
+                    field.handleChange(value.replace(/\D/g, ''));
+                  }}
+                  containerClassName="mt-2 justify-center"
+                  aria-label="6-digit verification code"
+                  aria-invalid={
+                    field.state.meta.errors.length > 0 ||
+                    getApiFieldErrors(verifyMutation.error, 'otp').length > 0
+                  }
+                  disabled={isBusy}
+                >
+                  <InputOTPGroup>
+                    {Array.from({ length: OTP_LENGTH }, (_, index) => (
+                      <InputOTPSlot
+                        key={index}
+                        index={index}
+                        className="size-14 text-xl"
+                      />
+                    ))}
+                  </InputOTPGroup>
+                </InputOTP>
+                <FieldError
+                  errors={[
+                    ...field.state.meta.errors.map(formatFieldError),
+                    ...getApiFieldErrors(verifyMutation.error, 'otp'),
+                  ]}
+                />
+              </Field>
+            )}
+          </form.Field>
 
-  // 5. Test API error for an already registered email.
-  test('shows the API error when the email is already registered', async ({
-    page,
-    api,
-  }) => {
-    api.on(
-      'POST',
-      '/api/v1/auth/register',
-      apiError(409, 'CONFLICT', 'An account with this email already exists.'),
-    );
+          {getGeneralFormError(submitError, VERIFY_EMAIL_ERROR_FIELDS) ? (
+            <FieldError>
+              {getGeneralFormError(submitError, VERIFY_EMAIL_ERROR_FIELDS)}
+            </FieldError>
+          ) : null}
+          {getRequestIdError(submitError) ? (
+            <p className="text-xs text-text-disabled">
+              {getRequestIdError(submitError)}
+            </p>
+          ) : null}
 
-    await page.getByLabel('Full Name').fill('Existing User');
-    await page.getByLabel('Email Address').fill('aisha@example.com');
-    await page.getByLabel('Password', { exact: true }).fill('Str0ngPassw0rd!');
-    await page.getByLabel('Confirm Password').fill('Str0ngPassw0rd!');
-    await page.getByRole('checkbox').click();
+          <div className="flex items-center gap-2 text-xs text-text-tertiary">
+            <Clock3 className="size-3.5 text-accent" />
+            Code expires in 10 minutes
+          </div>
 
-    await page.getByRole('button', { name: 'Create Account' }).click();
+          <Field>
+            <form.Subscribe
+              selector={(state) =>
+                [state.isSubmitting, state.values.otp] as const
+              }
+            >
+              {([isSubmitting, otp]) => (
+                <Button
+                  type="submit"
+                  className="h-12 rounded-xl"
+                  disabled={isBusy || isSubmitting || otp.length !== OTP_LENGTH}
+                >
+                  {isSubmitting ? 'Verifying...' : 'Verify Email'}
+                  <ArrowRight className="size-4" />
+                </Button>
+              )}
+            </form.Subscribe>
+          </Field>
+        </FieldGroup>
+      </form>
 
-    await expect(
-      page.getByText('An account with this email already exists.'),
-    ).toBeVisible();
-  });
+      <p className="mt-5 text-center text-sm text-text-tertiary">
+        Didn&apos;t receive the verification code?{' '}
+        <Button
+          type="button"
+          variant="link"
+          className="h-auto p-0 font-semibold text-accent"
+          onClick={() => void handleResend()}
+          disabled={isBusy}
+        >
+          {resendMutation.isPending ? 'Sending...' : 'Resend'}
+        </Button>
+      </p>
 
-  // 6. Test the complete sign-up flow.
-  test('completes the full sign-up flow', async ({ page, api }) => {
-    // 6.1 Mock account registration.
-    api.on('POST', '/api/v1/auth/register', {
-      status: 201,
-      body: {
-        userId: '00000000-0000-4000-8000-000000000002',
-        email: 'new.user@example.com',
-        status: 'PENDING',
-        createdAt: '2026-10-27T08:00:00.000Z',
-      },
-    });
-
-    // 6.2 Mock email verification.
-    api.on('POST', '/api/v1/auth/verify-email', {
-      status: 200,
-      body: {
-        success: true,
-      },
-    });
-
-    // 6.3 Complete account creation.
-    await page.getByLabel('Full Name').fill('New User');
-    await page.getByLabel('Email Address').fill('new.user@example.com');
-    await page.getByLabel('Password', { exact: true }).fill('Str0ngPassw0rd!');
-    await page.getByLabel('Confirm Password').fill('Str0ngPassw0rd!');
-    await page.getByRole('checkbox').click();
-
-    await page.getByRole('button', { name: 'Create Account' }).click();
-
-    // 6.4 Verify that the email verification step appears.
-    await expect(
-      page.getByRole('heading', { level: 1, name: 'Verify your email' }),
-    ).toBeVisible();
-
-    await expect(
-      page.getByText('Account created. We sent a verification code to your email.'),
-    ).toBeVisible();
-
-    // 6.5 Enter the six-digit verification code.
-    await page.getByLabel('6-digit verification code').fill('123456');
-
-    // 6.6 Submit email verification.
-    await page.getByRole('button', { name: 'Verify Email' }).click();
-
-    // 6.7 Verify that the KYC step appears.
-    // Add the actual KYC heading assertion after inspecting KycStep.tsx.
-
-    // 6.8 Complete KYC form and document upload.
-    // Add the actual KYC form fields and upload interaction.
-
-    // 6.9 Submit KYC.
-    // Add the KYC submission assertion.
-
-    // 6.10 Verify that the smart meter step appears.
-    // Add the actual smart meter heading assertion.
-
-    // 6.11 Complete smart meter registration.
-    // Add the actual meter form fields and submission.
-
-    // 6.12 Verify registration completion.
-    // Add the actual completion heading assertion.
-  });
-});
+      <Button
+        type="button"
+        variant="link"
+        onClick={onBack}
+        className="mt-6"
+        disabled={isBusy}
+      >
+        <ArrowLeft className="size-4" />
+        Back to account details
+      </Button>
+    </>
+  );
+}
