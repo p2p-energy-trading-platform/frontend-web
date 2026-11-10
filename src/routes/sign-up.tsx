@@ -62,7 +62,7 @@ export const Route = createFileRoute('/sign-up')({
 
     if (user.status === 'ACTIVE') {
       const canAccessKyc =
-        user.kycStatus === 'none' || user.kycStatus === 'rejected';
+        user.kycStatus === undefined || user.kycStatus === 'REJECTED';
 
       if (
         (step === 'kyc' && !canAccessKyc) ||

@@ -1,13 +1,15 @@
 import { env } from '#/env';
 import { ApiError, apiRequest } from '#/lib/api-client';
 
+export type AuthKycStatus = 'PENDING' | 'VERIFIED' | 'REJECTED';
+
 export interface AuthUser {
   userId: string;
   email: string;
   name: string;
   status: string;
   role: string;
-  kycStatus: 'none' | 'pending' | 'verified' | 'rejected';
+  kycStatus?: AuthKycStatus;
 }
 
 export interface LoginResponse {
