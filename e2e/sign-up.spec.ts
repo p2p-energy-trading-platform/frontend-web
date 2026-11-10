@@ -1,4 +1,3 @@
-import { success } from 'zod';
 import { apiError, expect, test } from './fixtures';
 
 test.describe('sign up', () => {
@@ -94,7 +93,7 @@ test.describe('sign up', () => {
 
   test('completes the full sign-up flow', async ({ page, api }) => {
     
-    // Complete account creation
+    // 1. Complete account creation
     api.on('POST', '/api/v1/auth/register', {
 
       status: 201,
@@ -102,7 +101,7 @@ test.describe('sign up', () => {
         userId: '00000000-0000-4000-8000-000000000002',
         email: 'new.user@example.com',
         status: 'PENDING',
-        createdAt: '2026-10-27T08:00:00.000z',
+        createdAt: '2026-10-27T08:00:00.000Z',
       },
 
     });
@@ -124,7 +123,7 @@ test.describe('sign up', () => {
     ).toBeVisible();
 
     
-    // Complete email verification
+    // 2.Complete email verification
     api.on('POST', '/api/v1/auth/verify-email', {
 
       status: 200,
@@ -146,7 +145,7 @@ test.describe('sign up', () => {
     ).toBeVisible();
 
 
-    // Complete KYC submission
+    // 3.Complete KYC submission
     api.on('POST', '/api/v1/kyc/upload-url', {
 
       status: 200,
@@ -170,6 +169,15 @@ test.describe('sign up', () => {
 
     });
 
+    await page.route(
+      'https://storage.example.com/test-upload',
+      async (route) => {
+        await route.fulfill({
+          status: 200,
+        });
+      },
+    );
+
 
     await page.getByLabel('Legal Full Name').fill('New User');
 
@@ -190,6 +198,12 @@ test.describe('sign up', () => {
 
     await page.getByRole('button', { name: 'Submit KYC' }).click();
 
+    await expect.poll(() =>
+      api.requests.some(
+        (request) => request.path === '/api/v1/kyc',
+      ),
+    ).toBe(true);
+
     const kycRequest = api.requests.find(
       (request) => request.path === '/api/v1/kyc',
     );
@@ -203,8 +217,68 @@ test.describe('sign up', () => {
 
     });
 
-    // Complete smart meter registration
 
-    // Verify registration completion
+
+    // 4.Complete smart meter registration
+    api.on('POST', '/api/v1/registration/claim', {
+
+      status: 200,
+      body: {
+        registration_id: '00000000-0000-4000-8000-000000000004',
+        status: 'PENDING',
+        message: 'Meter connection request submitted successfully',
+      },
+
+    });
+
+    await expect(
+      page.getByRole('heading', { name: 'Smart Meter' }),
+    ).toBeVisible();
+
+    await page.getByLabel('Smart Meter ID').fill('MTR-7829-XY');
+
+    await page
+      .getByRole('button', { name: 'Send Connection Request' })
+      .click();
+
+    await expect.poll(() =>
+      api.requests.some(
+        (request) => request.path === '/api/v1/registration/claim',
+      ),
+    ).toBe(true);
+
+    const meterClaimRequest = api.requests.find(
+      (request) => request.path === '/api/v1/registration/claim',
+    );
+
+    expect(meterClaimRequest?.body).toMatchObject({
+      meter_id: 'MTR-7829-XY',
+    });
+
+
+
+    // 5.Verify registration completion
+    await expect(
+      page.getByText('Onboarding complete'),
+    ).toBeVisible();
+
+    await expect(
+      page.getByRole('heading', { name: 'Registration saved' }),
+    ).toBeVisible();
+
+    const registrationSummary = page
+      .getByRole('heading', { name: 'Registration saved' })
+      .locator('..');
+
+    await expect(registrationSummary).toContainText('Identity status');
+    await expect(registrationSummary).toContainText('Smart meter');
+
+    await expect(registrationSummary).toContainText('Pending');
+
+    await expect(
+      page.getByRole('link', { name: 'View Profile' }),
+    ).toBeVisible();
+
   });
+
 });
