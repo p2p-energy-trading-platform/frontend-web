@@ -1,3 +1,4 @@
+import { success } from 'zod';
 import { apiError, expect, test } from './fixtures';
 
 test.describe('sign up', () => {
@@ -124,6 +125,26 @@ test.describe('sign up', () => {
 
     
     // Complete email verification
+    api.on('POST', '/api/v1/auth/verify-email', {
+
+      status: 200,
+      body: {
+        success: true,
+        message: 'Email verified successfully',
+      },
+
+    });
+
+    await page
+          .getByRole('textbox', { name: '6-digit verification code' })
+          .fill('123456');
+
+    await page.getByRole('button', { name: 'Verify Email' }).click();      
+
+    await expect(
+      page.getByRole('button', { name: /KYC/i }),
+    ).toBeVisible();
+
 
     // Complete KYC submission
 
