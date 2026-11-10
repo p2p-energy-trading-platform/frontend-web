@@ -338,7 +338,13 @@ function FinalContent({
           <p className="text-sm font-semibold">Email verified</p>
           <p className="mt-1 text-xs leading-5 text-sidebar-foreground/70">
             KYC status:{' '}
-            {kycStatus === 'pending' ? 'Pending review' : 'Not submitted'}
+            {kycStatus === 'pending'
+              ? 'Pending review'
+              : kycStatus === 'verified'
+                ? 'Verified'
+                : kycStatus === 'rejected'
+                  ? 'Rejected'
+                  : 'Not submitted'}
             <br />
             Smart meter:{' '}
             {meterStatus === 'pending' ? 'Pending approval' : 'Skipped'}

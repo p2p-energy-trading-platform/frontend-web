@@ -51,6 +51,8 @@ export function useRegister() {
 }
 
 export function useVerifyEmail() {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async ({ email, otp }: { email: string; otp: string }) => {
       const result = await verifyEmail(email, otp);
@@ -58,6 +60,9 @@ export function useVerifyEmail() {
         throw new Error(result.message || 'Email verification failed.');
       }
       return result;
+    },
+    onSuccess: async () => {
+      await queryClient.fetchQuery(authUserQueryOptions);
     },
   });
 }
