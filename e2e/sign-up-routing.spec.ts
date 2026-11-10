@@ -67,7 +67,7 @@ test.describe('sign-up URL routing', () => {
     await expect(page).toHaveURL('/dashboard');
   });
 
-  for (const kycStatus of ['pending', 'verified'] as const) {
+  for (const kycStatus of ['PENDING', 'VERIFIED'] as const) {
     test(`redirects active users with ${kycStatus} KYC away from KYC`, async ({
       page,
       api,
@@ -80,12 +80,15 @@ test.describe('sign-up URL routing', () => {
     });
   }
 
-  for (const kycStatus of ['none', 'rejected'] as const) {
-    test(`allows active users with ${kycStatus} KYC to access KYC`, async ({
+  for (const [label, user] of [
+    ['no KYC status', testUser],
+    ['REJECTED', { ...testUser, kycStatus: 'REJECTED' }],
+  ] as const) {
+    test(`allows active users with ${label} to access KYC`, async ({
       page,
       api,
     }) => {
-      api.signIn({ ...testUser, kycStatus });
+      api.signIn(user);
 
       await page.goto('/sign-up?step=kyc');
 

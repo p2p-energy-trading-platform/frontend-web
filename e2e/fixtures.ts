@@ -10,7 +10,7 @@ export interface MockUser {
   name: string;
   status: string;
   role: string;
-  kycStatus: 'none' | 'pending' | 'verified' | 'rejected';
+  kycStatus?: 'PENDING' | 'VERIFIED' | 'REJECTED';
 }
 
 export const testUser: MockUser = {
@@ -19,7 +19,6 @@ export const testUser: MockUser = {
   name: 'Aisha Rahman',
   status: 'ACTIVE',
   role: 'USER',
-  kycStatus: 'none',
 };
 
 export interface MockResponse {
