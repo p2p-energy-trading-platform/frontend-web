@@ -136,9 +136,6 @@ function SidebarPanel({
                 <span className="truncate text-sm font-medium text-sidebar-foreground">
                   {user.name}
                 </span>
-                <span className="truncate text-xs text-sidebar-foreground/60">
-                  {user.property} · {user.zone}
-                </span>
               </span>
               <ChevronDown className="ml-auto size-4 shrink-0 text-sidebar-foreground/50" />
             </>

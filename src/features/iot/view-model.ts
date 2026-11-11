@@ -61,6 +61,28 @@ function localTime(iso: string, timeZone: string) {
 
 // ---------------------------------------------------------------- dashboard
 
+/** Hour of the day (with minutes as a fraction) in the given time zone. */
+function localHour(at: Date, timeZone: string) {
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone,
+    hour: 'numeric',
+    minute: 'numeric',
+    hourCycle: 'h23',
+  }).formatToParts(at);
+  const get = (type: string) =>
+    Number(parts.find((part) => part.type === type)?.value);
+  return get('hour') + get('minute') / 60;
+}
+
+/** Greeting for the time of day. */
+export function dashboardGreeting(at: Date, timeZone: string) {
+  const hour = localHour(at, timeZone);
+  if (hour >= 5 && hour < 12) return { phrase: 'Good morning', emoji: '☀️' };
+  if (hour >= 12 && hour < 17) return { phrase: 'Good afternoon', emoji: '🌤️' };
+  if (hour >= 17 && hour < 21) return { phrase: 'Good evening', emoji: '🌇' };
+  return { phrase: 'Quiet night', emoji: '🌙' };
+}
+
 export function toEnergyPosition(
   summary: EnergySummary,
 ): EnergyPositionCardProps {

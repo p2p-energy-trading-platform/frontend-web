@@ -22,7 +22,7 @@ test.describe('signed in', () => {
     await page.goto('/dashboard');
 
     await expect(
-      page.getByRole('heading', { level: 1, name: /Good evening/ }),
+      page.getByRole('heading', { level: 1, name: /Aisha/ }),
     ).toBeVisible();
   });
 

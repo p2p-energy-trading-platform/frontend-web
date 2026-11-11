@@ -8,6 +8,7 @@ export interface StatTileProps {
   iconClassName?: string;
   value: string;
   label: string;
+  className?: string;
 }
 
 export function StatTile({
@@ -15,9 +16,10 @@ export function StatTile({
   iconClassName,
   value,
   label,
+  className,
 }: StatTileProps) {
   return (
-    <Card className="gap-2 p-4">
+    <Card className={cn('gap-2 p-4', className)}>
       <span
         className={cn(
           'flex size-7 items-center justify-center rounded-md bg-secondary text-text-secondary',
