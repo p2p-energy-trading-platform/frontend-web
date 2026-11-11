@@ -25,9 +25,16 @@ test.describe('IoT views', () => {
     api,
   }) => {
     mockIot(api);
+    const summaryResponse = page.waitForResponse((response) => {
+      const url = new URL(response.url());
+      return url.pathname === `/api/v1/iot/houses/${HOUSE_ID}/energy-summary`;
+    });
     await page.goto('/energy-assets');
+    expect((await summaryResponse).ok()).toBe(true);
 
-    await expect(page.getByText('Self-consumption')).toBeVisible();
+    await expect(
+      page.getByText('Self-consumption', { exact: true }),
+    ).toBeVisible();
     await expect(
       page.getByRole('img', {
         name: 'Energy generated, consumed, exported and imported over time',
