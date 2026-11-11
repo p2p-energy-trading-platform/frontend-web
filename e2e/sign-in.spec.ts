@@ -27,7 +27,7 @@ test.describe('sign in', () => {
 
     await expect(page).toHaveURL('/dashboard');
     await expect(
-      page.getByRole('heading', { level: 1, name: /Good evening/ }),
+      page.getByRole('heading', { level: 1, name: /Aisha/ }),
     ).toBeVisible();
   });
 

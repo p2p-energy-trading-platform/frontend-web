@@ -16,10 +16,7 @@ export default function EnergyView() {
       data-source="live"
     >
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-heading-2 text-text-primary">Energy</h1>
-          <p className="text-sm text-text-tertiary">{meta.meterLabel}</p>
-        </div>
+        <h1 className="text-heading-2 text-text-primary">Energy</h1>
         <HouseSelect
           houses={meta.houses}
           value={meta.selectedHouseId}
