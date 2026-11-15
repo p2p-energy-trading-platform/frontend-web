@@ -40,7 +40,13 @@ export default function RegistrationComplete({
               Identity status
             </p>
             <p className="mt-0.5 text-sm font-semibold">
-              {kycStatus === 'pending' ? 'Pending' : 'Not submitted'}
+              {kycStatus === 'pending'
+                ? 'Pending'
+                : kycStatus === 'verified'
+                  ? 'Verified'
+                  : kycStatus === 'rejected'
+                    ? 'Rejected'
+                    : 'Not submitted'}
             </p>
           </div>
         </div>

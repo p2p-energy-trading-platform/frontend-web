@@ -27,7 +27,7 @@ test.describe('IoT views', () => {
     mockIot(api);
     await page.goto('/energy-assets');
 
-    await expect(page.getByText('Self-consumption')).toBeVisible();
+    await expect(page.getByText('Self-consumption', { exact: true })).toBeVisible();
     await expect(
       page.getByRole('img', {
         name: 'Energy generated, consumed, exported and imported over time',
