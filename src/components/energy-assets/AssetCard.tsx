@@ -101,14 +101,16 @@ export function AssetCard({
         <div className="relative mt-3 flex items-baseline gap-1.5">
           <span
             className={cn(
-              'font-mono text-xl font-extrabold',
+              'font-mono text-lg font-semibold',
               statValueClassName,
             )}
           >
             {statValue}
           </span>
-          <span className="text-sm text-text-tertiary">{statUnit}</span>
-          <span className="text-sm text-text-tertiary">{statLabel}</span>
+          <span className="font-mono text-xs text-text-tertiary">
+            {statUnit}
+          </span>
+          <span className="text-xs text-text-tertiary">{statLabel}</span>
         </div>
 
         {typeof socPercent === 'number' && (

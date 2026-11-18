@@ -209,3 +209,71 @@ describe('line visibility', () => {
     ).toEqual([false, false, false]);
   });
 });
+
+describe('gaps in the data', () => {
+  const at = (startsAt: string, solarKw = 1): EnergyBucket => ({
+    startsAt,
+    energy: {
+      generatedKwh: solarKw / 2,
+      consumedKwh: 0.5,
+      exportedKwh: 0,
+      importedKwh: 0,
+      storageChargedKwh: 0,
+      storageDischargedKwh: 0,
+    },
+    averagePower: { solarKw, consumptionKw: 1, exportKw: 0, importKw: 0 },
+  });
+  const range = {
+    from: '2026-11-11T20:00:00.000Z',
+    to: '2026-11-12T20:00:00.000Z',
+    bucket: '30m' as const,
+  };
+  type LineSeries = Array<{
+    name: string;
+    showSymbol: boolean;
+    data: Array<[string, number | null]>;
+  }>;
+  const generated = (data: Array<EnergyBucket>) =>
+    (generationChartOption(data, colors, range).series as LineSeries)[0];
+
+  it('breaks the line where buckets are missing instead of joining them', () => {
+    const series = generated([
+      at('2026-11-12T08:00:00.000Z'),
+      at('2026-11-12T08:30:00.000Z'),
+      at('2026-11-12T11:00:00.000Z'),
+      at('2026-11-12T11:30:00.000Z'),
+    ]);
+    expect(series.data.map(([, value]) => value)).toEqual([1, 1, null, 1, 1]);
+    expect(series.data[2][0]).toBe('2026-11-12T09:00:00.000Z');
+  });
+
+  it('keeps consecutive buckets joined', () => {
+    const series = generated([
+      at('2026-11-12T08:00:00.000Z'),
+      at('2026-11-12T08:30:00.000Z'),
+    ]);
+    expect(series.data.map(([, value]) => value)).toEqual([1, 1]);
+  });
+
+  it('shows markers when a gap leaves a point on its own', () => {
+    const series = generated([
+      at('2026-11-12T08:00:00.000Z'),
+      at('2026-11-12T08:30:00.000Z'),
+      at('2026-11-12T12:00:00.000Z'),
+    ]);
+    expect(series.showSymbol).toBe(true);
+  });
+
+  it('breaks the actual solar line on the forecast chart too', () => {
+    const option = forecastChartOption(
+      [at('2026-11-12T03:00:00.000Z'), at('2026-11-12T07:00:00.000Z')],
+      [],
+      colors,
+      { ...range, bucket: '1h' },
+    );
+    const actual = (option.series as LineSeries).find(
+      (series) => series.name === 'Actual',
+    );
+    expect(actual?.data.map(([, value]) => value)).toEqual([1, null, 1]);
+  });
+});

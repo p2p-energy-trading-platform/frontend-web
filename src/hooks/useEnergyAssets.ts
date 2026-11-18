@@ -31,14 +31,11 @@ import {
 } from '#/features/iot/view-model';
 import type { AssetView } from '#/features/iot/view-model';
 
-/** House, zone and meter labels plus the house switcher for the Energy page. */
+/** Zone label plus the house switcher for the Energy page. */
 export function useEnergyMeta() {
   const selected = useSelectedHouse();
   const house = selected.house;
   return {
-    meterLabel: house
-      ? `${house.houseId} · ${gridLabel(house)} · ${house.meterId}`
-      : 'No smart meter linked',
     zoneLabel: house ? `${house.houseId} · ${gridLabel(house)}` : '—',
     houses: selected.houses,
     selectedHouseId: house?.houseId,
