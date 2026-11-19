@@ -15,7 +15,16 @@ import { useInitiateMeterClaim } from '#/features/registration/hooks';
 import { smartMeterClaimSchema } from '#/features/registration/schemas';
 import type { SmartMeterClaimValues } from '#/features/registration/schemas';
 import type { SmartMeterStatus } from './types';
+import { ApiError } from '#/lib/api-client';
 import { formatFieldError } from '#/lib/form-errors';
+
+// An account has one smart meter; the gateway answers 409 for a second claim.
+function claimErrorMessage(error: Error): string {
+  if (error instanceof ApiError && error.status === 409) {
+    return 'A smart meter is already linked to your account.';
+  }
+  return error.message;
+}
 
 interface SmartMeterStepProps {
   onComplete: (status: SmartMeterStatus) => Promise<void> | void;
@@ -100,7 +109,7 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
           {initiateMeterClaimMutation.error ? (
             <FieldError>
               {initiateMeterClaimMutation.error instanceof Error
-                ? initiateMeterClaimMutation.error.message
+                ? claimErrorMessage(initiateMeterClaimMutation.error)
                 : 'Unable to send the connection request. Please try again.'}
             </FieldError>
           ) : null}

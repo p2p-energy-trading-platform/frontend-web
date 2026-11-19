@@ -2,6 +2,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { ApiError } from '#/lib/api-client';
 import { SmartMeterStep } from './SmartMeterStep';
 
 const { mutateAsync, reset } = vi.hoisted(() => ({
@@ -81,6 +82,33 @@ describe('SmartMeterStep', () => {
 
     expect((await screen.findByRole('alert')).textContent).toContain(
       'Meter not found',
+    );
+    expect(onComplete).not.toHaveBeenCalled();
+  });
+
+  it('explains when the account already has a smart meter', async () => {
+    const onComplete = vi.fn();
+    mutateAsync.mockRejectedValue(
+      new ApiError(
+        409,
+        'CONFLICT',
+        'Resource already exists.',
+        'req-1',
+        [],
+        undefined,
+      ),
+    );
+
+    render(<SmartMeterStep onComplete={onComplete} />);
+    fireEvent.change(screen.getByLabelText('Smart Meter ID'), {
+      target: { value: 'MTR-7829-XY' },
+    });
+    fireEvent.click(
+      screen.getByRole('button', { name: /send connection request/i }),
+    );
+
+    expect((await screen.findByRole('alert')).textContent).toContain(
+      'A smart meter is already linked to your account.',
     );
     expect(onComplete).not.toHaveBeenCalled();
   });
