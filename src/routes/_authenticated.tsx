@@ -8,6 +8,7 @@ import {
   useLogout,
 } from '#/features/auth/hooks';
 import { useSelectedHouse } from '#/features/iot/hooks';
+import { useLiveHouse } from '#/features/iot/live';
 import { gridLabel } from '#/features/iot/view-model';
 import { getFirstName } from '#/lib/user';
 
@@ -31,6 +32,8 @@ function AuthenticatedLayout() {
   const { data: user } = useAuthUser();
   const logoutMutation = useLogout();
   const { house } = useSelectedHouse();
+  // One live subscription for the selected house keeps every signed-in page current.
+  useLiveHouse(house?.houseId);
 
   if (!user) {
     return null;
