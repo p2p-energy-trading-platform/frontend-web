@@ -15,8 +15,6 @@ export const env = createEnv({
   client: {
     VITE_APP_TITLE: z.string().min(1).optional(),
     VITE_API_BASE_URL: z.string().url(),
-    // Live updates over the WebSocket; "false" turns them off.
-    VITE_REALTIME_ENABLED: z.enum(['true', 'false']).optional(),
   },
 
   /**

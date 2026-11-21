@@ -361,6 +361,38 @@ describe('RealtimeClient reconnecting', () => {
     expect(client.state).toBe('offline');
   });
 
+  it('connects again when the user signs back in without a page reload', async () => {
+    let signedIn = false;
+    const { client, sockets, latest } = setup(() =>
+      signedIn
+        ? Promise.resolve('ticket-after-sign-in')
+        : Promise.reject(
+            new ApiError(
+              401,
+              'UNAUTHENTICATED',
+              'Sign in.',
+              undefined,
+              [],
+              undefined,
+            ),
+          ),
+    );
+    // The session expired: the ticket request is refused.
+    const leave = client.subscribe('iot.house.h1', () => {});
+    await flush();
+    expect(client.state).toBe('offline');
+
+    // The app sends the user to sign in, which unmounts the signed-in layout.
+    leave();
+    signedIn = true;
+    // After signing in, the dashboard mounts and watches the house again.
+    client.subscribe('iot.house.h1', () => {});
+    await flush();
+
+    expect(sockets).toHaveLength(1);
+    expect(latest().url).toContain('ticket=ticket-after-sign-in');
+  });
+
   it('waits for Retry-After when ticket requests are rate limited', async () => {
     let calls = 0;
     const { client, sockets } = setup(() => {

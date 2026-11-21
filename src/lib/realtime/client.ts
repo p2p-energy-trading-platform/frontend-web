@@ -6,7 +6,7 @@ import { serverMessageSchema } from './schemas';
  * - connecting / reconnecting: getting a ticket or opening the socket
  * - live: connected
  * - paused: closed while the tab is in the background
- * - offline: stopped (signed out, or stop() was called)
+ * - offline: signed out; a new subscription (after signing in) starts again
  */
 export type RealtimeState =
   'idle' | 'connecting' | 'live' | 'reconnecting' | 'paused' | 'offline';
@@ -74,7 +74,7 @@ export class RealtimeClient {
   private reconnectTimer: ReturnType<typeof setTimeout> | undefined;
   private hiddenTimer: ReturnType<typeof setTimeout> | undefined;
   private paused = false;
-  private stopped = false;
+  private signedOut = false;
   private nextId = 0;
   private currentState: RealtimeState = 'idle';
 
@@ -107,6 +107,9 @@ export class RealtimeClient {
     set.add(listener);
 
     if (isNew) {
+      // Signing in again remounts the app's listeners, so a new topic means
+      // the user may be back: try again instead of staying offline.
+      this.signedOut = false;
       if (this.socket?.readyState === OPEN) {
         this.sendSubscribe(topic);
       } else {
@@ -142,16 +145,6 @@ export class RealtimeClient {
     }
   }
 
-  /** Stops for good, for example on logout. */
-  stop(): void {
-    this.stopped = true;
-    this.clearReconnect();
-    clearTimeout(this.hiddenTimer);
-    for (const timer of this.topicTimers.values()) clearTimeout(timer);
-    this.topicTimers.clear();
-    this.closeSocket('offline');
-  }
-
   private removeListener(topic: string, listener: TopicListener): void {
     const set = this.listeners.get(topic);
     if (!set?.delete(listener) || set.size > 0) return;
@@ -168,14 +161,14 @@ export class RealtimeClient {
     if (this.listeners.size === 0) {
       this.clearReconnect();
       this.closeSocket(
-        this.stopped ? 'offline' : this.paused ? 'paused' : 'idle',
+        this.signedOut ? 'offline' : this.paused ? 'paused' : 'idle',
       );
     }
   }
 
   private ensureConnecting(): void {
     if (
-      this.stopped ||
+      this.signedOut ||
       this.paused ||
       this.socket !== null ||
       this.connecting ||
@@ -200,7 +193,7 @@ export class RealtimeClient {
     }
     this.connecting = false;
 
-    if (this.stopped || this.paused || this.listeners.size === 0) {
+    if (this.signedOut || this.paused || this.listeners.size === 0) {
       return;
     }
 
@@ -234,7 +227,7 @@ export class RealtimeClient {
   private onTicketError(error: unknown): void {
     if (error instanceof ApiError && error.status === 401) {
       // Still unauthenticated after the token refresh: the user is signed out.
-      this.stopped = true;
+      this.signedOut = true;
       this.setState('offline');
       return;
     }
@@ -266,8 +259,10 @@ export class RealtimeClient {
   }
 
   private scheduleReconnect(delayMs: number): void {
-    if (this.stopped || this.paused || this.listeners.size === 0) {
-      this.setState(this.stopped ? 'offline' : this.paused ? 'paused' : 'idle');
+    if (this.signedOut || this.paused || this.listeners.size === 0) {
+      this.setState(
+        this.signedOut ? 'offline' : this.paused ? 'paused' : 'idle',
+      );
       return;
     }
 

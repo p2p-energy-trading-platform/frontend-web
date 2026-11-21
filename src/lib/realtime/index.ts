@@ -10,14 +10,11 @@ export function realtimeUrl(apiBaseUrl: string): string {
   return `${apiBaseUrl.replace(/\/$/, '').replace(/^http/, 'ws')}/api/v1/ws`;
 }
 
-/*
- * The tab's one realtime client, created on first use. Null when realtime is
- * turned off (VITE_REALTIME_ENABLED=false) or outside a browser.
- */
+/** The tab's one realtime client, created on first use. Null outside a browser. */
 export function getRealtimeClient(): RealtimeClient | null {
   if (client !== undefined) return client;
 
-  if (typeof window === 'undefined' || env.VITE_REALTIME_ENABLED === 'false') {
+  if (typeof window === 'undefined') {
     client = null;
     return client;
   }
