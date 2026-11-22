@@ -11,7 +11,14 @@ export interface FlowTile {
   tone: 'warning' | 'default' | 'primary' | 'info';
 }
 
-export function LiveEnergyFlowCard({ tiles }: { tiles: Array<FlowTile> }) {
+export function LiveEnergyFlowCard({
+  tiles,
+  liveLabel,
+}: {
+  tiles: Array<FlowTile>;
+  /** The live connection's state: Live, Connecting, Reconnecting or Paused. */
+  liveLabel: string;
+}) {
   const toneClass: Record<FlowTile['tone'], string> = {
     warning: 'bg-chart-3/12 text-chart-3',
     default: 'bg-secondary text-text-secondary',
@@ -26,8 +33,9 @@ export function LiveEnergyFlowCard({ tiles }: { tiles: Array<FlowTile> }) {
         <Badge
           variant="outline"
           className="border-border-subtle text-text-tertiary"
+          aria-label={`Live updates: ${liveLabel}`}
         >
-          Now
+          {liveLabel}
         </Badge>
       </div>
 

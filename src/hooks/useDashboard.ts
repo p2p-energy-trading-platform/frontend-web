@@ -13,7 +13,7 @@ import { rangeFor, todayRange } from '#/features/iot/time-range';
 import type { EnergyPeriod } from '#/features/iot/time-range';
 import {
   batterySoc,
-  gridLabel,
+  dashboardGreeting,
   meterSyncActivity,
   toDeviceCards,
   toEnergyPosition,
@@ -40,19 +40,16 @@ export function useDashboard() {
 
   const readingStatus = queryStatus(selected, latest, latest.data === null);
   const summaryStatus = queryStatus(selected, summary);
+  const greeting = dashboardGreeting(now, MARKET_TIME_ZONE);
+  const firstName = user ? getFirstName(user.name || user.email) : '';
   const otherActivity = dashboardView.activity.filter(
     (item) => item.title !== 'Meter sync',
   );
 
   return {
     source: 'live' as const,
-    greetingName: user ? getFirstName(user.name || user.email) : '',
-    subtitle: [
-      rangeFor('Day', now, MARKET_TIME_ZONE).label,
-      selected.house && gridLabel(selected.house),
-    ]
-      .filter(Boolean)
-      .join(' · '),
+    greeting: `${greeting.phrase}${firstName ? `, ${firstName}` : ''} ${greeting.emoji}`,
+    subtitle: rangeFor('Day', now, MARKET_TIME_ZONE).label,
     position: {
       status: summaryStatus,
       value: summary.data ? toEnergyPosition(summary.data) : null,

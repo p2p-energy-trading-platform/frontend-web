@@ -12,10 +12,12 @@ import { MarketCard } from '#/components/dashboard/MarketCard';
 import { IotDataState } from '#/components/page-components/IotDataState';
 import { Button } from '#/components/ui/button';
 import { Card } from '#/components/ui/card';
+import { useLiveBadgeLabel } from '#/features/iot/live';
 import { useDashboard } from '#/hooks/useDashboard';
 
 export default function DashboardView() {
   const dashboard = useDashboard();
+  const liveLabel = useLiveBadgeLabel();
   const { position, devices, flow } = dashboard;
 
   return (
@@ -26,8 +28,7 @@ export default function DashboardView() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-heading-2 text-text-primary">
-            Good evening
-            {dashboard.greetingName ? `, ${dashboard.greetingName}` : ''} ☀️
+            {dashboard.greeting}
           </h1>
           <p className="text-sm text-text-tertiary">{dashboard.subtitle}</p>
         </div>
@@ -53,9 +54,14 @@ export default function DashboardView() {
         </Card>
       )}
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-7">
+      {/* Wrapping row: each row's tiles stretch to fill it, so no tile is left with empty space beside it. */}
+      <div className="flex flex-wrap gap-3">
         {dashboard.stats.map((stat) => (
-          <StatTile key={stat.label} {...stat} />
+          <StatTile
+            key={stat.label}
+            {...stat}
+            className="min-w-0 grow basis-[calc((100%-0.75rem)/2-1px)] min-[1024px]:basis-[calc((100%-2.25rem)/4-1px)] min-[1400px]:basis-0"
+          />
         ))}
       </div>
 
@@ -70,7 +76,7 @@ export default function DashboardView() {
 
       <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1fr_320px]">
         {devices.status === 'ready' ? (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-[repeat(auto-fit,minmax(13rem,1fr))]">
             {devices.cards.map((device) => (
               <DeviceCard key={device.title} {...device} />
             ))}
@@ -84,7 +90,7 @@ export default function DashboardView() {
           </Card>
         )}
         {flow.status === 'ready' ? (
-          <LiveEnergyFlowCard tiles={flow.tiles} />
+          <LiveEnergyFlowCard tiles={flow.tiles} liveLabel={liveLabel} />
         ) : (
           <Card className="border-border-subtle bg-card p-5">
             <IotDataState

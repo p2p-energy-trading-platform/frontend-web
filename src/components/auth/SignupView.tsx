@@ -11,7 +11,7 @@ import RegistrationComplete from './RegistrationComplete';
 import { useState } from 'react';
 import { getRouteApi, useNavigate } from '@tanstack/react-router';
 import { useAuthUser } from '#/features/auth/hooks';
-import type { AuthKycStatus } from '#/features/auth/api';
+import { getInitialKycStatus } from '#/features/auth/api';
 import { EmptyState } from '../ui/empty-state';
 import { Loader } from 'lucide-react';
 
@@ -30,19 +30,6 @@ function getCurrentStep(stepView: SIGN_UP_STATES) {
       return 4;
     case 'complete':
       return 5;
-  }
-}
-
-function getInitialKycStatus(status: AuthKycStatus | undefined): KycStatus {
-  switch (status) {
-    case 'PENDING':
-      return 'pending';
-    case 'VERIFIED':
-      return 'verified';
-    case 'REJECTED':
-      return 'rejected';
-    default:
-      return 'not-submitted';
   }
 }
 

@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import type { EnergyBucket, EnergySummary, House, MeterReading } from './api';
 import {
   batterySoc,
+  dashboardGreeting,
   gridLabel,
   meterSyncActivity,
   seriesToCsv,
@@ -420,5 +421,29 @@ describe('gridLabel', () => {
     expect(
       gridLabel({ ...house, grid: { gridId: 'grid01', displayName: ' ' } }),
     ).toBe('grid01');
+  });
+});
+
+describe('dashboard greeting', () => {
+  // Dubai is UTC+4, so 05:00Z is 09:00 GST.
+  const at = (utc: string) => new Date(`2026-11-12T${utc}:00Z`);
+
+  it('changes with the time of day in GST', () => {
+    expect(dashboardGreeting(at('05:00'), DUBAI)).toEqual({
+      phrase: 'Good morning',
+      emoji: '☀️',
+    });
+    expect(dashboardGreeting(at('10:00'), DUBAI).phrase).toBe('Good afternoon');
+    expect(dashboardGreeting(at('15:00'), DUBAI).phrase).toBe('Good evening');
+    expect(dashboardGreeting(at('19:00'), DUBAI).phrase).toBe('Quiet night');
+    expect(dashboardGreeting(at('23:00'), DUBAI).phrase).toBe('Quiet night');
+  });
+
+  it('switches at the edges of each part of the day', () => {
+    expect(dashboardGreeting(at('00:59'), DUBAI).phrase).toBe('Quiet night');
+    expect(dashboardGreeting(at('01:00'), DUBAI).phrase).toBe('Good morning');
+    expect(dashboardGreeting(at('08:00'), DUBAI).phrase).toBe('Good afternoon');
+    expect(dashboardGreeting(at('13:00'), DUBAI).phrase).toBe('Good evening');
+    expect(dashboardGreeting(at('17:00'), DUBAI).phrase).toBe('Quiet night');
   });
 });

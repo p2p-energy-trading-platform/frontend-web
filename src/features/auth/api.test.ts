@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   fetchCurrentUser,
   getGoogleSignInUrl,
+  getInitialKycStatus,
   requestPasswordReset,
   resetPassword,
 } from './api';
@@ -19,6 +20,17 @@ function json(body: unknown): Response {
     headers: { 'content-type': 'application/json' },
   });
 }
+
+describe('getInitialKycStatus', () => {
+  it.each([
+    ['PENDING', 'pending'],
+    ['VERIFIED', 'verified'],
+    ['REJECTED', 'rejected'],
+    [undefined, 'not-submitted'],
+  ] as const)('maps %s to %s', (status, expected) => {
+    expect(getInitialKycStatus(status)).toBe(expected);
+  });
+});
 
 describe('fetchCurrentUser', () => {
   beforeEach(() => {

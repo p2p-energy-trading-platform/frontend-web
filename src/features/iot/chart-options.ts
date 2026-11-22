@@ -1,7 +1,7 @@
 import type { EChartsCoreOption } from 'echarts/core';
 
 import { MARKET_TIME_ZONE } from '#/data/currency';
-import type { EnergyBucket, EnergyRange } from './api';
+import type { EnergyBucket, EnergyBucketSize, EnergyRange } from './api';
 import type { PeakMatrix } from './view-model';
 
 /** Colours read from the design tokens (see components/charts/theme.ts). */
@@ -15,7 +15,18 @@ export interface ChartColors {
   palette: Array<string>;
 }
 
-type Point = [string, number];
+type Point = [string, number | null];
+
+/** The selected period; with its bucket size, missing buckets show as gaps. */
+type ChartRange = EnergyRange & { bucket?: EnergyBucketSize };
+
+const BUCKET_MS: Record<EnergyBucketSize, number> = {
+  '5m': 300_000,
+  '15m': 900_000,
+  '30m': 1_800_000,
+  '1h': 3_600_000,
+  '1d': 86_400_000,
+};
 
 const kwLabel = (value: number) => `${value} kW`;
 
@@ -64,8 +75,13 @@ function line(
     name,
     type: 'line',
     data,
-    // One point draws no line, so it needs a marker to be visible.
-    showSymbol: data.length === 1,
+    // A point with no neighbour draws no line, so it needs a marker to be visible.
+    showSymbol: data.some(
+      ([, value], index) =>
+        value !== null &&
+        (data[index - 1]?.[1] ?? null) === null &&
+        (data[index + 1]?.[1] ?? null) === null,
+    ),
     smooth: true,
     lineStyle: { color, width: 2 },
     itemStyle: { color },
@@ -73,22 +89,39 @@ function line(
   };
 }
 
-const points = (
+/**
+ * The API only returns buckets that have readings, so where buckets are
+ * missing an empty point is added to break the line instead of joining
+ * across hours with no data.
+ */
+function points(
   buckets: Array<EnergyBucket>,
   pick: (b: EnergyBucket) => number,
-): Array<Point> => buckets.map((bucket) => [bucket.startsAt, pick(bucket)]);
+  bucket?: EnergyBucketSize,
+): Array<Point> {
+  const width = bucket ? BUCKET_MS[bucket] : undefined;
+  return buckets.flatMap((current, index): Array<Point> => {
+    const point: Point = [current.startsAt, pick(current)];
+    const previous = buckets.at(index - 1);
+    if (!width || index === 0 || !previous) return [point];
+    const gapStart = Date.parse(previous.startsAt) + width;
+    return Date.parse(current.startsAt) > gapStart
+      ? [[new Date(gapStart).toISOString(), null], point]
+      : [point];
+  });
+}
 
 export function generationChartOption(
   buckets: Array<EnergyBucket>,
   colors: ChartColors,
-  extent?: EnergyRange,
+  extent?: ChartRange,
 ): EChartsCoreOption {
   return {
     ...timeAxes(colors, extent),
     series: [
       line(
         'Generated',
-        points(buckets, (b) => b.averagePower.solarKw),
+        points(buckets, (b) => b.averagePower.solarKw, extent?.bucket),
         colors.generated,
         {
           areaStyle: { color: colors.generated, opacity: 0.15 },
@@ -96,7 +129,7 @@ export function generationChartOption(
       ),
       line(
         'Consumed',
-        points(buckets, (b) => b.averagePower.consumptionKw),
+        points(buckets, (b) => b.averagePower.consumptionKw, extent?.bucket),
         colors.consumed,
         {
           lineStyle: { color: colors.consumed, width: 2, type: 'dashed' },
@@ -104,7 +137,7 @@ export function generationChartOption(
       ),
       line(
         'Exported',
-        points(buckets, (b) => b.averagePower.exportKw),
+        points(buckets, (b) => b.averagePower.exportKw, extent?.bucket),
         colors.exported,
       ),
     ],
@@ -115,7 +148,7 @@ export function energySeriesChartOption(
   buckets: Array<EnergyBucket>,
   colors: ChartColors,
   nowIso: string,
-  extent?: EnergyRange,
+  extent?: ChartRange,
 ): EChartsCoreOption {
   const showNow = !extent || (nowIso >= extent.from && nowIso < extent.to);
   return {
@@ -123,7 +156,7 @@ export function energySeriesChartOption(
     series: [
       line(
         'Generated',
-        points(buckets, (b) => b.averagePower.solarKw),
+        points(buckets, (b) => b.averagePower.solarKw, extent?.bucket),
         colors.generated,
         showNow
           ? {
@@ -138,17 +171,17 @@ export function energySeriesChartOption(
       ),
       line(
         'Consumed',
-        points(buckets, (b) => b.averagePower.consumptionKw),
+        points(buckets, (b) => b.averagePower.consumptionKw, extent?.bucket),
         colors.consumed,
       ),
       line(
         'Exported',
-        points(buckets, (b) => b.averagePower.exportKw),
+        points(buckets, (b) => b.averagePower.exportKw, extent?.bucket),
         colors.exported,
       ),
       line(
         'Imported',
-        points(buckets, (b) => b.averagePower.importKw),
+        points(buckets, (b) => b.averagePower.importKw, extent?.bucket),
         colors.imported,
       ),
     ],
@@ -159,7 +192,7 @@ export function forecastChartOption(
   actual: Array<EnergyBucket>,
   forecast: Array<Point>,
   colors: ChartColors,
-  extent?: EnergyRange,
+  extent?: ChartRange,
 ): EChartsCoreOption {
   return {
     ...timeAxes(colors, extent),
@@ -169,7 +202,7 @@ export function forecastChartOption(
       }),
       line(
         'Actual',
-        points(actual, (b) => b.averagePower.solarKw),
+        points(actual, (b) => b.averagePower.solarKw, extent?.bucket),
         colors.generated,
         {
           showSymbol: true,

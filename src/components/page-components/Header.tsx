@@ -65,12 +65,12 @@ export default function PageHeader({
         {/* Left: property + zone + meter status */}
         <Link
           to={dashboardHref}
-          className="max-sm:hidden inline-flex items-center gap-2 rounded-lg px-1.5 py-1 text-text-primary no-underline transition hover:bg-secondary"
+          className="max-sm:hidden inline-flex min-w-10 shrink-[10000] items-center gap-2 rounded-lg px-1.5 py-1 text-text-primary no-underline transition hover:bg-secondary"
         >
-          <span className="flex size-7 items-center justify-center rounded-lg bg-secondary text-accent">
+          <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-secondary text-accent">
             <Home className="size-4" />
           </span>
-          <span className="text-sm font-semibold">{propertyName}</span>
+          <span className="truncate text-sm font-semibold">{propertyName}</span>
         </Link>
 
         <Badge
