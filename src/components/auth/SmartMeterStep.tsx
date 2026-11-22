@@ -14,6 +14,8 @@ import {
 import { useInitiateMeterClaim } from '#/features/registration/hooks';
 import { smartMeterClaimSchema } from '#/features/registration/schemas';
 import type { SmartMeterClaimValues } from '#/features/registration/schemas';
+import type { InitiateMeterClaimResponse } from '#/features/registration/api';
+import type { MeterRegistrationRecord } from '#/features/registration/storage';
 import type { SmartMeterStatus } from './types';
 import { ApiError } from '#/lib/api-client';
 import { formatFieldError } from '#/lib/form-errors';
@@ -27,10 +29,17 @@ function claimErrorMessage(error: Error): string {
 }
 
 interface SmartMeterStepProps {
-  onComplete: (status: SmartMeterStatus) => Promise<void> | void;
+  onComplete: (
+    status: SmartMeterStatus,
+    registration?: MeterRegistrationRecord,
+  ) => Promise<void> | void;
+  allowSkip?: boolean;
 }
 
-export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
+export function SmartMeterStep({
+  onComplete,
+  allowSkip = true,
+}: SmartMeterStepProps) {
   const initiateMeterClaimMutation = useInitiateMeterClaim();
 
   async function complete(status: SmartMeterStatus) {
@@ -43,14 +52,19 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
     validators: { onDynamic: smartMeterClaimSchema },
     onSubmit: async ({ value }) => {
       const { meterId } = smartMeterClaimSchema.parse(value);
+      let result: InitiateMeterClaimResponse;
       try {
-        await initiateMeterClaimMutation.mutateAsync({
+        result = await initiateMeterClaimMutation.mutateAsync({
           meter_id: meterId,
         });
       } catch {
         return;
       }
-      await onComplete('pending');
+      await onComplete('pending', {
+        registrationId: result.registration_id,
+        meterId,
+        status: result.status,
+      });
     },
   });
 
@@ -131,16 +145,18 @@ export function SmartMeterStep({ onComplete }: SmartMeterStepProps) {
             </CardDescription>
           </Card>
           <Field orientation="horizontal">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => complete('skipped')}
-              disabled={initiateMeterClaimMutation.isPending}
-              className="h-12 flex-1 rounded-xl"
-            >
-              <ShieldCheck className="size-4" />
-              Skip for Now
-            </Button>
+            {allowSkip ? (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => complete('skipped')}
+                disabled={initiateMeterClaimMutation.isPending}
+                className="h-12 flex-1 rounded-xl"
+              >
+                <ShieldCheck className="size-4" />
+                Skip for Now
+              </Button>
+            ) : null}
             <Button
               type="submit"
               disabled={initiateMeterClaimMutation.isPending}
