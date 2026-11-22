@@ -4,6 +4,7 @@ import Security from './Security';
 import TradingPreferences from './TradingPreferences';
 import AccountStatus from './AccountStatus';
 import ExternalServices from './ExternalServices';
+import SmartMeterRegistration from './SmartMeterRegistration';
 
 export default function ProfileView() {
   const profileState = useProfile();
@@ -29,6 +30,8 @@ export default function ProfileView() {
           <Security />
 
           <TradingPreferences />
+
+          <SmartMeterRegistration />
 
           <ExternalServices />
         </div>
