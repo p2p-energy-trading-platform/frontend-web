@@ -9,10 +9,48 @@ import {
 import { cn } from 'cn';
 import { useSelectedHouse } from '#/features/iot/hooks';
 import { toAccountStatus } from '#/features/iot/view-model';
+import { useKycSubmission } from '#/features/kyc/hooks';
 
 export default function AccountStatus() {
   const selected = useSelectedHouse();
   const status = toAccountStatus(selected.house);
+  const kyc = useKycSubmission();
+  const kycStatus = kyc.isLoading
+    ? {
+        value: 'Loading',
+        description: 'Checking your identity verification status',
+        tone: 'warning' as const,
+      }
+    : kyc.isError
+      ? {
+          value: 'Unavailable',
+          description: 'Could not load identity verification status',
+          tone: 'warning' as const,
+        }
+      : kyc.data?.state === 'VERIFIED'
+        ? {
+            value: 'Verified',
+            description: 'Identity verified and higher limits available',
+            tone: 'success' as const,
+          }
+        : kyc.data?.state === 'REJECTED'
+          ? {
+              value: 'Rejected',
+              description:
+                kyc.data.rejectionReason || 'Review your submitted KYC details',
+              tone: 'warning' as const,
+            }
+          : kyc.data?.state === 'PENDING'
+            ? {
+                value: 'Pending',
+                description: 'Your identity documents are being reviewed',
+                tone: 'warning' as const,
+              }
+            : {
+                value: 'Not submitted',
+                description: 'Submit identity verification from your profile',
+                tone: 'warning' as const,
+              };
 
   return (
     <>
@@ -29,13 +67,7 @@ export default function AccountStatus() {
             label="Trading Mode"
             {...status.tradingMode}
           />
-          <StatusRow
-            icon={BadgeCheck}
-            label="KYC status"
-            value="Pending"
-            description="Identity verified and higher limits available"
-            tone="success"
-          />
+          <StatusRow icon={BadgeCheck} label="KYC status" {...kycStatus} />
           <StatusRow
             icon={Building2}
             label="Smart meter"
