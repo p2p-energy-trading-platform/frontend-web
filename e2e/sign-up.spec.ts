@@ -103,12 +103,22 @@ test.describe('sign up', () => {
     await createAccountAndMoveToEmailVerification(page, api);
 
     // 2.Complete email verification
-    api.on('POST', '/api/v1/auth/verify-email', {
-      status: 200,
-      body: {
-        success: true,
-        message: 'Email verified successfully',
-      },
+    api.on('POST', '/api/v1/auth/verify-email', () => {
+      api.signIn({
+        userId: '00000000-0000-4000-8000-000000000002',
+        email: 'new.user@example.com',
+        name: 'New User',
+        status: 'ACTIVE',
+        role: 'USER',
+      });
+
+      return {
+        status: 200,
+        body: {
+          success: true,
+          message: 'Email verified successfully',
+        },
+      };
     });
 
     await page
