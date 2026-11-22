@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   createKycUploadUrl,
   extractKycNicOcr,
+  getKycSubmission,
   KycUploadError,
   submitKyc,
   uploadKycDocument,
@@ -144,5 +145,16 @@ describe('KYC API', () => {
     expect(url).toBe('http://api.test/api/v1/kyc');
     expect(options?.method).toBe('POST');
     expect(JSON.parse(String(options?.body))).toEqual(request);
+  });
+
+  it('gets the authenticated user KYC submission, or null when none exists', async () => {
+    fetchMock.mockResolvedValue(json(null));
+
+    await expect(getKycSubmission()).resolves.toBeNull();
+
+    const [url, options] = fetchMock.mock.calls[0];
+    expect(url).toBe('http://api.test/api/v1/kyc');
+    expect(options?.method).toBeUndefined();
+    expect(options?.credentials).toBe('include');
   });
 });
