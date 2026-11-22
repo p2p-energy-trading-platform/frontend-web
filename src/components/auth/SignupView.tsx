@@ -12,17 +12,20 @@ import { useState } from 'react';
 import { useAuthUser } from '#/features/auth/hooks';
 import { EmptyState } from '../ui/empty-state';
 import { Loader } from 'lucide-react';
+import { saveMeterRegistration } from '#/features/registration/storage';
+import type { MeterRegistrationRecord } from '#/features/registration/storage';
 
 const PENDING_VERIFICATION_EMAIL_KEY = 'gridx.pendingVerificationEmail';
 
 export default function SignupView() {
   const registration = useRegistration();
-  const { isLoading: isAuthLoading } = useAuthUser();
+  const { data: authUser, isLoading: isAuthLoading } = useAuthUser();
 
   const [view, setView] = useState<SIGN_UP_STATES>('account');
   const [registeredEmail, setRegisteredEmail] = useState('');
   const [kycStatus, setKycStatus] = useState<KycStatus>('not-submitted');
   const [meterStatus, setMeterStatus] = useState<SmartMeterStatus>('skipped');
+  const [meterRegistrationWarning, setMeterRegistrationWarning] = useState('');
 
   // useEffect(() => {
   //   if (authUser) {
@@ -84,7 +87,22 @@ export default function SignupView() {
     setView('smart-meter');
   }
 
-  async function handleSmartMeterComplete(status: SmartMeterStatus) {
+  async function handleSmartMeterComplete(
+    status: SmartMeterStatus,
+    meterRegistration?: MeterRegistrationRecord,
+  ) {
+    if (meterRegistration) {
+      try {
+        if (!authUser) {
+          throw new Error('The signed-in user could not be identified.');
+        }
+        saveMeterRegistration(authUser.userId, meterRegistration);
+      } catch {
+        setMeterRegistrationWarning(
+          'Your request was sent, but this browser could not save its details. Reverification may not be available after you leave this page.',
+        );
+      }
+    }
     await registration.completeSmartMeter();
     setMeterStatus(status);
     setView('complete');
@@ -145,6 +163,7 @@ export default function SignupView() {
               <RegistrationComplete
                 kycStatus={kycStatus}
                 meterStatus={meterStatus}
+                meterRegistrationWarning={meterRegistrationWarning}
               />
             ) : null}
           </div>
