@@ -5,6 +5,7 @@ import TradingPreferences from './TradingPreferences';
 import AccountStatus from './AccountStatus';
 import ExternalServices from './ExternalServices';
 import SmartMeterRegistration from './SmartMeterRegistration';
+import KycSubmission from './KycSubmission';
 
 export default function ProfileView() {
   const profileState = useProfile();
@@ -30,6 +31,8 @@ export default function ProfileView() {
           <Security />
 
           <TradingPreferences />
+
+          <KycSubmission />
 
           <SmartMeterRegistration />
 
