@@ -34,6 +34,7 @@ import type { KycStatus } from './types';
 
 interface KycStepProps {
   onComplete: (status: KycStatus) => Promise<void> | void;
+  allowSkip?: boolean;
 }
 
 function formatFileSize(bytes: number): string {
@@ -42,7 +43,7 @@ function formatFileSize(bytes: number): string {
     : `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-export function KycStep({ onComplete }: KycStepProps) {
+export function KycStep({ onComplete, allowSkip = true }: KycStepProps) {
   const kycMutation = useSubmitKyc();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [preparedDocument, setPreparedDocument] = useState<{
@@ -119,7 +120,7 @@ export function KycStep({ onComplete }: KycStepProps) {
       // The schema guarantees a document; this narrows the type.
       if (!value.document) return;
 
-      await kycMutation.mutateAsync({
+      const submission = await kycMutation.mutateAsync({
         fullName: value.fullName.trim(),
         nicNumber: value.nicNumber.trim(),
         dateOfBirth: value.dateOfBirth,
@@ -133,7 +134,13 @@ export function KycStep({ onComplete }: KycStepProps) {
         title: 'KYC submitted. We will review your documents shortly.',
         type: 'success',
       });
-      await onComplete('pending');
+      const status: KycStatus =
+        submission.state === 'VERIFIED'
+          ? 'verified'
+          : submission.state === 'REJECTED'
+            ? 'rejected'
+            : 'pending';
+      await onComplete(status);
     },
   });
 
@@ -148,7 +155,9 @@ export function KycStep({ onComplete }: KycStepProps) {
       </h1>
 
       <p className="mt-1 flex gap-1 text-sm leading-5 text-text-tertiary">
-        Verify your identity (Optional)
+        {allowSkip
+          ? 'Verify your identity (Optional)'
+          : 'Submit your identity details for verification'}
       </p>
       <form
         onSubmit={(event) => {
@@ -327,15 +336,17 @@ export function KycStep({ onComplete }: KycStepProps) {
           <form.Subscribe selector={(state) => state.isSubmitting}>
             {(isSubmitting) => (
               <Field orientation={'horizontal'} className="justify-between">
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="h-12 flex-1 rounded-xl"
-                  disabled={isSubmitting}
-                  onClick={() => void onComplete('not-submitted')}
-                >
-                  Skip for Now
-                </Button>
+                {allowSkip ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="h-12 flex-1 rounded-xl"
+                    disabled={isSubmitting}
+                    onClick={() => void onComplete('not-submitted')}
+                  >
+                    Skip for Now
+                  </Button>
+                ) : null}
 
                 <Button
                   type="submit"
