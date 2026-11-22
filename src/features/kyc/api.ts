@@ -24,6 +24,9 @@ export interface KycSubmitRequest {
 
 export interface KycSubmission {
   id: string;
+  fullName: string;
+  dateOfBirth: string;
+  nicNumber: string;
   state: KycState;
   rejectionReason?: string;
   createdAt: string;
@@ -80,4 +83,8 @@ export function submitKyc(request: KycSubmitRequest) {
     method: 'POST',
     body: JSON.stringify(request),
   });
+}
+
+export function getKycSubmission() {
+  return apiRequest<KycSubmission | null>('/api/v1/kyc');
 }
