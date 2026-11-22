@@ -3,12 +3,22 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { createKycUploadUrl, submitKyc, uploadKycDocument } from './api';
-import { useSubmitKyc } from './hooks';
+import {
+  createKycUploadUrl,
+  getKycSubmission,
+  submitKyc,
+  uploadKycDocument,
+} from './api';
+import {
+  kycSubmissionQueryOptions,
+  useSubmitKyc,
+  useKycSubmission,
+} from './hooks';
 
 vi.mock('./api', () => ({
   createKycUploadUrl: vi.fn(),
   submitKyc: vi.fn(),
+  getKycSubmission: vi.fn(),
   uploadKycDocument: vi.fn(),
 }));
 
@@ -21,6 +31,7 @@ vi.mock('#/features/auth/hooks', () => ({
 const createUploadUrlMock = vi.mocked(createKycUploadUrl);
 const uploadDocumentMock = vi.mocked(uploadKycDocument);
 const submitKycMock = vi.mocked(submitKyc);
+const getKycSubmissionMock = vi.mocked(getKycSubmission);
 
 function createWrapper() {
   const queryClient = new QueryClient({
@@ -55,6 +66,9 @@ describe('useSubmitKyc', () => {
 
     submitKycMock.mockResolvedValue({
       id: 'kyc-1',
+      fullName: 'Jane Doe',
+      dateOfBirth: '1998-04-12',
+      nicNumber: '987654321V',
       state: 'PENDING',
       createdAt: '2026-10-22T00:00:00.000Z',
       updatedAt: '2026-10-22T00:00:00.000Z',
@@ -140,5 +154,27 @@ describe('useSubmitKyc', () => {
     });
 
     expect(submitKycMock).not.toHaveBeenCalled();
+  });
+
+  it('loads the current KYC submission from the backend', async () => {
+    getKycSubmissionMock.mockResolvedValue({
+      id: 'kyc-1',
+      fullName: 'Jane Doe',
+      dateOfBirth: '1998-04-12',
+      nicNumber: '987654321V',
+      state: 'VERIFIED',
+      createdAt: '2026-10-22T00:00:00.000Z',
+      updatedAt: '2026-10-22T00:00:00.000Z',
+    });
+
+    const { result } = renderHook(() => useKycSubmission(), {
+      wrapper: createWrapper(),
+    });
+
+    await waitFor(() => {
+      expect(result.current.data?.state).toBe('VERIFIED');
+    });
+    expect(getKycSubmissionMock).toHaveBeenCalledOnce();
+    expect(kycSubmissionQueryOptions.queryKey).toEqual(['kyc', 'submission']);
   });
 });
