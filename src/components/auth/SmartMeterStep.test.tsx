@@ -64,8 +64,21 @@ describe('SmartMeterStep', () => {
 
     await waitFor(() => {
       expect(mutateAsync).toHaveBeenCalledWith({ meter_id: 'MTR-7829-XY' });
-      expect(onComplete).toHaveBeenCalledWith('pending');
+      expect(onComplete).toHaveBeenCalledWith('pending', {
+        registrationId: 'registration-123',
+        meterId: 'MTR-7829-XY',
+        status: 'pending',
+      });
     });
+  });
+
+  it('can require a meter claim instead of allowing the user to skip', () => {
+    render(<SmartMeterStep onComplete={vi.fn()} allowSkip={false} />);
+
+    expect(screen.queryByRole('button', { name: /skip for now/i })).toBeNull();
+    expect(
+      screen.getByRole('button', { name: /send connection request/i }),
+    ).not.toBeNull();
   });
 
   it('shows a claim error and keeps the user on the step', async () => {
