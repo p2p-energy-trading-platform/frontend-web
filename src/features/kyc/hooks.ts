@@ -1,7 +1,27 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  queryOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 import { authUserQueryOptions } from '#/features/auth/hooks';
-import { createKycUploadUrl, submitKyc, uploadKycDocument } from './api';
+import {
+  createKycUploadUrl,
+  getKycSubmission,
+  submitKyc,
+  uploadKycDocument,
+} from './api';
+
+export const kycSubmissionQueryOptions = queryOptions({
+  queryKey: ['kyc', 'submission'] as const,
+  queryFn: getKycSubmission,
+  retry: false,
+});
+
+export function useKycSubmission() {
+  return useQuery(kycSubmissionQueryOptions);
+}
 
 export interface SubmitKycInput {
   fullName: string;
@@ -38,6 +58,9 @@ export function useSubmitKyc() {
       });
     },
     onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: kycSubmissionQueryOptions.queryKey,
+      });
       await queryClient.invalidateQueries({
         queryKey: authUserQueryOptions.queryKey,
       });
