@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { initiateMeterClaim } from './api';
+import { initiateMeterClaim, reverifyRegistration } from './api';
 
 const fetchMock = vi.fn<typeof fetch>();
 
@@ -40,6 +40,49 @@ describe('initiateMeterClaim', () => {
     expect(options?.method).toBe('POST');
     expect(JSON.parse(String(options?.body))).toEqual({
       meter_id: 'MTR-7829-XY',
+    });
+  });
+
+  describe('reverifyRegistration', () => {
+    beforeEach(() => {
+      vi.stubGlobal('fetch', fetchMock);
+    });
+
+    afterEach(() => {
+      fetchMock.mockReset();
+      vi.unstubAllGlobals();
+    });
+
+    it('reverifies the existing registration without creating a new claim', async () => {
+      fetchMock.mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            registration_id: 'registration-123',
+            meter_id: 'MTR-7829-XY',
+            message: 'Registration status reverification started',
+            status: 'DEWA_APPROVAL_PENDING',
+          }),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        ),
+      );
+
+      await expect(
+        reverifyRegistration({
+          registration_id: 'registration-123',
+          meter_id: 'MTR-7829-XY',
+        }),
+      ).resolves.toMatchObject({
+        registration_id: 'registration-123',
+        status: 'DEWA_APPROVAL_PENDING',
+      });
+
+      const [url, options] = fetchMock.mock.calls[0];
+      expect(String(url)).toContain('/api/v1/registration/reverify');
+      expect(options?.method).toBe('POST');
+      expect(JSON.parse(String(options?.body))).toEqual({
+        registration_id: 'registration-123',
+        meter_id: 'MTR-7829-XY',
+      });
     });
   });
 });
