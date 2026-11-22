@@ -7,9 +7,11 @@ import { cn } from 'cn';
 export default function RegistrationComplete({
   kycStatus,
   meterStatus,
+  meterRegistrationWarning,
 }: {
   kycStatus: KycStatus;
   meterStatus: SmartMeterStatus;
+  meterRegistrationWarning?: string;
 }) {
   return (
     <div>
@@ -29,6 +31,12 @@ export default function RegistrationComplete({
         Your email is verified and your onboarding choices have been saved. You
         can update identity or smart meter details from your account later.
       </p>
+
+      {meterRegistrationWarning ? (
+        <p className="mt-3 text-sm text-destructive" role="alert">
+          {meterRegistrationWarning}
+        </p>
+      ) : null}
 
       <div className="mt-7 divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
         <div className="flex items-center gap-3 p-4">
