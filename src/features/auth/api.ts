@@ -1,12 +1,30 @@
 import { env } from '#/env';
 import { ApiError, apiRequest } from '#/lib/api-client';
 
+export type AuthKycStatus = 'PENDING' | 'VERIFIED' | 'REJECTED';
+
+export function getInitialKycStatus(
+  status: AuthKycStatus | undefined,
+): 'not-submitted' | 'pending' | 'verified' | 'rejected' {
+  switch (status) {
+    case 'PENDING':
+      return 'pending';
+    case 'VERIFIED':
+      return 'verified';
+    case 'REJECTED':
+      return 'rejected';
+    default:
+      return 'not-submitted';
+  }
+}
+
 export interface AuthUser {
   userId: string;
   email: string;
   name: string;
   status: string;
   role: string;
+  kycStatus?: AuthKycStatus;
 }
 
 export interface LoginResponse {

@@ -1,6 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { getGoogleSignInUrl, requestPasswordReset, resetPassword } from './api';
+import {
+  fetchCurrentUser,
+  getGoogleSignInUrl,
+  getInitialKycStatus,
+  requestPasswordReset,
+  resetPassword,
+} from './api';
 
 vi.mock('#/env', () => ({
   env: { VITE_API_BASE_URL: 'http://api.test' },
@@ -14,6 +20,72 @@ function json(body: unknown): Response {
     headers: { 'content-type': 'application/json' },
   });
 }
+
+describe('getInitialKycStatus', () => {
+  it.each([
+    ['PENDING', 'pending'],
+    ['VERIFIED', 'verified'],
+    ['REJECTED', 'rejected'],
+    [undefined, 'not-submitted'],
+  ] as const)('maps %s to %s', (status, expected) => {
+    expect(getInitialKycStatus(status)).toBe(expected);
+  });
+});
+
+describe('fetchCurrentUser', () => {
+  beforeEach(() => {
+    vi.stubGlobal('fetch', fetchMock);
+  });
+
+  afterEach(() => {
+    fetchMock.mockReset();
+    vi.unstubAllGlobals();
+  });
+
+  it('preserves the canonical uppercase KYC status', async () => {
+    fetchMock.mockResolvedValue(
+      json({
+        userId: 'user-1',
+        email: 'user@example.com',
+        name: 'Test User',
+        status: 'ACTIVE',
+        role: 'USER',
+        kycStatus: 'VERIFIED',
+      }),
+    );
+
+    await expect(fetchCurrentUser()).resolves.toEqual({
+      userId: 'user-1',
+      email: 'user@example.com',
+      name: 'Test User',
+      status: 'ACTIVE',
+      role: 'USER',
+      kycStatus: 'VERIFIED',
+    });
+
+    expect(String(fetchMock.mock.calls[0]?.[0])).toContain('/api/v1/auth/me');
+  });
+
+  it('accepts a current-user response without KYC status', async () => {
+    fetchMock.mockResolvedValue(
+      json({
+        userId: 'user-2',
+        email: 'user@example.com',
+        name: 'Test User',
+        status: 'ACTIVE',
+        role: 'USER',
+      }),
+    );
+
+    await expect(fetchCurrentUser()).resolves.toEqual({
+      userId: 'user-2',
+      email: 'user@example.com',
+      name: 'Test User',
+      status: 'ACTIVE',
+      role: 'USER',
+    });
+  });
+});
 
 describe('password-reset API', () => {
   beforeEach(() => {
